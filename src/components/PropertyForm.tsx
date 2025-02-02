@@ -1,11 +1,13 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Form } from "@/components/ui/form"
 import { PropertyTypeSelect } from "./property/PropertyTypeSelect"
 import { PurchaseDateField } from "./property/PurchaseDateField"
 import { MoneyField } from "./property/MoneyField"
+import { PropertyNameField } from "./property/PropertyNameField"
+import { PropertyAddressField } from "./property/PropertyAddressField"
+import { PropertyFormHeader } from "./property/PropertyFormHeader"
+import { PropertyFormActions } from "./property/PropertyFormActions"
 import { propertyFormSchema, type PropertyFormValues } from "./property/PropertyFormTypes"
 import { usePropertySubmit } from "./property/usePropertySubmit"
 
@@ -25,7 +27,6 @@ interface PropertyFormProps {
 
 export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProps) {
   const submitProperty = usePropertySubmit(onSuccess, property?.id)
-
   console.log("Property data received:", property)
 
   const defaultPurchaseDate = property?.purchase_date 
@@ -37,7 +38,7 @@ export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProp
   const form = useForm<PropertyFormValues>({
     resolver: zodResolver(propertyFormSchema),
     defaultValues: property ? {
-      propertyType: property.property_type,  // This was the issue - property_type wasn't being mapped correctly
+      propertyType: property.property_type,
       name: property.name,
       address: property.address,
       purchasePrice: new Intl.NumberFormat("en-US", {
@@ -67,47 +68,14 @@ export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProp
 
   return (
     <div className="space-y-6 p-6 bg-white rounded-lg shadow-sm border max-w-2xl mx-auto">
-      <div>
-        <h2 className="text-2xl font-semibold">
-          {property ? "Edit Property" : "Add New Property"}
-        </h2>
-        <p className="text-muted-foreground">
-          {property ? "Update your property details below." : "Enter your property details below."}
-        </p>
-      </div>
+      <PropertyFormHeader isEditing={!!property} />
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(submitProperty)} className="space-y-4">
           <PropertyTypeSelect form={form} />
-
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Property Name/Description</FormLabel>
-                <FormControl>
-                  <Input placeholder="e.g., Beach House" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Property Address</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter full address" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
+          <PropertyNameField form={form} />
+          <PropertyAddressField form={form} />
+          
           <MoneyField 
             form={form}
             name="purchasePrice"
@@ -122,14 +90,10 @@ export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProp
             label="Current Property Value"
           />
 
-          <div className="flex justify-end gap-4 pt-4">
-            <Button variant="outline" type="button" onClick={onCancel}>
-              Cancel
-            </Button>
-            <Button type="submit">
-              {property ? "Update Property" : "Add Property"}
-            </Button>
-          </div>
+          <PropertyFormActions 
+            isEditing={!!property} 
+            onCancel={onCancel}
+          />
         </form>
       </Form>
     </div>
