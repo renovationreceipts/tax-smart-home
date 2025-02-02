@@ -14,7 +14,8 @@ interface TaxCalculationTableProps {
 }
 
 export function TaxCalculationTable({ property, projects }: TaxCalculationTableProps) {
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = (amount: number | null) => {
+    if (amount === null) return "-"
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
@@ -22,12 +23,14 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
   }
 
   const totalProjectCosts = projects.reduce((sum, project) => sum + project.cost, 0)
-  const newCostBasis = property ? property.purchase_price + totalProjectCosts : totalProjectCosts
-  const taxableGainWithBasis = property ? property.current_value - newCostBasis : 0
-  const taxableGainWithoutBasis = property ? property.current_value - (property.purchase_price || 0) : 0
-  const taxSavings = taxableGainWithoutBasis - taxableGainWithBasis
+  const newCostBasis = property ? property.purchase_price + totalProjectCosts : null
+  const taxableGainWithBasis = property ? property.current_value - (newCostBasis || 0) : null
+  const taxableGainWithoutBasis = property ? property.current_value - property.purchase_price : null
+  const taxSavings = taxableGainWithBasis !== null && taxableGainWithoutBasis !== null 
+    ? taxableGainWithoutBasis - taxableGainWithBasis 
+    : null
   const assumedTaxRate = 0.20 // 20% capital gains tax rate
-  const estimatedTaxSavings = taxSavings * assumedTaxRate
+  const estimatedTaxSavings = taxSavings !== null ? taxSavings * assumedTaxRate : null
 
   return (
     <Table>
@@ -40,11 +43,11 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
       <TableBody>
         <TableRow>
           <TableCell className="font-medium">Current Home Value</TableCell>
-          <TableCell>{property ? formatCurrency(property.current_value) : formatCurrency(0)}</TableCell>
+          <TableCell>{property ? formatCurrency(property.current_value) : "-"}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell className="font-medium">Purchase Price</TableCell>
-          <TableCell>{property ? formatCurrency(property.purchase_price) : formatCurrency(0)}</TableCell>
+          <TableCell>{property ? formatCurrency(property.purchase_price) : "-"}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell className="font-medium">Basis Adjustments (Total Project Costs)</TableCell>
