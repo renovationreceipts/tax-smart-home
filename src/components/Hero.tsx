@@ -30,7 +30,7 @@ export const Hero = () => {
             </div>
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
+                src="/lovable-uploads/486df4ae-0040-493b-84af-13fd7d3fb88d.png"
                 alt="Tax Smart Home Dashboard Preview"
                 className="rounded-2xl shadow-2xl w-full h-auto object-cover"
               />
