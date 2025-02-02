@@ -4,8 +4,10 @@ import { DayPicker, DayPickerProps } from "react-day-picker";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export type CalendarProps = DayPickerProps & {
-  onSelect?: (date: Date) => void;
+export type CalendarProps = Omit<DayPickerProps, "mode" | "selected" | "onSelect"> & {
+  mode?: "default" | "single"
+  selected?: Date | null
+  onSelect?: (date: Date | undefined) => void
 };
 
 function Calendar({
@@ -94,10 +96,11 @@ function Calendar({
         IconLeft: ({ ..._props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ..._props }) => <ChevronRight className="h-4 w-4" />,
       }}
+      mode="single"
+      selected={props.selected}
+      onSelect={(date) => props.onSelect?.(date)}
       captionLayout="buttons"
       footer={captionLayout}
-      {...props}
-      onSelect={props.onSelect}
     />
   );
 }
