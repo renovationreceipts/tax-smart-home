@@ -16,8 +16,7 @@ import {
 export default function Account() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  // This would be replaced with actual property data from Supabase
-  const hasProperties = false; // Temporary state until we implement property management
+  const hasProperties = false;
 
   const handleSignOut = async () => {
     try {
@@ -144,12 +143,38 @@ export default function Account() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {[...Array(8)].map((_, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="font-medium">-</TableCell>
-                    <TableCell>-</TableCell>
-                  </TableRow>
-                ))}
+                <TableRow>
+                  <TableCell className="font-medium">Current Home Value</TableCell>
+                  <TableCell>-</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="font-medium">Purchase Price</TableCell>
+                  <TableCell>-</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="font-medium">Basis Adjustments</TableCell>
+                  <TableCell>-</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="font-medium">New Cost Basis</TableCell>
+                  <TableCell>-</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="font-medium">Taxable Gain With New Cost Basis</TableCell>
+                  <TableCell>-</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="font-medium">Taxable Gain Without New Cost Basis</TableCell>
+                  <TableCell>-</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="font-medium">Tracking Improvements Reduced Your Taxable Capital Gain By</TableCell>
+                  <TableCell>-</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="font-medium">Based on Your Tax Rate This Saved You</TableCell>
+                  <TableCell>-</TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </div>
