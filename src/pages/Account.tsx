@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
@@ -20,11 +20,17 @@ interface Property {
 }
 
 async function fetchProperties() {
+  console.log("Fetching properties...")
   const { data, error } = await supabase
     .from("properties")
     .select("id, name, address, purchase_price, current_value")
   
-  if (error) throw error
+  if (error) {
+    console.error("Error fetching properties:", error)
+    throw error
+  }
+  
+  console.log("Properties fetched:", data)
   return data
 }
 

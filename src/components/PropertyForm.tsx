@@ -61,14 +61,14 @@ export function PropertyForm({ onCancel, onSuccess }: PropertyFormProps) {
 
       if (error) throw error
 
+      if (onSuccess) {
+        onSuccess()
+      }
+
       toast({
         title: "Property Added",
         description: "Your property has been successfully added.",
       })
-      
-      if (onSuccess) {
-        onSuccess()
-      }
       
       navigate("/account")
     } catch (error) {
