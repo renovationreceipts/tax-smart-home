@@ -58,8 +58,8 @@ export function ProjectAndTaxSection({
 
       <div className="bg-white rounded-lg shadow-sm border p-6">
         <div className="flex items-center gap-3 mb-4">
+          <DollarSign className="h-6 w-6 text-primary" />
           <h3 className="text-lg font-semibold">Tax Calculation</h3>
-          <DollarSign className="h-5 w-5 text-gray-500" />
         </div>
         <p className="text-gray-600 text-sm mb-4">
           {!selectedProperty 
