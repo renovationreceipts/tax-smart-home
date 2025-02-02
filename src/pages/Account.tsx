@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
 import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
+import { Plus, User } from "lucide-react"
 import { PropertyForm } from "@/components/PropertyForm"
 import { PropertyList } from "@/components/property/PropertyList"
 import { EmptyPropertyState } from "@/components/property/EmptyPropertyState"
@@ -12,11 +12,13 @@ import { AccountHeader } from "@/components/account/AccountHeader"
 import { ProjectsSection } from "@/components/account/ProjectsSection"
 import { useProperties } from "@/hooks/useProperties"
 import { useProjects } from "@/hooks/useProjects"
+import { UserProfile } from "@/components/profile/UserProfile"
 
 export default function Account() {
   const navigate = useNavigate()
   const { toast } = useToast()
   const [showPropertyForm, setShowPropertyForm] = useState(false)
+  const [showProfile, setShowProfile] = useState(false)
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null)
   const [propertyToEdit, setPropertyToEdit] = useState<any>(null)
   
@@ -43,6 +45,10 @@ export default function Account() {
     setShowPropertyForm(true)
   }
 
+  if (showProfile) {
+    return <UserProfile />
+  }
+
   if (showPropertyForm) {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
@@ -67,13 +73,26 @@ export default function Account() {
       <AccountHeader onSignOut={handleSignOut} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Your Properties</h2>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">My Account</h1>
+          <div className="flex gap-4">
+            <Button
+              variant="outline"
+              onClick={() => setShowProfile(true)}
+            >
+              <User className="h-4 w-4 mr-2" />
+              Profile
+            </Button>
             <Button onClick={() => setShowPropertyForm(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Add Property
             </Button>
+          </div>
+        </div>
+
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">Your Properties</h2>
           </div>
 
           {properties.length === 0 ? (
