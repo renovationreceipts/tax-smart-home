@@ -9,6 +9,8 @@ export interface Project {
   cost: number
   completion_date: string
   created_at: string | null
+  builder_name: string | null
+  builder_url: string | null
 }
 
 async function fetchProjects(propertyId: string) {
