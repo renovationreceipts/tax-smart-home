@@ -1,9 +1,9 @@
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { DayPicker } from "react-day-picker";
-
-import { cn } from "@/lib/utils";
+import { DayPicker, SelectSingleEventHandler } from "react-day-picker";
 import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Select } from "@/components/ui/select"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
@@ -13,6 +13,38 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
+  const [year, setYear] = React.useState(props.selected ? new Date(props.selected).getFullYear() : new Date().getFullYear());
+
+  // Generate array of years from 1900 to current year
+  const years = Array.from({ length: new Date().getFullYear() - 1900 + 1 }, (_, i) => 1900 + i).reverse();
+
+  const handleYearSelect = (selectedYear: string) => {
+    const newYear = parseInt(selectedYear);
+    setYear(newYear);
+    
+    if (props.selected) {
+      const newDate = new Date(props.selected as Date);
+      newDate.setFullYear(newYear);
+      (props.onSelect as SelectSingleEventHandler)?.(newDate);
+    }
+  };
+
+  const footer = (
+    <div className="flex items-center justify-center space-x-2 pt-4">
+      <select
+        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
+        value={year}
+        onChange={(e) => handleYearSelect(e.target.value)}
+      >
+        {years.map((year) => (
+          <option key={year} value={year}>
+            {year}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -55,6 +87,7 @@ function Calendar({
         IconLeft: ({ ..._props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ..._props }) => <ChevronRight className="h-4 w-4" />,
       }}
+      footer={footer}
       {...props}
     />
   );
