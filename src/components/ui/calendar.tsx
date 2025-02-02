@@ -12,6 +12,44 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
+  const [currentYear, setCurrentYear] = React.useState(() => {
+    if (props.selected instanceof Date) {
+      return props.selected.getFullYear();
+    }
+    return new Date().getFullYear();
+  });
+
+  const years = React.useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    return Array.from({ length: currentYear - 1900 + 1 }, (_, i) => currentYear - i);
+  }, []);
+
+  const captionLayout = React.useMemo(() => {
+    return (
+      <div className="flex items-center justify-center gap-2">
+        <select
+          className="rounded-md border border-input bg-background px-2 py-1 text-sm ring-offset-background"
+          value={currentYear}
+          onChange={(e) => {
+            const newYear = parseInt(e.target.value);
+            setCurrentYear(newYear);
+            if (props.selected) {
+              const newDate = new Date(props.selected);
+              newDate.setFullYear(newYear);
+              props.onSelect?.(newDate);
+            }
+          }}
+        >
+          {years.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+      </div>
+    );
+  }, [currentYear, years, props.selected, props.onSelect]);
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -54,6 +92,8 @@ function Calendar({
         IconLeft: ({ ..._props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ..._props }) => <ChevronRight className="h-4 w-4" />,
       }}
+      captionLayout="buttons"
+      footer={captionLayout}
       {...props}
     />
   );
