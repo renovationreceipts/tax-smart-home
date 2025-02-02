@@ -1,34 +1,16 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Calendar } from "@/components/ui/calendar"
-import { CalendarIcon } from "lucide-react"
-import { format } from "date-fns"
-import { cn } from "@/lib/utils"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { MoneyField } from "@/components/property/MoneyField"
+import { Form } from "@/components/ui/form"
 import { supabase } from "@/integrations/supabase/client"
 import { useToast } from "@/hooks/use-toast"
-
-const projectFormSchema = z.object({
-  name: z.string().min(1, "Project name is required"),
-  description: z.string().optional(),
-  cost: z.string().min(1, "Project cost is required"),
-  completion_date: z.date({
-    required_error: "Completion date is required",
-  }),
-  builder_name: z.string().optional(),
-  builder_url: z.string().url().optional().or(z.literal("")),
-  beforePhotos: z.instanceof(FileList).optional(),
-  afterPhotos: z.instanceof(FileList).optional(),
-  receipts: z.instanceof(FileList).optional(),
-})
-
-type ProjectFormValues = z.infer<typeof projectFormSchema>
+import { format } from "date-fns"
+import { ProjectFormHeader } from "./form/ProjectFormHeader"
+import { ProjectBasicFields } from "./form/ProjectBasicFields"
+import { ProjectDateField } from "./form/ProjectDateField"
+import { ProjectFileFields } from "./form/ProjectFileFields"
+import { ProjectBuilderFields } from "./form/ProjectBuilderFields"
+import { ProjectFormActions } from "./form/ProjectFormActions"
+import { projectFormSchema, type ProjectFormValues } from "./form/ProjectFormTypes"
 
 interface ProjectFormProps {
   propertyId: string
@@ -145,209 +127,14 @@ export function ProjectForm({ propertyId, onSuccess, onCancel }: ProjectFormProp
 
   return (
     <div className="space-y-6 p-6 bg-white rounded-lg shadow-sm border max-w-2xl mx-auto">
-      <div>
-        <h2 className="text-2xl font-semibold">Add New Project</h2>
-        <p className="text-muted-foreground">
-          Enter your project details below.
-        </p>
-      </div>
-
+      <ProjectFormHeader />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Project Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Kitchen Renovation" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Textarea 
-                    placeholder="Describe your project..."
-                    className="resize-none"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <MoneyField
-            form={form}
-            name="cost"
-            label="Project Cost"
-          />
-
-          <FormField
-            control={form.control}
-            name="completion_date"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Completion Date</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP")
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date("1900-01-01")
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="beforePhotos"
-            render={({ field: { onChange, value, ...field } }) => (
-              <FormItem>
-                <FormLabel>Before Photos (Optional)</FormLabel>
-                <FormControl>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={(e) => {
-                      const files = e.target.files
-                      if (files) {
-                        onChange(files)
-                      }
-                    }}
-                    {...field}
-                    className="file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="afterPhotos"
-            render={({ field: { onChange, value, ...field } }) => (
-              <FormItem>
-                <FormLabel>After Photos (Optional)</FormLabel>
-                <FormControl>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={(e) => {
-                      const files = e.target.files
-                      if (files) {
-                        onChange(files)
-                      }
-                    }}
-                    {...field}
-                    className="file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="receipts"
-            render={({ field: { onChange, value, ...field } }) => (
-              <FormItem>
-                <FormLabel>Receipts (Optional)</FormLabel>
-                <FormControl>
-                  <Input
-                    type="file"
-                    accept=".pdf,.jpg,.jpeg,.png"
-                    multiple
-                    onChange={(e) => {
-                      const files = e.target.files
-                      if (files) {
-                        onChange(files)
-                      }
-                    }}
-                    {...field}
-                    className="file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="builder_name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Builder Name (Optional)</FormLabel>
-                <FormControl>
-                  <Input placeholder="Builder or Contractor Name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="builder_url"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Builder Website (Optional)</FormLabel>
-                <FormControl>
-                  <Input placeholder="https://..." {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="flex justify-end gap-4 pt-4">
-            <Button variant="outline" type="button" onClick={onCancel}>
-              Cancel
-            </Button>
-            <Button type="submit">
-              Add Project
-            </Button>
-          </div>
+          <ProjectBasicFields form={form} />
+          <ProjectDateField form={form} />
+          <ProjectFileFields form={form} />
+          <ProjectBuilderFields form={form} />
+          <ProjectFormActions onCancel={onCancel} />
         </form>
       </Form>
     </div>
