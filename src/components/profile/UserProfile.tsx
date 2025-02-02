@@ -98,6 +98,24 @@ export function UserProfile() {
         throw new Error("No user found")
       }
 
+      // Update email in auth if it has changed
+      if (data.email !== user.email) {
+        console.log("Updating email to:", data.email)
+        const { error: emailError } = await supabase.auth.updateUser({
+          email: data.email,
+        })
+
+        if (emailError) {
+          console.error("Email update error:", emailError)
+          throw emailError
+        }
+
+        toast({
+          title: "Email Update",
+          description: "Please check your new email for a confirmation link.",
+        })
+      }
+
       console.log("Updating profile with tax_rate:", data.tax_rate)
       const { error: profileError } = await supabase
         .from("profiles")
@@ -183,8 +201,12 @@ export function UserProfile() {
                     <label className="text-sm font-medium">Email</label>
                     <Input
                       {...profileForm.register("email")}
-                      disabled
                     />
+                    {profileForm.formState.errors.email && (
+                      <p className="text-sm text-red-500">
+                        {profileForm.formState.errors.email.message}
+                      </p>
+                    )}
                   </div>
 
                   <PercentageField
