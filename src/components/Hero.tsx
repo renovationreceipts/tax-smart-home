@@ -23,9 +23,11 @@ export const Hero = () => {
                 Track all your home improvement expenses to accurately calculate cost basis—ultimately lowering taxable gains when selling. Perfect for homeowners, second-home owners, and landlords.
               </p>
               <div className="flex gap-4">
-                <Button size="lg" className="text-lg">
-                  Get Started <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                <Link to="/signup">
+                  <Button size="lg" className="text-lg">
+                    Get Started <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
               </div>
             </div>
             <div className="relative">
