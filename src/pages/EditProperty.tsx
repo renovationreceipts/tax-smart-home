@@ -6,6 +6,8 @@ export function EditProperty() {
   const navigate = useNavigate()
   const { id } = useParams()
   const { data: properties = [] } = useProperties()
+  
+  // Find the property with complete type information
   const property = id ? properties.find(p => p.id === id) : undefined
 
   return (
