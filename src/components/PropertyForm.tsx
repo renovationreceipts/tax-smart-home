@@ -3,14 +3,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useToast } from "@/hooks/use-toast"
-import { useNavigate } from "react-router-dom"
-import { supabase } from "@/integrations/supabase/client"
 import { PropertyTypeSelect } from "./property/PropertyTypeSelect"
 import { PurchaseDateField } from "./property/PurchaseDateField"
 import { MoneyField } from "./property/MoneyField"
 import { propertyFormSchema, type PropertyFormValues } from "./property/PropertyFormTypes"
-import { format } from "date-fns"
+import { usePropertySubmit } from "./property/usePropertySubmit"
 
 interface PropertyFormProps {
   onCancel: () => void
@@ -18,8 +15,7 @@ interface PropertyFormProps {
 }
 
 export function PropertyForm({ onCancel, onSuccess }: PropertyFormProps) {
-  const { toast } = useToast()
-  const navigate = useNavigate()
+  const submitProperty = usePropertySubmit(onSuccess)
 
   const form = useForm<PropertyFormValues>({
     resolver: zodResolver(propertyFormSchema),
@@ -31,56 +27,6 @@ export function PropertyForm({ onCancel, onSuccess }: PropertyFormProps) {
     },
   })
 
-  async function onSubmit(data: PropertyFormValues) {
-    try {
-      const { data: { user } } = await supabase.auth.getUser()
-      
-      if (!user) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "You must be logged in to add a property.",
-        })
-        return
-      }
-
-      const numericPurchasePrice = Number(data.purchasePrice.replace(/[^0-9.-]/g, ""))
-      const numericCurrentValue = Number(data.currentValue.replace(/[^0-9.-]/g, ""))
-      
-      const { error } = await supabase
-        .from("properties")
-        .insert({
-          user_id: user.id,
-          property_type: data.propertyType,
-          name: data.name,
-          address: data.address,
-          purchase_price: numericPurchasePrice / 100,
-          purchase_date: format(data.purchaseDate, "yyyy-MM-dd"),
-          current_value: numericCurrentValue / 100,
-        })
-
-      if (error) throw error
-
-      if (onSuccess) {
-        onSuccess()
-      }
-
-      toast({
-        title: "Property Added",
-        description: "Your property has been successfully added.",
-      })
-      
-      navigate("/account")
-    } catch (error) {
-      console.error("Error adding property:", error)
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to add property. Please try again.",
-      })
-    }
-  }
-
   return (
     <div className="space-y-6 p-6 bg-white rounded-lg shadow-sm border max-w-2xl mx-auto">
       <div>
@@ -89,7 +35,7 @@ export function PropertyForm({ onCancel, onSuccess }: PropertyFormProps) {
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(submitProperty)} className="space-y-4">
           <PropertyTypeSelect form={form} />
 
           <FormField
