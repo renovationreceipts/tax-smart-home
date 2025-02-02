@@ -22,8 +22,8 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
     }).format(amount)
   }
 
-  const totalProjectCosts = projects.reduce((sum, project) => sum + project.cost, 0)
-  const newCostBasis = property ? property.purchase_price + totalProjectCosts : null
+  const totalProjectCosts = property ? projects.reduce((sum, project) => sum + project.cost, 0) : null
+  const newCostBasis = property && totalProjectCosts !== null ? property.purchase_price + totalProjectCosts : null
   const taxableGainWithBasis = property ? property.current_value - (newCostBasis || 0) : null
   const taxableGainWithoutBasis = property ? property.current_value - property.purchase_price : null
   const taxSavings = taxableGainWithBasis !== null && taxableGainWithoutBasis !== null 
