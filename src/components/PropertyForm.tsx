@@ -75,12 +75,24 @@ export function PropertyForm({ onCancel }: PropertyFormProps) {
 
   async function onSubmit(data: PropertyFormValues) {
     try {
+      const { data: { user } } = await supabase.auth.getUser()
+      
+      if (!user) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "You must be logged in to add a property.",
+        })
+        return
+      }
+
       const numericPurchasePrice = Number(data.purchasePrice.replace(/[^0-9.-]/g, ""))
       const numericCurrentValue = Number(data.currentValue.replace(/[^0-9.-]/g, ""))
       
       const { error } = await supabase
         .from("properties")
         .insert({
+          user_id: user.id,
           property_type: data.propertyType,
           name: data.name,
           address: data.address,
