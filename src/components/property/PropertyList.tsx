@@ -56,42 +56,23 @@ export function PropertyList({
                 key={property.id}
                 className={`${
                   property.id === selectedPropertyId ? "bg-primary/5" : ""
-                }`}
+                } cursor-pointer hover:bg-muted/50`}
+                onClick={() => onPropertySelect(property.id)}
               >
                 <TableCell className="flex items-center justify-center">
-                  <RadioGroupItem value={property.id} id={property.id} />
+                  <RadioGroupItem value={property.id} id={property.id} onClick={(e) => e.stopPropagation()} />
                 </TableCell>
                 <TableCell className="font-medium">
-                  <label 
-                    htmlFor={property.id}
-                    className="block cursor-pointer"
-                  >
-                    {property.name}
-                  </label>
+                  {property.name}
                 </TableCell>
                 <TableCell>
-                  <label 
-                    htmlFor={property.id}
-                    className="block cursor-pointer"
-                  >
-                    {property.address}
-                  </label>
+                  {property.address}
                 </TableCell>
                 <TableCell>
-                  <label 
-                    htmlFor={property.id}
-                    className="block cursor-pointer"
-                  >
-                    {formatCurrency(property.purchase_price)}
-                  </label>
+                  {formatCurrency(property.purchase_price)}
                 </TableCell>
                 <TableCell>
-                  <label 
-                    htmlFor={property.id}
-                    className="block cursor-pointer"
-                  >
-                    {formatCurrency(property.current_value)}
-                  </label>
+                  {formatCurrency(property.current_value)}
                 </TableCell>
                 <TableCell>
                   <Button
