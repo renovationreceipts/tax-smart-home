@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { DayPicker, DayClickEventHandler } from "react-day-picker";
+import { DayPicker } from "react-day-picker";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -12,45 +12,6 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
-  const [year, setYear] = React.useState(() => {
-    if (props.selected instanceof Date) {
-      return props.selected.getFullYear();
-    }
-    return new Date().getFullYear();
-  });
-
-  // Generate array of years from 1900 to current year
-  const years = Array.from({ length: new Date().getFullYear() - 1900 + 1 }, (_, i) => 1900 + i).reverse();
-
-  const handleYearSelect = (selectedYear: string) => {
-    const newYear = parseInt(selectedYear);
-    setYear(newYear);
-    
-    if (props.selected instanceof Date && props.onDayClick) {
-      const newDate = new Date(props.selected);
-      newDate.setFullYear(newYear);
-      // Create a synthetic React MouseEvent
-      const syntheticEvent = new MouseEvent('click') as unknown as React.MouseEvent<Element, MouseEvent>;
-      props.onDayClick(newDate, { selected: true }, syntheticEvent);
-    }
-  };
-
-  const footer = (
-    <div className="flex items-center justify-center space-x-2 pt-4">
-      <select
-        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
-        value={year}
-        onChange={(e) => handleYearSelect(e.target.value)}
-      >
-        {years.map((year) => (
-          <option key={year} value={year}>
-            {year}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -93,7 +54,6 @@ function Calendar({
         IconLeft: ({ ..._props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ..._props }) => <ChevronRight className="h-4 w-4" />,
       }}
-      footer={footer}
       {...props}
     />
   );

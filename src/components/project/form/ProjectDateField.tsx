@@ -7,12 +7,15 @@ import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { UseFormReturn } from "react-hook-form"
 import type { ProjectFormValues } from "./ProjectFormTypes"
+import { useState } from "react"
 
 interface ProjectDateFieldProps {
   form: UseFormReturn<ProjectFormValues>
 }
 
 export function ProjectDateField({ form }: ProjectDateFieldProps) {
+  const [open, setOpen] = useState(false)
+
   return (
     <FormField
       control={form.control}
@@ -20,7 +23,7 @@ export function ProjectDateField({ form }: ProjectDateFieldProps) {
       render={({ field }) => (
         <FormItem className="flex flex-col">
           <FormLabel>Completion Date</FormLabel>
-          <Popover>
+          <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
@@ -43,7 +46,10 @@ export function ProjectDateField({ form }: ProjectDateFieldProps) {
               <Calendar
                 mode="single"
                 selected={field.value}
-                onSelect={field.onChange}
+                onSelect={(date) => {
+                  field.onChange(date)
+                  setOpen(false)
+                }}
                 disabled={(date) =>
                   date > new Date() || date < new Date("1900-01-01")
                 }
