@@ -16,7 +16,7 @@ interface PropertyFormProps {
     name: string
     address: string
     purchase_price: number
-    purchase_date: Date
+    purchase_date: string | null
     current_value: number
   }
   onCancel: () => void
@@ -40,7 +40,7 @@ export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProp
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
       }).format(property.purchase_price),
-      purchaseDate: new Date(property.purchase_date),
+      purchaseDate: property.purchase_date ? new Date(property.purchase_date) : new Date(),
       currentValue: new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
@@ -52,7 +52,7 @@ export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProp
       name: "",
       address: "",
       purchasePrice: "",
-      purchaseDate: undefined,
+      purchaseDate: new Date(),
       currentValue: "",
     },
   })
