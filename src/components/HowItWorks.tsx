@@ -1,15 +1,15 @@
-import { LogIn, Home, FileText } from "lucide-react";
+import { Home, Hammer, FileText } from "lucide-react";
 
 const steps = [
   {
-    icon: <LogIn className="h-6 w-6 text-blue-600" />,
-    title: "Create an Account",
-    description: "Sign up and securely log in to start tracking your property expenses.",
-  },
-  {
     icon: <Home className="h-6 w-6 text-blue-600" />,
     title: "Input Property Details",
-    description: "Add your home's purchase information and improvement expenses, specifying property type.",
+    description: "Add your property information including purchase date, price, and property type.",
+  },
+  {
+    icon: <Hammer className="h-6 w-6 text-blue-600" />,
+    title: "Add and Track Capital Improvements",
+    description: "Record and categorize all property improvements and their associated costs.",
   },
   {
     icon: <FileText className="h-6 w-6 text-blue-600" />,
