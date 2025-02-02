@@ -1,10 +1,12 @@
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { DayPicker } from "react-day-picker";
+import { DayPicker, DayPickerProps } from "react-day-picker";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+export type CalendarProps = DayPickerProps & {
+  onSelect?: (date: Date) => void;
+};
 
 function Calendar({
   className,
@@ -33,12 +35,10 @@ function Calendar({
           onChange={(e) => {
             const newYear = parseInt(e.target.value);
             setCurrentYear(newYear);
-            if (props.selected instanceof Date) {
+            if (props.selected instanceof Date && props.onSelect) {
               const newDate = new Date(props.selected);
               newDate.setFullYear(newYear);
-              if (props.onSelect) {
-                props.onSelect(newDate);
-              }
+              props.onSelect(newDate);
             }
           }}
         >
@@ -97,6 +97,7 @@ function Calendar({
       captionLayout="buttons"
       footer={captionLayout}
       {...props}
+      onSelect={props.onSelect}
     />
   );
 }
