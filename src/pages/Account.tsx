@@ -84,8 +84,8 @@ export default function Account() {
           </div>
         </div>
 
-        {/* Three Key Sections */}
-        <div className="grid md:grid-cols-3 gap-6">
+        {/* Two Key Sections */}
+        <div className="grid md:grid-cols-2 gap-6">
           {/* Properties Section */}
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <div className="flex items-center gap-3 mb-4">
@@ -95,18 +95,6 @@ export default function Account() {
             <p className="text-gray-600 text-sm">
               Add and manage multiple properties. Each property will have its own
               projects and tax calculations.
-            </p>
-          </div>
-
-          {/* Projects Section */}
-          <div className="bg-white rounded-lg shadow-sm border p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <FileText className="h-6 w-6 text-primary" />
-              <h3 className="text-lg font-semibold">Projects</h3>
-            </div>
-            <p className="text-gray-600 text-sm">
-              Track home improvement projects for each property. These will be used
-              for tax calculations.
             </p>
           </div>
 
