@@ -1,13 +1,8 @@
-import { useState, useEffect } from "react"
-import { PropertyForm } from "@/components/PropertyForm"
-import { PropertyList } from "@/components/property/PropertyList"
-import { EmptyPropertyState } from "@/components/property/EmptyPropertyState"
-import { TaxCalculationTable } from "@/components/property/TaxCalculationTable"
-import { ProjectsSection } from "@/components/account/ProjectsSection"
+import { useState } from "react"
 import { AccountActions } from "@/components/account/AccountActions"
+import { PropertySection } from "@/components/account/PropertySection"
+import { ProjectAndTaxSection } from "@/components/account/ProjectAndTaxSection"
 import { useProperties } from "@/hooks/useProperties"
-import { useProjects } from "@/hooks/useProjects"
-import { ProjectForm } from "@/components/project/ProjectForm"
 import type { Project } from "@/hooks/useProjects"
 
 export function AccountContent() {
@@ -17,61 +12,7 @@ export function AccountContent() {
   const [propertyToEdit, setPropertyToEdit] = useState<any>(null)
   const [projectToEdit, setProjectToEdit] = useState<Project | null>(null)
   
-  const { data: properties = [], refetch: refetchProperties } = useProperties()
-  const { data: projects = [], refetch: refetchProjects } = useProjects(selectedPropertyId)
-
-  // Auto-select the first property when properties are loaded
-  useEffect(() => {
-    if (properties.length > 0 && !selectedPropertyId) {
-      setSelectedPropertyId(properties[0].id)
-    }
-  }, [properties, selectedPropertyId])
-
-  const handleEditProperty = (property: any) => {
-    setPropertyToEdit(property)
-    setShowPropertyForm(true)
-  }
-
-  const handleEditProject = (project: Project) => {
-    setProjectToEdit(project)
-    setShowProjectForm(true)
-  }
-
-  if (showPropertyForm) {
-    return (
-      <PropertyForm 
-        property={propertyToEdit}
-        onCancel={() => {
-          setShowPropertyForm(false)
-          setPropertyToEdit(null)
-        }}
-        onSuccess={() => {
-          setShowPropertyForm(false)
-          setPropertyToEdit(null)
-          refetchProperties()
-        }}
-      />
-    )
-  }
-
-  if (showProjectForm && selectedPropertyId) {
-    return (
-      <ProjectForm
-        propertyId={selectedPropertyId}
-        project={projectToEdit}
-        onCancel={() => {
-          setShowProjectForm(false)
-          setProjectToEdit(null)
-        }}
-        onSuccess={() => {
-          setShowProjectForm(false)
-          setProjectToEdit(null)
-          refetchProjects()
-        }}
-      />
-    )
-  }
-
+  const { data: properties = [] } = useProperties()
   const selectedProperty = properties.find(p => p.id === selectedPropertyId)
 
   return (
@@ -81,47 +22,23 @@ export function AccountContent() {
         <AccountActions onAddProperty={() => setShowPropertyForm(true)} />
       </div>
 
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Your Properties</h2>
-        </div>
+      <PropertySection 
+        selectedPropertyId={selectedPropertyId}
+        setSelectedPropertyId={setSelectedPropertyId}
+        showPropertyForm={showPropertyForm}
+        setShowPropertyForm={setShowPropertyForm}
+        propertyToEdit={propertyToEdit}
+        setPropertyToEdit={setPropertyToEdit}
+      />
 
-        {properties.length === 0 ? (
-          <EmptyPropertyState onAddProperty={() => setShowPropertyForm(true)} />
-        ) : (
-          <PropertyList 
-            properties={properties}
-            selectedPropertyId={selectedPropertyId}
-            onPropertySelect={setSelectedPropertyId}
-            onEditProperty={handleEditProperty}
-          />
-        )}
-      </div>
-
-      <div className="space-y-6">
-        <ProjectsSection 
-          propertyId={selectedPropertyId}
-          projects={projects}
-          onAddProject={() => setShowProjectForm(true)}
-          onEditProject={handleEditProject}
-        />
-
-        <div className="bg-white rounded-lg shadow-sm border p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <h3 className="text-lg font-semibold">Tax Calculation</h3>
-          </div>
-          <p className="text-gray-600 text-sm mb-4">
-            {!selectedProperty 
-              ? "Select a property to view detailed tax calculations and potential savings."
-              : "Get automated tax calculations based on your property improvements and expenses."
-            }
-          </p>
-          <TaxCalculationTable 
-            property={selectedProperty}
-            projects={projects}
-          />
-        </div>
-      </div>
+      <ProjectAndTaxSection 
+        selectedPropertyId={selectedPropertyId}
+        selectedProperty={selectedProperty}
+        showProjectForm={showProjectForm}
+        setShowProjectForm={setShowProjectForm}
+        projectToEdit={projectToEdit}
+        setProjectToEdit={setProjectToEdit}
+      />
     </>
   )
 }
