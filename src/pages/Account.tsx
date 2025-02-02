@@ -4,6 +4,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Home, FileText, Calculator, LogOut, Plus } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export default function Account() {
   const navigate = useNavigate();
@@ -124,10 +132,26 @@ export default function Account() {
               <Calculator className="h-6 w-6 text-primary" />
               <h3 className="text-lg font-semibold">Tax Calculation</h3>
             </div>
-            <p className="text-gray-600 text-sm">
+            <p className="text-gray-600 text-sm mb-4">
               Get automated tax calculations based on your property improvements and
               expenses.
             </p>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Category</TableHead>
+                  <TableHead>Amount</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {[...Array(8)].map((_, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-medium">-</TableCell>
+                    <TableCell>-</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
         </div>
       </main>
