@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -20,6 +21,44 @@ export function ProfileSettingsForm() {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
   })
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        console.log("Loading profile data...")
+        const { data: { user } } = await supabase.auth.getUser()
+        
+        if (!user) {
+          console.error("No user found while loading profile")
+          return
+        }
+
+        // Get profile data from profiles table
+        const { data: profile, error: profileError } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", user.id)
+          .single()
+
+        if (profileError) {
+          console.error("Error loading profile:", profileError)
+          return
+        }
+
+        console.log("Loaded profile data:", profile)
+        
+        // Set form values with existing data
+        form.reset({
+          email: user.email,
+          tax_rate: profile.tax_rate || 0,
+        })
+      } catch (error) {
+        console.error("Error in loadProfile:", error)
+      }
+    }
+
+    loadProfile()
+  }, [])
 
   const onSubmit = async (data: ProfileFormValues) => {
     console.log("Profile form submitted with data:", data)
