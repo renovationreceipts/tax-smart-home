@@ -17,7 +17,7 @@ export const Hero = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 lg:text-6xl">
-                Digitize Your Home Improvements & Boost Your Tax Benefits
+                Track Home Improvements, Increase Your Cost Basis, Save on Taxes
               </h1>
               <p className="text-xl text-gray-600">
                 Track all your home improvement expenses to accurately calculate cost basis—ultimately lowering taxable gains when selling. Perfect for homeowners, second-home owners, and landlords.
