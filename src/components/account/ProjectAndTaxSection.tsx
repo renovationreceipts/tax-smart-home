@@ -1,6 +1,6 @@
+import { useNavigate } from "react-router-dom"
 import { ProjectsSection } from "@/components/account/ProjectsSection"
 import { TaxCalculationTable } from "@/components/property/TaxCalculationTable"
-import { ProjectForm } from "@/components/project/ProjectForm"
 import { useProjects } from "@/hooks/useProjects"
 import { DollarSign } from "lucide-react"
 import type { Project } from "@/hooks/useProjects"
@@ -8,43 +8,17 @@ import type { Project } from "@/hooks/useProjects"
 interface ProjectAndTaxSectionProps {
   selectedPropertyId: string | null
   selectedProperty: any
-  showProjectForm: boolean
-  setShowProjectForm: (show: boolean) => void
-  projectToEdit: Project | null
-  setProjectToEdit: (project: Project | null) => void
 }
 
 export function ProjectAndTaxSection({
   selectedPropertyId,
   selectedProperty,
-  showProjectForm,
-  setShowProjectForm,
-  projectToEdit,
-  setProjectToEdit
 }: ProjectAndTaxSectionProps) {
-  const { data: projects = [], refetch: refetchProjects } = useProjects(selectedPropertyId)
+  const navigate = useNavigate()
+  const { data: projects = [] } = useProjects(selectedPropertyId)
 
   const handleEditProject = (project: Project) => {
-    setProjectToEdit(project)
-    setShowProjectForm(true)
-  }
-
-  if (showProjectForm && selectedPropertyId) {
-    return (
-      <ProjectForm
-        propertyId={selectedPropertyId}
-        project={projectToEdit}
-        onCancel={() => {
-          setShowProjectForm(false)
-          setProjectToEdit(null)
-        }}
-        onSuccess={() => {
-          setShowProjectForm(false)
-          setProjectToEdit(null)
-          refetchProjects()
-        }}
-      />
-    )
+    navigate(`/project/edit/${selectedPropertyId}/${project.id}`)
   }
 
   return (
@@ -52,7 +26,7 @@ export function ProjectAndTaxSection({
       <ProjectsSection 
         propertyId={selectedPropertyId}
         projects={projects}
-        onAddProject={() => setShowProjectForm(true)}
+        onAddProject={() => navigate(`/project/edit/${selectedPropertyId}`)}
         onEditProject={handleEditProject}
       />
 

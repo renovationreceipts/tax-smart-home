@@ -1,4 +1,4 @@
-import { PropertyForm } from "@/components/PropertyForm"
+import { useNavigate } from "react-router-dom"
 import { PropertyList } from "@/components/property/PropertyList"
 import { EmptyPropertyState } from "@/components/property/EmptyPropertyState"
 import { useProperties } from "@/hooks/useProperties"
@@ -7,23 +7,15 @@ import { useEffect } from "react"
 interface PropertySectionProps {
   selectedPropertyId: string | null
   setSelectedPropertyId: (id: string) => void
-  showPropertyForm: boolean
-  setShowPropertyForm: (show: boolean) => void
-  propertyToEdit: any
-  setPropertyToEdit: (property: any) => void
 }
 
 export function PropertySection({ 
   selectedPropertyId,
   setSelectedPropertyId,
-  showPropertyForm,
-  setShowPropertyForm,
-  propertyToEdit,
-  setPropertyToEdit
 }: PropertySectionProps) {
-  const { data: properties = [], refetch: refetchProperties } = useProperties()
+  const navigate = useNavigate()
+  const { data: properties = [] } = useProperties()
 
-  // Auto-select the first property when properties are loaded
   useEffect(() => {
     if (properties.length > 0 && !selectedPropertyId) {
       setSelectedPropertyId(properties[0].id)
@@ -31,25 +23,7 @@ export function PropertySection({
   }, [properties, selectedPropertyId, setSelectedPropertyId])
 
   const handleEditProperty = (property: any) => {
-    setPropertyToEdit(property)
-    setShowPropertyForm(true)
-  }
-
-  if (showPropertyForm) {
-    return (
-      <PropertyForm 
-        property={propertyToEdit}
-        onCancel={() => {
-          setShowPropertyForm(false)
-          setPropertyToEdit(null)
-        }}
-        onSuccess={() => {
-          setShowPropertyForm(false)
-          setPropertyToEdit(null)
-          refetchProperties()
-        }}
-      />
-    )
+    navigate(`/property/edit/${property.id}`)
   }
 
   return (
@@ -59,7 +33,7 @@ export function PropertySection({
       </div>
 
       {properties.length === 0 ? (
-        <EmptyPropertyState onAddProperty={() => setShowPropertyForm(true)} />
+        <EmptyPropertyState onAddProperty={() => navigate("/property/edit")} />
       ) : (
         <PropertyList 
           properties={properties}
