@@ -29,7 +29,9 @@ function Calendar({
     if (props.selected instanceof Date && props.onDayClick) {
       const newDate = new Date(props.selected);
       newDate.setFullYear(newYear);
-      props.onDayClick(newDate, { selected: true }, new MouseEvent('click'));
+      // Create a synthetic React MouseEvent
+      const syntheticEvent = new MouseEvent('click') as unknown as React.MouseEvent<Element, MouseEvent>;
+      props.onDayClick(newDate, { selected: true }, syntheticEvent);
     }
   };
 
