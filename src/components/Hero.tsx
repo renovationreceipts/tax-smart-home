@@ -11,7 +11,7 @@ export const Hero = () => {
               Digitize Your Home Improvements & Boost Your Tax Benefits
             </h1>
             <p className="text-xl text-gray-600">
-              Track expenses, calculate cost basis, and simplify tax reporting for your primary home, second home, or rental property—all in one place.
+              Track all your home improvement expenses to accurately calculate cost basis—ultimately lowering taxable gains when selling. Perfect for homeowners, second-home owners, and landlords.
             </p>
             <div className="flex gap-4">
               <Button size="lg" className="text-lg">
