@@ -8,6 +8,7 @@ import NotFound from "@/pages/NotFound";
 import SignUp from "@/pages/SignUp";
 import Login from "@/pages/Login";
 import Account from "@/pages/Account";
+import Profile from "@/pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
             <Route path="/account" element={<Account />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>

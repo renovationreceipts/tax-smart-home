@@ -12,13 +12,11 @@ import { AccountHeader } from "@/components/account/AccountHeader"
 import { ProjectsSection } from "@/components/account/ProjectsSection"
 import { useProperties } from "@/hooks/useProperties"
 import { useProjects } from "@/hooks/useProjects"
-import { UserProfile } from "@/components/profile/UserProfile"
 
 export default function Account() {
   const navigate = useNavigate()
   const { toast } = useToast()
   const [showPropertyForm, setShowPropertyForm] = useState(false)
-  const [showProfile, setShowProfile] = useState(false)
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null)
   const [propertyToEdit, setPropertyToEdit] = useState<any>(null)
   
@@ -43,10 +41,6 @@ export default function Account() {
   const handleEditProperty = (property: any) => {
     setPropertyToEdit(property)
     setShowPropertyForm(true)
-  }
-
-  if (showProfile) {
-    return <UserProfile />
   }
 
   if (showPropertyForm) {
@@ -78,7 +72,7 @@ export default function Account() {
           <div className="flex gap-4">
             <Button
               variant="outline"
-              onClick={() => setShowProfile(true)}
+              onClick={() => navigate("/profile")}
             >
               <User className="h-4 w-4 mr-2" />
               Profile
