@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client"
 import { format } from "date-fns"
 import { PropertyFormValues } from "./PropertyFormTypes"
 
-export function usePropertySubmit(onSuccess?: () => void) {
+export function usePropertySubmit(onSuccess?: () => void, propertyId?: string) {
   const { toast } = useToast()
   const navigate = useNavigate()
 
@@ -21,20 +21,36 @@ export function usePropertySubmit(onSuccess?: () => void) {
         return
       }
 
+      // Convert currency strings to numbers (removing currency formatting)
       const numericPurchasePrice = Number(data.purchasePrice.replace(/[^0-9.-]/g, ""))
       const numericCurrentValue = Number(data.currentValue.replace(/[^0-9.-]/g, ""))
       
-      const { error } = await supabase
-        .from("properties")
-        .insert({
-          user_id: user.id,
-          property_type: data.propertyType,
-          name: data.name,
-          address: data.address,
-          purchase_price: numericPurchasePrice / 100,
-          purchase_date: format(data.purchaseDate, "yyyy-MM-dd"),
-          current_value: numericCurrentValue / 100,
-        })
+      const propertyData = {
+        user_id: user.id,
+        property_type: data.propertyType,
+        name: data.name,
+        address: data.address,
+        purchase_price: numericPurchasePrice,
+        purchase_date: format(data.purchaseDate, "yyyy-MM-dd"),
+        current_value: numericCurrentValue,
+      }
+
+      let error
+      
+      if (propertyId) {
+        // Update existing property
+        const { error: updateError } = await supabase
+          .from("properties")
+          .update(propertyData)
+          .eq("id", propertyId)
+        error = updateError
+      } else {
+        // Insert new property
+        const { error: insertError } = await supabase
+          .from("properties")
+          .insert(propertyData)
+        error = insertError
+      }
 
       if (error) throw error
 
@@ -43,17 +59,19 @@ export function usePropertySubmit(onSuccess?: () => void) {
       }
 
       toast({
-        title: "Property Added",
-        description: "Your property has been successfully added.",
+        title: propertyId ? "Property Updated" : "Property Added",
+        description: propertyId 
+          ? "Your property has been successfully updated."
+          : "Your property has been successfully added.",
       })
       
       navigate("/account")
     } catch (error) {
-      console.error("Error adding property:", error)
+      console.error("Error saving property:", error)
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to add property. Please try again.",
+        description: "Failed to save property. Please try again.",
       })
     }
   }

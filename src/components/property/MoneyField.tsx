@@ -11,12 +11,17 @@ interface MoneyFieldProps {
 
 export function MoneyField({ form, name, label }: MoneyFieldProps) {
   function formatCurrency(value: string) {
+    // Remove all non-numeric characters
     const numericValue = value.replace(/[^0-9]/g, "")
     if (!numericValue) return ""
+    
+    // Format as whole dollars (no cents)
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
-    }).format(Number(numericValue) / 100)
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(Number(numericValue))
   }
 
   return (
@@ -28,7 +33,7 @@ export function MoneyField({ form, name, label }: MoneyFieldProps) {
           <FormLabel>{label}</FormLabel>
           <FormControl>
             <Input
-              placeholder="$0.00"
+              placeholder="$0"
               {...field}
               onChange={(e) => {
                 const formatted = formatCurrency(e.target.value)
