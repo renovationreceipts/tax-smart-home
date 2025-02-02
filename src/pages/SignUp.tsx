@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -33,7 +33,7 @@ export default function SignUp() {
           title: "Success!",
           description: "Please check your email to confirm your account.",
         });
-        navigate("/");
+        navigate("/account");
       }
     } catch (error) {
       console.error("Error:", error);
