@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
 import SignUp from "@/pages/SignUp";
+import Login from "@/pages/Login";
 import Account from "@/pages/Account";
 
 const queryClient = new QueryClient();
@@ -20,6 +21,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/account" element={<Account />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
