@@ -27,6 +27,42 @@ export type Database = {
         }
         Relationships: []
       }
+      properties: {
+        Row: {
+          address: string
+          created_at: string | null
+          current_value: number
+          id: string
+          name: string
+          property_type: string
+          purchase_date: string
+          purchase_price: number
+          user_id: string
+        }
+        Insert: {
+          address: string
+          created_at?: string | null
+          current_value: number
+          id?: string
+          name: string
+          property_type: string
+          purchase_date: string
+          purchase_price: number
+          user_id: string
+        }
+        Update: {
+          address?: string
+          created_at?: string | null
+          current_value?: number
+          id?: string
+          name?: string
+          property_type?: string
+          purchase_date?: string
+          purchase_price?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
