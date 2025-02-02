@@ -8,6 +8,8 @@ interface PropertyTypeSelectProps {
 }
 
 export function PropertyTypeSelect({ form }: PropertyTypeSelectProps) {
+  console.log("Current property type value:", form.getValues("propertyType"))
+  
   return (
     <FormField
       control={form.control}
@@ -15,7 +17,7 @@ export function PropertyTypeSelect({ form }: PropertyTypeSelectProps) {
       render={({ field }) => (
         <FormItem>
           <FormLabel>Property Type</FormLabel>
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <Select onValueChange={field.onChange} value={field.value}>
             <FormControl>
               <SelectTrigger>
                 <SelectValue placeholder="Select property type" />
