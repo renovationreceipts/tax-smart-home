@@ -7,14 +7,16 @@ import { ProjectsSection } from "@/components/account/ProjectsSection"
 import { AccountActions } from "@/components/account/AccountActions"
 import { useProperties } from "@/hooks/useProperties"
 import { useProjects } from "@/hooks/useProjects"
+import { ProjectForm } from "@/components/project/ProjectForm"
 
 export function AccountContent() {
   const [showPropertyForm, setShowPropertyForm] = useState(false)
+  const [showProjectForm, setShowProjectForm] = useState(false)
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null)
   const [propertyToEdit, setPropertyToEdit] = useState<any>(null)
   
   const { data: properties = [], refetch: refetchProperties } = useProperties()
-  const { data: projects = [] } = useProjects(selectedPropertyId)
+  const { data: projects = [], refetch: refetchProjects } = useProjects(selectedPropertyId)
 
   const handleEditProperty = (property: any) => {
     setPropertyToEdit(property)
@@ -33,6 +35,19 @@ export function AccountContent() {
           setShowPropertyForm(false)
           setPropertyToEdit(null)
           refetchProperties()
+        }}
+      />
+    )
+  }
+
+  if (showProjectForm && selectedPropertyId) {
+    return (
+      <ProjectForm
+        propertyId={selectedPropertyId}
+        onCancel={() => setShowProjectForm(false)}
+        onSuccess={() => {
+          setShowProjectForm(false)
+          refetchProjects()
         }}
       />
     )
@@ -68,6 +83,7 @@ export function AccountContent() {
         <ProjectsSection 
           propertyId={selectedPropertyId}
           projects={projects}
+          onAddProject={() => setShowProjectForm(true)}
         />
 
         <div className="bg-white rounded-lg shadow-sm border p-6">
