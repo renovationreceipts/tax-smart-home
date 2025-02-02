@@ -12,7 +12,14 @@ export default function Account() {
     try {
       const { error } = await supabase.auth.signOut()
       if (error) throw error
+      
+      // Redirect to the main website screen after successful sign out
       navigate("/")
+      
+      toast({
+        title: "Signed out successfully",
+        description: "You have been signed out of your account.",
+      })
     } catch (error) {
       console.error("Error signing out:", error)
       toast({

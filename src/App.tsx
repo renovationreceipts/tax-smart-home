@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Account from "@/pages/Account"
 import EditProperty from "@/pages/EditProperty"
 import EditProject from "@/pages/EditProject"
+import Index from "@/pages/Index"
+import Login from "@/pages/Login"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,8 +20,9 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Account />} />
+          <Route path="/" element={<Index />} />
           <Route path="/account" element={<Account />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/property/edit/:id?" element={<EditProperty />} />
           <Route path="/project/edit/:propertyId/:id?" element={<EditProject />} />
         </Routes>
