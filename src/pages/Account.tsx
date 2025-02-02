@@ -34,7 +34,6 @@ export default function Account() {
   };
 
   const handleAddProject = () => {
-    // This will be implemented when we add the project creation functionality
     toast({
       title: "Coming soon",
       description: "Project creation will be implemented in the next update.",
@@ -172,7 +171,7 @@ export default function Account() {
                   <TableCell>-</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell className="font-medium">Based on Your Tax Rate This Saved You</TableCell>
+                  <TableCell className="font-medium text-green-600">Based on Your Tax Rate This Saved You</TableCell>
                   <TableCell>-</TableCell>
                 </TableRow>
               </TableBody>
