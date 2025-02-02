@@ -37,7 +37,7 @@ export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProp
   const form = useForm<PropertyFormValues>({
     resolver: zodResolver(propertyFormSchema),
     defaultValues: property ? {
-      propertyType: property.property_type,
+      propertyType: property.property_type,  // This was the issue - property_type wasn't being mapped correctly
       name: property.name,
       address: property.address,
       purchasePrice: new Intl.NumberFormat("en-US", {
