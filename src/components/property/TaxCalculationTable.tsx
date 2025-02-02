@@ -61,43 +61,43 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
       <TableHeader>
         <TableRow>
           <TableHead>Category</TableHead>
-          <TableHead>Amount</TableHead>
+          <TableHead className="text-right">Amount</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         <TableRow>
           <TableCell className="font-medium">Current Home Value</TableCell>
-          <TableCell>{property ? formatCurrency(property.current_value) : "-"}</TableCell>
+          <TableCell className="text-right">{property ? formatCurrency(property.current_value) : "-"}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell className="font-medium">Purchase Price</TableCell>
-          <TableCell>{property ? formatCurrency(property.purchase_price) : "-"}</TableCell>
+          <TableCell className="text-right">{property ? formatCurrency(property.purchase_price) : "-"}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell className="font-medium">Basis Adjustments (Total Project Costs)</TableCell>
-          <TableCell>{formatCurrency(totalProjectCosts)}</TableCell>
+          <TableCell className="text-right">{formatCurrency(totalProjectCosts)}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell className="font-medium">New Cost Basis</TableCell>
-          <TableCell>{formatCurrency(newCostBasis)}</TableCell>
+          <TableCell className="text-right">{formatCurrency(newCostBasis)}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell className="font-medium">Taxable Gain With New Cost Basis</TableCell>
-          <TableCell>{formatCurrency(taxableGainWithBasis)}</TableCell>
+          <TableCell className="text-right">{formatCurrency(taxableGainWithBasis)}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell className="font-medium">Taxable Gain Without New Cost Basis</TableCell>
-          <TableCell>{formatCurrency(taxableGainWithoutBasis)}</TableCell>
+          <TableCell className="text-right">{formatCurrency(taxableGainWithoutBasis)}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell className="font-medium">Tracking Improvements Reduced Your Taxable Capital Gain By</TableCell>
-          <TableCell>{formatCurrency(taxSavings)}</TableCell>
+          <TableCell className="text-right">{formatCurrency(taxSavings)}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell className="font-medium text-green-600">
             Based on {userTaxRate !== null ? `${(userTaxRate * 100).toFixed(1)}%` : '0%'} Tax Rate This Saved You
           </TableCell>
-          <TableCell className="text-green-600">{formatCurrency(estimatedTaxSavings)}</TableCell>
+          <TableCell className="text-right text-green-600">{formatCurrency(estimatedTaxSavings)}</TableCell>
         </TableRow>
       </TableBody>
     </Table>
