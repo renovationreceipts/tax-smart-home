@@ -4,7 +4,14 @@ import { Routes, Route } from "react-router-dom"
 import Account from "@/pages/Account"
 import EditProperty from "@/pages/EditProperty"
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 
 export default function App() {
   return (

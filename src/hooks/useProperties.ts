@@ -16,6 +16,7 @@ async function fetchProperties() {
   const { data, error } = await supabase
     .from("properties")
     .select("id, property_type, name, address, purchase_price, purchase_date, current_value")
+    .returns<Property[]>()
   
   if (error) {
     console.error("Error fetching properties:", error)

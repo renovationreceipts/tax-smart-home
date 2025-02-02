@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { PropertyForm } from "@/components/PropertyForm"
 import { useProperties } from "@/hooks/useProperties"
 
-export function EditProperty() {
+export default function EditProperty() {
   const navigate = useNavigate()
   const { id } = useParams()
   const { data: properties = [] } = useProperties()
