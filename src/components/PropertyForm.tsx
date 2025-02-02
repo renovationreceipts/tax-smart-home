@@ -26,6 +26,8 @@ interface PropertyFormProps {
 export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProps) {
   const submitProperty = usePropertySubmit(onSuccess, property?.id)
 
+  console.log("Property data received:", property)
+
   const form = useForm<PropertyFormValues>({
     resolver: zodResolver(propertyFormSchema),
     defaultValues: property ? {
@@ -35,19 +37,27 @@ export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProp
       purchasePrice: new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
       }).format(property.purchase_price),
-      purchaseDate: property.purchase_date,
+      purchaseDate: new Date(property.purchase_date),
       currentValue: new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
       }).format(property.current_value),
     } : {
+      propertyType: undefined,
       name: "",
       address: "",
       purchasePrice: "",
+      purchaseDate: undefined,
       currentValue: "",
     },
   })
+
+  console.log("Form default values:", form.getValues())
 
   return (
     <div className="space-y-6 p-6 bg-white rounded-lg shadow-sm border max-w-2xl mx-auto">
