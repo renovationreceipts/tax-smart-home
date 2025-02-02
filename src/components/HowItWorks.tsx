@@ -1,17 +1,20 @@
-import { CircleIcon } from "lucide-react";
+import { LogIn, Home, FileText } from "lucide-react";
 
 const steps = [
   {
+    icon: <LogIn className="h-6 w-6 text-blue-600" />,
     title: "Create an Account",
     description: "Sign up and securely log in to start tracking your property expenses.",
   },
   {
-    title: "Input Property Information",
-    description: "Enter your home's purchase details and improvement expenses, categorized by property type.",
+    icon: <Home className="h-6 w-6 text-blue-600" />,
+    title: "Input Property Details",
+    description: "Add your home's purchase information and improvement expenses, specifying property type.",
   },
   {
-    title: "Generate Tax Reports",
-    description: "Let the app calculate your cost basis and prepare IRS Form 8949 data automatically.",
+    icon: <FileText className="h-6 w-6 text-blue-600" />,
+    title: "Generate Tax Forms",
+    description: "Automatically calculate cost basis and prepare data for IRS Form 8949.",
   },
 ];
 
@@ -23,21 +26,18 @@ export const HowItWorks = () => {
           <h2 className="text-3xl font-bold sm:text-4xl mb-4">
             How It Works
           </h2>
-          <p className="text-xl text-gray-600">
-            Three simple steps to optimize your property tax benefits
-          </p>
         </div>
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-12">
           {steps.map((step, index) => (
             <div key={index} className="relative">
               {index < steps.length - 1 && (
                 <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-blue-200 -z-10" />
               )}
               <div className="flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mb-6">
-                  <span className="text-xl font-bold">{index + 1}</span>
+                <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-6">
+                  {step.icon}
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
+                <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
                 <p className="text-gray-600">{step.description}</p>
               </div>
             </div>
