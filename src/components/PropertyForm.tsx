@@ -1,53 +1,19 @@
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
-
-const formSchema = z.object({
-  propertyType: z.enum(["PRIMARY_HOME", "SECOND_HOME", "RENTAL"], {
-    required_error: "Please select a property type.",
-  }),
-  name: z.string().min(1, "Property name is required"),
-  address: z.string().min(1, "Property address is required"),
-  purchasePrice: z.string().min(1, "Purchase price is required"),
-  purchaseDate: z.date({
-    required_error: "Purchase date is required.",
-  }),
-  currentValue: z.string().min(1, "Current property value is required"),
-})
-
-type PropertyFormValues = z.infer<typeof formSchema>
+import { PropertyTypeSelect } from "./property/PropertyTypeSelect"
+import { PurchaseDateField } from "./property/PurchaseDateField"
+import { MoneyField } from "./property/MoneyField"
+import { propertyFormSchema, type PropertyFormValues } from "./property/PropertyFormTypes"
+import { format } from "date-fns"
 
 interface PropertyFormProps {
-  onCancel: () => void;
+  onCancel: () => void
 }
 
 export function PropertyForm({ onCancel }: PropertyFormProps) {
@@ -55,7 +21,7 @@ export function PropertyForm({ onCancel }: PropertyFormProps) {
   const navigate = useNavigate()
 
   const form = useForm<PropertyFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(propertyFormSchema),
     defaultValues: {
       name: "",
       address: "",
@@ -63,15 +29,6 @@ export function PropertyForm({ onCancel }: PropertyFormProps) {
       currentValue: "",
     },
   })
-
-  function formatCurrency(value: string) {
-    const numericValue = value.replace(/[^0-9]/g, "")
-    if (!numericValue) return ""
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(Number(numericValue) / 100)
-  }
 
   async function onSubmit(data: PropertyFormValues) {
     try {
@@ -128,28 +85,7 @@ export function PropertyForm({ onCancel }: PropertyFormProps) {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="propertyType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Property Type</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select property type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="PRIMARY_HOME">Primary Home</SelectItem>
-                    <SelectItem value="SECOND_HOME">Second Home</SelectItem>
-                    <SelectItem value="RENTAL">Rental Property</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <PropertyTypeSelect form={form} />
 
           <FormField
             control={form.control}
@@ -179,90 +115,18 @@ export function PropertyForm({ onCancel }: PropertyFormProps) {
             )}
           />
 
-          <FormField
-            control={form.control}
+          <MoneyField 
+            form={form}
             name="purchasePrice"
-            render={({ field: { onChange, ...field } }) => (
-              <FormItem>
-                <FormLabel>Purchase Price</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="$0.00"
-                    {...field}
-                    onChange={(e) => {
-                      const formatted = formatCurrency(e.target.value)
-                      e.target.value = formatted
-                      onChange(e)
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Purchase Price"
           />
 
-          <FormField
-            control={form.control}
-            name="purchaseDate"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Purchase Date</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP")
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date("1900-01-01")
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <PurchaseDateField form={form} />
 
-          <FormField
-            control={form.control}
+          <MoneyField 
+            form={form}
             name="currentValue"
-            render={({ field: { onChange, ...field } }) => (
-              <FormItem>
-                <FormLabel>Current Property Value</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="$0.00"
-                    {...field}
-                    onChange={(e) => {
-                      const formatted = formatCurrency(e.target.value)
-                      e.target.value = formatted
-                      onChange(e)
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Current Property Value"
           />
 
           <div className="flex justify-end gap-4 pt-4">
