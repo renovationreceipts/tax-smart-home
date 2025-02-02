@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { supabase } from "@/integrations/supabase/client"
 import type { Project } from "@/hooks/useProjects"
 
 interface Property {
@@ -14,6 +16,27 @@ interface TaxCalculationTableProps {
 }
 
 export function TaxCalculationTable({ property, projects }: TaxCalculationTableProps) {
+  const [userTaxRate, setUserTaxRate] = useState<number | null>(null)
+
+  useEffect(() => {
+    const fetchUserTaxRate = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('tax_rate')
+          .eq('id', user.id)
+          .single()
+        
+        if (profile?.tax_rate) {
+          setUserTaxRate(profile.tax_rate / 100) // Convert percentage to decimal
+        }
+      }
+    }
+
+    fetchUserTaxRate()
+  }, [])
+
   const formatCurrency = (amount: number | null) => {
     if (amount === null) return "-"
     return new Intl.NumberFormat("en-US", {
@@ -29,8 +52,7 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
   const taxSavings = taxableGainWithBasis !== null && taxableGainWithoutBasis !== null 
     ? taxableGainWithoutBasis - taxableGainWithBasis 
     : null
-  const assumedTaxRate = 0.20 // 20% capital gains tax rate
-  const estimatedTaxSavings = taxSavings !== null ? taxSavings * assumedTaxRate : null
+  const estimatedTaxSavings = taxSavings !== null && userTaxRate !== null ? taxSavings * userTaxRate : null
 
   return (
     <Table>
@@ -70,7 +92,9 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
           <TableCell>{formatCurrency(taxSavings)}</TableCell>
         </TableRow>
         <TableRow>
-          <TableCell className="font-medium text-green-600">Based on 20% Tax Rate This Saved You</TableCell>
+          <TableCell className="font-medium text-green-600">
+            Based on {userTaxRate !== null ? `${(userTaxRate * 100).toFixed(1)}%` : '0%'} Tax Rate This Saved You
+          </TableCell>
           <TableCell className="text-green-600">{formatCurrency(estimatedTaxSavings)}</TableCell>
         </TableRow>
       </TableBody>
