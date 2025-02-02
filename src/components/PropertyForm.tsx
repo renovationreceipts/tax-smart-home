@@ -14,9 +14,10 @@ import { format } from "date-fns"
 
 interface PropertyFormProps {
   onCancel: () => void
+  onSuccess?: () => void
 }
 
-export function PropertyForm({ onCancel }: PropertyFormProps) {
+export function PropertyForm({ onCancel, onSuccess }: PropertyFormProps) {
   const { toast } = useToast()
   const navigate = useNavigate()
 
@@ -64,6 +65,10 @@ export function PropertyForm({ onCancel }: PropertyFormProps) {
         title: "Property Added",
         description: "Your property has been successfully added.",
       })
+      
+      if (onSuccess) {
+        onSuccess()
+      }
       
       navigate("/account")
     } catch (error) {

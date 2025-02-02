@@ -9,6 +9,7 @@ import { PropertyForm } from "@/components/PropertyForm"
 import { PropertyList } from "@/components/property/PropertyList"
 import { EmptyPropertyState } from "@/components/property/EmptyPropertyState"
 import { TaxCalculationTable } from "@/components/property/TaxCalculationTable"
+import { useQuery } from "@tanstack/react-query"
 
 interface Property {
   id: string
@@ -18,34 +19,24 @@ interface Property {
   current_value: number
 }
 
+async function fetchProperties() {
+  const { data, error } = await supabase
+    .from("properties")
+    .select("id, name, address, purchase_price, current_value")
+  
+  if (error) throw error
+  return data
+}
+
 export default function Account() {
   const navigate = useNavigate()
   const { toast } = useToast()
-  const [properties, setProperties] = useState<Property[]>([])
   const [showPropertyForm, setShowPropertyForm] = useState(false)
 
-  useEffect(() => {
-    fetchProperties()
-  }, [])
-
-  async function fetchProperties() {
-    try {
-      const { data, error } = await supabase
-        .from("properties")
-        .select("id, name, address, purchase_price, current_value")
-      
-      if (error) throw error
-      
-      setProperties(data || [])
-    } catch (error) {
-      console.error("Error fetching properties:", error)
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to load properties.",
-      })
-    }
-  }
+  const { data: properties = [], refetch } = useQuery({
+    queryKey: ['properties'],
+    queryFn: fetchProperties,
+  })
 
   const handleSignOut = async () => {
     try {
@@ -65,7 +56,13 @@ export default function Account() {
   if (showPropertyForm) {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
-        <PropertyForm onCancel={() => setShowPropertyForm(false)} />
+        <PropertyForm 
+          onCancel={() => setShowPropertyForm(false)}
+          onSuccess={() => {
+            setShowPropertyForm(false)
+            refetch()
+          }}
+        />
       </div>
     )
   }
