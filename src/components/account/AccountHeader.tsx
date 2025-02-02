@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Home, LogOut } from "lucide-react"
 
 interface AccountHeaderProps {
@@ -15,20 +14,15 @@ export function AccountHeader({ onSignOut }: AccountHeaderProps) {
             <Home className="h-6 w-6" />
             <span className="text-xl font-bold">HomeCostTracker</span>
           </div>
-          <div className="flex items-center gap-4">
-            <Avatar className="h-8 w-8">
-              <AvatarFallback>U</AvatarFallback>
-            </Avatar>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-gray-600"
-              onClick={onSignOut}
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign out
-            </Button>
-          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-gray-600"
+            onClick={onSignOut}
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Sign out
+          </Button>
         </div>
       </div>
     </nav>
