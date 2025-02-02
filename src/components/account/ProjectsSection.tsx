@@ -1,9 +1,10 @@
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { FileText, Plus } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import type { Project } from "@/hooks/useProjects"
 import { useProperties } from "@/hooks/useProperties"
+import { ProjectForm } from "@/components/project/ProjectForm"
 
 interface ProjectsSectionProps {
   propertyId: string | null
@@ -11,7 +12,7 @@ interface ProjectsSectionProps {
 }
 
 export function ProjectsSection({ propertyId, projects }: ProjectsSectionProps) {
-  const { toast } = useToast()
+  const [showProjectForm, setShowProjectForm] = useState(false)
   const { data: properties = [] } = useProperties()
 
   const formatCurrency = (amount: number) => {
@@ -23,6 +24,16 @@ export function ProjectsSection({ propertyId, projects }: ProjectsSectionProps) 
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString()
+  }
+
+  if (showProjectForm && propertyId) {
+    return (
+      <ProjectForm
+        propertyId={propertyId}
+        onCancel={() => setShowProjectForm(false)}
+        onSuccess={() => setShowProjectForm(false)}
+      />
+    )
   }
 
   if (!propertyId) {
@@ -50,10 +61,7 @@ export function ProjectsSection({ propertyId, projects }: ProjectsSectionProps) 
           <h3 className="text-lg font-semibold">Projects</h3>
         </div>
         <Button 
-          onClick={() => toast({
-            title: "Not implemented yet",
-            description: "Project creation functionality is coming soon.",
-          })}
+          onClick={() => setShowProjectForm(true)}
           size="sm"
         >
           <Plus className="h-4 w-4 mr-2" />
