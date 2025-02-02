@@ -10,16 +10,38 @@ import { propertyFormSchema, type PropertyFormValues } from "./property/Property
 import { usePropertySubmit } from "./property/usePropertySubmit"
 
 interface PropertyFormProps {
+  property?: {
+    id: string
+    property_type: "PRIMARY_HOME" | "SECOND_HOME" | "RENTAL"
+    name: string
+    address: string
+    purchase_price: number
+    purchase_date: Date
+    current_value: number
+  }
   onCancel: () => void
   onSuccess?: () => void
 }
 
-export function PropertyForm({ onCancel, onSuccess }: PropertyFormProps) {
-  const submitProperty = usePropertySubmit(onSuccess)
+export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProps) {
+  const submitProperty = usePropertySubmit(onSuccess, property?.id)
 
   const form = useForm<PropertyFormValues>({
     resolver: zodResolver(propertyFormSchema),
-    defaultValues: {
+    defaultValues: property ? {
+      propertyType: property.property_type,
+      name: property.name,
+      address: property.address,
+      purchasePrice: new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(property.purchase_price),
+      purchaseDate: property.purchase_date,
+      currentValue: new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(property.current_value),
+    } : {
       name: "",
       address: "",
       purchasePrice: "",
@@ -30,8 +52,12 @@ export function PropertyForm({ onCancel, onSuccess }: PropertyFormProps) {
   return (
     <div className="space-y-6 p-6 bg-white rounded-lg shadow-sm border max-w-2xl mx-auto">
       <div>
-        <h2 className="text-2xl font-semibold">Add New Property</h2>
-        <p className="text-muted-foreground">Enter your property details below.</p>
+        <h2 className="text-2xl font-semibold">
+          {property ? "Edit Property" : "Add New Property"}
+        </h2>
+        <p className="text-muted-foreground">
+          {property ? "Update your property details below." : "Enter your property details below."}
+        </p>
       </div>
 
       <Form {...form}>
@@ -84,7 +110,9 @@ export function PropertyForm({ onCancel, onSuccess }: PropertyFormProps) {
             <Button variant="outline" type="button" onClick={onCancel}>
               Cancel
             </Button>
-            <Button type="submit">Add Property</Button>
+            <Button type="submit">
+              {property ? "Update Property" : "Add Property"}
+            </Button>
           </div>
         </form>
       </Form>

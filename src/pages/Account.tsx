@@ -18,6 +18,7 @@ export default function Account() {
   const { toast } = useToast()
   const [showPropertyForm, setShowPropertyForm] = useState(false)
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null)
+  const [propertyToEdit, setPropertyToEdit] = useState<any>(null)
   
   const { data: properties = [], refetch: refetchProperties } = useProperties()
   const { data: projects = [] } = useProjects(selectedPropertyId)
@@ -37,13 +38,23 @@ export default function Account() {
     }
   }
 
+  const handleEditProperty = (property: any) => {
+    setPropertyToEdit(property)
+    setShowPropertyForm(true)
+  }
+
   if (showPropertyForm) {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
         <PropertyForm 
-          onCancel={() => setShowPropertyForm(false)}
+          property={propertyToEdit}
+          onCancel={() => {
+            setShowPropertyForm(false)
+            setPropertyToEdit(null)
+          }}
           onSuccess={() => {
             setShowPropertyForm(false)
+            setPropertyToEdit(null)
             refetchProperties()
           }}
         />
@@ -72,6 +83,7 @@ export default function Account() {
               properties={properties}
               selectedPropertyId={selectedPropertyId}
               onPropertySelect={setSelectedPropertyId}
+              onEditProperty={handleEditProperty}
             />
           )}
         </div>
