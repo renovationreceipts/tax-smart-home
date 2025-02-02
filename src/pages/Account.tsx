@@ -11,12 +11,16 @@ import { TaxCalculationTable } from "@/components/property/TaxCalculationTable"
 import { AccountHeader } from "@/components/account/AccountHeader"
 import { ProjectsSection } from "@/components/account/ProjectsSection"
 import { useProperties } from "@/hooks/useProperties"
+import { useProjects } from "@/hooks/useProjects"
 
 export default function Account() {
   const navigate = useNavigate()
   const { toast } = useToast()
   const [showPropertyForm, setShowPropertyForm] = useState(false)
-  const { data: properties = [], refetch } = useProperties()
+  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null)
+  
+  const { data: properties = [], refetch: refetchProperties } = useProperties()
+  const { data: projects = [] } = useProjects(selectedPropertyId)
 
   const handleSignOut = async () => {
     try {
@@ -40,7 +44,7 @@ export default function Account() {
           onCancel={() => setShowPropertyForm(false)}
           onSuccess={() => {
             setShowPropertyForm(false)
-            refetch()
+            refetchProperties()
           }}
         />
       </div>
@@ -64,23 +68,35 @@ export default function Account() {
           {properties.length === 0 ? (
             <EmptyPropertyState onAddProperty={() => setShowPropertyForm(true)} />
           ) : (
-            <PropertyList properties={properties} />
+            <PropertyList 
+              properties={properties}
+              selectedPropertyId={selectedPropertyId}
+              onPropertySelect={setSelectedPropertyId}
+            />
           )}
         </div>
 
         <div className="space-y-6">
-          <ProjectsSection />
+          <ProjectsSection 
+            propertyId={selectedPropertyId}
+            projects={projects}
+          />
 
-          <div className="bg-white rounded-lg shadow-sm border p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <h3 className="text-lg font-semibold">Tax Calculation</h3>
+          {selectedPropertyId && (
+            <div className="bg-white rounded-lg shadow-sm border p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <h3 className="text-lg font-semibold">Tax Calculation</h3>
+              </div>
+              <p className="text-gray-600 text-sm mb-4">
+                Get automated tax calculations based on your property improvements and
+                expenses.
+              </p>
+              <TaxCalculationTable 
+                property={properties.find(p => p.id === selectedPropertyId)}
+                projects={projects}
+              />
             </div>
-            <p className="text-gray-600 text-sm mb-4">
-              Get automated tax calculations based on your property improvements and
-              expenses.
-            </p>
-            <TaxCalculationTable />
-          </div>
+          )}
         </div>
       </main>
     </div>

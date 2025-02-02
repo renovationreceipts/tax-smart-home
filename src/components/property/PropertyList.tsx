@@ -10,9 +10,11 @@ interface Property {
 
 interface PropertyListProps {
   properties: Property[]
+  selectedPropertyId: string | null
+  onPropertySelect: (propertyId: string) => void
 }
 
-export function PropertyList({ properties }: PropertyListProps) {
+export function PropertyList({ properties, selectedPropertyId, onPropertySelect }: PropertyListProps) {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -33,7 +35,13 @@ export function PropertyList({ properties }: PropertyListProps) {
         </TableHeader>
         <TableBody>
           {properties.map((property) => (
-            <TableRow key={property.id}>
+            <TableRow 
+              key={property.id}
+              className={`cursor-pointer hover:bg-gray-50 ${
+                property.id === selectedPropertyId ? "bg-primary/5" : ""
+              }`}
+              onClick={() => onPropertySelect(property.id)}
+            >
               <TableCell className="font-medium">{property.name}</TableCell>
               <TableCell>{property.address}</TableCell>
               <TableCell>{formatCurrency(property.purchase_price)}</TableCell>
