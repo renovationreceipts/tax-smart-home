@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Calendar } from "@/components/ui/calendar"
-import { CalendarIcon, Upload } from "lucide-react"
+import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -237,7 +237,7 @@ export function ProjectForm({ propertyId, onSuccess, onCancel }: ProjectFormProp
           <FormField
             control={form.control}
             name="beforePhotos"
-            render={({ field: { onChange, ...field } }) => (
+            render={({ field: { onChange, value, ...field } }) => (
               <FormItem>
                 <FormLabel>Before Photos (Optional)</FormLabel>
                 <FormControl>
@@ -245,7 +245,12 @@ export function ProjectForm({ propertyId, onSuccess, onCancel }: ProjectFormProp
                     type="file"
                     accept="image/*"
                     multiple
-                    onChange={(e) => onChange(e.target.files)}
+                    onChange={(e) => {
+                      const files = e.target.files
+                      if (files) {
+                        onChange(files)
+                      }
+                    }}
                     {...field}
                     className="file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
                   />
@@ -258,7 +263,7 @@ export function ProjectForm({ propertyId, onSuccess, onCancel }: ProjectFormProp
           <FormField
             control={form.control}
             name="afterPhotos"
-            render={({ field: { onChange, ...field } }) => (
+            render={({ field: { onChange, value, ...field } }) => (
               <FormItem>
                 <FormLabel>After Photos (Optional)</FormLabel>
                 <FormControl>
@@ -266,7 +271,12 @@ export function ProjectForm({ propertyId, onSuccess, onCancel }: ProjectFormProp
                     type="file"
                     accept="image/*"
                     multiple
-                    onChange={(e) => onChange(e.target.files)}
+                    onChange={(e) => {
+                      const files = e.target.files
+                      if (files) {
+                        onChange(files)
+                      }
+                    }}
                     {...field}
                     className="file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
                   />
@@ -279,7 +289,7 @@ export function ProjectForm({ propertyId, onSuccess, onCancel }: ProjectFormProp
           <FormField
             control={form.control}
             name="receipts"
-            render={({ field: { onChange, ...field } }) => (
+            render={({ field: { onChange, value, ...field } }) => (
               <FormItem>
                 <FormLabel>Receipts (Optional)</FormLabel>
                 <FormControl>
@@ -287,7 +297,12 @@ export function ProjectForm({ propertyId, onSuccess, onCancel }: ProjectFormProp
                     type="file"
                     accept=".pdf,.jpg,.jpeg,.png"
                     multiple
-                    onChange={(e) => onChange(e.target.files)}
+                    onChange={(e) => {
+                      const files = e.target.files
+                      if (files) {
+                        onChange(files)
+                      }
+                    }}
                     {...field}
                     className="file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
                   />
