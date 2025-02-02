@@ -1,15 +1,19 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { UseFormReturn } from "react-hook-form"
-import { PropertyFormValues } from "./PropertyFormTypes"
 
-interface MoneyFieldProps {
-  form: UseFormReturn<PropertyFormValues>
-  name: "purchasePrice" | "currentValue"
+// Make this type generic to work with any form values
+interface MoneyFieldProps<T extends Record<string, any>> {
+  form: UseFormReturn<T>
+  name: keyof T & string
   label: string
 }
 
-export function MoneyField({ form, name, label }: MoneyFieldProps) {
+export function MoneyField<T extends Record<string, any>>({ 
+  form, 
+  name, 
+  label 
+}: MoneyFieldProps<T>) {
   function formatCurrency(value: string) {
     // Remove all non-numeric characters
     const numericValue = value.replace(/[^0-9]/g, "")
