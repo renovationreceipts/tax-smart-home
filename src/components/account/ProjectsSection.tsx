@@ -3,6 +3,7 @@ import { FileText, Plus } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import type { Project } from "@/hooks/useProjects"
+import { useProperties } from "@/hooks/useProperties"
 
 interface ProjectsSectionProps {
   propertyId: string | null
@@ -11,6 +12,7 @@ interface ProjectsSectionProps {
 
 export function ProjectsSection({ propertyId, projects }: ProjectsSectionProps) {
   const { toast } = useToast()
+  const { data: properties = [] } = useProperties()
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -31,7 +33,10 @@ export function ProjectsSection({ propertyId, projects }: ProjectsSectionProps) 
           <h3 className="text-lg font-semibold">Projects</h3>
         </div>
         <p className="text-gray-600 text-sm mt-2">
-          Select a property to view and manage its projects.
+          {properties.length === 0 
+            ? "Add a property first and then you can add projects"
+            : "Select a property to view and manage its projects"
+          }
         </p>
       </div>
     )
