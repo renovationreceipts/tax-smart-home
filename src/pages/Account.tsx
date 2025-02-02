@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Home, FileText, Calculator, LogOut, Plus } from "lucide-react";
+import { PropertyForm } from "@/components/PropertyForm";
 import {
   Table,
   TableBody,
@@ -17,6 +19,7 @@ export default function Account() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const hasProperties = false;
+  const [showPropertyForm, setShowPropertyForm] = useState(false);
 
   const handleSignOut = async () => {
     try {
@@ -33,12 +36,13 @@ export default function Account() {
     }
   };
 
-  const handleAddProject = () => {
-    toast({
-      title: "Coming soon",
-      description: "Project creation will be implemented in the next update.",
-    });
-  };
+  if (showPropertyForm) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <PropertyForm onCancel={() => setShowPropertyForm(false)} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -93,7 +97,10 @@ export default function Account() {
               properties and manage their projects and tax calculations
               individually.
             </p>
-            <Button className="w-full sm:w-auto">
+            <Button 
+              className="w-full sm:w-auto"
+              onClick={() => setShowPropertyForm(true)}
+            >
               <Plus className="mr-2 h-4 w-4" />
               Add Your First Property
             </Button>
