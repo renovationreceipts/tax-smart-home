@@ -14,8 +14,6 @@ interface TaxCalculationTableProps {
 }
 
 export function TaxCalculationTable({ property, projects }: TaxCalculationTableProps) {
-  if (!property) return null
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -24,9 +22,9 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
   }
 
   const totalProjectCosts = projects.reduce((sum, project) => sum + project.cost, 0)
-  const newCostBasis = property.purchase_price + totalProjectCosts
-  const taxableGainWithBasis = property.current_value - newCostBasis
-  const taxableGainWithoutBasis = property.current_value - property.purchase_price
+  const newCostBasis = property ? property.purchase_price + totalProjectCosts : totalProjectCosts
+  const taxableGainWithBasis = property ? property.current_value - newCostBasis : 0
+  const taxableGainWithoutBasis = property ? property.current_value - (property.purchase_price || 0) : 0
   const taxSavings = taxableGainWithoutBasis - taxableGainWithBasis
   const assumedTaxRate = 0.20 // 20% capital gains tax rate
   const estimatedTaxSavings = taxSavings * assumedTaxRate
@@ -42,11 +40,11 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
       <TableBody>
         <TableRow>
           <TableCell className="font-medium">Current Home Value</TableCell>
-          <TableCell>{formatCurrency(property.current_value)}</TableCell>
+          <TableCell>{property ? formatCurrency(property.current_value) : formatCurrency(0)}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell className="font-medium">Purchase Price</TableCell>
-          <TableCell>{formatCurrency(property.purchase_price)}</TableCell>
+          <TableCell>{property ? formatCurrency(property.purchase_price) : formatCurrency(0)}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell className="font-medium">Basis Adjustments (Total Project Costs)</TableCell>

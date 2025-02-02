@@ -113,22 +113,16 @@ export default function Account() {
             <div className="flex items-center gap-3 mb-4">
               <h3 className="text-lg font-semibold">Tax Calculation</h3>
             </div>
-            {!selectedProperty ? (
-              <p className="text-gray-600 text-sm">
-                Select a property to view its tax calculations and potential savings.
-              </p>
-            ) : (
-              <>
-                <p className="text-gray-600 text-sm mb-4">
-                  Get automated tax calculations based on your property improvements and
-                  expenses.
-                </p>
-                <TaxCalculationTable 
-                  property={selectedProperty}
-                  projects={projects}
-                />
-              </>
-            )}
+            <p className="text-gray-600 text-sm mb-4">
+              {!selectedProperty 
+                ? "Select a property to view detailed tax calculations and potential savings."
+                : "Get automated tax calculations based on your property improvements and expenses."
+              }
+            </p>
+            <TaxCalculationTable 
+              property={selectedProperty}
+              projects={projects}
+            />
           </div>
         </div>
       </main>
