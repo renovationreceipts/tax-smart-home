@@ -1,11 +1,11 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { UseFormReturn } from "react-hook-form"
+import { UseFormReturn, Path } from "react-hook-form"
 
 // Make this type generic to work with any form values
 interface MoneyFieldProps<T extends Record<string, any>> {
   form: UseFormReturn<T>
-  name: keyof T & string
+  name: Path<T>
   label: string
 }
 
