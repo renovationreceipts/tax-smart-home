@@ -8,6 +8,8 @@ import { Home, FileText, Calculator, LogOut, Plus } from "lucide-react";
 export default function Account() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  // This would be replaced with actual property data from Supabase
+  const hasProperties = false; // Temporary state until we implement property management
 
   const handleSignOut = async () => {
     try {
@@ -22,6 +24,14 @@ export default function Account() {
         description: "Please try again.",
       });
     }
+  };
+
+  const handleAddProject = () => {
+    // This will be implemented when we add the project creation functionality
+    toast({
+      title: "Coming soon",
+      description: "Project creation will be implemented in the next update.",
+    });
   };
 
   return (
@@ -88,9 +98,19 @@ export default function Account() {
         <div className="space-y-6">
           {/* Projects Section */}
           <div className="bg-white rounded-lg shadow-sm border p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <FileText className="h-6 w-6 text-primary" />
-              <h3 className="text-lg font-semibold">Projects</h3>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <FileText className="h-6 w-6 text-primary" />
+                <h3 className="text-lg font-semibold">Projects</h3>
+              </div>
+              <Button 
+                onClick={handleAddProject}
+                disabled={!hasProperties}
+                size="sm"
+              >
+                <Plus className="h-4 w-4" />
+                Add Project
+              </Button>
             </div>
             <p className="text-gray-600 text-sm">
               Track home improvement projects for each property. These will be used
