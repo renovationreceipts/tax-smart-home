@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { PropertyForm } from "@/components/PropertyForm"
 import { PropertyList } from "@/components/property/PropertyList"
 import { EmptyPropertyState } from "@/components/property/EmptyPropertyState"
@@ -19,6 +19,13 @@ export function AccountContent() {
   
   const { data: properties = [], refetch: refetchProperties } = useProperties()
   const { data: projects = [], refetch: refetchProjects } = useProjects(selectedPropertyId)
+
+  // Auto-select the first property when properties are loaded
+  useEffect(() => {
+    if (properties.length > 0 && !selectedPropertyId) {
+      setSelectedPropertyId(properties[0].id)
+    }
+  }, [properties, selectedPropertyId])
 
   const handleEditProperty = (property: any) => {
     setPropertyToEdit(property)
