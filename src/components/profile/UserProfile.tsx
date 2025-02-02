@@ -15,7 +15,6 @@ import { PercentageField } from "./PercentageField"
 const profileFormSchema = z.object({
   email: z.string().email(),
   tax_rate: z.number().min(0).max(100).optional(),
-  password: z.string().min(6).optional(),
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
@@ -83,17 +82,6 @@ export function UserProfile() {
       if (!user) {
         console.error("No user found during form submission")
         throw new Error("No user found")
-      }
-
-      if (data.password) {
-        console.log("Updating password...")
-        const { error: passwordError } = await supabase.auth.updateUser({
-          password: data.password,
-        })
-        if (passwordError) {
-          console.error("Password update error:", passwordError)
-          throw passwordError
-        }
       }
 
       console.log("Updating profile with tax_rate:", data.tax_rate)
@@ -164,15 +152,6 @@ export function UserProfile() {
                   name="tax_rate"
                   label="Tax Rate"
                 />
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">New Password (optional)</label>
-                  <Input
-                    type="password"
-                    {...form.register("password")}
-                    placeholder="Leave blank to keep current password"
-                  />
-                </div>
               </div>
 
               <Button type="submit">
