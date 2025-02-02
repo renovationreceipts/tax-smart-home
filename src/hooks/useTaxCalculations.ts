@@ -21,7 +21,8 @@ export function useTaxCalculations({ property, projects }: TaxCalculationsProps)
           .eq('id', user.id)
           .single()
 
-        setUserTaxRate(profile?.tax_rate || 0)
+        // Convert the tax rate to decimal (e.g., 15% -> 0.15)
+        setUserTaxRate(profile?.tax_rate ? profile.tax_rate / 100 : 0)
       } catch (error) {
         console.error('Error fetching tax rate:', error)
       }
