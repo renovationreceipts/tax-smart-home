@@ -17,9 +17,6 @@ export const Hero = () => {
               <Button size="lg" className="text-lg">
                 Get Started <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button size="lg" variant="outline" className="text-lg">
-                Request Demo
-              </Button>
             </div>
           </div>
           <div className="relative">
