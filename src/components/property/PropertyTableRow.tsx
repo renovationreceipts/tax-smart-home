@@ -34,7 +34,7 @@ export function PropertyTableRow({
       } cursor-pointer hover:bg-muted/50`}
       onClick={() => onPropertySelect(property.id)}
     >
-      <TableCell className="flex items-center justify-center">
+      <TableCell className="flex items-center justify-center py-4">
         <RadioGroupItem 
           value={property.id} 
           id={property.id} 
