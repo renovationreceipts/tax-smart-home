@@ -11,19 +11,33 @@ import { ProjectFileFields } from "./form/ProjectFileFields"
 import { ProjectBuilderFields } from "./form/ProjectBuilderFields"
 import { ProjectFormActions } from "./form/ProjectFormActions"
 import { projectFormSchema, type ProjectFormValues } from "./form/ProjectFormTypes"
+import type { Project } from "@/hooks/useProjects"
 
 interface ProjectFormProps {
   propertyId: string
+  project?: Project
   onSuccess: () => void
   onCancel: () => void
 }
 
-export function ProjectForm({ propertyId, onSuccess, onCancel }: ProjectFormProps) {
+export function ProjectForm({ propertyId, project, onSuccess, onCancel }: ProjectFormProps) {
   const { toast } = useToast()
   
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
-    defaultValues: {
+    defaultValues: project ? {
+      name: project.name,
+      description: project.description || "",
+      cost: new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(project.cost),
+      completion_date: new Date(project.completion_date),
+      builder_name: project.builder_name || "",
+      builder_url: project.builder_url || "",
+    } : {
       name: "",
       description: "",
       cost: "",
@@ -78,40 +92,58 @@ export function ProjectForm({ propertyId, onSuccess, onCancel }: ProjectFormProp
 
       const numericCost = Number(data.cost.replace(/[^0-9.-]/g, ""))
       
-      const { data: projectData, error } = await supabase
-        .from("projects")
-        .insert({
-          property_id: propertyId,
-          user_id: user.id,
-          name: data.name,
-          description: data.description || null,
-          cost: numericCost,
-          completion_date: format(data.completion_date, "yyyy-MM-dd"),
-          builder_name: data.builder_name || null,
-          builder_url: data.builder_url || null,
-        })
-        .select()
-        .single()
+      if (project) {
+        // Update existing project
+        const { error } = await supabase
+          .from("projects")
+          .update({
+            name: data.name,
+            description: data.description || null,
+            cost: numericCost,
+            completion_date: format(data.completion_date, "yyyy-MM-dd"),
+            builder_name: data.builder_name || null,
+            builder_url: data.builder_url || null,
+          })
+          .eq('id', project.id)
 
-      if (error) throw error
+        if (error) throw error
+      } else {
+        // Create new project
+        const { data: projectData, error } = await supabase
+          .from("projects")
+          .insert({
+            property_id: propertyId,
+            user_id: user.id,
+            name: data.name,
+            description: data.description || null,
+            cost: numericCost,
+            completion_date: format(data.completion_date, "yyyy-MM-dd"),
+            builder_name: data.builder_name || null,
+            builder_url: data.builder_url || null,
+          })
+          .select()
+          .single()
 
-      // Upload files if they exist
-      const uploadPromises = []
-      if (data.beforePhotos?.length) {
-        uploadPromises.push(handleFileUpload(data.beforePhotos, 'before_photo', projectData.id))
-      }
-      if (data.afterPhotos?.length) {
-        uploadPromises.push(handleFileUpload(data.afterPhotos, 'after_photo', projectData.id))
-      }
-      if (data.receipts?.length) {
-        uploadPromises.push(handleFileUpload(data.receipts, 'receipt', projectData.id))
-      }
+        if (error) throw error
 
-      await Promise.all(uploadPromises)
+        // Upload files if they exist
+        const uploadPromises = []
+        if (data.beforePhotos?.length) {
+          uploadPromises.push(handleFileUpload(data.beforePhotos, 'before_photo', projectData.id))
+        }
+        if (data.afterPhotos?.length) {
+          uploadPromises.push(handleFileUpload(data.afterPhotos, 'after_photo', projectData.id))
+        }
+        if (data.receipts?.length) {
+          uploadPromises.push(handleFileUpload(data.receipts, 'receipt', projectData.id))
+        }
+
+        await Promise.all(uploadPromises)
+      }
 
       toast({
         title: "Success",
-        description: "Project has been added successfully.",
+        description: `Project has been ${project ? 'updated' : 'added'} successfully.`,
       })
       
       onSuccess()
@@ -127,7 +159,7 @@ export function ProjectForm({ propertyId, onSuccess, onCancel }: ProjectFormProp
 
   return (
     <div className="space-y-6 p-6 bg-white rounded-lg shadow-sm border max-w-2xl mx-auto">
-      <ProjectFormHeader />
+      <ProjectFormHeader isEditing={!!project} />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <ProjectBasicFields form={form} />
