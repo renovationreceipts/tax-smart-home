@@ -28,6 +28,12 @@ export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProp
 
   console.log("Property data received:", property)
 
+  const defaultPurchaseDate = property?.purchase_date 
+    ? new Date(property.purchase_date) 
+    : new Date()
+
+  console.log("Default purchase date:", defaultPurchaseDate)
+
   const form = useForm<PropertyFormValues>({
     resolver: zodResolver(propertyFormSchema),
     defaultValues: property ? {
@@ -40,7 +46,7 @@ export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProp
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
       }).format(property.purchase_price),
-      purchaseDate: property.purchase_date ? new Date(property.purchase_date) : new Date(),
+      purchaseDate: defaultPurchaseDate,
       currentValue: new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
