@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Calendar } from "@/components/ui/calendar"
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, Upload } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -23,6 +23,9 @@ const projectFormSchema = z.object({
   }),
   builder_name: z.string().optional(),
   builder_url: z.string().url().optional().or(z.literal("")),
+  beforePhotos: z.instanceof(FileList).optional(),
+  afterPhotos: z.instanceof(FileList).optional(),
+  receipts: z.instanceof(FileList).optional(),
 })
 
 type ProjectFormValues = z.infer<typeof projectFormSchema>
@@ -48,6 +51,36 @@ export function ProjectForm({ propertyId, onSuccess, onCancel }: ProjectFormProp
     },
   })
 
+  const handleFileUpload = async (files: FileList, category: string, projectId: string) => {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      const fileExt = file.name.split('.').pop()
+      const filePath = `${projectId}/${crypto.randomUUID()}.${fileExt}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('project-files')
+        .upload(filePath, file)
+
+      if (uploadError) {
+        console.error('Error uploading file:', uploadError)
+        continue
+      }
+
+      const { error: dbError } = await supabase
+        .from('project_files')
+        .insert({
+          project_id: projectId,
+          file_path: filePath,
+          file_type: file.type,
+          file_category: category,
+        })
+
+      if (dbError) {
+        console.error('Error saving file metadata:', dbError)
+      }
+    }
+  }
+
   const onSubmit = async (data: ProjectFormValues) => {
     try {
       const { data: { user } } = await supabase.auth.getUser()
@@ -63,7 +96,7 @@ export function ProjectForm({ propertyId, onSuccess, onCancel }: ProjectFormProp
 
       const numericCost = Number(data.cost.replace(/[^0-9.-]/g, ""))
       
-      const { error } = await supabase
+      const { data: projectData, error } = await supabase
         .from("projects")
         .insert({
           property_id: propertyId,
@@ -75,8 +108,24 @@ export function ProjectForm({ propertyId, onSuccess, onCancel }: ProjectFormProp
           builder_name: data.builder_name || null,
           builder_url: data.builder_url || null,
         })
+        .select()
+        .single()
 
       if (error) throw error
+
+      // Upload files if they exist
+      const uploadPromises = []
+      if (data.beforePhotos?.length) {
+        uploadPromises.push(handleFileUpload(data.beforePhotos, 'before_photo', projectData.id))
+      }
+      if (data.afterPhotos?.length) {
+        uploadPromises.push(handleFileUpload(data.afterPhotos, 'after_photo', projectData.id))
+      }
+      if (data.receipts?.length) {
+        uploadPromises.push(handleFileUpload(data.receipts, 'receipt', projectData.id))
+      }
+
+      await Promise.all(uploadPromises)
 
       toast({
         title: "Success",
@@ -180,6 +229,69 @@ export function ProjectForm({ propertyId, onSuccess, onCancel }: ProjectFormProp
                     />
                   </PopoverContent>
                 </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="beforePhotos"
+            render={({ field: { onChange, ...field } }) => (
+              <FormItem>
+                <FormLabel>Before Photos (Optional)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={(e) => onChange(e.target.files)}
+                    {...field}
+                    className="file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="afterPhotos"
+            render={({ field: { onChange, ...field } }) => (
+              <FormItem>
+                <FormLabel>After Photos (Optional)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={(e) => onChange(e.target.files)}
+                    {...field}
+                    className="file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="receipts"
+            render={({ field: { onChange, ...field } }) => (
+              <FormItem>
+                <FormLabel>Receipts (Optional)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    multiple
+                    onChange={(e) => onChange(e.target.files)}
+                    {...field}
+                    className="file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
