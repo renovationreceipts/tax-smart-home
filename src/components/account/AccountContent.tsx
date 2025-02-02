@@ -13,7 +13,8 @@ export function AccountContent() {
 
   return (
     <>
-      <div className="flex justify-end mb-6">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-gray-900">Your Properties</h2>
         <AccountActions onAddProperty={() => navigate("/property/edit")} />
       </div>
 
