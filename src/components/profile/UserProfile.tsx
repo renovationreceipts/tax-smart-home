@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -23,8 +23,6 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>
 export function UserProfile() {
   const navigate = useNavigate()
   const { toast } = useToast()
-  const [loading, setLoading] = useState(false)
-
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
   })
@@ -56,14 +54,12 @@ export function UserProfile() {
     }
   }
 
-  // Fix: Remove the second argument from useState
-  useState(() => {
+  useEffect(() => {
     loadUserProfile()
-  })
+  }, []) // Empty dependency array means this runs once on mount
 
   const onSubmit = async (data: ProfileFormValues) => {
     try {
-      setLoading(true)
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error("No user found")
 
@@ -89,6 +85,9 @@ export function UserProfile() {
         title: "Success",
         description: "Profile updated successfully",
       })
+      
+      // Navigate back to account page after successful update
+      navigate("/account")
     } catch (error) {
       console.error("Error updating profile:", error)
       toast({
@@ -96,9 +95,11 @@ export function UserProfile() {
         title: "Error",
         description: "Failed to update profile",
       })
-    } finally {
-      setLoading(false)
     }
+  }
+
+  const handleBackClick = () => {
+    navigate("/account")
   }
 
   return (
@@ -106,7 +107,7 @@ export function UserProfile() {
       <Button
         variant="ghost"
         className="mb-6"
-        onClick={() => navigate("/account")}
+        onClick={handleBackClick}
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back to Account
@@ -144,8 +145,8 @@ export function UserProfile() {
                 </div>
               </div>
 
-              <Button type="submit" disabled={loading}>
-                {loading ? "Saving..." : "Save Changes"}
+              <Button type="submit">
+                Save Changes
               </Button>
             </form>
           </Form>
