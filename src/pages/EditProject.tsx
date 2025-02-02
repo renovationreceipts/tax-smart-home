@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { ProjectForm } from "@/components/project/ProjectForm"
 import { useProjects } from "@/hooks/useProjects"
 
-export function EditProject() {
+export default function EditProject() {
   const navigate = useNavigate()
   const { propertyId, id } = useParams()
   const { data: projects = [] } = useProjects(propertyId || null)
