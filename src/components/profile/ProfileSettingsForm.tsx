@@ -32,7 +32,7 @@ export function ProfileSettingsForm() {
         throw new Error("No user found")
       }
 
-      // Update email in auth if it has changed
+      // Only attempt to update email if it's different from current email
       if (data.email !== user.email) {
         console.log("Updating email to:", data.email)
         const { error: emailError } = await supabase.auth.updateUser({
@@ -41,6 +41,15 @@ export function ProfileSettingsForm() {
 
         if (emailError) {
           console.error("Email update error:", emailError)
+          // Handle specific error for email already in use
+          if (emailError.message.includes("already been registered")) {
+            toast({
+              variant: "destructive",
+              title: "Email Update Failed",
+              description: "This email address is already registered. Please use a different email.",
+            })
+            return // Exit early to prevent profile update
+          }
           throw emailError
         }
 
@@ -50,6 +59,7 @@ export function ProfileSettingsForm() {
         })
       }
 
+      // Always update the profile with tax rate
       console.log("Updating profile with tax_rate:", data.tax_rate)
       const { error: profileError } = await supabase
         .from("profiles")
@@ -64,17 +74,23 @@ export function ProfileSettingsForm() {
       }
 
       console.log("Profile updated successfully")
-      toast({
-        title: "Success",
-        description: "Profile updated successfully",
-      })
+      if (data.email === user.email) {
+        // Only show success toast if we didn't show email verification toast
+        toast({
+          title: "Success",
+          description: "Profile updated successfully",
+        })
+      }
     } catch (error) {
       console.error("Error in onSubmit:", error)
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to update profile",
-      })
+      // Only show generic error if we haven't shown a specific error
+      if (!error.message?.includes("already been registered")) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to update profile",
+        })
+      }
     }
   }
 
