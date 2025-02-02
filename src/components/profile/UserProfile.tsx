@@ -56,9 +56,10 @@ export function UserProfile() {
     }
   }
 
+  // Fix: Remove the second argument from useState
   useState(() => {
     loadUserProfile()
-  }, [])
+  })
 
   const onSubmit = async (data: ProfileFormValues) => {
     try {
