@@ -36,6 +36,13 @@ export default function Account() {
     }
   };
 
+  const handleAddProject = () => {
+    toast({
+      title: "Not implemented yet",
+      description: "Project creation functionality is coming soon.",
+    });
+  };
+
   if (showPropertyForm) {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
