@@ -30,35 +30,85 @@ export type Database = {
         }
         Relationships: []
       }
+      project_files: {
+        Row: {
+          created_at: string | null
+          file_category: string
+          file_path: string
+          file_type: string
+          id: string
+          project_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          file_category: string
+          file_path: string
+          file_type: string
+          id?: string
+          project_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          file_category?: string
+          file_path?: string
+          file_type?: string
+          id?: string
+          project_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_files_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
+          builder_name: string | null
+          builder_url: string | null
           completion_date: string
           cost: number
           created_at: string | null
           description: string | null
+          end_date: string | null
           id: string
           name: string
           property_id: string
+          start_date: string | null
           user_id: string
         }
         Insert: {
+          builder_name?: string | null
+          builder_url?: string | null
           completion_date: string
           cost: number
           created_at?: string | null
           description?: string | null
+          end_date?: string | null
           id?: string
           name: string
           property_id: string
+          start_date?: string | null
           user_id: string
         }
         Update: {
+          builder_name?: string | null
+          builder_url?: string | null
           completion_date?: string
           cost?: number
           created_at?: string | null
           description?: string | null
+          end_date?: string | null
           id?: string
           name?: string
           property_id?: string
+          start_date?: string | null
           user_id?: string
         }
         Relationships: [
