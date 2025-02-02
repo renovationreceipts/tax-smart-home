@@ -27,25 +27,40 @@ export function UserProfile() {
     resolver: zodResolver(profileFormSchema),
   })
 
+  console.log("UserProfile component rendered")
+
   const loadUserProfile = async () => {
+    console.log("Loading user profile...")
     try {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) throw new Error("No user found")
+      console.log("Auth user data:", user)
+      
+      if (!user) {
+        console.error("No user found in auth")
+        throw new Error("No user found")
+      }
 
-      const { data: profile } = await supabase
+      const { data: profile, error } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", user.id)
         .single()
 
+      console.log("Profile data:", profile)
+      console.log("Profile fetch error:", error)
+
       if (profile) {
+        console.log("Resetting form with profile data:", {
+          email: user.email,
+          tax_rate: profile.tax_rate || 0,
+        })
         form.reset({
           email: user.email,
           tax_rate: profile.tax_rate || 0,
         })
       }
     } catch (error) {
-      console.error("Error loading profile:", error)
+      console.error("Error in loadUserProfile:", error)
       toast({
         variant: "destructive",
         title: "Error",
@@ -55,23 +70,33 @@ export function UserProfile() {
   }
 
   useEffect(() => {
+    console.log("UserProfile useEffect triggered")
     loadUserProfile()
   }, []) // Empty dependency array means this runs once on mount
 
   const onSubmit = async (data: ProfileFormValues) => {
+    console.log("Form submitted with data:", data)
     try {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) throw new Error("No user found")
+      console.log("Current auth user:", user)
 
-      // Update password if provided
+      if (!user) {
+        console.error("No user found during form submission")
+        throw new Error("No user found")
+      }
+
       if (data.password) {
+        console.log("Updating password...")
         const { error: passwordError } = await supabase.auth.updateUser({
           password: data.password,
         })
-        if (passwordError) throw passwordError
+        if (passwordError) {
+          console.error("Password update error:", passwordError)
+          throw passwordError
+        }
       }
 
-      // Update profile
+      console.log("Updating profile with tax_rate:", data.tax_rate)
       const { error: profileError } = await supabase
         .from("profiles")
         .update({
@@ -79,17 +104,21 @@ export function UserProfile() {
         })
         .eq("id", user.id)
 
-      if (profileError) throw profileError
+      if (profileError) {
+        console.error("Profile update error:", profileError)
+        throw profileError
+      }
 
+      console.log("Profile updated successfully")
       toast({
         title: "Success",
         description: "Profile updated successfully",
       })
       
-      // Navigate back to account page after successful update
+      console.log("Attempting navigation to /account")
       navigate("/account")
     } catch (error) {
-      console.error("Error updating profile:", error)
+      console.error("Error in onSubmit:", error)
       toast({
         variant: "destructive",
         title: "Error",
@@ -99,6 +128,7 @@ export function UserProfile() {
   }
 
   const handleBackClick = () => {
+    console.log("Back button clicked, navigating to /account")
     navigate("/account")
   }
 
