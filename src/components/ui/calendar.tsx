@@ -33,10 +33,12 @@ function Calendar({
           onChange={(e) => {
             const newYear = parseInt(e.target.value);
             setCurrentYear(newYear);
-            if (props.selected) {
+            if (props.selected instanceof Date) {
               const newDate = new Date(props.selected);
               newDate.setFullYear(newYear);
-              props.onSelect?.(newDate);
+              if (props.onSelect) {
+                props.onSelect(newDate);
+              }
             }
           }}
         >
