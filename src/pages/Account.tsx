@@ -85,7 +85,7 @@ export default function Account() {
         </div>
 
         {/* Two Key Sections */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="space-y-6">
           {/* Projects Section */}
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <div className="flex items-center gap-3 mb-4">
