@@ -1,9 +1,8 @@
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { DayPicker, SelectSingleEventHandler } from "react-day-picker";
+import { DayPicker } from "react-day-picker";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Select } from "@/components/ui/select"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
@@ -13,7 +12,12 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
-  const [year, setYear] = React.useState(props.selected ? new Date(props.selected).getFullYear() : new Date().getFullYear());
+  const [year, setYear] = React.useState(() => {
+    if (props.selected instanceof Date) {
+      return props.selected.getFullYear();
+    }
+    return new Date().getFullYear();
+  });
 
   // Generate array of years from 1900 to current year
   const years = Array.from({ length: new Date().getFullYear() - 1900 + 1 }, (_, i) => 1900 + i).reverse();
@@ -22,10 +26,10 @@ function Calendar({
     const newYear = parseInt(selectedYear);
     setYear(newYear);
     
-    if (props.selected) {
-      const newDate = new Date(props.selected as Date);
+    if (props.selected instanceof Date && props.onSelect) {
+      const newDate = new Date(props.selected);
       newDate.setFullYear(newYear);
-      (props.onSelect as SelectSingleEventHandler)?.(newDate);
+      props.onSelect(newDate);
     }
   };
 
