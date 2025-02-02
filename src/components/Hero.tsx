@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Home, Calculator, FileText } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const Hero = () => {
@@ -29,25 +29,11 @@ export const Hero = () => {
               </div>
             </div>
             <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl p-6 space-y-4">
-                <div className="flex items-center justify-between border-b pb-4">
-                  <div className="flex items-center gap-3">
-                    <Home className="h-6 w-6 text-blue-600" />
-                    <span className="font-semibold">Property Dashboard</span>
-                  </div>
-                  <span className="text-green-600 font-semibold">$245,000</span>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <Calculator className="h-5 w-5 text-gray-500" />
-                    <span>Cost Basis Calculator</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <FileText className="h-5 w-5 text-gray-500" />
-                    <span>IRS Form 8949 Export</span>
-                  </div>
-                </div>
-              </div>
+              <img 
+                src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
+                alt="Tax Smart Home Dashboard Preview"
+                className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+              />
             </div>
           </div>
         </div>
