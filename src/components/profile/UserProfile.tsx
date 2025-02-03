@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
@@ -11,24 +11,25 @@ import { PasswordChangeForm } from "./PasswordChangeForm"
 export function UserProfile() {
   const navigate = useNavigate()
   const { toast } = useToast()
+  const [isLoading, setIsLoading] = useState(true)
 
   console.log("UserProfile component rendered")
 
   const loadUserProfile = async () => {
     console.log("Loading user profile...")
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      console.log("Auth user data:", user)
+      const { data: { session } } = await supabase.auth.getSession()
       
-      if (!user) {
-        console.error("No user found in auth")
-        throw new Error("No user found")
+      if (!session) {
+        console.error("No active session found")
+        navigate("/login")
+        return
       }
 
       const { data: profile, error } = await supabase
         .from("profiles")
         .select("*")
-        .eq("id", user.id)
+        .eq("id", session.user.id)
         .single()
 
       console.log("Profile data:", profile)
@@ -44,6 +45,8 @@ export function UserProfile() {
         title: "Error",
         description: "Failed to load profile",
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -55,6 +58,10 @@ export function UserProfile() {
   const handleBackClick = () => {
     console.log("Back button clicked, navigating to /account")
     navigate("/account")
+  }
+
+  if (isLoading) {
+    return <div className="flex justify-center items-center min-h-screen">Loading...</div>
   }
 
   return (
