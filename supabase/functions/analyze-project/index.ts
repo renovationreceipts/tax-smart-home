@@ -51,6 +51,17 @@ serve(async (req) => {
     if (!response.ok) {
       const errorData = await response.text();
       console.error('OpenAI API error:', errorData);
+      
+      // Handle rate limit specifically
+      if (response.status === 429) {
+        return new Response(JSON.stringify({ 
+          error: "The analysis service is temporarily unavailable. Please try again in a few moments."
+        }), {
+          status: 429,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      
       throw new Error(`OpenAI API error: ${response.status}`);
     }
 

@@ -37,7 +37,17 @@ export function ProjectBasicFields({ form }: ProjectBasicFieldsProps) {
         body: { description }
       })
 
-      if (error) throw error
+      if (error) {
+        if (error.status === 429) {
+          toast({
+            title: "Service Busy",
+            description: "The analysis service is temporarily unavailable. Please try again in a few moments.",
+            variant: "destructive",
+          })
+          return
+        }
+        throw error
+      }
 
       setAnalysis(data.analysis)
       toast({
