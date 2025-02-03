@@ -22,21 +22,31 @@ export function FileUploadButton({ value, onChange, multiple = false, accept, la
     if (!files?.length) return null;
     
     return (
-      <div className="mt-2 space-y-2">
+      <div className="space-y-4">
         {Array.from(files).map((file, index) => (
-          <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
-            {file.type.startsWith('image/') ? (
-              <img 
-                src={URL.createObjectURL(file)}
-                alt="File preview"
-                className="w-10 h-10 object-cover rounded"
-              />
-            ) : (
-              <div className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center">
-                📄
+          <div 
+            key={index} 
+            className="p-4 border rounded-lg bg-white shadow-sm"
+          >
+            <div className="flex items-center gap-4">
+              {file.type.startsWith('image/') ? (
+                <img 
+                  src={URL.createObjectURL(file)}
+                  alt="File preview"
+                  className="w-20 h-20 object-cover rounded-md"
+                />
+              ) : (
+                <div className="w-20 h-20 bg-gray-100 rounded-md flex items-center justify-center">
+                  📄
+                </div>
+              )}
+              <div className="flex-1">
+                <p className="font-medium text-gray-900">{file.name}</p>
+                <p className="text-sm text-gray-500">
+                  {(file.size / 1024 / 1024).toFixed(2)} MB
+                </p>
               </div>
-            )}
-            <span className="flex-1">{file.name}</span>
+            </div>
           </div>
         ))}
       </div>
@@ -62,7 +72,7 @@ export function FileUploadButton({ value, onChange, multiple = false, accept, la
         <Button
           type="button"
           variant="outline"
-          className="w-full h-20 flex flex-col items-center justify-center gap-2"
+          className="w-full h-20 flex flex-col items-center justify-center gap-2 border-2 border-dashed"
           onClick={handleAddFiles}
         >
           <Plus className="h-6 w-6" />
@@ -73,9 +83,9 @@ export function FileUploadButton({ value, onChange, multiple = false, accept, la
           {renderSelectedFiles(value)}
           <Button
             type="button"
-            variant="outline"
+            variant="secondary"
             size="sm"
-            className="mt-2"
+            className="w-full"
             onClick={handleAddFiles}
           >
             <Plus className="h-4 w-4 mr-2" />
