@@ -3,7 +3,7 @@ import { Receipt, Calculator, FileSpreadsheet } from "lucide-react";
 const steps = [
   {
     icon: <Receipt className="h-6 w-6 text-blue-600" />,
-    title: "Track Home Improvements",
+    title: "Track Home Renovations and Improvements",
     description: "Easily document all your capital improvements with receipts, descriptions, and costs in one organized place.",
   },
   {
