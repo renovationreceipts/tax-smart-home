@@ -1,6 +1,7 @@
 import { Table, TableHeader, TableBody, TableHead, TableRow } from "@/components/ui/table"
 import { TaxTableRow } from "./TaxTableRow"
 import { useTaxCalculations } from "@/hooks/useTaxCalculations"
+import { Separator } from "@/components/ui/separator"
 
 interface TaxCalculationTableProps {
   property: any
@@ -19,48 +20,65 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
   } = useTaxCalculations({ property, projects })
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Category</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TaxTableRow 
-          label="Current Home Value"
-          value={property?.current_value}
-        />
-        <TaxTableRow 
-          label="Purchase Price"
-          value={property?.purchase_price}
-        />
-        <TaxTableRow 
-          label="Basis Adjustments (Total Project Costs)"
-          value={totalProjectCosts}
-        />
-        <TaxTableRow 
-          label="New Cost Basis"
-          value={newCostBasis}
-        />
-        <TaxTableRow 
-          label="Taxable Gain With New Cost Basis"
-          value={taxableGainWithBasis}
-        />
-        <TaxTableRow 
-          label="Taxable Gain Without New Cost Basis"
-          value={taxableGainWithoutBasis}
-        />
-        <TaxTableRow 
-          label="Tracking Improvements Reduced Your Taxable Capital Gain By"
-          value={taxSavings}
-        />
-        <TaxTableRow 
-          label={`Based on ${userTaxRate !== null ? `${(userTaxRate * 100).toFixed(1)}%` : '0%'} Tax Rate This Saved You`}
-          value={estimatedTaxSavings}
-          isHighlighted
-        />
-      </TableBody>
-    </Table>
+    <div className="space-y-6">
+      {/* First Table: Cost Basis Calculation */}
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Category</TableHead>
+            <TableHead className="text-right">Amount</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TaxTableRow 
+            label="Current Home Value"
+            value={property?.current_value}
+          />
+          <TaxTableRow 
+            label="Purchase Price"
+            value={property?.purchase_price}
+          />
+          <TaxTableRow 
+            label="Basis Adjustments (Total Project Costs)"
+            value={totalProjectCosts}
+          />
+          <TaxTableRow 
+            label="New Cost Basis"
+            value={newCostBasis}
+          />
+        </TableBody>
+      </Table>
+
+      <Separator className="my-4" />
+
+      {/* Second Table: Tax Calculations */}
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Category</TableHead>
+            <TableHead className="text-right">Amount</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TaxTableRow 
+            label="Taxable Gain With New Cost Basis"
+            value={taxableGainWithBasis}
+          />
+          <TaxTableRow 
+            label="Taxable Gain Without New Cost Basis"
+            value={taxableGainWithoutBasis}
+          />
+          <TaxTableRow 
+            label="Tracking Improvements Reduced Your Taxable Capital Gain By"
+            value={taxSavings}
+          />
+          <TaxTableRow 
+            label={`Based on ${userTaxRate !== null ? `${(userTaxRate * 100).toFixed(1)}%` : '0%'} Tax Rate This Saved You`}
+            value={estimatedTaxSavings}
+            isHighlighted
+          />
+        </TableBody>
+      </Table>
+    </div>
   )
 }
