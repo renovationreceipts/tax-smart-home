@@ -9,13 +9,16 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form } from "@/components/ui/form"
+import type { Database } from "@/integrations/supabase/types"
+
+type TaxFormType = Database["public"]["Enums"]["tax_form_type"]
 
 const formSchema = z.object({
-  formType: z.enum(["8949", "SCHEDULE_D"], {
-    required_error: "Please select a form type",
-  }),
+  formType: z.enum(["8949", "SCHEDULE_D"] as const),
   taxYear: z.string().min(4, "Please enter a valid tax year"),
 })
+
+type FormValues = z.infer<typeof formSchema>
 
 interface TaxFormGeneratorProps {
   property: any
@@ -26,7 +29,7 @@ export function TaxFormGenerator({ property, projects }: TaxFormGeneratorProps) 
   const { toast } = useToast()
   const [isGenerating, setIsGenerating] = useState(false)
 
-  const form = useForm({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       formType: "8949",
@@ -34,10 +37,14 @@ export function TaxFormGenerator({ property, projects }: TaxFormGeneratorProps) 
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: FormValues) => {
     try {
       setIsGenerating(true)
       console.log("Generating tax form with values:", values)
+
+      // Get the current user
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error("No user found")
 
       // Calculate form data based on property and projects
       const formData = {
@@ -58,8 +65,9 @@ export function TaxFormGenerator({ property, projects }: TaxFormGeneratorProps) 
       const { error } = await supabase
         .from('tax_forms')
         .insert({
+          user_id: user.id,
           property_id: property.id,
-          form_type: values.formType,
+          form_type: values.formType as TaxFormType,
           tax_year: parseInt(values.taxYear),
           data: formData,
         })
