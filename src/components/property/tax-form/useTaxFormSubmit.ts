@@ -46,7 +46,7 @@ export function useTaxFormSubmit({ property, projects }: UseTaxFormSubmitProps) 
           property_id: property.id,
           form_type: values.formType,
           tax_year: parseInt(values.taxYear),
-          data: formData,
+          data: formData as unknown as Json, // Type assertion to match Supabase's Json type
         })
 
       if (error) throw error

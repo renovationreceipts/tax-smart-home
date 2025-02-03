@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { ProjectsSection } from "@/components/account/ProjectsSection"
 import { TaxCalculationTable } from "@/components/property/TaxCalculationTable"
-import { TaxFormGenerator } from "@/components/property/TaxFormGenerator"
+import { TaxFormGenerator } from "@/components/property/tax-form/TaxFormGenerator"
 import { useProjects } from "@/hooks/useProjects"
 import { DollarSign } from "lucide-react"
 import type { Project } from "@/hooks/useProjects"
