@@ -3,6 +3,7 @@ import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
 import { generatePDF } from "./pdfGenerator"
 import type { FormValues, TaxFormData } from "./types"
+import type { Json } from "@/integrations/supabase/types"
 
 interface UseTaxFormSubmitProps {
   property: any
