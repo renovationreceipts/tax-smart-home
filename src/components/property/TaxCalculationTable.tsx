@@ -23,6 +23,12 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
     <div className="space-y-6">
       {/* First Table: Cost Basis Calculation */}
       <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Category</TableHead>
+            <TableHead className="text-right">Amount</TableHead>
+          </TableRow>
+        </TableHeader>
         <TableBody>
           <TaxTableRow 
             label="Current Home Value"
