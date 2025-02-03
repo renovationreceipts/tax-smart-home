@@ -49,7 +49,7 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
         </TableBody>
       </Table>
 
-      <Separator className="my-4" />
+      <Separator className="my-4 bg-black" />
 
       {/* Second Table: Tax Calculations */}
       <Table>
