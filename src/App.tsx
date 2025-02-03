@@ -6,6 +6,7 @@ import EditProject from "@/pages/EditProject"
 import Index from "@/pages/Index"
 import Login from "@/pages/Login"
 import Profile from "@/pages/Profile"
+import SignUp from "@/pages/SignUp"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/" element={<Index />} />
           <Route path="/account" element={<Account />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/property/edit/:id?" element={<EditProperty />} />
           <Route path="/project/edit/:propertyId/:id?" element={<EditProject />} />
