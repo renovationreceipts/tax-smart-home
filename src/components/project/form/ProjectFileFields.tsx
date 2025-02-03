@@ -5,9 +5,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { UseFormReturn } from "react-hook-form"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { supabase } from "@/integrations/supabase/client"
-import { Trash2, Eye } from "lucide-react"
+import { Trash2, Eye, Plus } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import type { ProjectFormValues } from "./ProjectFormTypes"
 
 interface ProjectFileFieldsProps {
@@ -26,6 +26,9 @@ export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
   const { toast } = useToast()
   const queryClient = useQueryClient()
   const [previewFile, setPreviewFile] = useState<ProjectFile | null>(null)
+  const beforePhotosRef = useRef<HTMLInputElement>(null)
+  const afterPhotosRef = useRef<HTMLInputElement>(null)
+  const receiptsRef = useRef<HTMLInputElement>(null)
 
   const { data: existingFiles = [] } = useQuery({
     queryKey: ['project-files', projectId],
@@ -169,6 +172,35 @@ export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
     )
   }
 
+  const renderSelectedFiles = (files: FileList | null) => {
+    if (!files?.length) return null;
+    
+    return (
+      <div className="mt-2 space-y-2">
+        {Array.from(files).map((file, index) => (
+          <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
+            {file.type.startsWith('image/') ? (
+              <img 
+                src={URL.createObjectURL(file)}
+                alt="File preview"
+                className="w-10 h-10 object-cover rounded"
+              />
+            ) : (
+              <div className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center">
+                📄
+              </div>
+            )}
+            <span className="flex-1">{file.name}</span>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  const handleAddMoreFiles = (ref: React.RefObject<HTMLInputElement>) => {
+    ref.current?.click()
+  }
+
   return (
     <>
       <FormField
@@ -177,11 +209,12 @@ export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
         render={({ field: { onChange, value, ...field } }) => (
           <FormItem>
             <FormLabel>Before Photos (Optional)</FormLabel>
-            <FormControl>
+            <div className="space-y-4">
               <Input
                 type="file"
                 accept="image/*"
                 multiple
+                ref={beforePhotosRef}
                 onChange={(e) => {
                   const files = e.target.files
                   if (files) {
@@ -189,9 +222,34 @@ export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
                   }
                 }}
                 {...field}
-                className="h-14 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground file:cursor-pointer hover:file:bg-primary/90"
+                className="hidden"
               />
-            </FormControl>
+              {(!value || (value as FileList)?.length === 0) ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full h-20 flex flex-col items-center justify-center gap-2"
+                  onClick={() => handleAddMoreFiles(beforePhotosRef)}
+                >
+                  <Plus className="h-6 w-6" />
+                  <span>Add Before Photos</span>
+                </Button>
+              ) : (
+                <>
+                  {renderSelectedFiles(value as FileList)}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="mt-2"
+                    onClick={() => handleAddMoreFiles(beforePhotosRef)}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add More Photos
+                  </Button>
+                </>
+              )}
+            </div>
             {renderExistingFiles('before_photo')}
             <FormMessage />
           </FormItem>
@@ -204,11 +262,12 @@ export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
         render={({ field: { onChange, value, ...field } }) => (
           <FormItem>
             <FormLabel>After Photos (Optional)</FormLabel>
-            <FormControl>
+            <div className="space-y-4">
               <Input
                 type="file"
                 accept="image/*"
                 multiple
+                ref={afterPhotosRef}
                 onChange={(e) => {
                   const files = e.target.files
                   if (files) {
@@ -216,9 +275,34 @@ export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
                   }
                 }}
                 {...field}
-                className="h-14 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground file:cursor-pointer hover:file:bg-primary/90"
+                className="hidden"
               />
-            </FormControl>
+              {(!value || (value as FileList)?.length === 0) ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full h-20 flex flex-col items-center justify-center gap-2"
+                  onClick={() => handleAddMoreFiles(afterPhotosRef)}
+                >
+                  <Plus className="h-6 w-6" />
+                  <span>Add After Photos</span>
+                </Button>
+              ) : (
+                <>
+                  {renderSelectedFiles(value as FileList)}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="mt-2"
+                    onClick={() => handleAddMoreFiles(afterPhotosRef)}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add More Photos
+                  </Button>
+                </>
+              )}
+            </div>
             {renderExistingFiles('after_photo')}
             <FormMessage />
           </FormItem>
@@ -231,11 +315,12 @@ export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
         render={({ field: { onChange, value, ...field } }) => (
           <FormItem>
             <FormLabel>Receipts (Optional)</FormLabel>
-            <FormControl>
+            <div className="space-y-4">
               <Input
                 type="file"
                 accept=".pdf,.jpg,.jpeg,.png"
                 multiple
+                ref={receiptsRef}
                 onChange={(e) => {
                   const files = e.target.files
                   if (files) {
@@ -243,9 +328,34 @@ export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
                   }
                 }}
                 {...field}
-                className="h-14 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground file:cursor-pointer hover:file:bg-primary/90"
+                className="hidden"
               />
-            </FormControl>
+              {(!value || (value as FileList)?.length === 0) ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full h-20 flex flex-col items-center justify-center gap-2"
+                  onClick={() => handleAddMoreFiles(receiptsRef)}
+                >
+                  <Plus className="h-6 w-6" />
+                  <span>Add Receipts</span>
+                </Button>
+              ) : (
+                <>
+                  {renderSelectedFiles(value as FileList)}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="mt-2"
+                    onClick={() => handleAddMoreFiles(receiptsRef)}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add More Files
+                  </Button>
+                </>
+              )}
+            </div>
             {renderExistingFiles('receipt')}
             <FormMessage />
           </FormItem>
