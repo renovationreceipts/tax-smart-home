@@ -10,11 +10,26 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [emailError, setEmailError] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const validateEmail = (email: string) => {
+    if (!email.includes('@')) {
+      setEmailError("Please enter a valid email address");
+      return false;
+    }
+    setEmailError("");
+    return true;
+  };
+
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateEmail(email)) {
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -77,8 +92,15 @@ export default function SignUp() {
                 required
                 placeholder="Email address"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (emailError) validateEmail(e.target.value);
+                }}
+                className={emailError ? "border-red-500" : ""}
               />
+              {emailError && (
+                <p className="mt-1 text-sm text-red-500">{emailError}</p>
+              )}
             </div>
             <div>
               <label htmlFor="password" className="sr-only">
