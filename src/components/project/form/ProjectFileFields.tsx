@@ -28,7 +28,7 @@ export function ProjectFileFields({ form }: ProjectFileFieldsProps) {
                   }
                 }}
                 {...field}
-                className="h-14 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                className="h-14 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground file:cursor-pointer hover:file:bg-primary/90"
               />
             </FormControl>
             <FormMessage />
@@ -54,7 +54,7 @@ export function ProjectFileFields({ form }: ProjectFileFieldsProps) {
                   }
                 }}
                 {...field}
-                className="h-14 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                className="h-14 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground file:cursor-pointer hover:file:bg-primary/90"
               />
             </FormControl>
             <FormMessage />
@@ -80,7 +80,7 @@ export function ProjectFileFields({ form }: ProjectFileFieldsProps) {
                   }
                 }}
                 {...field}
-                className="h-14 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                className="h-14 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground file:cursor-pointer hover:file:bg-primary/90"
               />
             </FormControl>
             <FormMessage />
