@@ -10,6 +10,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form } from "@/components/ui/form"
 import type { Database } from "@/integrations/supabase/types"
+import jsPDF from 'jspdf'
 
 type TaxFormType = Database["public"]["Enums"]["tax_form_type"]
 
@@ -37,6 +38,61 @@ export function TaxFormGenerator({ property, projects }: TaxFormGeneratorProps) 
     },
   })
 
+  const generatePDF = (formType: string, formData: any) => {
+    const doc = new jsPDF()
+    const margin = 20
+    let yPosition = margin
+
+    // Add header
+    doc.setFontSize(16)
+    doc.text(`IRS Form ${formType}`, margin, yPosition)
+    yPosition += 10
+
+    doc.setFontSize(12)
+    doc.text(`Tax Year: ${formData.taxYear}`, margin, yPosition)
+    yPosition += 10
+
+    // Property Information
+    doc.setFontSize(14)
+    doc.text("Property Information", margin, yPosition)
+    yPosition += 10
+
+    doc.setFontSize(10)
+    doc.text(`Address: ${formData.propertyInfo.address}`, margin, yPosition)
+    yPosition += 7
+    doc.text(`Purchase Price: $${formData.propertyInfo.purchasePrice.toLocaleString()}`, margin, yPosition)
+    yPosition += 7
+    doc.text(`Purchase Date: ${new Date(formData.propertyInfo.purchaseDate).toLocaleDateString()}`, margin, yPosition)
+    yPosition += 7
+    doc.text(`Current Value: $${formData.propertyInfo.currentValue.toLocaleString()}`, margin, yPosition)
+    yPosition += 15
+
+    // Improvements
+    doc.setFontSize(14)
+    doc.text("Property Improvements", margin, yPosition)
+    yPosition += 10
+
+    doc.setFontSize(10)
+    formData.improvements.forEach((improvement: any) => {
+      doc.text(`Project: ${improvement.name}`, margin, yPosition)
+      yPosition += 7
+      doc.text(`Cost: $${improvement.cost.toLocaleString()}`, margin + 10, yPosition)
+      yPosition += 7
+      doc.text(`Date: ${new Date(improvement.date).toLocaleDateString()}`, margin + 10, yPosition)
+      yPosition += 10
+    })
+
+    // Calculate totals
+    const totalImprovements = formData.improvements.reduce((sum: number, imp: any) => sum + imp.cost, 0)
+    yPosition += 5
+    doc.text(`Total Improvements: $${totalImprovements.toLocaleString()}`, margin, yPosition)
+    yPosition += 7
+    doc.text(`Adjusted Cost Basis: $${(formData.propertyInfo.purchasePrice + totalImprovements).toLocaleString()}`, margin, yPosition)
+
+    // Save the PDF
+    doc.save(`tax-form-${formType}-${formData.taxYear}.pdf`)
+  }
+
   const onSubmit = async (values: FormValues) => {
     try {
       setIsGenerating(true)
@@ -48,6 +104,7 @@ export function TaxFormGenerator({ property, projects }: TaxFormGeneratorProps) 
 
       // Calculate form data based on property and projects
       const formData = {
+        taxYear: values.taxYear,
         propertyInfo: {
           address: property.address,
           purchasePrice: property.purchase_price,
@@ -74,13 +131,13 @@ export function TaxFormGenerator({ property, projects }: TaxFormGeneratorProps) 
 
       if (error) throw error
 
+      // Generate and download PDF
+      generatePDF(values.formType, formData)
+
       toast({
         title: "Success",
         description: `${values.formType} form for tax year ${values.taxYear} has been generated.`,
       })
-
-      // TODO: Implement PDF generation and download
-      console.log("Form data stored:", formData)
 
     } catch (error) {
       console.error("Error generating tax form:", error)
