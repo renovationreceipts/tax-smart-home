@@ -3,7 +3,7 @@ import { BarChart2, Calculator, FileText, Shield } from "lucide-react";
 const features = [
   {
     icon: <BarChart2 className="h-6 w-6" />,
-    title: "Expense Tracking",
+    title: "Renovation Expense Tracking",
     description: "Record every home improvement—from contractor projects to DIY Home Depot trips—across different property types.",
   },
   {
