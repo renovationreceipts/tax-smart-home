@@ -1,11 +1,13 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { UseFormReturn } from "react-hook-form"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { supabase } from "@/integrations/supabase/client"
-import { Trash2 } from "lucide-react"
+import { Trash2, Eye } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { useState } from "react"
 import type { ProjectFormValues } from "./ProjectFormTypes"
 
 interface ProjectFileFieldsProps {
@@ -23,6 +25,7 @@ interface ProjectFile {
 export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
   const { toast } = useToast()
   const queryClient = useQueryClient()
+  const [previewFile, setPreviewFile] = useState<ProjectFile | null>(null)
 
   const { data: existingFiles = [] } = useQuery({
     queryKey: ['project-files', projectId],
@@ -84,6 +87,46 @@ export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
     }
   }
 
+  const getFileUrl = (filePath: string) => {
+    return supabase.storage.from('project-files').getPublicUrl(filePath).data.publicUrl
+  }
+
+  const renderFilePreview = () => {
+    if (!previewFile) return null
+
+    const fileUrl = getFileUrl(previewFile.file_path)
+    const fileName = previewFile.file_path.split('/').pop() || 'File'
+
+    if (previewFile.file_type.startsWith('image/')) {
+      return (
+        <img 
+          src={fileUrl}
+          alt={fileName}
+          className="max-w-full max-h-[80vh] object-contain"
+        />
+      )
+    } else if (previewFile.file_type === 'application/pdf') {
+      return (
+        <iframe
+          src={`${fileUrl}#toolbar=0`}
+          className="w-full h-[80vh]"
+          title={fileName}
+        />
+      )
+    } else {
+      return (
+        <div className="p-4 text-center">
+          <p>This file type cannot be previewed.</p>
+          <Button asChild className="mt-4">
+            <a href={fileUrl} target="_blank" rel="noopener noreferrer">
+              Download File
+            </a>
+          </Button>
+        </div>
+      )
+    }
+  }
+
   const renderExistingFiles = (category: string) => {
     const files = existingFiles.filter(file => file.file_category === category)
     if (files.length === 0) return null
@@ -92,18 +135,24 @@ export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
       <div className="mt-2 space-y-2">
         {files.map(file => (
           <div key={file.id} className="flex items-center gap-2 text-sm text-gray-600 group">
-            {file.file_type.startsWith('image/') ? (
-              <img 
-                src={`${supabase.storage.from('project-files').getPublicUrl(file.file_path).data.publicUrl}`}
-                alt="File preview"
-                className="w-10 h-10 object-cover rounded"
-              />
-            ) : (
-              <div className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center">
-                📄
-              </div>
-            )}
-            <span className="flex-1">{file.file_path.split('/').pop()}</span>
+            <button
+              type="button"
+              onClick={() => setPreviewFile(file)}
+              className="flex items-center gap-2 flex-1 hover:text-gray-900"
+            >
+              {file.file_type.startsWith('image/') ? (
+                <img 
+                  src={getFileUrl(file.file_path)}
+                  alt="File preview"
+                  className="w-10 h-10 object-cover rounded"
+                />
+              ) : (
+                <div className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center">
+                  📄
+                </div>
+              )}
+              <span>{file.file_path.split('/').pop()}</span>
+            </button>
             <Button
               type="button"
               variant="ghost"
@@ -202,6 +251,15 @@ export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
           </FormItem>
         )}
       />
+
+      <Dialog open={!!previewFile} onOpenChange={(open) => !open && setPreviewFile(null)}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>{previewFile?.file_path.split('/').pop()}</DialogTitle>
+          </DialogHeader>
+          {renderFilePreview()}
+        </DialogContent>
+      </Dialog>
     </>
   )
 }
