@@ -18,7 +18,7 @@ export function TaxTableRow({
   const textColor = isHighlighted ? "text-green-600" : ""
 
   return (
-    <TableRow className={`${className}`}>
+    <TableRow className={`border-b border-gray-100 ${className}`}>
       <TableCell className={`font-medium ${textColor}`}>{label}</TableCell>
       <TableCell className={`text-right ${textColor}`}>{formattedValue}</TableCell>
     </TableRow>
