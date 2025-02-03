@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form } from "@/components/ui/form"
-import { format } from "date-fns"
 import { ProjectFormHeader } from "./form/ProjectFormHeader"
 import { ProjectBasicFields } from "./form/ProjectBasicFields"
 import { ProjectDateField } from "./form/ProjectDateField"
@@ -57,7 +56,7 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <ProjectBasicFields form={form} />
           <ProjectDateField form={form} />
-          <ProjectFileFields form={form} />
+          <ProjectFileFields form={form} projectId={project?.id} />
           <ProjectBuilderFields form={form} />
           <ProjectFormActions isEditing={!!project} onCancel={onCancel} />
         </form>

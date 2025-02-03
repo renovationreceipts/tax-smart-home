@@ -14,10 +14,14 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
   const { toast } = useToast()
 
   const handleFileUpload = async (files: FileList, category: string, projectId: string) => {
+    console.log(`Uploading ${files.length} files for category: ${category}`)
+    
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
       const fileExt = file.name.split('.').pop()
       const filePath = `${projectId}/${crypto.randomUUID()}.${fileExt}`
+
+      console.log(`Uploading file: ${file.name} to path: ${filePath}`)
 
       const { error: uploadError } = await supabase.storage
         .from('project-files')
@@ -72,6 +76,20 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
           .eq('id', project.id)
 
         if (error) throw error
+
+        // Handle file uploads for existing project
+        const uploadPromises = []
+        if (data.beforePhotos?.length) {
+          uploadPromises.push(handleFileUpload(data.beforePhotos, 'before_photo', project.id))
+        }
+        if (data.afterPhotos?.length) {
+          uploadPromises.push(handleFileUpload(data.afterPhotos, 'after_photo', project.id))
+        }
+        if (data.receipts?.length) {
+          uploadPromises.push(handleFileUpload(data.receipts, 'receipt', project.id))
+        }
+
+        await Promise.all(uploadPromises)
       } else {
         const { data: projectData, error } = await supabase
           .from("projects")
@@ -90,6 +108,7 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
 
         if (error) throw error
 
+        // Handle file uploads for new project
         const uploadPromises = []
         if (data.beforePhotos?.length) {
           uploadPromises.push(handleFileUpload(data.beforePhotos, 'before_photo', projectData.id))

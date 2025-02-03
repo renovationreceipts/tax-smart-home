@@ -1,13 +1,69 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { UseFormReturn } from "react-hook-form"
+import { useQuery } from "@tanstack/react-query"
+import { supabase } from "@/integrations/supabase/client"
 import type { ProjectFormValues } from "./ProjectFormTypes"
 
 interface ProjectFileFieldsProps {
   form: UseFormReturn<ProjectFormValues>
+  projectId?: string
 }
 
-export function ProjectFileFields({ form }: ProjectFileFieldsProps) {
+interface ProjectFile {
+  id: string
+  file_path: string
+  file_type: string
+  file_category: string
+}
+
+export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
+  const { data: existingFiles = [] } = useQuery({
+    queryKey: ['project-files', projectId],
+    queryFn: async () => {
+      if (!projectId) return []
+      const { data, error } = await supabase
+        .from('project_files')
+        .select('*')
+        .eq('project_id', projectId)
+      
+      if (error) {
+        console.error('Error fetching project files:', error)
+        return []
+      }
+      
+      console.log('Fetched project files:', data)
+      return data
+    },
+    enabled: !!projectId
+  })
+
+  const renderExistingFiles = (category: string) => {
+    const files = existingFiles.filter(file => file.file_category === category)
+    if (files.length === 0) return null
+
+    return (
+      <div className="mt-2 space-y-2">
+        {files.map(file => (
+          <div key={file.id} className="flex items-center gap-2 text-sm text-gray-600">
+            {file.file_type.startsWith('image/') ? (
+              <img 
+                src={`${supabase.storage.from('project-files').getPublicUrl(file.file_path).data.publicUrl}`}
+                alt="File preview"
+                className="w-10 h-10 object-cover rounded"
+              />
+            ) : (
+              <div className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center">
+                📄
+              </div>
+            )}
+            <span>{file.file_path.split('/').pop()}</span>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   return (
     <>
       <FormField
@@ -31,6 +87,7 @@ export function ProjectFileFields({ form }: ProjectFileFieldsProps) {
                 className="h-14 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground file:cursor-pointer hover:file:bg-primary/90"
               />
             </FormControl>
+            {renderExistingFiles('before_photo')}
             <FormMessage />
           </FormItem>
         )}
@@ -57,6 +114,7 @@ export function ProjectFileFields({ form }: ProjectFileFieldsProps) {
                 className="h-14 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground file:cursor-pointer hover:file:bg-primary/90"
               />
             </FormControl>
+            {renderExistingFiles('after_photo')}
             <FormMessage />
           </FormItem>
         )}
@@ -83,6 +141,7 @@ export function ProjectFileFields({ form }: ProjectFileFieldsProps) {
                 className="h-14 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground file:cursor-pointer hover:file:bg-primary/90"
               />
             </FormControl>
+            {renderExistingFiles('receipt')}
             <FormMessage />
           </FormItem>
         )}
