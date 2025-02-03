@@ -13,13 +13,17 @@ export default function EditProject() {
     return null
   }
 
+  const handleNavigateBack = () => {
+    navigate(`/account?propertyId=${propertyId}`)
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <ProjectForm
         propertyId={propertyId}
         project={project}
-        onCancel={() => navigate("/account")}
-        onSuccess={() => navigate("/account")}
+        onCancel={handleNavigateBack}
+        onSuccess={handleNavigateBack}
       />
     </div>
   )

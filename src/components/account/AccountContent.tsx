@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { AccountActions } from "@/components/account/AccountActions"
 import { PropertySection } from "@/components/account/PropertySection"
 import { ProjectAndTaxSection } from "@/components/account/ProjectAndTaxSection"
@@ -7,9 +7,26 @@ import { useProperties } from "@/hooks/useProperties"
 
 export function AccountContent() {
   const navigate = useNavigate()
-  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(
+    searchParams.get("propertyId")
+  )
   const { data: properties = [] } = useProperties()
   const selectedProperty = properties.find(p => p.id === selectedPropertyId)
+
+  // Set initial property only if no property is selected and properties exist
+  useEffect(() => {
+    if (properties.length > 0 && !selectedPropertyId) {
+      const newPropertyId = properties[0].id
+      setSelectedPropertyId(newPropertyId)
+      setSearchParams({ propertyId: newPropertyId })
+    }
+  }, [properties, selectedPropertyId, setSearchParams])
+
+  const handlePropertySelect = (propertyId: string) => {
+    setSelectedPropertyId(propertyId)
+    setSearchParams({ propertyId })
+  }
 
   return (
     <>
@@ -20,7 +37,7 @@ export function AccountContent() {
 
       <PropertySection 
         selectedPropertyId={selectedPropertyId}
-        setSelectedPropertyId={setSelectedPropertyId}
+        setSelectedPropertyId={handlePropertySelect}
       />
 
       <ProjectAndTaxSection 
