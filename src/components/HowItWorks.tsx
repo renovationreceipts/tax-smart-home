@@ -1,20 +1,20 @@
-import { Home, Hammer, FileText } from "lucide-react";
+import { Receipt, Calculator, FileSpreadsheet } from "lucide-react";
 
 const steps = [
   {
-    icon: <Home className="h-6 w-6 text-blue-600" />,
-    title: "Input Property Details",
-    description: "Add your property information including purchase date, price, and property type.",
+    icon: <Receipt className="h-6 w-6 text-blue-600" />,
+    title: "Track Home Improvements",
+    description: "Easily document all your capital improvements with receipts, descriptions, and costs in one organized place.",
   },
   {
-    icon: <Hammer className="h-6 w-6 text-blue-600" />,
-    title: "Add and Track Capital Improvements",
-    description: "Record and categorize all property improvements and their associated costs.",
+    icon: <Calculator className="h-6 w-6 text-blue-600" />,
+    title: "Calculate Cost Basis",
+    description: "Automatically compute your adjusted cost basis by combining purchase price and improvement costs.",
   },
   {
-    icon: <FileText className="h-6 w-6 text-blue-600" />,
-    title: "Generate Tax Forms",
-    description: "Automatically calculate cost basis and prepare data for IRS Form 8949.",
+    icon: <FileSpreadsheet className="h-6 w-6 text-blue-600" />,
+    title: "Prepare Tax Documents",
+    description: "Generate accurate tax forms and maintain organized records for potential IRS audits.",
   },
 ];
 
@@ -24,8 +24,11 @@ export const HowItWorks = () => {
       <div className="container-width">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold sm:text-4xl mb-4">
-            How It Works
+            How This Business Can Help
           </h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Streamline your property expense tracking, maximize tax benefits, and maintain organized records for your peace of mind.
+          </p>
         </div>
         <div className="grid md:grid-cols-3 gap-12">
           {steps.map((step, index) => (
@@ -34,7 +37,7 @@ export const HowItWorks = () => {
                 <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-blue-200 -z-10" />
               )}
               <div className="flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-6">
+                <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mb-6">
                   {step.icon}
                 </div>
                 <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
