@@ -36,7 +36,7 @@ export function ProjectAnalysisButton({
         if (error.status === 429) {
           toast({
             title: "Service Busy",
-            description: "The analysis service is temporarily unavailable. Please try again in a few moments.",
+            description: "The analysis service is temporarily busy. Please wait a moment and try again.",
             variant: "destructive",
           })
           return
@@ -53,7 +53,7 @@ export function ProjectAnalysisButton({
       console.error('Error analyzing project:', error)
       toast({
         title: "Analysis Failed",
-        description: "Unable to analyze the project description. Please try again.",
+        description: "Unable to analyze the project description. Please try again in a few moments.",
         variant: "destructive",
       })
     } finally {

@@ -8,19 +8,12 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async (req) => {
-  // Handle CORS preflight requests
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
-  }
+const RETRY_DELAY = 2000; // 2 seconds
+const MAX_RETRIES = 3;
 
+async function callOpenAI(description: string, attempt = 1): Promise<Response> {
   try {
-    const { description } = await req.json();
-    console.log('Analyzing project description:', description);
-
-    if (!openAIApiKey) {
-      throw new Error('OpenAI API key is not configured');
-    }
+    console.log(`Attempt ${attempt} to analyze description:`, description);
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -48,14 +41,41 @@ serve(async (req) => {
       }),
     });
 
+    if (response.status === 429 && attempt < MAX_RETRIES) {
+      console.log(`Rate limited on attempt ${attempt}, retrying after delay...`);
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+      return callOpenAI(description, attempt + 1);
+    }
+
+    return response;
+  } catch (error) {
+    console.error(`Error on attempt ${attempt}:`, error);
+    throw error;
+  }
+}
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    const { description } = await req.json();
+    console.log('Analyzing project description:', description);
+
+    if (!openAIApiKey) {
+      throw new Error('OpenAI API key is not configured');
+    }
+
+    const response = await callOpenAI(description);
+
     if (!response.ok) {
       const errorData = await response.text();
       console.error('OpenAI API error:', errorData);
       
-      // Handle rate limit specifically
       if (response.status === 429) {
         return new Response(JSON.stringify({ 
-          error: "The analysis service is temporarily unavailable. Please try again in a few moments."
+          error: "The analysis service is busy. Please wait a moment and try again."
         }), {
           status: 429,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -68,7 +88,7 @@ serve(async (req) => {
     const data = await response.json();
     console.log('OpenAI response:', data);
 
-    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+    if (!data.choices?.[0]?.message?.content) {
       throw new Error('Invalid response format from OpenAI');
     }
 
@@ -82,7 +102,7 @@ serve(async (req) => {
     return new Response(JSON.stringify({ 
       error: error.message || 'An unexpected error occurred'
     }), {
-      status: 500,
+      status: error.status || 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
