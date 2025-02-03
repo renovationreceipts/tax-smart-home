@@ -8,7 +8,7 @@ const steps = [
   },
   {
     icon: <Calculator className="h-6 w-6 text-blue-600" />,
-    title: "Calculate Cost Basis",
+    title: "Calculate Cost Basis For Your Property",
     description: "Automatically compute your adjusted cost basis by combining purchase price and improvement costs.",
   },
   {
