@@ -26,7 +26,7 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
           <TableHead className="text-right">Amount</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>
+      <TableBody className="divide-y divide-gray-100">
         <TaxTableRow 
           label="Current Home Value"
           value={property?.current_value}
@@ -42,12 +42,12 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
         <TaxTableRow 
           label="New Cost Basis"
           value={newCostBasis}
-          className="border-b border-gray-200"
+          className="!border-b-2 !border-gray-200"
         />
         <TaxTableRow 
           label="Taxable Gain With New Cost Basis"
           value={taxableGainWithBasis}
-          className="pt-4"
+          className="!pt-6"
         />
         <TaxTableRow 
           label="Taxable Gain Without New Cost Basis"
