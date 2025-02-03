@@ -157,6 +157,44 @@ export type Database = {
         }
         Relationships: []
       }
+      tax_forms: {
+        Row: {
+          created_at: string | null
+          data: Json
+          form_type: Database["public"]["Enums"]["tax_form_type"]
+          id: string
+          property_id: string
+          tax_year: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          data: Json
+          form_type: Database["public"]["Enums"]["tax_form_type"]
+          id?: string
+          property_id: string
+          tax_year: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          data?: Json
+          form_type?: Database["public"]["Enums"]["tax_form_type"]
+          id?: string
+          property_id?: string
+          tax_year?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tax_forms_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -165,7 +203,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      tax_form_type: "8949" | "SCHEDULE_D"
     }
     CompositeTypes: {
       [_ in never]: never
