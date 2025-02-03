@@ -61,13 +61,15 @@ export function ProjectAnalysisButton({
     }
   }
 
+  const isDisabled = isAnalyzing || !description.trim()
+
   return (
     <Button
       type="button"
       variant="outline"
       size="sm"
       onClick={analyzeDescription}
-      disabled={isAnalyzing}
+      disabled={isDisabled}
       className="text-sm"
     >
       {isAnalyzing ? (
