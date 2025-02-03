@@ -16,6 +16,11 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
   const handleFileUpload = async (files: FileList, category: string, projectId: string) => {
     console.log(`Uploading ${files.length} files for category: ${category}`)
     
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      throw new Error("User must be logged in to upload files")
+    }
+    
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
       const fileExt = file.name.split('.').pop()
@@ -25,7 +30,10 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
 
       const { error: uploadError } = await supabase.storage
         .from('project-files')
-        .upload(filePath, file)
+        .upload(filePath, file, {
+          upsert: false,
+          contentType: file.type
+        })
 
       if (uploadError) {
         console.error('Error uploading file:', uploadError)
@@ -36,6 +44,7 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
         .from('project_files')
         .insert({
           project_id: projectId,
+          user_id: user.id,  // Make sure to set the user_id
           file_path: filePath,
           file_type: file.type,
           file_category: category,
