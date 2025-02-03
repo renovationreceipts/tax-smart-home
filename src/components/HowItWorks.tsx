@@ -24,7 +24,7 @@ export const HowItWorks = () => {
       <div className="container-width">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold sm:text-4xl mb-4">
-            How This Business Can Help
+            How We Help
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Streamline your property expense tracking, maximize tax benefits, and maintain organized records for your peace of mind.
