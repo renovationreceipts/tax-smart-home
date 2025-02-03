@@ -22,7 +22,7 @@ async function callOpenAI(description: string, attempt = 1): Promise<Response> {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-3.5-turbo',
         messages: [
           {
             role: 'system',
