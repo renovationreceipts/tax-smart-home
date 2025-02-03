@@ -5,14 +5,20 @@ interface TaxTableRowProps {
   label: string
   value: number | string | null
   isHighlighted?: boolean
+  className?: string
 }
 
-export function TaxTableRow({ label, value, isHighlighted = false }: TaxTableRowProps) {
+export function TaxTableRow({ 
+  label, 
+  value, 
+  isHighlighted = false,
+  className = ""
+}: TaxTableRowProps) {
   const formattedValue = typeof value === 'number' ? formatCurrency(value) : value || "-"
   const textColor = isHighlighted ? "text-green-600" : ""
 
   return (
-    <TableRow>
+    <TableRow className={className}>
       <TableCell className={`font-medium ${textColor}`}>{label}</TableCell>
       <TableCell className={`text-right ${textColor}`}>{formattedValue}</TableCell>
     </TableRow>

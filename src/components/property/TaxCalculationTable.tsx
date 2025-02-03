@@ -42,10 +42,12 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
         <TaxTableRow 
           label="New Cost Basis"
           value={newCostBasis}
+          className="border-b border-gray-200"
         />
         <TaxTableRow 
           label="Taxable Gain With New Cost Basis"
           value={taxableGainWithBasis}
+          className="pt-4"
         />
         <TaxTableRow 
           label="Taxable Gain Without New Cost Basis"
