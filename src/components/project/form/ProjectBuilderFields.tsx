@@ -9,7 +9,7 @@ interface ProjectBuilderFieldsProps {
 
 export function ProjectBuilderFields({ form }: ProjectBuilderFieldsProps) {
   return (
-    <>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <FormField
         control={form.control}
         name="builder_name"
@@ -37,6 +37,6 @@ export function ProjectBuilderFields({ form }: ProjectBuilderFieldsProps) {
           </FormItem>
         )}
       />
-    </>
+    </div>
   )
 }
