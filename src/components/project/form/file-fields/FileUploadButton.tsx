@@ -53,12 +53,15 @@ export function FileUploadButton({ value, onChange, multiple = false, accept, la
     )
   }
 
+  console.log("FileUploadButton value:", value)
+  console.log("FileUploadButton value length:", value?.length)
+
   return (
     <div className="space-y-4">
       <Input
         type="file"
         accept={accept}
-        multiple={false} // Force single file upload
+        multiple={false}
         ref={inputRef}
         onChange={(e) => {
           const files = e.target.files
@@ -68,7 +71,7 @@ export function FileUploadButton({ value, onChange, multiple = false, accept, la
         }}
         className="hidden"
       />
-      {(!value || (value as FileList)?.length === 0) && (
+      {(!value || value.length === 0) && (
         <Button
           type="button"
           variant="outline"
