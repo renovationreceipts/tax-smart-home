@@ -29,7 +29,11 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
           className="relative group bg-white rounded-lg border border-gray-200 p-4 hover:border-gray-300 transition-colors"
         >
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 flex-shrink-0">
+            <button 
+              type="button"
+              onClick={() => onPreview(file)}
+              className="w-12 h-12 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-primary rounded"
+            >
               {file.file_type.startsWith('image/') ? (
                 <img 
                   src={getFileUrl(file.file_path)}
@@ -41,15 +45,19 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
                   <div className="text-2xl">📄</div>
                 </div>
               )}
-            </div>
-            <div className="flex-1 min-w-0">
+            </button>
+            <button
+              type="button"
+              onClick={() => onPreview(file)}
+              className="flex-1 min-w-0 text-left focus:outline-none focus:ring-2 focus:ring-primary rounded p-1"
+            >
               <p className="text-sm font-medium text-gray-900 truncate">
                 {file.file_path.split('/').pop()}
               </p>
               <p className="text-sm text-gray-500">
-                {formatFileSize(file.size || 0)}
+                {formatFileSize(file.size)}
               </p>
-            </div>
+            </button>
             <Button
               type="button"
               variant="ghost"
