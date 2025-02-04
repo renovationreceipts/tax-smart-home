@@ -15,7 +15,7 @@ const Footer = () => {
               <span className="text-xl font-bold">CompanyName</span>
             </div>
             <p className="text-gray-600">
-              Helping property owners manage their finances and tax records efficiently.
+              Helping property owners track renovation costs and tax records efficiently.
             </p>
           </div>
 
