@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Home, LogOut, User } from "lucide-react"
+import { Home, LogOut, User, Users } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
 interface AccountHeaderProps {
@@ -18,6 +18,15 @@ export function AccountHeader({ onSignOut }: AccountHeaderProps) {
             <span className="text-xl font-bold">CompanyName</span>
           </div>
           <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-gray-600"
+              onClick={() => navigate("/community")}
+            >
+              <Users className="h-4 w-4 mr-2" />
+              Community
+            </Button>
             <Button
               variant="ghost"
               size="sm"

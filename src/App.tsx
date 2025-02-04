@@ -8,6 +8,7 @@ import Index from "@/pages/Index"
 import Login from "@/pages/Login"
 import Profile from "@/pages/Profile"
 import SignUp from "@/pages/SignUp"
+import Community from "@/pages/Community"
 import "./App.css"
 
 const queryClient = new QueryClient({
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/community" element={<Community />} />
           <Route path="/property/edit/:id?" element={<EditProperty />} />
           <Route path="/project/edit/:propertyId/:id?" element={<EditProject />} />
         </Routes>
