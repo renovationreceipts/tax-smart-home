@@ -11,6 +11,7 @@ import Profile from "@/pages/Profile"
 import SignUp from "@/pages/SignUp"
 import Community from "@/pages/Community"
 import Disclaimers from './pages/Disclaimers.tsx';
+import Terms from './pages/Terms.tsx';
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
   {
     path: "/disclaimers",
     element: <Disclaimers />,
+  },
+  {
+    path: "/terms",
+    element: <Terms />,
   }
 ]);
 
