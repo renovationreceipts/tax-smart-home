@@ -32,13 +32,13 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
             <button 
               type="button"
               onClick={() => onPreview(file)}
-              className="w-12 h-12 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-primary rounded"
+              className="w-12 h-12 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-primary rounded overflow-hidden"
             >
               {file.file_type.startsWith('image/') ? (
                 <img 
                   src={getFileUrl(file.file_path)}
                   alt="File preview"
-                  className="w-full h-full object-cover rounded"
+                  className="w-full h-full object-cover"
                 />
               ) : (
                 <div className="w-full h-full bg-gray-50 rounded flex items-center justify-center">
@@ -61,9 +61,9 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
             <Button
               type="button"
               variant="ghost"
-              size="sm"
+              size="icon"
               onClick={() => onDelete(file.id, file.file_path)}
-              className="opacity-0 group-hover:opacity-100 transition-opacity"
+              className="opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2"
             >
               <X className="h-4 w-4" />
               <span className="sr-only">Remove file</span>
