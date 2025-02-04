@@ -11,12 +11,31 @@ interface FileListProps {
 
 export function FileList({ files, onPreview, onDelete }: FileListProps) {
   const getFileUrl = (filePath: string) => {
+    // For newly added files that are File objects
+    if (filePath instanceof File) {
+      return URL.createObjectURL(filePath)
+    }
+    // For existing files in Supabase storage
     return supabase.storage.from('project-files').getPublicUrl(filePath).data.publicUrl
   }
 
   const formatFileSize = (bytes: number) => {
     const mb = bytes / (1024 * 1024)
     return `${mb.toFixed(2)} MB`
+  }
+
+  const getFileName = (file: ProjectFile) => {
+    if (file.file_path instanceof File) {
+      return file.file_path.name
+    }
+    return file.file_path.split('/').pop() || 'Unknown file'
+  }
+
+  const getFileType = (file: ProjectFile) => {
+    if (file.file_path instanceof File) {
+      return file.file_path.type
+    }
+    return file.file_type
   }
 
   if (files.length === 0) return null
@@ -34,7 +53,7 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
               onClick={() => onPreview(file)}
               className="w-12 h-12 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-primary rounded overflow-hidden"
             >
-              {file.file_type.startsWith('image/') ? (
+              {getFileType(file).startsWith('image/') ? (
                 <img 
                   src={getFileUrl(file.file_path)}
                   alt="File preview"
@@ -52,7 +71,7 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
               className="flex-1 min-w-0 text-left focus:outline-none focus:ring-2 focus:ring-primary rounded p-1"
             >
               <p className="text-sm font-medium text-gray-900 truncate">
-                {file.file_path.split('/').pop()}
+                {getFileName(file)}
               </p>
               <p className="text-sm text-gray-500">
                 {formatFileSize(file.size)}
