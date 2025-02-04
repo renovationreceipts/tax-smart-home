@@ -29,10 +29,10 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
               <img 
                 src={getFileUrl(file.file_path)}
                 alt="File preview"
-                className="w-full h-[400px] object-cover rounded-lg border border-gray-200"
+                className="w-full h-[200px] object-contain rounded-lg border border-gray-200"
               />
             ) : (
-              <div className="w-full h-[400px] bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-center">
+              <div className="w-full h-[200px] bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-center">
                 <div className="text-2xl">📄</div>
               </div>
             )}
