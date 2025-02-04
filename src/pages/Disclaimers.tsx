@@ -1,9 +1,25 @@
 import React from 'react';
+import { Button } from "@/components/ui/button";
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 const Disclaimers = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="container-width py-16">
       <div className="max-w-3xl mx-auto space-y-8">
+        <div className="flex items-center gap-4 mb-8">
+          <Button 
+            variant="outline" 
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </Button>
+        </div>
+
         <h1 className="text-3xl font-bold text-gray-900">Disclaimer</h1>
         
         <section className="space-y-4">
