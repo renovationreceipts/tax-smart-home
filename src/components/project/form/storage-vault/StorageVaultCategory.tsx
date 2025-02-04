@@ -27,6 +27,9 @@ export function StorageVaultCategory({
   uploadLabel
 }: StorageVaultCategoryProps) {
   const hasExistingFiles = files.length > 0;
+  const currentValue = form.watch(fieldName) as FileList | null;
+  const hasSelectedFiles = currentValue && currentValue.length > 0;
+  const shouldShowUploadButton = !hasExistingFiles && !hasSelectedFiles;
 
   return (
     <FormField
@@ -36,7 +39,7 @@ export function StorageVaultCategory({
         <FormItem className="space-y-4">
           <FormLabel className="text-lg font-semibold">{label}</FormLabel>
           <div className="min-h-[100px]">
-            {!hasExistingFiles ? (
+            {shouldShowUploadButton ? (
               <FileUploadButton
                 value={value as FileList | null}
                 onChange={onChange}
