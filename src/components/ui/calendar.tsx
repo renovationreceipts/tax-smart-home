@@ -40,20 +40,20 @@ function Calendar({
     ]
     const newMonth = months.indexOf(value)
     setCurrentMonth(newMonth)
-    if (props.selected instanceof Date && props.onSelect) {
+    if (props.selected instanceof Date) {
       const newDate = new Date(props.selected)
       newDate.setMonth(newMonth)
-      props.onSelect(newDate)
+      // Don't call onSelect here to keep the picker open
     }
   }
 
   const handleYearChange = (value: string) => {
     const newYear = parseInt(value)
     setCurrentYear(newYear)
-    if (props.selected instanceof Date && props.onSelect) {
+    if (props.selected instanceof Date) {
       const newDate = new Date(props.selected)
       newDate.setFullYear(newYear)
-      props.onSelect(newDate)
+      // Don't call onSelect here to keep the picker open
     }
   }
 
@@ -74,7 +74,7 @@ function Calendar({
         }}
         mode="single"
         selected={props.selected}
-        onSelect={(date) => props.onSelect?.(date)}
+        onSelect={props.onSelect}
         month={new Date(currentYear, currentMonth)}
       />
     </div>
