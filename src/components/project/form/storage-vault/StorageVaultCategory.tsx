@@ -35,7 +35,7 @@ export function StorageVaultCategory({
           <FormLabel className="text-lg font-semibold">{label}</FormLabel>
           <div className="mt-2 space-y-4">
             <FileUploadButton
-              value={value}
+              value={value as FileList | null}
               onChange={onChange}
               multiple
               accept={accept}
