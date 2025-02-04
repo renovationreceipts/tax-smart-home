@@ -12,9 +12,14 @@ const queryClient = new QueryClient({
   },
 })
 
-export default function App() {
+interface AppProps {
+  children: React.ReactNode
+}
+
+export default function App({ children }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
+      {children}
       <Toaster />
     </QueryClientProvider>
   )
