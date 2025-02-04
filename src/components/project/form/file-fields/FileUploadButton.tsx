@@ -53,9 +53,6 @@ export function FileUploadButton({ value, onChange, multiple = false, accept, la
     )
   }
 
-  console.log("FileUploadButton value:", value)
-  console.log("FileUploadButton value length:", value?.length)
-
   return (
     <div className="space-y-4">
       <Input
@@ -71,17 +68,15 @@ export function FileUploadButton({ value, onChange, multiple = false, accept, la
         }}
         className="hidden"
       />
-      {(!value || value.length === 0) && (
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full h-20 flex flex-col items-center justify-center gap-2 border-2 border-dashed"
-          onClick={handleAddFiles}
-        >
-          <Plus className="h-6 w-6" />
-          <span>{label}</span>
-        </Button>
-      )}
+      <Button
+        type="button"
+        variant="outline"
+        className="w-full h-20 flex flex-col items-center justify-center gap-2 border-2 border-dashed"
+        onClick={handleAddFiles}
+      >
+        <Plus className="h-6 w-6" />
+        <span>{label}</span>
+      </Button>
       {value && value.length > 0 && renderSelectedFiles(value)}
     </div>
   )
