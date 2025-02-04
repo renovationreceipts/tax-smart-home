@@ -31,40 +31,61 @@ export function StorageVaultCategory({
 }: StorageVaultCategoryProps) {
   const queryClient = useQueryClient()
   
+  console.log(`Rendering ${fieldName} category:`, { 
+    files, 
+    formValue: form.watch(fieldName) 
+  })
+  
   const handleFileChange = async (files: FileList) => {
-    console.log("File change detected:", files)
-    form.setValue(fieldName, files);
+    if (files.length === 0) return
     
-    // Create temporary file entries for immediate display
-    const tempFiles: ProjectFile[] = Array.from(files).map(file => ({
+    console.log(`File change for ${fieldName}:`, files[0].name)
+    
+    // Only take the first file since we want one file per category
+    const file = files[0]
+    form.setValue(fieldName, files)
+    
+    // Create a temporary file entry for immediate display
+    const tempFile: ProjectFile = {
       id: `temp-${crypto.randomUUID()}`,
       file_path: file,
       file_type: file.type,
       file_category: fieldName.replace('Photos', '_photo').replace('receipts', 'receipt'),
       size: file.size
-    }));
+    }
     
-    // Update the cache by merging existing files with temp files
+    // Update the cache by replacing any existing files in this category with the new temp file
     queryClient.setQueryData(['project-files', projectId], (oldData: ProjectFile[] = []) => {
-      const existingFiles = oldData.filter(file => !file.id.startsWith('temp-'));
-      console.log("Updating cache with temp files:", [...existingFiles, ...tempFiles])
-      return [...existingFiles, ...tempFiles]
-    });
-  };
+      // Remove any existing files in this category (temp or permanent)
+      const otherFiles = oldData.filter(f => f.file_category !== tempFile.file_category)
+      console.log(`Updating cache for ${fieldName}:`, [...otherFiles, tempFile])
+      return [...otherFiles, tempFile]
+    })
+  }
 
-  // Handle file deletion by updating the form value and cache
   const handleDelete = (fileId: string, filePath: string) => {
-    // Reset the form field value for this category
-    form.setValue(fieldName, null);
+    console.log(`Deleting file from ${fieldName}:`, { fileId, filePath })
     
-    // Call the original onDelete handler
-    onDelete(fileId, filePath);
+    // Reset the form field value
+    form.setValue(fieldName, null)
+    
+    // Call the original onDelete handler for permanent files
+    if (!fileId.startsWith('temp-')) {
+      onDelete(fileId, filePath)
+    }
     
     // Update the cache to remove the file
     queryClient.setQueryData(['project-files', projectId], (oldData: ProjectFile[] = []) => {
-      return oldData.filter(file => file.id !== fileId);
-    });
-  };
+      const updatedFiles = oldData.filter(file => file.id !== fileId)
+      console.log(`Updated cache after deletion for ${fieldName}:`, updatedFiles)
+      return updatedFiles
+    })
+  }
+
+  // Filter files to only show the one for this category
+  const categoryFiles = files.filter(file => 
+    file.file_category === fieldName.replace('Photos', '_photo').replace('receipts', 'receipt')
+  )
 
   return (
     <FormField
@@ -74,7 +95,7 @@ export function StorageVaultCategory({
         <FormItem className="space-y-4">
           <FormLabel className="text-lg font-semibold">{label}</FormLabel>
           <div className="min-h-[100px]">
-            {files.length === 0 ? (
+            {categoryFiles.length === 0 ? (
               <FileUploadButton
                 value={value as FileList | null}
                 onChange={handleFileChange}
@@ -84,7 +105,7 @@ export function StorageVaultCategory({
               />
             ) : (
               <FileList
-                files={files}
+                files={categoryFiles}
                 onPreview={onPreview}
                 onDelete={handleDelete}
               />
