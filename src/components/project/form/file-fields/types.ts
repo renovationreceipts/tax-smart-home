@@ -3,4 +3,5 @@ export interface ProjectFile {
   file_path: string
   file_type: string
   file_category: string
+  size: number
 }
