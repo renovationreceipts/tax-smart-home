@@ -14,6 +14,13 @@ export interface Project {
 }
 
 async function fetchProjects(propertyId: string) {
+  // Validate that propertyId is a valid UUID using a regex
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  if (!uuidRegex.test(propertyId)) {
+    console.log("Invalid property ID format:", propertyId)
+    return []
+  }
+
   console.log("Fetching projects for property:", propertyId)
   const { data, error } = await supabase
     .from("projects")
