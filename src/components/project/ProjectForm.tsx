@@ -54,8 +54,8 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <ProjectBasicFields form={form} />
-          <ProjectFileFields form={form} projectId={project?.id} />
           <ProjectBuilderFields form={form} />
+          <ProjectFileFields form={form} projectId={project?.id} />
           <ProjectFormActions isEditing={!!project} onCancel={onCancel} />
         </form>
       </Form>
