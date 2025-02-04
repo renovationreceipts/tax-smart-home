@@ -80,7 +80,7 @@ export function StorageVaultSection({ form, projectId }: StorageVaultSectionProp
       <div className="text-xl font-bold mb-6">Storage Vault</div>
       
       <StorageVaultCategory
-        label="Before Photos"
+        label="Before Photo"
         fieldName="beforePhotos"
         form={form}
         files={existingFiles.filter(file => file.file_category === 'before_photo')}
@@ -91,7 +91,7 @@ export function StorageVaultSection({ form, projectId }: StorageVaultSectionProp
       />
 
       <StorageVaultCategory
-        label="After Photos"
+        label="After Photo"
         fieldName="afterPhotos"
         form={form}
         files={existingFiles.filter(file => file.file_category === 'after_photo')}
@@ -102,7 +102,7 @@ export function StorageVaultSection({ form, projectId }: StorageVaultSectionProp
       />
 
       <StorageVaultCategory
-        label="Receipts"
+        label="Receipt"
         fieldName="receipts"
         form={form}
         files={existingFiles.filter(file => file.file_category === 'receipt')}
