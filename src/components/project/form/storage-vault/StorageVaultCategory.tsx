@@ -53,7 +53,8 @@ export function StorageVaultCategory({
     });
   };
 
-  const shouldShowUploadButton = files.length === 0 && (!currentValue || currentValue.length === 0);
+  // Show upload button if there are no files at all (including temporary ones)
+  const shouldShowUploadButton = files.length === 0;
 
   return (
     <FormField
