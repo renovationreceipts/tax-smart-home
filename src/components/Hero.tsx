@@ -34,7 +34,7 @@ export const Hero = () => {
               <img 
                 src="/lovable-uploads/486df4ae-0040-493b-84af-13fd7d3fb88d.png"
                 alt="Tax Smart Home Dashboard Preview"
-                className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+                className="rounded-2xl shadow-2xl w-1/2 h-auto object-cover mx-auto"
               />
             </div>
           </div>
