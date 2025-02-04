@@ -33,8 +33,10 @@ export function useProjectFiles(projectId?: string) {
       return filesWithUrls
     },
     enabled: !!projectId,
-    staleTime: 0,
-    refetchInterval: 1000,
+    // Only refetch when the query window is refocused
+    staleTime: Infinity,
+    // Remove the aggressive refetch interval
+    gcTime: 0,
   })
 
   return { existingFiles }

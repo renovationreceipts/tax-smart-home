@@ -45,10 +45,11 @@ export function StorageVaultCategory({
       size: file.size
     }));
     
-    // Update the cache with temporary files
+    // Update the cache by merging existing files with temp files
     queryClient.setQueryData(['project-files', projectId], (oldData: ProjectFile[] = []) => {
-      console.log("Updating cache with temp files:", tempFiles)
-      return [...oldData, ...tempFiles]
+      const existingFiles = oldData.filter(file => !file.id.startsWith('temp-'));
+      console.log("Updating cache with temp files:", [...existingFiles, ...tempFiles])
+      return [...existingFiles, ...tempFiles]
     });
   };
 
