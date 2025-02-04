@@ -17,7 +17,7 @@ export const Hero = () => {
           <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
             <div className="space-y-8">
               <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 lg:text-6xl">
-                Track Home Improvements, Maximize Your Cost Basis, Slash Your Tax Bill
+                Track Home Renovations, Maximize Your Cost Basis, Slash Your Tax Bill
               </h1>
               <p className="text-xl text-gray-600">
                 Track all your home improvement expenses to accurately calculate cost basis—ultimately lowering taxable gains when selling. Perfect for homeowners, second-home owners, and landlords.
