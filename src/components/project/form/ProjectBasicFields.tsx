@@ -3,6 +3,7 @@ import { MoneyField } from "@/components/property/MoneyField"
 import { ProjectNameField } from "./fields/ProjectNameField"
 import { ProjectDescriptionField } from "./fields/ProjectDescriptionField"
 import type { ProjectFormValues } from "./ProjectFormTypes"
+import { ProjectDateField } from "./ProjectDateField"
 
 interface ProjectBasicFieldsProps {
   form: UseFormReturn<ProjectFormValues>
@@ -13,11 +14,14 @@ export function ProjectBasicFields({ form }: ProjectBasicFieldsProps) {
     <>
       <ProjectNameField form={form} />
       <ProjectDescriptionField form={form} />
-      <MoneyField
-        form={form}
-        name="cost"
-        label="Project Cost"
-      />
+      <div className="grid grid-cols-2 gap-4">
+        <MoneyField
+          form={form}
+          name="cost"
+          label="Project Cost"
+        />
+        <ProjectDateField form={form} />
+      </div>
     </>
   )
 }

@@ -21,7 +21,7 @@ export function ProjectDateField({ form }: ProjectDateFieldProps) {
       control={form.control}
       name="completion_date"
       render={({ field }) => (
-        <FormItem className="flex flex-col">
+        <FormItem>
           <FormLabel>Completion Date</FormLabel>
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -50,8 +50,7 @@ export function ProjectDateField({ form }: ProjectDateFieldProps) {
                   field.onChange(date)
                   setOpen(false)
                 }}
-                disabled={(date) =>
-                  date > new Date() || date < new Date("1900-01-01")
+                 new Date() || date < new Date("1900-01-01")
                 }
                 initialFocus
               />
