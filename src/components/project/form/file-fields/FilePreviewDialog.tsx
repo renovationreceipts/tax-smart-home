@@ -16,17 +16,29 @@ export function FilePreviewDialog({ file, onClose }: FilePreviewDialogProps) {
     return supabase.storage.from('project-files').getPublicUrl(filePath).data.publicUrl
   }
 
-  const handleDownload = () => {
-    const fileUrl = getFileUrl(file.file_path)
-    const fileName = file.file_path.split('/').pop() || 'download'
-    
-    // Create a temporary link element to trigger the download
-    const link = document.createElement('a')
-    link.href = fileUrl
-    link.download = fileName
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+  const handleDownload = async () => {
+    try {
+      const fileUrl = getFileUrl(file.file_path)
+      const fileName = file.file_path.split('/').pop() || 'download'
+      
+      // Fetch the file as a blob
+      const response = await fetch(fileUrl)
+      const blob = await response.blob()
+      
+      // Create a blob URL and trigger download
+      const blobUrl = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = blobUrl
+      link.download = fileName // This forces download instead of navigation
+      document.body.appendChild(link)
+      link.click()
+      
+      // Cleanup
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(blobUrl)
+    } catch (error) {
+      console.error('Error downloading file:', error)
+    }
   }
 
   const renderPreview = () => {
