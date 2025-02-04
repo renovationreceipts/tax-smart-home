@@ -21,20 +21,20 @@ export function useProjectFiles(projectId?: string) {
       
       console.log('Fetched project files:', data)
       
-      // Transform the data to include public URLs for files
       const filesWithUrls = (data as any[]).map(file => ({
-        ...file,
-        size: file.size || 0,
+        id: file.id,
         file_path: file.file_path,
         file_type: file.file_type || 'application/octet-stream',
+        file_category: file.file_category,
+        size: file.size || 0,
       })) as ProjectFile[]
 
       console.log('Files with URLs:', filesWithUrls)
       return filesWithUrls
     },
     enabled: !!projectId,
-    staleTime: 0, // No stale time to always fetch fresh data
-    refetchInterval: 1000, // Refetch every second while component is mounted
+    staleTime: 0,
+    refetchInterval: 1000,
   })
 
   return { existingFiles }

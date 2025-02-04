@@ -10,14 +10,22 @@ interface FileListProps {
 }
 
 export function FileList({ files, onPreview, onDelete }: FileListProps) {
-  const getFileUrl = (filePath: string | File) => {
-    if (filePath instanceof File) {
-      return URL.createObjectURL(filePath)
+  const getFileUrl = (file: ProjectFile) => {
+    // For temporary files (newly uploaded), use the File object directly
+    if (file.id.startsWith('temp-') && file.file_path instanceof File) {
+      console.log('Creating blob URL for temp file:', file.file_path.name)
+      return URL.createObjectURL(file.file_path)
     }
-    // Always generate a fresh URL to avoid caching issues
-    const { data } = supabase.storage.from('project-files').getPublicUrl(filePath)
-    console.log('Generated file URL:', data.publicUrl)
-    return data.publicUrl
+    
+    // For stored files, get the Supabase URL
+    if (typeof file.file_path === 'string') {
+      const { data } = supabase.storage.from('project-files').getPublicUrl(file.file_path)
+      console.log('Generated Supabase URL:', data.publicUrl)
+      return data.publicUrl
+    }
+
+    console.log('Unable to generate URL for file:', file)
+    return ''
   }
 
   const formatFileSize = (bytes: number) => {
@@ -33,22 +41,18 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
     return filePath.split('/').pop() || 'Unknown file'
   }
 
-  const getFileType = (file: ProjectFile) => {
-    const filePath = file.file_path
-    if (filePath instanceof File) {
-      return filePath.type
-    }
-    return file.file_type
-  }
-
   if (files.length === 0) return null
 
   return (
     <div className="space-y-4">
       {files.map(file => {
         const isTemp = file.id.startsWith('temp-')
-        const fileUrl = getFileUrl(file.file_path)
-        console.log('Rendering file:', { file, fileUrl, type: getFileType(file) })
+        console.log('Rendering file:', { 
+          id: file.id, 
+          isTemp, 
+          type: file.file_type,
+          path: file.file_path instanceof File ? file.file_path.name : file.file_path 
+        })
         
         return (
           <div 
@@ -63,15 +67,15 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
                 onClick={() => onPreview(file)}
                 className="w-12 h-12 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-primary rounded overflow-hidden"
               >
-                {getFileType(file).startsWith('image/') ? (
+                {file.file_type.startsWith('image/') ? (
                   <img 
-                    src={fileUrl}
+                    src={getFileUrl(file)}
                     alt={getFileName(file)}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       console.error('Image load error:', e)
                       const imgElement = e.currentTarget
-                      imgElement.onerror = null // Prevent infinite loop
+                      imgElement.onerror = null
                       imgElement.src = '/placeholder.svg'
                     }}
                   />
