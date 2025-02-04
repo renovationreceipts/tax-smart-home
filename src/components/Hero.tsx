@@ -4,16 +4,16 @@ import { Link } from "react-router-dom";
 
 export const Hero = () => {
   return (
-    <div className="hero-gradient">
-      <nav className="container-width py-4 px-4 flex justify-between items-center">
+    <div className="w-full hero-gradient">
+      <nav className="w-full max-w-7xl mx-auto py-4 px-4 flex justify-between items-center">
         <div className="text-xl font-bold text-gray-900">CompanyName</div>
         <div className="flex gap-4 items-center">
           <Link to="/login" className="text-gray-600 hover:text-gray-900">Login</Link>
           <Link to="/signup" className="text-white bg-primary hover:bg-primary/90 px-4 py-2 rounded-md">Sign Up</Link>
         </div>
       </nav>
-      <div className="section-padding">
-        <div className="container-width">
+      <div className="w-full py-16 sm:py-20 lg:py-24 px-4">
+        <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
             <div className="space-y-8">
               <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 lg:text-6xl">
