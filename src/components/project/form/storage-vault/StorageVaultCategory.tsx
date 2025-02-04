@@ -35,7 +35,7 @@ export function StorageVaultCategory({
       name={fieldName}
       render={({ field: { onChange, value } }) => (
         <FormItem>
-          <FormLabel className="text-lg font-semibold">{label}</FormLabel>
+          <FormLabel>{label}</FormLabel>
           <div className="mt-2 space-y-4">
             {!hasExistingFiles && (
               <FileUploadButton
