@@ -17,7 +17,7 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
   if (files.length === 0) return null
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-2xl mx-auto">
       {files.map(file => (
         <div key={file.id} className="relative group">
           <button
@@ -29,11 +29,11 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
               <img 
                 src={getFileUrl(file.file_path)}
                 alt="File preview"
-                className="w-full aspect-[4/3] object-cover rounded-lg border border-gray-200"
+                className="w-full aspect-[3/2] object-cover rounded-lg border border-gray-200"
               />
             ) : (
-              <div className="w-full aspect-[4/3] bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-center">
-                <div className="text-4xl">📄</div>
+              <div className="w-full aspect-[3/2] bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-center">
+                <div className="text-2xl">📄</div>
               </div>
             )}
           </button>
