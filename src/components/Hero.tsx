@@ -14,7 +14,7 @@ export const Hero = () => {
       </nav>
       <div className="section-padding">
         <div className="container-width">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
             <div className="space-y-8">
               <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 lg:text-6xl">
                 Track Home Improvements, Maximize Your Cost Basis, Slash Your Tax Bill
@@ -22,7 +22,7 @@ export const Hero = () => {
               <p className="text-xl text-gray-600">
                 Track all your home improvement expenses to accurately calculate cost basis—ultimately lowering taxable gains when selling. Perfect for homeowners, second-home owners, and landlords.
               </p>
-              <div className="flex gap-4">
+              <div className="flex justify-center gap-4">
                 <Link to="/signup">
                   <Button size="lg" className="text-lg">
                     Get Started <ArrowRight className="ml-2 h-5 w-5" />
