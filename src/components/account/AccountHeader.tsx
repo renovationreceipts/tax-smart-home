@@ -15,7 +15,7 @@ export function AccountHeader({ onSignOut }: AccountHeaderProps) {
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
             <Home className="h-6 w-6" />
-            <span className="text-xl font-bold">HomeCostTracker</span>
+            <span className="text-xl font-bold">CompanyName</span>
           </div>
           <div className="flex items-center gap-2">
             <Button
