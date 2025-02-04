@@ -44,6 +44,8 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
     <div className="space-y-4">
       {files.map(file => {
         const isTemp = file.id.startsWith('temp-')
+        const fileUrl = getFileUrl(file.file_path)
+        console.log('Rendering file:', { file, fileUrl }) // Debug log
         
         return (
           <div 
@@ -60,9 +62,13 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
               >
                 {getFileType(file).startsWith('image/') ? (
                   <img 
-                    src={getFileUrl(file.file_path)}
+                    src={fileUrl}
                     alt="File preview"
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      console.error('Image load error:', e)
+                      e.currentTarget.src = '/placeholder.svg'
+                    }}
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-50 rounded flex items-center justify-center">
