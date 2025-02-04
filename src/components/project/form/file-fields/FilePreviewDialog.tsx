@@ -12,14 +12,24 @@ interface FilePreviewDialogProps {
 export function FilePreviewDialog({ file, onClose }: FilePreviewDialogProps) {
   if (!file) return null
 
-  const getFileUrl = (filePath: string) => {
+  const getFileUrl = (filePath: string | File) => {
+    if (filePath instanceof File) {
+      return URL.createObjectURL(filePath)
+    }
     return supabase.storage.from('project-files').getPublicUrl(filePath).data.publicUrl
+  }
+
+  const getFileName = (filePath: string | File) => {
+    if (filePath instanceof File) {
+      return filePath.name
+    }
+    return filePath.split('/').pop() || 'download'
   }
 
   const handleDownload = async () => {
     try {
       const fileUrl = getFileUrl(file.file_path)
-      const fileName = file.file_path.split('/').pop() || 'download'
+      const fileName = getFileName(file.file_path)
       
       // Fetch the file as a blob
       const response = await fetch(fileUrl)
@@ -29,7 +39,7 @@ export function FilePreviewDialog({ file, onClose }: FilePreviewDialogProps) {
       const blobUrl = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = blobUrl
-      link.download = fileName // This forces download instead of navigation
+      link.download = fileName
       document.body.appendChild(link)
       link.click()
       
@@ -43,7 +53,7 @@ export function FilePreviewDialog({ file, onClose }: FilePreviewDialogProps) {
 
   const renderPreview = () => {
     const fileUrl = getFileUrl(file.file_path)
-    const fileName = file.file_path.split('/').pop() || 'File'
+    const fileName = getFileName(file.file_path)
 
     if (file.file_type.startsWith('image/')) {
       return (
@@ -94,7 +104,7 @@ export function FilePreviewDialog({ file, onClose }: FilePreviewDialogProps) {
     <Dialog open={!!file} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-4xl">
         <DialogHeader>
-          <DialogTitle>{file.file_path.split('/').pop()}</DialogTitle>
+          <DialogTitle>{getFileName(file.file_path)}</DialogTitle>
         </DialogHeader>
         {renderPreview()}
       </DialogContent>
