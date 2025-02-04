@@ -18,7 +18,12 @@ export function useProjectFiles(projectId?: string) {
       }
       
       console.log('Fetched project files:', data)
-      return data as ProjectFile[]
+
+      // Transform the data to include a default size if not present
+      return (data as any[]).map(file => ({
+        ...file,
+        size: file.size || 0, // Default to 0 if size is not present
+      })) as ProjectFile[]
     },
     enabled: !!projectId
   })
