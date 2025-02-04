@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form } from "@/components/ui/form"
 import { ProjectFormHeader } from "./form/ProjectFormHeader"
 import { ProjectBasicFields } from "./form/ProjectBasicFields"
-import { ProjectDateField } from "./form/ProjectDateField"
 import { ProjectFileFields } from "./form/ProjectFileFields"
 import { ProjectBuilderFields } from "./form/ProjectBuilderFields"
 import { ProjectFormActions } from "./form/ProjectFormActions"
@@ -55,7 +54,6 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <ProjectBasicFields form={form} />
-          <ProjectDateField form={form} />
           <ProjectFileFields form={form} projectId={project?.id} />
           <ProjectBuilderFields form={form} />
           <ProjectFormActions isEditing={!!project} onCancel={onCancel} />
