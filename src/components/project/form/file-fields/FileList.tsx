@@ -10,12 +10,10 @@ interface FileListProps {
 }
 
 export function FileList({ files, onPreview, onDelete }: FileListProps) {
-  const getFileUrl = (filePath: string) => {
-    // For newly added files that are File objects
+  const getFileUrl = (filePath: string | File) => {
     if (filePath instanceof File) {
       return URL.createObjectURL(filePath)
     }
-    // For existing files in Supabase storage
     return supabase.storage.from('project-files').getPublicUrl(filePath).data.publicUrl
   }
 
@@ -25,15 +23,17 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
   }
 
   const getFileName = (file: ProjectFile) => {
-    if (file.file_path instanceof File) {
-      return file.file_path.name
+    const filePath = file.file_path
+    if (filePath instanceof File) {
+      return filePath.name
     }
-    return file.file_path.split('/').pop() || 'Unknown file'
+    return filePath.split('/').pop() || 'Unknown file'
   }
 
   const getFileType = (file: ProjectFile) => {
-    if (file.file_path instanceof File) {
-      return file.file_path.type
+    const filePath = file.file_path
+    if (filePath instanceof File) {
+      return filePath.type
     }
     return file.file_type
   }
@@ -81,7 +81,7 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
               type="button"
               variant="ghost"
               size="icon"
-              onClick={() => onDelete(file.id, file.file_path)}
+              onClick={() => onDelete(file.id, typeof file.file_path === 'string' ? file.file_path : file.file_path.name)}
               className="opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2"
             >
               <X className="h-4 w-4" />
