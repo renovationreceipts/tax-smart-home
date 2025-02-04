@@ -7,6 +7,8 @@ export function useProjectFiles(projectId?: string) {
     queryKey: ['project-files', projectId],
     queryFn: async () => {
       if (!projectId) return []
+      
+      console.log("Fetching project files for project:", projectId)
       const { data, error } = await supabase
         .from('project_files')
         .select('*')
@@ -25,8 +27,8 @@ export function useProjectFiles(projectId?: string) {
       })) as ProjectFile[]
     },
     enabled: !!projectId,
-    staleTime: 1000, // Set a short stale time to ensure quick updates
-    refetchInterval: 2000, // Refetch every 2 seconds while the component is mounted
+    staleTime: 0, // Disable stale time to always fetch fresh data
+    refetchInterval: 1000, // Refetch every second while the component is mounted
   })
 
   return { existingFiles }

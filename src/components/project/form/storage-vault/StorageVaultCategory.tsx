@@ -30,18 +30,29 @@ export function StorageVaultCategory({
   projectId
 }: StorageVaultCategoryProps) {
   const queryClient = useQueryClient()
-  const hasExistingFiles = files.length > 0;
   const currentValue = form.watch(fieldName) as FileList | null;
-  const hasSelectedFiles = currentValue && currentValue.length > 0;
-  const shouldShowUploadButton = !hasExistingFiles && !hasSelectedFiles;
-
-  const handleFileChange = (files: FileList) => {
+  
+  const handleFileChange = async (files: FileList) => {
+    console.log("File change detected:", files)
     form.setValue(fieldName, files);
-    // Immediately invalidate the project files query to trigger a refetch
-    if (projectId) {
-      queryClient.invalidateQueries({ queryKey: ['project-files', projectId] });
-    }
+    
+    // Create temporary file entries for immediate display
+    const tempFiles: ProjectFile[] = Array.from(files).map(file => ({
+      id: `temp-${crypto.randomUUID()}`,
+      file_path: file,
+      file_type: file.type,
+      file_category: fieldName.replace('Photos', '_photo').replace('receipts', 'receipt'),
+      size: file.size
+    }));
+    
+    // Update the cache with temporary files
+    queryClient.setQueryData(['project-files', projectId], (oldData: ProjectFile[] = []) => {
+      console.log("Updating cache with temp files:", tempFiles)
+      return [...oldData, ...tempFiles]
+    });
   };
+
+  const shouldShowUploadButton = files.length === 0 && (!currentValue || currentValue.length === 0);
 
   return (
     <FormField
