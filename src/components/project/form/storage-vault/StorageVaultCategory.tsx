@@ -26,7 +26,6 @@ export function StorageVaultCategory({
   accept,
   uploadLabel
 }: StorageVaultCategoryProps) {
-  // Only show upload button if there are no existing files
   const hasExistingFiles = files.length > 0;
 
   return (
@@ -34,10 +33,10 @@ export function StorageVaultCategory({
       control={form.control}
       name={fieldName}
       render={({ field: { onChange, value } }) => (
-        <FormItem>
-          <FormLabel>{label}</FormLabel>
-          <div className="mt-2 space-y-4">
-            {!hasExistingFiles && (
+        <FormItem className="space-y-4">
+          <FormLabel className="text-lg font-semibold">{label}</FormLabel>
+          <div className="min-h-[100px]">
+            {!hasExistingFiles ? (
               <FileUploadButton
                 value={value as FileList | null}
                 onChange={onChange}
@@ -45,12 +44,13 @@ export function StorageVaultCategory({
                 accept={accept}
                 label={uploadLabel}
               />
+            ) : (
+              <FileList
+                files={files}
+                onPreview={onPreview}
+                onDelete={onDelete}
+              />
             )}
-            <FileList
-              files={files}
-              onPreview={onPreview}
-              onDelete={onDelete}
-            />
           </div>
           <FormMessage />
         </FormItem>

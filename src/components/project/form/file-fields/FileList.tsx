@@ -14,39 +14,53 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
     return supabase.storage.from('project-files').getPublicUrl(filePath).data.publicUrl
   }
 
+  const formatFileSize = (bytes: number) => {
+    const mb = bytes / (1024 * 1024)
+    return `${mb.toFixed(2)} MB`
+  }
+
   if (files.length === 0) return null
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-7xl mx-auto">
+    <div className="space-y-4">
       {files.map(file => (
-        <div key={file.id} className="relative group">
-          <button
-            type="button"
-            onClick={() => onPreview(file)}
-            className="w-full"
-          >
-            {file.file_type.startsWith('image/') ? (
-              <img 
-                src={getFileUrl(file.file_path)}
-                alt="File preview"
-                className="w-full h-[200px] object-contain rounded-lg border border-gray-200"
-              />
-            ) : (
-              <div className="w-full h-[200px] bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-center">
-                <div className="text-2xl">📄</div>
-              </div>
-            )}
-          </button>
-          <Button
-            type="button"
-            variant="destructive"
-            size="icon"
-            onClick={() => onDelete(file.id, file.file_path)}
-            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity rounded-full"
-          >
-            <X className="h-4 w-4" />
-            <span className="sr-only">Delete file</span>
-          </Button>
+        <div 
+          key={file.id} 
+          className="relative group bg-white rounded-lg border border-gray-200 p-4 hover:border-gray-300 transition-colors"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 flex-shrink-0">
+              {file.file_type.startsWith('image/') ? (
+                <img 
+                  src={getFileUrl(file.file_path)}
+                  alt="File preview"
+                  className="w-full h-full object-cover rounded"
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-50 rounded flex items-center justify-center">
+                  <div className="text-2xl">📄</div>
+                </div>
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-gray-900 truncate">
+                {file.file_path.split('/').pop()}
+              </p>
+              <p className="text-sm text-gray-500">
+                {formatFileSize(file.size || 0)}
+              </p>
+            </div>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => onDelete(file.id, file.file_path)}
+              className="opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <X className="h-4 w-4" />
+              <span className="sr-only">Remove file</span>
+            </Button>
+          </div>
         </div>
       ))}
     </div>

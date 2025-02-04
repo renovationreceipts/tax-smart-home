@@ -22,7 +22,7 @@ export function StorageVaultSection({ form, projectId }: StorageVaultSectionProp
     <div className="space-y-8">
       <StorageVaultHeader />
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <StorageVaultCategory
           label="Before Photo"
           fieldName="beforePhotos"
