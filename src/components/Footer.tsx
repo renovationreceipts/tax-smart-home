@@ -12,7 +12,7 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <Home className="h-6 w-6" />
-              <span className="text-xl font-bold">HomeCostTracker</span>
+              <span className="text-xl font-bold">CompanyName</span>
             </div>
             <p className="text-gray-600">
               Helping property owners manage their finances and tax records efficiently.
@@ -53,7 +53,7 @@ const Footer = () => {
       <div className="border-t">
         <div className="container-width py-6">
           <p className="text-center text-gray-600">
-            © {currentYear} HomeCostTracker. All rights reserved.
+            © {currentYear} CompanyName. All rights reserved.
           </p>
         </div>
       </div>
