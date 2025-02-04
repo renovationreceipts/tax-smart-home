@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button"
 import { AccountHeader } from "@/components/account/AccountHeader"
-import { Slack } from "lucide-react"
+import { Slack, ArrowLeft } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 export default function Community() {
+  const navigate = useNavigate()
+  
   const handleJoinSlack = () => {
     // Replace this URL with your actual Slack community invite link
     window.open("https://join.slack.com/t/your-workspace/shared_invite/your-invite-link", "_blank")
@@ -12,6 +15,15 @@ export default function Community() {
     <div className="min-h-screen bg-background">
       <AccountHeader onSignOut={() => {}} />
       <main className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate("/account")}
+          className="mb-6"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Dashboard
+        </Button>
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-4xl font-bold tracking-tight text-foreground mb-4">
             Join Our Community
