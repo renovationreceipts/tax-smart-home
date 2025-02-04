@@ -67,7 +67,7 @@ function Calendar({
   };
 
   const customHeader = (
-    <div className="flex items-center justify-center gap-2 mb-4">
+    <div className="flex items-center justify-center gap-2 pt-4">
       <Select
         value={months[currentMonth]}
         onValueChange={handleMonthChange}
