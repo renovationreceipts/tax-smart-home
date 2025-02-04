@@ -78,25 +78,28 @@ export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
   }
 
   return (
-    <>
+    <div className="space-y-8">
+      <div className="text-xl font-bold mb-6">Storage Vault</div>
       <FormField
         control={form.control}
         name="beforePhotos"
         render={({ field: { onChange, value } }) => (
           <FormItem>
-            <FormLabel>Before Photos (Optional)</FormLabel>
-            <FileUploadButton
-              value={value}
-              onChange={onChange}
-              multiple
-              accept="image/*"
-              label="Add Before Photos"
-            />
-            <FileList
-              files={existingFiles.filter(file => file.file_category === 'before_photo')}
-              onPreview={setPreviewFile}
-              onDelete={handleDeleteFile}
-            />
+            <FormLabel className="text-lg font-semibold">Before Photos</FormLabel>
+            <div className="mt-2 space-y-4">
+              <FileUploadButton
+                value={value}
+                onChange={onChange}
+                multiple
+                accept="image/*"
+                label="Add Before Photos"
+              />
+              <FileList
+                files={existingFiles.filter(file => file.file_category === 'before_photo')}
+                onPreview={setPreviewFile}
+                onDelete={handleDeleteFile}
+              />
+            </div>
             <FormMessage />
           </FormItem>
         )}
@@ -107,19 +110,21 @@ export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
         name="afterPhotos"
         render={({ field: { onChange, value } }) => (
           <FormItem>
-            <FormLabel>After Photos (Optional)</FormLabel>
-            <FileUploadButton
-              value={value}
-              onChange={onChange}
-              multiple
-              accept="image/*"
-              label="Add After Photos"
-            />
-            <FileList
-              files={existingFiles.filter(file => file.file_category === 'after_photo')}
-              onPreview={setPreviewFile}
-              onDelete={handleDeleteFile}
-            />
+            <FormLabel className="text-lg font-semibold">After Photos</FormLabel>
+            <div className="mt-2 space-y-4">
+              <FileUploadButton
+                value={value}
+                onChange={onChange}
+                multiple
+                accept="image/*"
+                label="Add After Photos"
+              />
+              <FileList
+                files={existingFiles.filter(file => file.file_category === 'after_photo')}
+                onPreview={setPreviewFile}
+                onDelete={handleDeleteFile}
+              />
+            </div>
             <FormMessage />
           </FormItem>
         )}
@@ -130,19 +135,21 @@ export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
         name="receipts"
         render={({ field: { onChange, value } }) => (
           <FormItem>
-            <FormLabel>Receipts (Optional)</FormLabel>
-            <FileUploadButton
-              value={value}
-              onChange={onChange}
-              multiple
-              accept=".pdf,.jpg,.jpeg,.png"
-              label="Add Receipts"
-            />
-            <FileList
-              files={existingFiles.filter(file => file.file_category === 'receipt')}
-              onPreview={setPreviewFile}
-              onDelete={handleDeleteFile}
-            />
+            <FormLabel className="text-lg font-semibold">Receipts</FormLabel>
+            <div className="mt-2 space-y-4">
+              <FileUploadButton
+                value={value}
+                onChange={onChange}
+                multiple
+                accept=".pdf,.jpg,.jpeg,.png"
+                label="Add Receipts"
+              />
+              <FileList
+                files={existingFiles.filter(file => file.file_category === 'receipt')}
+                onPreview={setPreviewFile}
+                onDelete={handleDeleteFile}
+              />
+            </div>
             <FormMessage />
           </FormItem>
         )}
@@ -152,6 +159,6 @@ export function ProjectFileFields({ form, projectId }: ProjectFileFieldsProps) {
         file={previewFile}
         onClose={() => setPreviewFile(null)}
       />
-    </>
+    </div>
   )
 }

@@ -50,10 +50,10 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
   console.log("Form default values:", form.getValues())
 
   return (
-    <div className="space-y-6 p-6 bg-white rounded-lg shadow-sm border max-w-2xl mx-auto">
+    <div className="space-y-6 p-8 bg-white rounded-lg shadow-sm border max-w-4xl mx-auto">
       <ProjectFormHeader isEditing={!!project} />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <ProjectBasicFields form={form} />
           <ProjectDateField form={form} />
           <ProjectFileFields form={form} projectId={project?.id} />
