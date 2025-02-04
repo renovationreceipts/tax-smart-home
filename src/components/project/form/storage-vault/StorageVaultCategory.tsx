@@ -30,7 +30,6 @@ export function StorageVaultCategory({
   projectId
 }: StorageVaultCategoryProps) {
   const queryClient = useQueryClient()
-  const currentValue = form.watch(fieldName) as FileList | null;
   
   const handleFileChange = async (files: FileList) => {
     console.log("File change detected:", files)
@@ -53,8 +52,19 @@ export function StorageVaultCategory({
     });
   };
 
-  // Show upload button if there are no files at all (including temporary ones)
-  const shouldShowUploadButton = files.length === 0;
+  // Handle file deletion by updating the form value and cache
+  const handleDelete = (fileId: string, filePath: string) => {
+    // Reset the form field value for this category
+    form.setValue(fieldName, null);
+    
+    // Call the original onDelete handler
+    onDelete(fileId, filePath);
+    
+    // Update the cache to remove the file
+    queryClient.setQueryData(['project-files', projectId], (oldData: ProjectFile[] = []) => {
+      return oldData.filter(file => file.id !== fileId);
+    });
+  };
 
   return (
     <FormField
@@ -64,7 +74,7 @@ export function StorageVaultCategory({
         <FormItem className="space-y-4">
           <FormLabel className="text-lg font-semibold">{label}</FormLabel>
           <div className="min-h-[100px]">
-            {shouldShowUploadButton ? (
+            {files.length === 0 ? (
               <FileUploadButton
                 value={value as FileList | null}
                 onChange={handleFileChange}
@@ -76,7 +86,7 @@ export function StorageVaultCategory({
               <FileList
                 files={files}
                 onPreview={onPreview}
-                onDelete={onDelete}
+                onDelete={handleDelete}
               />
             )}
           </div>
