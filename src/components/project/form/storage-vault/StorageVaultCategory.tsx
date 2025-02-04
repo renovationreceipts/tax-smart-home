@@ -37,7 +37,7 @@ export function StorageVaultCategory({
             <FileUploadButton
               value={value as FileList | null}
               onChange={onChange}
-              multiple
+              multiple={false}
               accept={accept}
               label={uploadLabel}
             />

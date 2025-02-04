@@ -58,7 +58,7 @@ export function FileUploadButton({ value, onChange, multiple = false, accept, la
       <Input
         type="file"
         accept={accept}
-        multiple={multiple}
+        multiple={false} // Force single file upload
         ref={inputRef}
         onChange={(e) => {
           const files = e.target.files
@@ -68,7 +68,7 @@ export function FileUploadButton({ value, onChange, multiple = false, accept, la
         }}
         className="hidden"
       />
-      {(!value || (value as FileList)?.length === 0) ? (
+      {(!value || (value as FileList)?.length === 0) && (
         <Button
           type="button"
           variant="outline"
@@ -78,21 +78,8 @@ export function FileUploadButton({ value, onChange, multiple = false, accept, la
           <Plus className="h-6 w-6" />
           <span>{label}</span>
         </Button>
-      ) : (
-        <>
-          {renderSelectedFiles(value)}
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            className="w-full"
-            onClick={handleAddFiles}
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add More Files
-          </Button>
-        </>
       )}
+      {value && value.length > 0 && renderSelectedFiles(value)}
     </div>
   )
 }

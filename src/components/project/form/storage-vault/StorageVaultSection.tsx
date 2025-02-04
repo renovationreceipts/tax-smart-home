@@ -87,7 +87,7 @@ export function StorageVaultSection({ form, projectId }: StorageVaultSectionProp
         onPreview={setPreviewFile}
         onDelete={handleDeleteFile}
         accept="image/*"
-        uploadLabel="Add Before Photos"
+        uploadLabel="Add Before Photo"
       />
 
       <StorageVaultCategory
@@ -98,7 +98,7 @@ export function StorageVaultSection({ form, projectId }: StorageVaultSectionProp
         onPreview={setPreviewFile}
         onDelete={handleDeleteFile}
         accept="image/*"
-        uploadLabel="Add After Photos"
+        uploadLabel="Add After Photo"
       />
 
       <StorageVaultCategory
@@ -109,7 +109,7 @@ export function StorageVaultSection({ form, projectId }: StorageVaultSectionProp
         onPreview={setPreviewFile}
         onDelete={handleDeleteFile}
         accept=".pdf,.jpg,.jpeg,.png"
-        uploadLabel="Add Receipts"
+        uploadLabel="Add Receipt"
       />
 
       <FilePreviewDialog
