@@ -1,8 +1,15 @@
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { DayPicker, DayPickerProps } from "react-day-picker";
+import { DayPicker } from "react-day-picker";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export type CalendarProps = Omit<DayPickerProps, "mode" | "selected" | "onSelect"> & {
   mode?: "default" | "single"
@@ -16,6 +23,13 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
+  const [currentMonth, setCurrentMonth] = React.useState(() => {
+    if (props.selected instanceof Date) {
+      return props.selected.getMonth();
+    }
+    return new Date().getMonth();
+  });
+
   const [currentYear, setCurrentYear] = React.useState(() => {
     if (props.selected instanceof Date) {
       return props.selected.getFullYear();
@@ -23,36 +37,73 @@ function Calendar({
     return new Date().getFullYear();
   });
 
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
   const years = React.useMemo(() => {
     const currentYear = new Date().getFullYear();
     return Array.from({ length: currentYear - 1900 + 1 }, (_, i) => currentYear - i);
   }, []);
 
+  const handleMonthChange = (value: string) => {
+    const newMonth = months.indexOf(value);
+    setCurrentMonth(newMonth);
+    if (props.selected instanceof Date && props.onSelect) {
+      const newDate = new Date(props.selected);
+      newDate.setMonth(newMonth);
+      props.onSelect(newDate);
+    }
+  };
+
+  const handleYearChange = (value: string) => {
+    const newYear = parseInt(value);
+    setCurrentYear(newYear);
+    if (props.selected instanceof Date && props.onSelect) {
+      const newDate = new Date(props.selected);
+      newDate.setFullYear(newYear);
+      props.onSelect(newDate);
+    }
+  };
+
   const captionLayout = React.useMemo(() => {
     return (
       <div className="flex items-center justify-center gap-2">
-        <select
-          className="rounded-md border border-input bg-background px-2 py-1 text-sm ring-offset-background"
-          value={currentYear}
-          onChange={(e) => {
-            const newYear = parseInt(e.target.value);
-            setCurrentYear(newYear);
-            if (props.selected instanceof Date && props.onSelect) {
-              const newDate = new Date(props.selected);
-              newDate.setFullYear(newYear);
-              props.onSelect(newDate);
-            }
-          }}
+        <Select
+          value={months[currentMonth]}
+          onValueChange={handleMonthChange}
         >
-          {years.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
+          <SelectTrigger className="w-[140px] h-9">
+            <SelectValue placeholder="Select month" />
+          </SelectTrigger>
+          <SelectContent>
+            {months.map((month) => (
+              <SelectItem key={month} value={month}>
+                {month}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={currentYear.toString()}
+          onValueChange={handleYearChange}
+        >
+          <SelectTrigger className="w-[100px] h-9">
+            <SelectValue placeholder="Select year" />
+          </SelectTrigger>
+          <SelectContent>
+            {years.map((year) => (
+              <SelectItem key={year} value={year.toString()}>
+                {year}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
     );
-  }, [currentYear, years, props.selected, props.onSelect]);
+  }, [currentMonth, currentYear, months, years]);
 
   return (
     <DayPicker
