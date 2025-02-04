@@ -79,38 +79,40 @@ export function StorageVaultSection({ form, projectId }: StorageVaultSectionProp
     <div className="space-y-8">
       <div className="text-xl font-bold mb-6">Storage Vault</div>
       
-      <StorageVaultCategory
-        label="Before Photo"
-        fieldName="beforePhotos"
-        form={form}
-        files={existingFiles.filter(file => file.file_category === 'before_photo')}
-        onPreview={setPreviewFile}
-        onDelete={handleDeleteFile}
-        accept="image/*"
-        uploadLabel="Add Before Photo"
-      />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <StorageVaultCategory
+          label="Before Photo"
+          fieldName="beforePhotos"
+          form={form}
+          files={existingFiles.filter(file => file.file_category === 'before_photo')}
+          onPreview={setPreviewFile}
+          onDelete={handleDeleteFile}
+          accept="image/*"
+          uploadLabel="Add Before Photo"
+        />
 
-      <StorageVaultCategory
-        label="After Photo"
-        fieldName="afterPhotos"
-        form={form}
-        files={existingFiles.filter(file => file.file_category === 'after_photo')}
-        onPreview={setPreviewFile}
-        onDelete={handleDeleteFile}
-        accept="image/*"
-        uploadLabel="Add After Photo"
-      />
+        <StorageVaultCategory
+          label="After Photo"
+          fieldName="afterPhotos"
+          form={form}
+          files={existingFiles.filter(file => file.file_category === 'after_photo')}
+          onPreview={setPreviewFile}
+          onDelete={handleDeleteFile}
+          accept="image/*"
+          uploadLabel="Add After Photo"
+        />
 
-      <StorageVaultCategory
-        label="Receipt"
-        fieldName="receipts"
-        form={form}
-        files={existingFiles.filter(file => file.file_category === 'receipt')}
-        onPreview={setPreviewFile}
-        onDelete={handleDeleteFile}
-        accept=".pdf,.jpg,.jpeg,.png"
-        uploadLabel="Add Receipt"
-      />
+        <StorageVaultCategory
+          label="Receipt"
+          fieldName="receipts"
+          form={form}
+          files={existingFiles.filter(file => file.file_category === 'receipt')}
+          onPreview={setPreviewFile}
+          onDelete={handleDeleteFile}
+          accept=".pdf,.jpg,.jpeg,.png"
+          uploadLabel="Add Receipt"
+        />
+      </div>
 
       <FilePreviewDialog
         file={previewFile}
