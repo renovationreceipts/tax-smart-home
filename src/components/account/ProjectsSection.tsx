@@ -1,4 +1,4 @@
-import { FileText, Plus, Pencil } from "lucide-react"
+import { FileText, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import type { Project } from "@/hooks/useProjects"
@@ -71,27 +71,19 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
                 <TableHead>Description</TableHead>
                 <TableHead>Cost</TableHead>
                 <TableHead>Completion Date</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {projects.map((project) => (
-                <TableRow key={project.id}>
+                <TableRow 
+                  key={project.id}
+                  onClick={() => onEditProject?.(project)}
+                  className="cursor-pointer hover:bg-muted/50"
+                >
                   <TableCell className="font-medium">{project.name}</TableCell>
                   <TableCell>{project.description}</TableCell>
                   <TableCell>{formatCurrency(project.cost)}</TableCell>
                   <TableCell>{formatDate(project.completion_date)}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => onEditProject?.(project)}
-                      className="h-8 w-8"
-                    >
-                      <Pencil className="h-4 w-4" />
-                      <span className="sr-only">Edit project</span>
-                    </Button>
-                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
