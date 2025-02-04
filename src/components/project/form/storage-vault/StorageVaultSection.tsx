@@ -32,6 +32,7 @@ export function StorageVaultSection({ form, projectId }: StorageVaultSectionProp
           onDelete={handleDeleteFile}
           accept="image/*"
           uploadLabel="Add Before Photo"
+          projectId={projectId}
         />
 
         <StorageVaultCategory
@@ -43,6 +44,7 @@ export function StorageVaultSection({ form, projectId }: StorageVaultSectionProp
           onDelete={handleDeleteFile}
           accept="image/*"
           uploadLabel="Add After Photo"
+          projectId={projectId}
         />
 
         <StorageVaultCategory
@@ -54,6 +56,7 @@ export function StorageVaultSection({ form, projectId }: StorageVaultSectionProp
           onDelete={handleDeleteFile}
           accept=".pdf,.jpg,.jpeg,.png"
           uploadLabel="Add Receipt"
+          projectId={projectId}
         />
       </div>
 

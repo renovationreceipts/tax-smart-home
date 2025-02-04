@@ -19,13 +19,14 @@ export function useProjectFiles(projectId?: string) {
       
       console.log('Fetched project files:', data)
 
-      // Transform the data to include a default size if not present
       return (data as any[]).map(file => ({
         ...file,
-        size: file.size || 0, // Default to 0 if size is not present
+        size: file.size || 0,
       })) as ProjectFile[]
     },
-    enabled: !!projectId
+    enabled: !!projectId,
+    staleTime: 1000, // Set a short stale time to ensure quick updates
+    refetchInterval: 2000, // Refetch every 2 seconds while the component is mounted
   })
 
   return { existingFiles }
