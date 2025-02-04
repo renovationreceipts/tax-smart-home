@@ -14,7 +14,10 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
     if (filePath instanceof File) {
       return URL.createObjectURL(filePath)
     }
-    return supabase.storage.from('project-files').getPublicUrl(filePath).data.publicUrl
+    // Always generate a fresh URL to avoid caching issues
+    const { data } = supabase.storage.from('project-files').getPublicUrl(filePath)
+    console.log('Generated file URL:', data.publicUrl)
+    return data.publicUrl
   }
 
   const formatFileSize = (bytes: number) => {
@@ -45,7 +48,7 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
       {files.map(file => {
         const isTemp = file.id.startsWith('temp-')
         const fileUrl = getFileUrl(file.file_path)
-        console.log('Rendering file:', { file, fileUrl }) // Debug log
+        console.log('Rendering file:', { file, fileUrl, type: getFileType(file) })
         
         return (
           <div 
@@ -63,11 +66,13 @@ export function FileList({ files, onPreview, onDelete }: FileListProps) {
                 {getFileType(file).startsWith('image/') ? (
                   <img 
                     src={fileUrl}
-                    alt="File preview"
+                    alt={getFileName(file)}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       console.error('Image load error:', e)
-                      e.currentTarget.src = '/placeholder.svg'
+                      const imgElement = e.currentTarget
+                      imgElement.onerror = null // Prevent infinite loop
+                      imgElement.src = '/placeholder.svg'
                     }}
                   />
                 ) : (

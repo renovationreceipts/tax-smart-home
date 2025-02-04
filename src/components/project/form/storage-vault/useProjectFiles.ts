@@ -25,16 +25,16 @@ export function useProjectFiles(projectId?: string) {
       const filesWithUrls = (data as any[]).map(file => ({
         ...file,
         size: file.size || 0,
-        file_path: file.file_path, // Keep the original file_path
-        publicUrl: supabase.storage.from('project-files').getPublicUrl(file.file_path).data.publicUrl
+        file_path: file.file_path,
+        file_type: file.file_type || 'application/octet-stream',
       })) as ProjectFile[]
 
       console.log('Files with URLs:', filesWithUrls)
       return filesWithUrls
     },
     enabled: !!projectId,
-    staleTime: 1000, // Set a short stale time
-    refetchInterval: 2000, // Refetch every 2 seconds while component is mounted
+    staleTime: 0, // No stale time to always fetch fresh data
+    refetchInterval: 1000, // Refetch every second while component is mounted
   })
 
   return { existingFiles }
