@@ -68,18 +68,16 @@ export function FileListItem({ file, onPreview, onDelete, fileUrl, fileName }: F
             {formatFileSize(file.size)}
           </p>
         </button>
-        {!isTemp && (
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={() => onDelete(file.id, typeof file.file_path === 'string' ? file.file_path : file.file_path.name)}
-            className="opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2"
-          >
-            <X className="h-4 w-4" />
-            <span className="sr-only">Remove file</span>
-          </Button>
-        )}
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          onClick={() => onDelete(file.id, typeof file.file_path === 'string' ? file.file_path : file.file_path.name)}
+          className="opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2"
+        >
+          <X className="h-4 w-4" />
+          <span className="sr-only">Remove file</span>
+        </Button>
       </div>
     </div>
   )

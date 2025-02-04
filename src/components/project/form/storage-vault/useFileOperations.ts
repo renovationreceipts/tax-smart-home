@@ -8,6 +8,20 @@ export function useFileOperations(projectId?: string) {
 
   const handleDeleteFile = async (fileId: string, filePath: string) => {
     try {
+      // If it's a temporary file, just remove it from the cache
+      if (fileId.startsWith('temp-')) {
+        queryClient.setQueryData(['project-files', projectId], (oldData: any[] = []) => {
+          return oldData.filter(file => file.id !== fileId)
+        })
+        
+        toast({
+          title: "Success",
+          description: "File removed successfully",
+        })
+        return
+      }
+
+      // Otherwise, proceed with deleting from Supabase
       const { error: storageError } = await supabase.storage
         .from('project-files')
         .remove([filePath])
