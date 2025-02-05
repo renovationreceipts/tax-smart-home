@@ -1,44 +1,60 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+const FINE_TUNED_MODEL = 'ft:gpt-3.5-turbo-0125:personal:cost-basis:AxaH9ph8';
+const RETRY_DELAY = 2000;
+const MAX_RETRIES = 3;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const RETRY_DELAY = 2000; // 2 seconds
-const MAX_RETRIES = 3;
+interface OpenAIResponse {
+  choices: Array<{
+    message: {
+      content: string;
+    };
+  }>;
+}
+
+function createOpenAIRequest(description: string) {
+  return {
+    model: FINE_TUNED_MODEL,
+    messages: [
+      {
+        role: 'system',
+        content: `You are a helpful assistant that analyzes home improvement projects to determine if they qualify for increasing the cost basis according to IRS guidelines. 
+        Focus on whether the project:
+        1. Adds to the property's value
+        2. Prolongs its useful life
+        3. Adapts it to new uses
+        Provide a clear yes/no recommendation with a brief explanation based on IRS Publication 523.`
+      },
+      {
+        role: 'user',
+        content: `Please analyze this home improvement project and tell me if it likely qualifies for increasing the cost basis: ${description}`
+      }
+    ],
+  };
+}
 
 async function callOpenAI(description: string, attempt = 1): Promise<Response> {
-  try {
-    console.log(`Attempt ${attempt} to analyze description:`, description);
+  const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+  if (!openAIApiKey) {
+    throw new Error('OpenAI API key is not configured');
+  }
 
+  console.log(`Attempt ${attempt} to analyze description:`, description);
+
+  try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        model: 'ft:gpt-3.5-turbo-0125:personal:cost-basis:AxaH9ph8',
-        messages: [
-          {
-            role: 'system',
-            content: `You are a helpful assistant that analyzes home improvement projects to determine if they qualify for increasing the cost basis according to IRS guidelines. 
-            Focus on whether the project:
-            1. Adds to the property's value
-            2. Prolongs its useful life
-            3. Adapts it to new uses
-            Provide a clear yes/no recommendation with a brief explanation based on IRS Publication 523.`
-          },
-          {
-            role: 'user',
-            content: `Please analyze this home improvement project and tell me if it likely qualifies for increasing the cost basis: ${description}`
-          }
-        ],
-      }),
+      body: JSON.stringify(createOpenAIRequest(description)),
     });
 
     if (response.status === 429 && attempt < MAX_RETRIES) {
@@ -54,18 +70,10 @@ async function callOpenAI(description: string, attempt = 1): Promise<Response> {
   }
 }
 
-serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
-  }
-
+async function handleAnalysisRequest(req: Request): Promise<Response> {
   try {
     const { description } = await req.json();
     console.log('Analyzing project description:', description);
-
-    if (!openAIApiKey) {
-      throw new Error('OpenAI API key is not configured');
-    }
 
     const response = await callOpenAI(description);
 
@@ -74,36 +82,46 @@ serve(async (req) => {
       console.error('OpenAI API error:', errorData);
       
       if (response.status === 429) {
-        return new Response(JSON.stringify({ 
-          error: "The analysis service is busy. Please wait a moment and try again."
-        }), {
-          status: 429,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
+        return new Response(
+          JSON.stringify({ 
+            error: "The analysis service is busy. Please wait a moment and try again."
+          }), 
+          {
+            status: 429,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
       }
       
       throw new Error(`OpenAI API error: ${response.status}`);
     }
 
-    const data = await response.json();
+    const data = await response.json() as OpenAIResponse;
     console.log('OpenAI response:', data);
 
     if (!data.choices?.[0]?.message?.content) {
       throw new Error('Invalid response format from OpenAI');
     }
 
-    return new Response(JSON.stringify({ 
-      analysis: data.choices[0].message.content 
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    return new Response(
+      JSON.stringify({ analysis: data.choices[0].message.content }), 
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
   } catch (error) {
     console.error('Error in analyze-project function:', error);
-    return new Response(JSON.stringify({ 
-      error: error.message || 'An unexpected error occurred'
-    }), {
-      status: error.status || 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    return new Response(
+      JSON.stringify({ error: error.message || 'An unexpected error occurred' }), 
+      {
+        status: error.status || 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    );
   }
+}
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+  return handleAnalysisRequest(req);
 });
