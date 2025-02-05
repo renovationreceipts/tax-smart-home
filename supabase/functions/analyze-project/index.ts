@@ -22,8 +22,7 @@ async function callOpenAI(description: string, attempt = 1): Promise<Response> {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        // Please provide your fine-tuned model ID to replace 'gpt-3.5-turbo'
-        model: 'YOUR_FINE_TUNED_MODEL_ID',
+        model: 'ft:gpt-3.5-turbo-0125:personal:cost-basis:AxaH9ph8',
         messages: [
           {
             role: 'system',
