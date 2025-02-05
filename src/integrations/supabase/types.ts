@@ -9,6 +9,39 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      analytics_events: {
+        Row: {
+          created_at: string | null
+          event_data: Json | null
+          event_name: string
+          event_type: Database["public"]["Enums"]["analytics_event_type"]
+          id: string
+          page_url: string | null
+          session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_data?: Json | null
+          event_name: string
+          event_type: Database["public"]["Enums"]["analytics_event_type"]
+          id?: string
+          page_url?: string | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_data?: Json | null
+          event_name?: string
+          event_type?: Database["public"]["Enums"]["analytics_event_type"]
+          id?: string
+          page_url?: string | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -203,6 +236,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      analytics_event_type: "click" | "pageview" | "custom"
       tax_form_type: "8949" | "SCHEDULE_D"
     }
     CompositeTypes: {
