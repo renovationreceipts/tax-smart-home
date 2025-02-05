@@ -79,7 +79,7 @@ export function ProjectAnalysisButton({
       ) : (
         <Lightbulb className="mr-2 h-4 w-4" />
       )}
-      Ask IRS-GPT if This Qualifies
+      Does this Qualify? Ask IRS-GPT!
     </Button>
   )
 }
