@@ -7,11 +7,13 @@ import { useToast } from "@/hooks/use-toast"
 interface ProjectAnalysisButtonProps {
   description: string
   onAnalysisComplete: (analysis: string) => void
+  isDisabled?: boolean
 }
 
 export function ProjectAnalysisButton({ 
   description, 
-  onAnalysisComplete 
+  onAnalysisComplete,
+  isDisabled = false
 }: ProjectAnalysisButtonProps) {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const { toast } = useToast()
@@ -61,7 +63,7 @@ export function ProjectAnalysisButton({
     }
   }
 
-  const isDisabled = isAnalyzing || !description.trim()
+  const isButtonDisabled = isAnalyzing || !description.trim() || isDisabled
 
   return (
     <Button
@@ -69,7 +71,7 @@ export function ProjectAnalysisButton({
       variant="outline"
       size="sm"
       onClick={analyzeDescription}
-      disabled={isDisabled}
+      disabled={isButtonDisabled}
       className="text-sm"
     >
       {isAnalyzing ? (

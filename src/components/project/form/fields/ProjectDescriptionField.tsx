@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
 import { UseFormReturn } from "react-hook-form"
@@ -11,6 +11,22 @@ interface ProjectDescriptionFieldProps {
 
 export function ProjectDescriptionField({ form }: ProjectDescriptionFieldProps) {
   const [analysis, setAnalysis] = useState<string | null>(null)
+  const [lastAnalyzedText, setLastAnalyzedText] = useState<string>("")
+  const currentDescription = form.watch("description") || ""
+
+  // Reset the analyzed state when description changes
+  useEffect(() => {
+    if (currentDescription !== lastAnalyzedText) {
+      setLastAnalyzedText("")
+    }
+  }, [currentDescription, lastAnalyzedText])
+
+  const handleAnalysisComplete = (analysisText: string) => {
+    setAnalysis(analysisText)
+    setLastAnalyzedText(currentDescription)
+  }
+
+  const isAnalysisDisabled = currentDescription === lastAnalyzedText && analysis !== null
 
   return (
     <FormField
@@ -22,7 +38,8 @@ export function ProjectDescriptionField({ form }: ProjectDescriptionFieldProps) 
             <span>Description</span>
             <ProjectAnalysisButton 
               description={field.value || ""} 
-              onAnalysisComplete={setAnalysis}
+              onAnalysisComplete={handleAnalysisComplete}
+              isDisabled={isAnalysisDisabled}
             />
           </FormLabel>
           <FormControl>
