@@ -34,7 +34,7 @@ export function ProjectAnalysisButton({
     if (credits && credits.used >= credits.limit) {
       toast({
         title: "Credit Limit Reached",
-        description: "You've used all your IRS-GPT credits. Please try again later.",
+        description: "You've used all your IRS-GPT credits.",
         variant: "destructive",
       })
       return
