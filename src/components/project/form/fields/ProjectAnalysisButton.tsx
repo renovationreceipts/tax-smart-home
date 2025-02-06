@@ -25,19 +25,41 @@ export function ProjectAnalysisButton({
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
 
+      // First try to get existing credits
       const { data, error } = await supabase
         .from('user_credits')
         .select('credits_used, credits_limit')
         .eq('credit_type', 'irs_gpt')
         .eq('user_id', user.id)
-        .single()
+        .maybeSingle()
 
       if (error) {
         console.error('Error fetching credits:', error)
         return
       }
 
-      setCredits(data ? { used: data.credits_used, limit: data.credits_limit } : null)
+      // If no credits found, initialize them
+      if (!data) {
+        const { data: newCredits, error: insertError } = await supabase
+          .from('user_credits')
+          .insert({
+            user_id: user.id,
+            credit_type: 'irs_gpt',
+            credits_used: 0,
+            credits_limit: 10
+          })
+          .select('credits_used, credits_limit')
+          .single()
+
+        if (insertError) {
+          console.error('Error initializing credits:', insertError)
+          return
+        }
+
+        setCredits(newCredits)
+      } else {
+        setCredits(data)
+      }
     }
 
     fetchCredits()
