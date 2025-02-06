@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Loader2, Lightbulb } from "lucide-react"
 import { supabase } from "@/integrations/supabase/client"
 import { useToast } from "@/hooks/use-toast"
+import { useIRSCredits } from "@/hooks/useIRSCredits"
+import { CreditsDisplay } from "./CreditsDisplay"
 
 interface ProjectAnalysisButtonProps {
   description: string
@@ -16,77 +18,8 @@ export function ProjectAnalysisButton({
   isDisabled = false
 }: ProjectAnalysisButtonProps) {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
-  const [credits, setCredits] = useState<{ used: number, limit: number } | null>(null)
+  const { credits, updateCreditsUsed } = useIRSCredits()
   const { toast } = useToast()
-
-  // Fetch user credits on component mount
-  useEffect(() => {
-    async function fetchCredits() {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
-
-      // First try to get existing credits
-      const { data, error } = await supabase
-        .from('user_credits')
-        .select('credits_used, credits_limit')
-        .eq('credit_type', 'irs_gpt')
-        .eq('user_id', user.id)
-        .maybeSingle()
-
-      if (error) {
-        console.error('Error fetching credits:', error)
-        return
-      }
-
-      // If no credits found, initialize them
-      if (!data) {
-        const { data: newCredits, error: insertError } = await supabase
-          .from('user_credits')
-          .insert({
-            user_id: user.id,
-            credit_type: 'irs_gpt',
-            credits_used: 0,
-            credits_limit: 10
-          })
-          .select('credits_used, credits_limit')
-          .single()
-
-        if (insertError) {
-          console.error('Error initializing credits:', insertError)
-          return
-        }
-
-        setCredits({ 
-          used: newCredits.credits_used, 
-          limit: newCredits.credits_limit 
-        })
-      } else {
-        setCredits({ 
-          used: data.credits_used, 
-          limit: data.credits_limit 
-        })
-      }
-    }
-
-    fetchCredits()
-  }, [])
-
-  const updateCreditsUsed = async () => {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
-
-    const { error } = await supabase
-      .from('user_credits')
-      .update({ credits_used: (credits?.used || 0) + 1 })
-      .eq('credit_type', 'irs_gpt')
-      .eq('user_id', user.id)
-
-    if (error) {
-      console.error('Error updating credits:', error)
-    } else {
-      setCredits(prev => prev ? { ...prev, used: prev.used + 1 } : null)
-    }
-  }
 
   const analyzeDescription = async () => {
     if (!description) {
@@ -164,9 +97,7 @@ export function ProjectAnalysisButton({
         Does this Qualify? Ask IRS-GPT!
       </Button>
       {credits && (
-        <span className="text-sm text-gray-500">
-          {credits.used}/{credits.limit} credits used
-        </span>
+        <CreditsDisplay used={credits.used} limit={credits.limit} />
       )}
     </div>
   )
