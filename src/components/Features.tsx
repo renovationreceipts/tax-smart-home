@@ -1,4 +1,4 @@
-import { BarChart2, Calculator, FileText, Shield } from "lucide-react";
+import { BarChart2, Calculator, FileText, BrainCog } from "lucide-react";
 
 const features = [
   {
@@ -17,7 +17,7 @@ const features = [
     description: "Automatically export values into IRS Form 8949 for easy download or printing.",
   },
   {
-    icon: <Shield className="h-6 w-6" />,
+    icon: <BrainCog className="h-6 w-6" />,
     title: "IRS-GPT™",
     description: "Discover if your project qualifies for cost basis adjustment, find tax credits, and more.",
   },
