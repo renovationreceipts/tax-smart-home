@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <footer className="bg-white border-t">
       <div className="container-width py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Logo and Description */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -17,15 +17,6 @@ const Footer = () => {
             <p className="text-gray-600">
               Helping property owners track renovation costs and tax records efficiently.
             </p>
-          </div>
-
-          {/* Product Links */}
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-4">Product</h3>
-            <ul className="space-y-3">
-              <li><Link to="/features" className="text-gray-600 hover:text-gray-900">Features</Link></li>
-              <li><Link to="/pricing" className="text-gray-600 hover:text-gray-900">Pricing</Link></li>
-            </ul>
           </div>
 
           {/* Company Links */}
