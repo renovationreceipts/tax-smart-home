@@ -13,7 +13,7 @@ const features = [
   },
   {
     icon: <BrainCog className="h-6 w-6" />,
-    title: "IRS-GPT™ to find\ntax credits and savings",
+    title: "IRS-GPT™ to find\ntax credits",
     description: "Discover if your project qualifies for cost basis adjustment, find tax credits, and more.",
   },
   {
