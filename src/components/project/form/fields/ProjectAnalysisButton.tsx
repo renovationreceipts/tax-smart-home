@@ -56,9 +56,15 @@ export function ProjectAnalysisButton({
           return
         }
 
-        setCredits(newCredits)
+        setCredits({ 
+          used: newCredits.credits_used, 
+          limit: newCredits.credits_limit 
+        })
       } else {
-        setCredits(data)
+        setCredits({ 
+          used: data.credits_used, 
+          limit: data.credits_limit 
+        })
       }
     }
 
