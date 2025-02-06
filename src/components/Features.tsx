@@ -19,7 +19,7 @@ const features = [
   {
     icon: <Shield className="h-6 w-6" />,
     title: "IRS-GPT™",
-    description: "View interactive graphs and summaries that consolidate your financial records securely.",
+    description: "Discover if your project qualifies for cost basis adjustment, find tax credits, and more.",
   },
 ];
 
