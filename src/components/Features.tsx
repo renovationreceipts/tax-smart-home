@@ -13,7 +13,7 @@ const features = [
   },
   {
     icon: <BrainCog className="h-6 w-6" />,
-    title: "Use IRS-GPT™ to find tax credits and savings",
+    title: "IRS-GPT™ to find\ntax credits and savings",
     description: "Discover if your project qualifies for cost basis adjustment, find tax credits, and more.",
   },
   {
@@ -41,7 +41,7 @@ export const Features = () => {
               <div className="w-16 h-16 rounded-full bg-gray-100 text-blue-600 flex items-center justify-center mb-6">
                 {feature.icon}
               </div>
-              <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
+              <h3 className="text-xl font-semibold mb-3 whitespace-pre-line">{feature.title}</h3>
               <p className="text-gray-600">{feature.description}</p>
             </div>
           ))}
