@@ -228,6 +228,36 @@ export type Database = {
           },
         ]
       }
+      user_credits: {
+        Row: {
+          created_at: string | null
+          credit_type: Database["public"]["Enums"]["credit_type"]
+          credits_limit: number
+          credits_used: number
+          id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          credit_type: Database["public"]["Enums"]["credit_type"]
+          credits_limit?: number
+          credits_used?: number
+          id?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          credit_type?: Database["public"]["Enums"]["credit_type"]
+          credits_limit?: number
+          credits_used?: number
+          id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -237,6 +267,7 @@ export type Database = {
     }
     Enums: {
       analytics_event_type: "click" | "pageview" | "custom"
+      credit_type: "irs_gpt"
       tax_form_type: "8949" | "SCHEDULE_D"
     }
     CompositeTypes: {
