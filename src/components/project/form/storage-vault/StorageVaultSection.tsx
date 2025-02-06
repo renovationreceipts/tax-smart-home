@@ -48,7 +48,7 @@ export function StorageVaultSection({ form, projectId }: StorageVaultSectionProp
         />
 
         <StorageVaultCategory
-          label="Receipt"
+          label="Receipt/Invoice"
           fieldName="receipts"
           form={form}
           files={existingFiles.filter(file => file.file_category === 'receipt')}
