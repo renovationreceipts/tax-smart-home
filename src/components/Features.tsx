@@ -12,14 +12,14 @@ const features = [
     description: "Automatically update your cost basis, tailored for primary, second, and rental properties.",
   },
   {
-    icon: <FileText className="h-6 w-6" />,
-    title: "Tax Reporting Made Easy",
-    description: "Automatically export values into IRS Form 8949 for easy download or printing.",
-  },
-  {
     icon: <BrainCog className="h-6 w-6" />,
     title: "IRS-GPT™",
     description: "Discover if your project qualifies for cost basis adjustment, find tax credits, and more.",
+  },
+  {
+    icon: <FileText className="h-6 w-6" />,
+    title: "Tax Reporting Made Easy",
+    description: "Automatically export values into IRS Form 8949 for easy download or printing.",
   },
 ];
 
