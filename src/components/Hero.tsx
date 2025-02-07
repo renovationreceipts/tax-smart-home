@@ -25,7 +25,7 @@ export const Hero = () => {
   return (
     <div className="w-full hero-gradient">
       <nav className="w-full max-w-7xl mx-auto py-4 px-4 flex justify-between items-center">
-        <div className="text-xl font-bold text-gray-900">Home Improvement Tax Tracker.com</div>
+        <div className="text-xl font-bold text-gray-900">RenovationReceipts.com</div>
         <div className="flex gap-4 items-center">
           <Link 
             to="/login" 
