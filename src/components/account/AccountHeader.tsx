@@ -18,7 +18,7 @@ export function AccountHeader({ onSignOut }: AccountHeaderProps) {
             <img 
               src="/lovable-uploads/69bafa75-cbb8-49f9-a552-21142b9fa060.png" 
               alt="RenovationReceipts.com"
-              className="h-6 w-auto"
+              className="h-13 w-auto"
             />
           </div>
           <div className="flex items-center gap-2">
