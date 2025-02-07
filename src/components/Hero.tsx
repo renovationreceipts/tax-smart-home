@@ -28,7 +28,7 @@ export const Hero = () => {
       <nav className="w-full max-w-7xl mx-auto py-4 px-4 flex justify-between items-center">
         <div>
           <img 
-            src="/lovable-uploads/de0711d6-5e88-442a-845c-efb3fd3caba4.png" 
+            src="/lovable-uploads/69bafa75-cbb8-49f9-a552-21142b9fa060.png" 
             alt="RenovationReceipts.com"
             className="h-12 w-auto"
           />
