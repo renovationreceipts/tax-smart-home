@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,10 +27,15 @@ export default function Login() {
       });
 
       if (error) {
+        let errorMessage = error.message;
+        if (error.message.includes("Invalid login credentials")) {
+          errorMessage = "The email or password you entered is incorrect. Please try again.";
+        }
+        
         toast({
           variant: "destructive",
-          title: "Error",
-          description: error.message,
+          title: "Login failed",
+          description: errorMessage,
         });
       } else {
         toast({
@@ -43,7 +49,7 @@ export default function Login() {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "An unexpected error occurred",
+        description: "An unexpected error occurred while trying to log in. Please try again.",
       });
     } finally {
       setIsLoading(false);
@@ -77,7 +83,7 @@ export default function Login() {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "An unexpected error occurred",
+        description: "An unexpected error occurred while trying to reset your password",
       });
     } finally {
       setIsLoading(false);
