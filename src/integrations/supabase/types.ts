@@ -269,6 +269,7 @@ export type Database = {
       analytics_event_type: "click" | "pageview" | "custom"
       credit_type: "irs_gpt"
       tax_form_type: "8949" | "SCHEDULE_D"
+      user_credit_type: "irs_gpt"
     }
     CompositeTypes: {
       [_ in never]: never
