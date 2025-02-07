@@ -1,5 +1,6 @@
+
 import { Button } from "@/components/ui/button"
-import { Home, LogOut, User, Users } from "lucide-react"
+import { LogOut, User, Users } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
 interface AccountHeaderProps {
@@ -14,8 +15,11 @@ export function AccountHeader({ onSignOut }: AccountHeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Home className="h-6 w-6" />
-            <span className="text-xl font-bold">CompanyName</span>
+            <img 
+              src="/lovable-uploads/69bafa75-cbb8-49f9-a552-21142b9fa060.png" 
+              alt="RenovationReceipts.com"
+              className="h-12 w-auto"
+            />
           </div>
           <div className="flex items-center gap-2">
             <Button
