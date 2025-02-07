@@ -1,3 +1,4 @@
+
 import { FileText, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -69,7 +70,7 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
               <TableRow>
                 <TableHead>Project Name</TableHead>
                 <TableHead>Description</TableHead>
-                <TableHead>Cost</TableHead>
+                <TableHead className="text-right">Cost</TableHead>
                 <TableHead>Completion Date</TableHead>
               </TableRow>
             </TableHeader>
@@ -82,7 +83,7 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
                 >
                   <TableCell className="font-medium">{project.name}</TableCell>
                   <TableCell>{project.description}</TableCell>
-                  <TableCell>{formatCurrency(project.cost)}</TableCell>
+                  <TableCell className="text-right">{formatCurrency(project.cost)}</TableCell>
                   <TableCell>{formatDate(project.completion_date)}</TableCell>
                 </TableRow>
               ))}
