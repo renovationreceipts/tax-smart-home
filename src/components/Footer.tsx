@@ -1,5 +1,5 @@
+
 import { Link } from "react-router-dom";
-import { Home } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -10,9 +10,12 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Logo and Description */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Home className="h-6 w-6" />
-              <span className="text-xl font-bold">RenovationReceipts.com</span>
+            <div className="flex items-center">
+              <img 
+                src="/lovable-uploads/69bafa75-cbb8-49f9-a552-21142b9fa060.png" 
+                alt="RenovationReceipts.com"
+                className="h-12 w-auto"
+              />
             </div>
             <p className="text-gray-600">
               Helping property owners track renovation costs and tax records efficiently.
