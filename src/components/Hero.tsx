@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -25,7 +26,13 @@ export const Hero = () => {
   return (
     <div className="w-full hero-gradient">
       <nav className="w-full max-w-7xl mx-auto py-4 px-4 flex justify-between items-center">
-        <div className="text-xl font-bold text-gray-900">RenovationReceipts.com</div>
+        <div>
+          <img 
+            src="/lovable-uploads/de0711d6-5e88-442a-845c-efb3fd3caba4.png" 
+            alt="RenovationReceipts.com"
+            className="h-8 w-auto"
+          />
+        </div>
         <div className="flex gap-4 items-center">
           <Link 
             to="/login" 
