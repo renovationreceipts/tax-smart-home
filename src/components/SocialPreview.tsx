@@ -1,25 +1,31 @@
 
 import React from 'react';
+import { ArrowRight } from 'lucide-react';
 
 const SocialPreview = () => {
   return (
-    <div className="w-[1200px] h-[630px] bg-white flex flex-col justify-center items-center p-16">
-      <h1 className="text-6xl font-bold text-gray-900 mb-8">Renovation Receipts</h1>
-      <p className="text-3xl text-gray-600 text-center max-w-3xl">
-        Track Home Improvement Expenses and Maximize Tax Savings
-      </p>
-      <div className="mt-12 flex gap-8">
-        <div className="bg-blue-50 p-8 rounded-lg">
-          <h3 className="text-2xl font-semibold mb-4">Track Receipts</h3>
-          <p className="text-gray-600">Organize all your renovation expenses</p>
+    <div className="w-[1200px] h-[630px] bg-white flex flex-col justify-center items-center p-16 hero-gradient">
+      <div className="w-full flex items-center justify-between mb-12">
+        <img 
+          src="/lovable-uploads/69bafa75-cbb8-49f9-a552-21142b9fa060.png" 
+          alt="RenovationReceipts.com"
+          className="h-20 w-auto"
+        />
+        <div className="flex gap-4">
+          <div className="text-gray-600">Login</div>
+          <div className="text-white bg-primary px-4 py-2 rounded-md">Sign Up</div>
         </div>
-        <div className="bg-green-50 p-8 rounded-lg">
-          <h3 className="text-2xl font-semibold mb-4">Calculate Taxes</h3>
-          <p className="text-gray-600">Maximize your tax deductions</p>
-        </div>
-        <div className="bg-purple-50 p-8 rounded-lg">
-          <h3 className="text-2xl font-semibold mb-4">Store Documents</h3>
-          <p className="text-gray-600">Keep all records in one place</p>
+      </div>
+
+      <div className="flex flex-col items-center text-center max-w-4xl">
+        <h1 className="text-5xl font-bold tracking-tight text-gray-900 mb-8">
+          Track Home Renovations, Maximize Your Cost Basis, Slash Your Tax Bill
+        </h1>
+        <p className="text-2xl text-gray-600 mb-12">
+          Track all your home improvement expenses to accurately calculate cost basis—ultimately lowering taxable gains when selling.
+        </p>
+        <div className="flex items-center gap-2 text-white bg-primary hover:bg-primary/90 px-6 py-3 rounded-md text-xl">
+          Get Started <ArrowRight className="ml-2 h-5 w-5" />
         </div>
       </div>
     </div>
