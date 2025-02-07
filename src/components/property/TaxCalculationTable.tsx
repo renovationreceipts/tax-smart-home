@@ -1,7 +1,9 @@
+
 import { Table, TableHeader, TableBody, TableHead, TableRow } from "@/components/ui/table"
 import { TaxTableRow } from "./TaxTableRow"
 import { useTaxCalculations } from "@/hooks/useTaxCalculations"
 import { Separator } from "@/components/ui/separator"
+import { useNavigate } from "react-router-dom"
 
 interface TaxCalculationTableProps {
   property: any
@@ -9,6 +11,7 @@ interface TaxCalculationTableProps {
 }
 
 export function TaxCalculationTable({ property, projects }: TaxCalculationTableProps) {
+  const navigate = useNavigate()
   const {
     userTaxRate,
     totalProjectCosts,
@@ -73,6 +76,21 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
           />
         </TableBody>
       </Table>
+
+      {!userTaxRate && (
+        <div className="bg-gray-50 border rounded-lg px-4 py-3 text-sm text-gray-600">
+          <div className="flex items-center">
+            Add your personalized capital gains tax rate in your{" "}
+            <button 
+              onClick={() => navigate("/profile")} 
+              className="text-primary hover:underline font-medium ml-1"
+            >
+              Profile
+            </button>
+            .
+          </div>
+        </div>
+      )}
     </div>
   )
 }
