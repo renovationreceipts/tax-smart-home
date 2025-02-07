@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import type { Project } from "@/hooks/useProjects"
 import { useProperties } from "@/hooks/useProperties"
+import { ProjectTypeExamples } from "@/components/project/ProjectTypeExamples"
 
 interface ProjectsSectionProps {
   propertyId: string | null
@@ -35,10 +36,11 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
         </div>
         <p className="text-gray-600 text-sm mt-2">
           {properties.length === 0 
-            ? "Add a property first and then you can add projects"
+            ? "Add a property first and then you can start tracking your improvement projects"
             : "Select a property to view and manage its projects"
           }
         </p>
+        {properties.length === 0 && <ProjectTypeExamples />}
       </div>
     )
   }
