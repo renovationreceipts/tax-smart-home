@@ -30,7 +30,7 @@ export const Hero = () => {
           <img 
             src="/lovable-uploads/69bafa75-cbb8-49f9-a552-21142b9fa060.png" 
             alt="RenovationReceipts.com"
-            className="h-16 w-auto"
+            className="h-20 w-auto"
           />
         </div>
         <div className="flex gap-4 items-center">
