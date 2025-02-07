@@ -71,7 +71,7 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
                 <TableHead>Project Name</TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead className="text-right">Cost</TableHead>
-                <TableHead>Completion Date</TableHead>
+                <TableHead className="text-right">Completion Date</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -84,7 +84,7 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
                   <TableCell className="font-medium">{project.name}</TableCell>
                   <TableCell>{project.description}</TableCell>
                   <TableCell className="text-right">{formatCurrency(project.cost)}</TableCell>
-                  <TableCell>{formatDate(project.completion_date)}</TableCell>
+                  <TableCell className="text-right">{formatDate(project.completion_date)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
