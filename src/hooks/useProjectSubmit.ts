@@ -24,23 +24,43 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
     
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
+      console.log('File details:', {
+        name: file.name,
+        type: file.type,
+        size: file.size
+      })
+
       const fileExt = file.name.split('.').pop()?.toLowerCase() // Ensure lowercase extension
       const filePath = `${projectId}/${crypto.randomUUID()}.${fileExt}`
 
-      console.log(`Uploading file: ${file.name} to path: ${filePath}`)
+      console.log(`Preparing to upload file: ${file.name} to path: ${filePath}`)
+      
+      // Determine content type - explicitly handle .ico files
+      let contentType = file.type
+      if (fileExt === 'ico') {
+        contentType = 'image/x-icon'
+      }
+      
+      console.log('Using content type:', contentType)
 
-      // Allow .ico files along with other types
       const { error: uploadError } = await supabase.storage
         .from('project-files')
         .upload(filePath, file, {
           upsert: false,
-          contentType: file.type || 'image/x-icon' // Fallback for .ico files
+          contentType: contentType
         })
 
       if (uploadError) {
         console.error('Error uploading file:', uploadError)
+        toast({
+          variant: "destructive",
+          title: "Upload Error",
+          description: `Failed to upload ${file.name}: ${uploadError.message}`,
+        })
         continue
       }
+
+      console.log('File uploaded successfully, saving metadata to database')
 
       const { error: dbError } = await supabase
         .from('project_files')
@@ -48,12 +68,17 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
           project_id: projectId,
           user_id: user.id,
           file_path: filePath,
-          file_type: file.type || 'image/x-icon', // Fallback for .ico files
+          file_type: contentType,
           file_category: category,
         })
 
       if (dbError) {
         console.error('Error saving file metadata:', dbError)
+        toast({
+          variant: "destructive",
+          title: "Database Error",
+          description: `Failed to save metadata for ${file.name}: ${dbError.message}`,
+        })
       }
     }
   }
