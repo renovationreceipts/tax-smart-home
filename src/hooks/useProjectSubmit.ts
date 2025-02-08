@@ -1,3 +1,4 @@
+
 import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
 import { format } from "date-fns"
@@ -23,16 +24,17 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
     
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
-      const fileExt = file.name.split('.').pop()
+      const fileExt = file.name.split('.').pop()?.toLowerCase() // Ensure lowercase extension
       const filePath = `${projectId}/${crypto.randomUUID()}.${fileExt}`
 
       console.log(`Uploading file: ${file.name} to path: ${filePath}`)
 
+      // Allow .ico files along with other types
       const { error: uploadError } = await supabase.storage
         .from('project-files')
         .upload(filePath, file, {
           upsert: false,
-          contentType: file.type
+          contentType: file.type || 'image/x-icon' // Fallback for .ico files
         })
 
       if (uploadError) {
@@ -44,9 +46,9 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
         .from('project_files')
         .insert({
           project_id: projectId,
-          user_id: user.id,  // Make sure to set the user_id
+          user_id: user.id,
           file_path: filePath,
-          file_type: file.type,
+          file_type: file.type || 'image/x-icon', // Fallback for .ico files
           file_category: category,
         })
 
