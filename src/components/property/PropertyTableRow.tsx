@@ -44,14 +44,16 @@ export function PropertyTableRow({
           />
         </div>
       </TableCell>
-      <TableCell className="font-medium py-2 flex justify-between items-center sm:table-cell">
-        <span className="font-bold sm:font-medium">{property.name}</span>
-        <div className="flex items-center gap-2 sm:hidden">
+      <TableCell className="font-medium py-2 flex items-center gap-2 sm:table-cell">
+        <div className="sm:hidden">
           <RadioGroupItem 
             value={property.id} 
             id={property.id}
             onClick={(e) => e.stopPropagation()} 
           />
+        </div>
+        <span className="font-bold sm:font-medium">{property.name}</span>
+        <div className="ml-auto sm:hidden">
           <Button
             variant="ghost"
             size="icon"
