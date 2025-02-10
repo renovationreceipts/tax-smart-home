@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,19 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Add session handling
+  useEffect(() => {
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        toast({
+          title: "Success",
+          description: "You have successfully logged in",
+        });
+        navigate("/account");
+      }
+    });
+  }, [navigate, toast]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,12 +50,6 @@ export default function Login() {
           title: "Login failed",
           description: errorMessage,
         });
-      } else {
-        toast({
-          title: "Success",
-          description: "You have successfully logged in",
-        });
-        navigate("/account");
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -258,4 +265,3 @@ export default function Login() {
     </div>
   );
 }
-
