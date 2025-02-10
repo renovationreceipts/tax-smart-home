@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
@@ -15,7 +16,7 @@ const PrivacyHeader = () => {
       <Button
         variant="ghost"
         className="mb-4"
-        onClick={() => navigate(-1)}
+        onClick={() => navigate('/')}
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
         Back
