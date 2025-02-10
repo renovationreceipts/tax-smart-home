@@ -25,8 +25,8 @@ export function AccountHeader({ onSignOut }: AccountHeaderProps) {
   }
 
   const MobileMenu = () => (
-    <div className="absolute top-full left-0 right-0 bg-white border-b shadow-lg">
-      <div className="flex flex-col p-4 space-y-2">
+    <div className="absolute top-full left-0 right-0 bg-[#FFFFFF] border-b shadow-lg">
+      <div className="flex flex-col p-4 space-y-2 bg-[#FFFFFF]">
         <Button
           variant="ghost"
           size="sm"
