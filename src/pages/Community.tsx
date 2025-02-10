@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button"
 import { AccountHeader } from "@/components/account/AccountHeader"
 import { Slack, ArrowLeft } from "lucide-react"
@@ -7,8 +8,7 @@ export default function Community() {
   const navigate = useNavigate()
   
   const handleJoinSlack = () => {
-    // Replace this URL with your actual Slack community invite link
-    window.open("https://join.slack.com/t/your-workspace/shared_invite/your-invite-link", "_blank")
+    window.open("https://join.slack.com/t/renovationreceiptscom/shared_invite/zt-2zqln109d-kUwtYrZVj~tdyVtiyGxdhQ", "_blank")
   }
 
   return (
