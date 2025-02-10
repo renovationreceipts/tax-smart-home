@@ -20,7 +20,7 @@ export function useAuth() {
             title: "Success!",
             description: "You have successfully signed in.",
           });
-          navigate("/account");
+          navigate("/account", { replace: true }); // Use replace to prevent back navigation to login
         }
       }
     });
@@ -36,7 +36,7 @@ export function useAuth() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/account`, // Explicitly redirect to account page
+          redirectTo: `${window.location.origin}/account`, // Keep the account redirect
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
