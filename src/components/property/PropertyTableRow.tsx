@@ -45,7 +45,7 @@ export function PropertyTableRow({
         </div>
       </TableCell>
       <TableCell className="font-medium py-2 flex justify-between items-center sm:table-cell">
-        <span>{property.name}</span>
+        <span className="font-bold sm:font-medium">{property.name}</span>
         <div className="flex items-center gap-2 sm:hidden">
           <RadioGroupItem 
             value={property.id} 
