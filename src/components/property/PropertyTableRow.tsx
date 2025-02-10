@@ -1,3 +1,4 @@
+
 import { TableCell, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { RadioGroupItem } from "@/components/ui/radio-group"
@@ -31,10 +32,10 @@ export function PropertyTableRow({
       key={property.id}
       className={`${
         property.id === selectedPropertyId ? "bg-primary/5" : ""
-      } cursor-pointer hover:bg-muted/50`}
+      } cursor-pointer hover:bg-muted/50 flex flex-col sm:table-row`}
       onClick={() => onPropertySelect(property.id)}
     >
-      <TableCell className="w-[48px] align-middle">
+      <TableCell className="w-[48px] align-middle hidden sm:table-cell">
         <div className="flex items-center justify-center h-full">
           <RadioGroupItem 
             value={property.id} 
@@ -43,19 +44,36 @@ export function PropertyTableRow({
           />
         </div>
       </TableCell>
-      <TableCell className="font-medium">
-        {property.name}
+      <TableCell className="font-medium py-2 flex justify-between items-center sm:table-cell">
+        <span>{property.name}</span>
+        <div className="flex items-center gap-2 sm:hidden">
+          <RadioGroupItem 
+            value={property.id} 
+            id={property.id}
+            onClick={(e) => e.stopPropagation()} 
+          />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={(e) => {
+              e.stopPropagation()
+              onEditProperty(property)
+            }}
+          >
+            <Pencil className="h-4 w-4" />
+          </Button>
+        </div>
       </TableCell>
-      <TableCell>
-        {property.address}
-      </TableCell>
-      <TableCell>
+      <TableCell className="py-2">{property.address}</TableCell>
+      <TableCell className="py-2">
+        <span className="font-medium sm:hidden">Purchase Price: </span>
         {formatCurrency(property.purchase_price)}
       </TableCell>
-      <TableCell>
+      <TableCell className="py-2">
+        <span className="font-medium sm:hidden">Current Value: </span>
         {formatCurrency(property.current_value)}
       </TableCell>
-      <TableCell>
+      <TableCell className="hidden sm:table-cell">
         <Button
           variant="ghost"
           size="icon"

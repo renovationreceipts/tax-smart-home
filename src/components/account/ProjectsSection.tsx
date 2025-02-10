@@ -66,9 +66,9 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
           No projects added yet. Add your first project to start tracking improvements.
         </p>
       ) : (
-        <div className="mt-4">
+        <div className="mt-4 overflow-x-auto">
           <Table>
-            <TableHeader>
+            <TableHeader className="hidden sm:table-header-group">
               <TableRow>
                 <TableHead>Project Name</TableHead>
                 <TableHead>Description</TableHead>
@@ -81,12 +81,18 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
                 <TableRow 
                   key={project.id}
                   onClick={() => onEditProject?.(project)}
-                  className="cursor-pointer hover:bg-muted/50"
+                  className="cursor-pointer hover:bg-muted/50 flex flex-col sm:table-row"
                 >
-                  <TableCell className="font-medium">{project.name}</TableCell>
-                  <TableCell>{project.description}</TableCell>
-                  <TableCell className="text-right">{formatCurrency(project.cost)}</TableCell>
-                  <TableCell className="text-right">{formatDate(project.completion_date)}</TableCell>
+                  <TableCell className="font-medium py-2 sm:py-4">{project.name}</TableCell>
+                  <TableCell className="py-2 sm:py-4">{project.description}</TableCell>
+                  <TableCell className="py-2 sm:py-4 sm:text-right">
+                    <span className="font-medium sm:hidden">Cost: </span>
+                    {formatCurrency(project.cost)}
+                  </TableCell>
+                  <TableCell className="py-2 sm:py-4 sm:text-right">
+                    <span className="font-medium sm:hidden">Completion Date: </span>
+                    {formatDate(project.completion_date)}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

@@ -1,8 +1,9 @@
+
 import { TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 export function PropertyTableHeader() {
   return (
-    <TableHeader>
+    <TableHeader className="hidden sm:table-header-group">
       <TableRow>
         <TableHead className="w-[50px]"></TableHead>
         <TableHead>Property Name</TableHead>
