@@ -1,6 +1,6 @@
 
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, ScrollRestoration } from "react-router-dom";
 import App from './App.tsx'
 import './index.css'
 import Account from "@/pages/Account"
@@ -20,55 +20,120 @@ import GenerateOGImage from './pages/GenerateOGImage.tsx';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Index />,
+    element: (
+      <>
+        <Index />
+        <ScrollRestoration />
+      </>
+    ),
   },
   {
     path: "/account",
-    element: <Account />,
+    element: (
+      <>
+        <Account />
+        <ScrollRestoration />
+      </>
+    ),
   },
   {
     path: "/login",
-    element: <Login />,
+    element: (
+      <>
+        <Login />
+        <ScrollRestoration />
+      </>
+    ),
   },
   {
     path: "/signup",
-    element: <SignUp />,
+    element: (
+      <>
+        <SignUp />
+        <ScrollRestoration />
+      </>
+    ),
   },
   {
     path: "/profile",
-    element: <Profile />,
+    element: (
+      <>
+        <Profile />
+        <ScrollRestoration />
+      </>
+    ),
   },
   {
     path: "/community",
-    element: <Community />,
+    element: (
+      <>
+        <Community />
+        <ScrollRestoration />
+      </>
+    ),
   },
   {
     path: "/about",
-    element: <About />,
+    element: (
+      <>
+        <About />
+        <ScrollRestoration />
+      </>
+    ),
   },
   {
     path: "/property/edit/:id?",
-    element: <EditProperty />,
+    element: (
+      <>
+        <EditProperty />
+        <ScrollRestoration />
+      </>
+    ),
   },
   {
     path: "/project/edit/:propertyId/:id?",
-    element: <EditProject />,
+    element: (
+      <>
+        <EditProject />
+        <ScrollRestoration />
+      </>
+    ),
   },
   {
     path: "/disclaimers",
-    element: <Disclaimers />,
+    element: (
+      <>
+        <Disclaimers />
+        <ScrollRestoration />
+      </>
+    ),
   },
   {
     path: "/terms",
-    element: <Terms />,
+    element: (
+      <>
+        <Terms />
+        <ScrollRestoration />
+      </>
+    ),
   },
   {
     path: "/privacy-policy",
-    element: <Privacy />,
+    element: (
+      <>
+        <Privacy />
+        <ScrollRestoration />
+      </>
+    ),
   },
   {
     path: "/generate-og-image",
-    element: <GenerateOGImage />,
+    element: (
+      <>
+        <GenerateOGImage />
+        <ScrollRestoration />
+      </>
+    ),
   }
 ]);
 
@@ -78,3 +143,4 @@ root.render(
     <RouterProvider router={router} />
   </App>
 );
+
