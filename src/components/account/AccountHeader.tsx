@@ -1,7 +1,9 @@
 
 import { Button } from "@/components/ui/button"
-import { LogOut, User, Users } from "lucide-react"
+import { LogOut, Menu, User, Users, X } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 interface AccountHeaderProps {
   onSignOut: () => void
@@ -9,9 +11,55 @@ interface AccountHeaderProps {
 
 export function AccountHeader({ onSignOut }: AccountHeaderProps) {
   const navigate = useNavigate()
+  const isMobile = useIsMobile()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const handleNavigate = (path: string) => {
+    setIsMenuOpen(false)
+    navigate(path)
+  }
+
+  const handleSignOut = () => {
+    setIsMenuOpen(false)
+    onSignOut()
+  }
+
+  const MobileMenu = () => (
+    <div className="absolute top-full left-0 right-0 bg-white border-b shadow-lg">
+      <div className="flex flex-col p-4 space-y-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-full justify-start text-gray-600"
+          onClick={() => handleNavigate("/community")}
+        >
+          <Users className="h-4 w-4 mr-2" />
+          Community
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-full justify-start text-gray-600"
+          onClick={() => handleNavigate("/profile")}
+        >
+          <User className="h-4 w-4 mr-2" />
+          Profile
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-full justify-start text-gray-600"
+          onClick={handleSignOut}
+        >
+          <LogOut className="h-4 w-4 mr-2" />
+          Sign out
+        </Button>
+      </div>
+    </div>
+  )
 
   return (
-    <nav className="bg-white border-b">
+    <nav className="bg-white border-b relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
@@ -21,35 +69,53 @@ export function AccountHeader({ onSignOut }: AccountHeaderProps) {
               className="h-12 w-auto"
             />
           </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-gray-600"
-              onClick={() => navigate("/community")}
-            >
-              <Users className="h-4 w-4 mr-2" />
-              Community
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-gray-600"
-              onClick={() => navigate("/profile")}
-            >
-              <User className="h-4 w-4 mr-2" />
-              Profile
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-gray-600"
-              onClick={onSignOut}
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign out
-            </Button>
-          </div>
+          {isMobile ? (
+            <div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="relative z-50"
+              >
+                {isMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
+              </Button>
+              {isMenuOpen && <MobileMenu />}
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-600"
+                onClick={() => navigate("/community")}
+              >
+                <Users className="h-4 w-4 mr-2" />
+                Community
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-600"
+                onClick={() => navigate("/profile")}
+              >
+                <User className="h-4 w-4 mr-2" />
+                Profile
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-600"
+                onClick={onSignOut}
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign out
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </nav>
