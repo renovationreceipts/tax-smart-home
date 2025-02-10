@@ -145,7 +145,7 @@ const Privacy = () => {
         <PrivacySection title="11. Contact Us">
           <p>If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at:</p>
           <div className="mt-4">
-            <p>[Your Company Name]</p>
+            <p>Renovation Receipts</p>
             <p>Email: [Your Contact Email]</p>
             <p>Address: [Your Company Address]</p>
           </div>
