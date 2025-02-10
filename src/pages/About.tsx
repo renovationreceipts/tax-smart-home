@@ -1,22 +1,21 @@
 
 import { Container } from "@/components/ui/container"
-import { Card } from "@/components/ui/card"
 import { Check } from "lucide-react"
 
 export default function About() {
   return (
     <Container className="py-12">
-      <div className="max-w-3xl mx-auto space-y-8">
+      <div className="max-w-3xl space-y-8">
         <section>
           <h1 className="text-3xl font-bold mb-6">About Us</h1>
-          <p className="text-lg mb-6">
+          <p className="text-base mb-6">
             It all started with an old house, a long list of projects, and way too many trips to Home Depot.
           </p>
-          <div className="p-6">
-            <p className="leading-relaxed mb-4">
+          <div className="space-y-4">
+            <p className="text-base">
               Like many homeowners, we found ourselves tackling renovations—some big, some small, some DIY, and some with contractors. Every project came with receipts, invoices, and expenses that piled up in a filing cabinet (or got lost in a drawer somewhere). When tax season rolled around, I knew some of these expenses would also qualify for credits, but tracking everything was a nightmare. I know knew the I should save these receipts as they would add to my cost basis in the event we ever sold the house in the future.
             </p>
-            <p className="leading-relaxed">
+            <p className="text-base">
               I searched for a tool that could organize renovation receipts, track expenses, and generate tax-friendly reports, but nothing fit my needs. So, I decided to build it myself.
             </p>
           </div>
@@ -24,7 +23,7 @@ export default function About() {
 
         <section>
           <h2 className="text-2xl font-bold mb-4">A Project That Became Something Bigger</h2>
-          <p className="mb-6">
+          <p className="text-base mb-6">
             This started as a personal challenge—a chance to play with AI and new tech tools while solving a real problem. Along the way, I've learned a ton:
           </p>
           <ul className="space-y-3 mb-6">
@@ -53,19 +52,19 @@ export default function About() {
               <span>Deploying everything via Netlify and making it simple for real users to access</span>
             </li>
           </ul>
-          <p className="text-lg">Now, this project is live in beta, and it's your chance to shape it.</p>
+          <p className="text-base">Now, this project is live in beta, and it's your chance to shape it.</p>
         </section>
 
         <section>
           <h2 className="text-2xl font-bold mb-4">We Need Your Feedback</h2>
-          <div className="p-6 space-y-4">
-            <p className="leading-relaxed">
+          <div className="space-y-4">
+            <p className="text-base">
               This tool is for homeowners like you—so your input is critical. We've integrated Slack for feedback and feature requests, so if you sign up now, you can help define what this product becomes. Whether it's better cost basis tracking, smarter receipt management, or more tax-saving insights, we're listening.
             </p>
-            <p className="leading-relaxed">
+            <p className="text-base">
               Thanks for being part of the journey! 🚀
             </p>
-            <p className="font-medium">
+            <p className="text-base font-medium">
               Join the beta, track your projects, and help us build something great.
             </p>
           </div>
