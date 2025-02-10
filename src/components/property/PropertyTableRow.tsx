@@ -64,12 +64,12 @@ export function PropertyTableRow({
           </Button>
         </div>
       </TableCell>
-      <TableCell className="py-2">{property.address}</TableCell>
-      <TableCell className="py-2">
+      <TableCell className="py-1 sm:py-2">{property.address}</TableCell>
+      <TableCell className="py-1 sm:py-2">
         <span className="font-medium sm:hidden">Purchase Price: </span>
         {formatCurrency(property.purchase_price)}
       </TableCell>
-      <TableCell className="py-2">
+      <TableCell className="py-1 sm:py-2">
         <span className="font-medium sm:hidden">Current Value: </span>
         {formatCurrency(property.current_value)}
       </TableCell>
