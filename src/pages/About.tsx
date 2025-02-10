@@ -1,11 +1,25 @@
 
 import { Container } from "@/components/ui/container"
 import { Check } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { ArrowLeft } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 export default function About() {
+  const navigate = useNavigate()
+
   return (
     <Container className="py-12">
-      <div className="max-w-3xl space-y-8">
+      <Button
+        variant="ghost"
+        onClick={() => navigate(-1)}
+        className="mb-6"
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back
+      </Button>
+
+      <div className="max-w-3xl mx-auto space-y-8">
         <section>
           <h1 className="text-3xl font-bold mb-6">About Us</h1>
           <p className="text-base mb-6">
