@@ -11,6 +11,7 @@ import Login from "@/pages/Login"
 import Profile from "@/pages/Profile"
 import SignUp from "@/pages/SignUp"
 import Community from "@/pages/Community"
+import About from "@/pages/About"
 import Disclaimers from './pages/Disclaimers.tsx';
 import Terms from './pages/Terms.tsx';
 import Privacy from './pages/Privacy.tsx';
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: "/community",
     element: <Community />,
+  },
+  {
+    path: "/about",
+    element: <About />,
   },
   {
     path: "/property/edit/:id?",
