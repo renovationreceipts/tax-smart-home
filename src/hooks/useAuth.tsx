@@ -3,14 +3,15 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { AuthChangeEvent } from "@supabase/supabase-js";
 
 export function useAuth() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
-      if ((event === 'SIGNED_IN' || event === 'SIGNED_UP') && session) {
+    supabase.auth.onAuthStateChange((event: AuthChangeEvent, session) => {
+      if ((event === 'SIGNED_IN' || event === 'USER_UPDATED') && session) {
         toast({
           title: "Success!",
           description: "You have successfully signed in.",
