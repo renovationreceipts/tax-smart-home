@@ -18,7 +18,7 @@ const FAQ = () => {
     },
     {
       question: "How does the IRS Form 8949 export work?",
-      answer: "When you're ready to file taxes, our app automatically compiles your cost basis data and generates a completed IRS Form 8949. You can download it as a PDF or print it directly for your records."
+      answer: "When you're ready to file taxes, our app automatically compiles your cost basis data and generates the information you need to fill our Form 8949. You can download it as a PDF or print it directly for your records."
     },
     {
       question: "Why is this free?",
