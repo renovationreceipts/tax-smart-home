@@ -10,33 +10,38 @@ export function useAuth() {
   const { toast } = useToast();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event: AuthChangeEvent, session) => {
-      console.log("Auth state changed:", event, session); // Add logging to help debug
+    console.log("Setting up auth state change listener"); // Debug log
 
-      if (session) {
-        // If we have a session, we should redirect to account page for these events
-        if (event === 'SIGNED_IN' || event === 'USER_UPDATED' || event === 'INITIAL_SESSION') {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event: AuthChangeEvent, session) => {
+      console.log("Auth state changed:", { event, sessionExists: !!session, userId: session?.user?.id }); // More detailed logging
+
+      if (event === 'SIGNED_IN' || event === 'USER_UPDATED' || event === 'INITIAL_SESSION') {
+        if (session) {
+          console.log("Valid session detected, redirecting to account"); // Debug log
           toast({
             title: "Success!",
             description: "You have successfully signed in.",
           });
-          navigate("/account", { replace: true }); // Use replace to prevent back navigation to login
+          // Use replace to prevent back navigation and force the route change
+          window.location.href = "/account";
         }
       }
     });
 
     // Cleanup subscription on unmount
     return () => {
+      console.log("Cleaning up auth state listener"); // Debug log
       subscription.unsubscribe();
     };
   }, [navigate, toast]);
 
   const handleGoogleAuth = async () => {
     try {
+      console.log("Initiating Google auth"); // Debug log
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/account`, // Keep the account redirect
+          redirectTo: window.location.origin + "/account",
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
@@ -45,6 +50,7 @@ export function useAuth() {
       });
 
       if (error) {
+        console.error("Google auth error:", error); // Debug log
         toast({
           variant: "destructive",
           title: "Authentication failed",
