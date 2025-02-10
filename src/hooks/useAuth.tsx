@@ -25,7 +25,7 @@ export function useAuth() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: 'https://gbztiauhydgyzvskqtrk.supabase.co/auth/v1/callback'
+          redirectTo: window.location.origin
         }
       });
 
