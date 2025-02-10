@@ -1,3 +1,4 @@
+
 import { Receipt, Calculator, FileSpreadsheet } from "lucide-react";
 
 const steps = [
@@ -14,7 +15,7 @@ const steps = [
   {
     icon: <FileSpreadsheet className="h-6 w-6 text-blue-600" />,
     title: "Prepare Tax Documents When Ready to Sell",
-    description: "Generate accurate tax forms and maintain organized records for potential IRS audits.",
+    description: "Generate tax forms and maintain organized records for potential IRS audits.",
   },
 ];
 
