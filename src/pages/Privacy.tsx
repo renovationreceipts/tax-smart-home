@@ -1,3 +1,4 @@
+
 import PrivacyHeader from "@/components/privacy/PrivacyHeader";
 import PrivacySection from "@/components/privacy/PrivacySection";
 import PrivacyList from "@/components/privacy/PrivacyList";
@@ -7,7 +8,7 @@ const Privacy = () => {
     <div className="container max-w-4xl py-8 space-y-8">
       <PrivacyHeader />
       
-      <div className="prose prose-gray max-w-none space-y-8">
+      <div className="prose prose-gray max-w-none space-y-8 text-black">
         <p>
           Renovation Receipts ("we," "us," or "our") is committed to protecting your privacy. 
           This Privacy Policy explains how we collect, use, disclose, and safeguard your information 
@@ -18,8 +19,8 @@ const Privacy = () => {
         <PrivacySection title="1. Information We Collect">
           <div className="space-y-6">
             <div>
-              <h3 className="text-xl font-semibold mb-2">A. Personal Information</h3>
-              <p>When you register for an account or use our Service, we may collect personally identifiable information ("Personal Information") such as:</p>
+              <h3 className="text-xl font-semibold mb-2 text-black">A. Personal Information</h3>
+              <p className="text-black">When you register for an account or use our Service, we may collect personally identifiable information ("Personal Information") such as:</p>
               <PrivacyList items={[
                 "Name",
                 "Email address",
@@ -30,8 +31,8 @@ const Privacy = () => {
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold mb-2">B. Property and Project Data</h3>
-              <p>Our Service is designed to help you track home improvement projects and calculate your cost basis. We may collect information related to:</p>
+              <h3 className="text-xl font-semibold mb-2 text-black">B. Property and Project Data</h3>
+              <p className="text-black">Our Service is designed to help you track home improvement projects and calculate your cost basis. We may collect information related to:</p>
               <PrivacyList items={[
                 "Property details (e.g., address, property type, purchase price)",
                 "Project details (e.g., project name, start and end dates, builder information, project cost)",
@@ -40,8 +41,8 @@ const Privacy = () => {
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold mb-2">C. Usage Data</h3>
-              <p>We automatically collect certain information about your use of the Service, including:</p>
+              <h3 className="text-xl font-semibold mb-2 text-black">C. Usage Data</h3>
+              <p className="text-black">We automatically collect certain information about your use of the Service, including:</p>
               <PrivacyList items={[
                 "IP address",
                 "Browser type and version",
@@ -52,8 +53,8 @@ const Privacy = () => {
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold mb-2">D. Cookies and Similar Technologies</h3>
-              <p>
+              <h3 className="text-xl font-semibold mb-2 text-black">D. Cookies and Similar Technologies</h3>
+              <p className="text-black">
                 We may use cookies and similar tracking technologies to enhance your experience, 
                 analyze usage trends, and improve our Service. You can adjust your browser settings 
                 to refuse cookies, but some features of the Service may not function properly as a result.
@@ -63,7 +64,7 @@ const Privacy = () => {
         </PrivacySection>
 
         <PrivacySection title="2. How We Use Your Information">
-          <p>We use the collected information for various purposes, including:</p>
+          <p className="text-black">We use the collected information for various purposes, including:</p>
           <PrivacyList items={[
             "Providing and Maintaining the Service: To create and manage your account, track home improvement projects, calculate cost basis, and generate tax reports.",
             "Improving the Service: To analyze usage trends and improve the functionality, security, and user experience of the Service.",
@@ -73,7 +74,7 @@ const Privacy = () => {
         </PrivacySection>
 
         <PrivacySection title="3. How We Share Your Information">
-          <p>We do not sell your Personal Information to third parties. We may share your information as follows:</p>
+          <p className="text-black">We do not sell your Personal Information to third parties. We may share your information as follows:</p>
           <PrivacyList items={[
             "Service Providers: With third-party vendors who perform services on our behalf (e.g., hosting, payment processing, analytics). These vendors are obligated to protect your information.",
             "Legal Requirements: If required by law, regulation, or legal process, we may disclose your information to government authorities or other entities.",
@@ -83,7 +84,7 @@ const Privacy = () => {
         </PrivacySection>
 
         <PrivacySection title="4. Data Retention">
-          <p>
+          <p className="text-black">
             We retain your information for as long as necessary to fulfill the purposes outlined in this Privacy Policy, 
             unless a longer retention period is required or permitted by law. When your information is no longer needed, 
             we will securely delete or anonymize it.
@@ -91,7 +92,7 @@ const Privacy = () => {
         </PrivacySection>
 
         <PrivacySection title="5. Data Security">
-          <p>
+          <p className="text-black">
             We implement appropriate technical and organizational measures to protect your Personal Information against 
             unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the 
             internet or electronic storage is 100% secure, so we cannot guarantee absolute security.
@@ -99,18 +100,18 @@ const Privacy = () => {
         </PrivacySection>
 
         <PrivacySection title="6. Your Rights and Choices">
-          <p>Depending on your jurisdiction, you may have rights regarding your Personal Information, including:</p>
+          <p className="text-black">Depending on your jurisdiction, you may have rights regarding your Personal Information, including:</p>
           <PrivacyList items={[
             "Access and Correction: The right to access, update, or correct your Personal Information.",
             "Deletion: The right to request the deletion of your Personal Information.",
             "Objection and Restriction: The right to object to or restrict the processing of your Personal Information.",
             "Data Portability: The right to request a copy of your Personal Information in a structured, commonly used format."
           ]} />
-          <p>To exercise these rights, please contact us using the information provided in the "Contact Us" section.</p>
+          <p className="text-black">To exercise these rights, please contact us using the information provided in the "Contact Us" section.</p>
         </PrivacySection>
 
         <PrivacySection title="7. Third-Party Links and Services">
-          <p>
+          <p className="text-black">
             Our Service may contain links to third-party websites or services that are not operated or controlled by us. 
             This Privacy Policy does not apply to the practices of those third parties. We encourage you to review the 
             privacy policies of any third-party websites you visit.
@@ -118,7 +119,7 @@ const Privacy = () => {
         </PrivacySection>
 
         <PrivacySection title="8. International Data Transfers">
-          <p>
+          <p className="text-black">
             Your information may be transferred to, and maintained on, servers located outside of your country. 
             By using our Service, you consent to the transfer of your information to countries that may have 
             different data protection laws than your country.
@@ -126,7 +127,7 @@ const Privacy = () => {
         </PrivacySection>
 
         <PrivacySection title="9. Children's Privacy">
-          <p>
+          <p className="text-black">
             Our Service is not intended for individuals under the age of 18. We do not knowingly collect Personal 
             Information from children. If you believe we have inadvertently collected such information, please 
             contact us immediately.
@@ -134,7 +135,7 @@ const Privacy = () => {
         </PrivacySection>
 
         <PrivacySection title="10. Changes to This Privacy Policy">
-          <p>
+          <p className="text-black">
             We may update this Privacy Policy from time to time. We will notify you of any changes by posting 
             the updated Privacy Policy on our website and updating the "Last Updated" date. Your continued use 
             of the Service after such changes constitutes your acceptance of the revised Privacy Policy.
@@ -142,8 +143,8 @@ const Privacy = () => {
         </PrivacySection>
 
         <PrivacySection title="11. Contact Us">
-          <p>If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at:</p>
-          <div className="mt-4">
+          <p className="text-black">If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at:</p>
+          <div className="mt-4 text-black">
             <p>Renovation Receipts</p>
             <p>Email: myrenovationreceipts@gmail.com</p>
           </div>
