@@ -1,4 +1,3 @@
-
 import PrivacyHeader from "@/components/privacy/PrivacyHeader";
 import PrivacySection from "@/components/privacy/PrivacySection";
 import PrivacyList from "@/components/privacy/PrivacyList";
@@ -147,7 +146,6 @@ const Privacy = () => {
           <div className="mt-4">
             <p>Renovation Receipts</p>
             <p>Email: myrenovationreceipts@gmail.com</p>
-            <p>Address: [Your Company Address]</p>
           </div>
         </PrivacySection>
       </div>
