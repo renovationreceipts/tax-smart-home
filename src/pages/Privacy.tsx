@@ -1,3 +1,4 @@
+
 import PrivacyHeader from "@/components/privacy/PrivacyHeader";
 import PrivacySection from "@/components/privacy/PrivacySection";
 import PrivacyList from "@/components/privacy/PrivacyList";
@@ -9,9 +10,9 @@ const Privacy = () => {
       
       <div className="prose prose-gray max-w-none space-y-8">
         <p>
-          [Your Company Name] ("we," "us," or "our") is committed to protecting your privacy. 
+          Renovation Receipts ("we," "us," or "our") is committed to protecting your privacy. 
           This Privacy Policy explains how we collect, use, disclose, and safeguard your information 
-          when you use our website and services, including [Your Service Name] (the "Service"). 
+          when you use our website and services, including Renovation Receipts (the "Service"). 
           By accessing or using the Service, you consent to the data practices described in this Privacy Policy.
         </p>
 
