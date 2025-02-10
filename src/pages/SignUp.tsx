@@ -70,7 +70,7 @@ export default function SignUp() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/account`
+          redirectTo: 'https://gbztiauhydgyzvskqtrk.supabase.co/auth/v1/callback'
         }
       });
 
