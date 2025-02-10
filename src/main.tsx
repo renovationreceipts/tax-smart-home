@@ -63,7 +63,7 @@ const router = createBrowserRouter([
     element: <Terms />,
   },
   {
-    path: "/privacy",
+    path: "/privacy-policy",
     element: <Privacy />,
   },
   {
