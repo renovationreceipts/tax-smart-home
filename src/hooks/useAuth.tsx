@@ -10,15 +10,25 @@ export function useAuth() {
   const { toast } = useToast();
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange((event: AuthChangeEvent, session) => {
-      if ((event === 'SIGNED_IN' || event === 'USER_UPDATED') && session) {
-        toast({
-          title: "Success!",
-          description: "You have successfully signed in.",
-        });
-        navigate("/account");
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event: AuthChangeEvent, session) => {
+      console.log("Auth state changed:", event, session); // Add logging to help debug
+
+      if (session) {
+        // If we have a session, we should redirect to account page for these events
+        if (event === 'SIGNED_IN' || event === 'USER_UPDATED' || event === 'INITIAL_SESSION') {
+          toast({
+            title: "Success!",
+            description: "You have successfully signed in.",
+          });
+          navigate("/account");
+        }
       }
     });
+
+    // Cleanup subscription on unmount
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [navigate, toast]);
 
   const handleGoogleAuth = async () => {
@@ -26,7 +36,11 @@ export function useAuth() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin
+          redirectTo: `${window.location.origin}/account`, // Explicitly redirect to account page
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          }
         }
       });
 
