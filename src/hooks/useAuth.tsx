@@ -10,7 +10,7 @@ export function useAuth() {
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN' && session) {
+      if ((event === 'SIGNED_IN' || event === 'SIGNED_UP') && session) {
         toast({
           title: "Success!",
           description: "You have successfully signed in.",
