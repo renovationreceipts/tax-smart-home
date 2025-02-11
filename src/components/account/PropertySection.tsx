@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom"
 import { PropertyList } from "@/components/property/PropertyList"
 import { EmptyPropertyState } from "@/components/property/EmptyPropertyState"
@@ -31,12 +32,14 @@ export function PropertySection({
       {properties.length === 0 ? (
         <EmptyPropertyState onAddProperty={() => navigate("/property/edit")} />
       ) : (
-        <PropertyList 
-          properties={properties}
-          selectedPropertyId={selectedPropertyId}
-          onPropertySelect={setSelectedPropertyId}
-          onEditProperty={handleEditProperty}
-        />
+        <div className="bg-white rounded-lg shadow-sm border p-6">
+          <PropertyList 
+            properties={properties}
+            selectedPropertyId={selectedPropertyId}
+            onPropertySelect={setSelectedPropertyId}
+            onEditProperty={handleEditProperty}
+          />
+        </div>
       )}
     </div>
   )
