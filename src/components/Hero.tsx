@@ -62,14 +62,14 @@ export const Hero = () => {
           <div>
             <Button
               variant="ghost"
-              size="icon"
+              size="lg"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="relative z-50"
             >
               {isMenuOpen ? (
-                <X className="h-6 w-6" />
+                <X className="h-7 w-7" />
               ) : (
-                <Menu className="h-6 w-6" />
+                <Menu className="h-7 w-7" />
               )}
             </Button>
             {isMenuOpen && <MobileMenu />}
