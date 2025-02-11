@@ -4,6 +4,15 @@ import { Trash2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 interface PropertyFormActionsProps {
   isEditing: boolean
@@ -28,7 +37,7 @@ export function PropertyFormActions({ isEditing, onCancel }: PropertyFormActions
 
       toast({
         title: "Property Deleted",
-        description: "The property has been successfully removed from your account.",
+        description: "The property and all associated projects have been successfully removed from your account.",
       })
 
       navigate('/account')
@@ -46,15 +55,48 @@ export function PropertyFormActions({ isEditing, onCancel }: PropertyFormActions
     <div className="flex flex-col sm:flex-row sm:justify-between gap-4 pt-4">
       {isEditing && (
         <div className="order-2 sm:order-none">
-          <Button
-            variant="ghost"
-            type="button"
-            onClick={handleDeleteProperty}
-            className="w-full sm:w-auto text-[#ea384c] hover:bg-[#ea384c]/10 border-2 border-[#ea384c]"
-          >
-            <Trash2 className="mr-2 h-4 w-4" />
-            Delete Property
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                variant="ghost"
+                type="button"
+                className="w-full sm:w-auto text-[#ea384c] hover:bg-[#ea384c]/10 border-2 border-[#ea384c]"
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete Property
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Delete Property</DialogTitle>
+                <DialogDescription className="pt-2">
+                  Are you sure you want to delete this property? This action cannot be undone.
+                  <p className="mt-2 font-semibold text-destructive">
+                    Warning: Deleting this property will also delete all projects associated with it.
+                  </p>
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <Button 
+                  variant="outline" 
+                  type="button" 
+                  onClick={() => {
+                    const closeButton = document.querySelector("button[data-dismiss]") as HTMLButtonElement;
+                    closeButton?.click();
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  type="button"
+                  onClick={handleDeleteProperty}
+                >
+                  Delete
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       )}
       <div className="flex gap-4 order-1 sm:order-none sm:ml-auto">
