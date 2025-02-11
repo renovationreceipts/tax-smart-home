@@ -13,9 +13,9 @@ export function AccountActions({ onAddProperty }: AccountActionsProps) {
         onClick={onAddProperty}
         size="sm"
         variant="ghost"
-        className="sm:!variant-default border border-input"
+        className="sm:!variant-default border border-primary text-primary hover:text-primary"
       >
-        <Plus className="h-4 w-4 mr-2" />
+        <Plus className="h-4 w-4 mr-2 text-primary" />
         <span className="hidden sm:inline">Add Property</span>
         <span className="sm:hidden">Add</span>
       </Button>
