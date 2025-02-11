@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query"
 import { supabase } from "@/integrations/supabase/client"
 
@@ -9,13 +10,14 @@ export interface Property {
   purchase_price: number
   purchase_date: string
   current_value: number
+  lived_in_property_2_of_5_years: boolean | null
 }
 
 async function fetchProperties() {
   console.log("Fetching properties...")
   const { data, error } = await supabase
     .from("properties")
-    .select("id, property_type, name, address, purchase_price, purchase_date, current_value")
+    .select("id, property_type, name, address, purchase_price, purchase_date, current_value, lived_in_property_2_of_5_years")
     .returns<Property[]>()
   
   if (error) {
