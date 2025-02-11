@@ -4,6 +4,8 @@ import { PropertyList } from "@/components/property/PropertyList"
 import { EmptyPropertyState } from "@/components/property/EmptyPropertyState"
 import { useProperties } from "@/hooks/useProperties"
 import { useEffect } from "react"
+import { House } from "lucide-react"
+import { AccountActions } from "@/components/account/AccountActions"
 
 interface PropertySectionProps {
   selectedPropertyId: string | null
@@ -33,6 +35,13 @@ export function PropertySection({
         <EmptyPropertyState onAddProperty={() => navigate("/property/edit")} />
       ) : (
         <div className="bg-white rounded-lg shadow-sm border p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <House className="h-5 w-5 text-[#0090FF]" />
+              <h2 className="text-lg font-bold text-gray-900">Properties</h2>
+            </div>
+            <AccountActions onAddProperty={() => navigate("/property/edit")} />
+          </div>
           <PropertyList 
             properties={properties}
             selectedPropertyId={selectedPropertyId}

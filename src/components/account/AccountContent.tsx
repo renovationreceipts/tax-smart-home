@@ -16,7 +16,6 @@ export function AccountContent() {
   const { data: properties = [] } = useProperties()
   const selectedProperty = properties.find(p => p.id === selectedPropertyId)
 
-  // Set initial property only if no property is selected and properties exist
   useEffect(() => {
     if (properties.length > 0 && !selectedPropertyId) {
       const newPropertyId = properties[0].id
@@ -32,14 +31,6 @@ export function AccountContent() {
 
   return (
     <>
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-2">
-          <House className="h-5 w-5 text-[#0090FF]" />
-          <h2 className="text-lg font-bold text-gray-900">Properties</h2>
-        </div>
-        <AccountActions onAddProperty={() => navigate("/property/edit")} />
-      </div>
-
       <PropertySection 
         selectedPropertyId={selectedPropertyId}
         setSelectedPropertyId={handlePropertySelect}
