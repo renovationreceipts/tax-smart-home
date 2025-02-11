@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog"
 
 interface PropertyFormActionsProps {
@@ -51,11 +52,6 @@ export function PropertyFormActions({ isEditing, onCancel }: PropertyFormActions
     }
   }
 
-  const handleModalClose = () => {
-    const closeButton = document.querySelector("button[data-dismiss]") as HTMLButtonElement;
-    if (closeButton) closeButton.click();
-  }
-
   return (
     <div className="flex flex-col sm:flex-row sm:justify-between gap-4 pt-4">
       {isEditing && (
@@ -82,13 +78,11 @@ export function PropertyFormActions({ isEditing, onCancel }: PropertyFormActions
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <Button 
-                  variant="outline" 
-                  type="button" 
-                  onClick={handleModalClose}
-                >
-                  Cancel
-                </Button>
+                <DialogClose asChild>
+                  <Button variant="outline" type="button">
+                    Cancel
+                  </Button>
+                </DialogClose>
                 <Button
                   variant="destructive"
                   type="button"
