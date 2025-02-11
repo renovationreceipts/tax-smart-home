@@ -163,6 +163,7 @@ export type Database = {
           created_at: string | null
           current_value: number
           id: string
+          lived_in_property_2_of_5_years: boolean | null
           name: string
           property_type: string
           purchase_date: string
@@ -174,6 +175,7 @@ export type Database = {
           created_at?: string | null
           current_value: number
           id?: string
+          lived_in_property_2_of_5_years?: boolean | null
           name: string
           property_type: string
           purchase_date: string
@@ -185,6 +187,7 @@ export type Database = {
           created_at?: string | null
           current_value?: number
           id?: string
+          lived_in_property_2_of_5_years?: boolean | null
           name?: string
           property_type?: string
           purchase_date?: string

@@ -1,3 +1,4 @@
+
 import { z } from "zod"
 
 export const propertyFormSchema = z.object({
@@ -11,6 +12,7 @@ export const propertyFormSchema = z.object({
     required_error: "Purchase date is required.",
   }),
   currentValue: z.string().min(1, "Current property value is required"),
+  livedInProperty2of5Years: z.boolean().default(true)
 })
 
 export type PropertyFormValues = z.infer<typeof propertyFormSchema>
