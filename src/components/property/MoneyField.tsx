@@ -1,3 +1,4 @@
+
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { UseFormReturn, Path } from "react-hook-form"
@@ -38,6 +39,8 @@ export function MoneyField<T extends Record<string, any>>({
           <FormControl>
             <Input
               placeholder="$0"
+              inputMode="numeric"
+              pattern="[0-9]*"
               {...field}
               onChange={(e) => {
                 const formatted = formatCurrency(e.target.value)
