@@ -1,3 +1,4 @@
+
 import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { FileList } from "../file-fields/FileList"
 import { FileUploadButton } from "../file-fields/FileUploadButton"
@@ -93,7 +94,7 @@ export function StorageVaultCategory({
       name={fieldName}
       render={({ field: { value } }) => (
         <FormItem className="space-y-4">
-          <FormLabel className="text-lg font-semibold">{label}</FormLabel>
+          <FormLabel>{label}</FormLabel>
           <div className="min-h-[100px]">
             {categoryFiles.length === 0 ? (
               <FileUploadButton
