@@ -1,3 +1,4 @@
+
 import { UseFormReturn } from "react-hook-form"
 import { MoneyField } from "@/components/property/MoneyField"
 import { ProjectNameField } from "./fields/ProjectNameField"
@@ -14,13 +15,15 @@ export function ProjectBasicFields({ form }: ProjectBasicFieldsProps) {
     <>
       <ProjectNameField form={form} />
       <ProjectDescriptionField form={form} />
-      <div className="grid grid-cols-2 gap-4">
+      <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4">
         <MoneyField
           form={form}
           name="cost"
           label="Project Cost"
         />
-        <ProjectDateField form={form} />
+        <div className="sm:order-none order-last">
+          <ProjectDateField form={form} />
+        </div>
       </div>
     </>
   )
