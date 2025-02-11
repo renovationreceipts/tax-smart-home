@@ -46,7 +46,7 @@ export function PropertyList({
         onValueChange={onPropertySelect}
       >
         <Table>
-          <PropertyTableHeader />
+          <PropertyTableHeader showRadio={properties.length > 1} />
           <TableBody>
             {properties.map((property) => (
               <PropertyTableRow
@@ -56,6 +56,7 @@ export function PropertyList({
                 onPropertySelect={onPropertySelect}
                 onEditProperty={onEditProperty}
                 formatCurrency={formatCurrency}
+                totalProperties={properties.length}
               />
             ))}
           </TableBody>
