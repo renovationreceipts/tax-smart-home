@@ -59,7 +59,7 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
       <Table>
         <TableBody>
           <TaxTableRow 
-            label="Taxable Gain With New Cost Basis"
+            label="Without Tracking, Your Reported Gain Would Have Been"
             value={taxableGainWithBasis}
           />
           <TaxTableRow 
