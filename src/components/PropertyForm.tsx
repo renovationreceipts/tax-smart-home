@@ -1,13 +1,15 @@
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Form } from "@/components/ui/form"
 import { PropertyTypeSelect } from "./property/PropertyTypeSelect"
 import { PurchaseDateField } from "./property/PurchaseDateField"
 import { MoneyField } from "./property/MoneyField"
 import { PropertyNameField } from "./property/PropertyNameField"
-import { PropertyAddressField } from "./property/PropertyAddressField"
+import { StreetAddressField } from "./property/address/StreetAddressField"
+import { CityField } from "./property/address/CityField"
+import { StateField } from "./property/address/StateField"
+import { ZipCodeField } from "./property/address/ZipCodeField"
 import { PropertyFormHeader } from "./property/PropertyFormHeader"
 import { PropertyFormActions } from "./property/PropertyFormActions"
 import { propertyFormSchema, type PropertyFormValues } from "./property/PropertyFormTypes"
@@ -18,7 +20,10 @@ interface PropertyFormProps {
     id: string
     property_type: "PRIMARY_HOME" | "SECOND_HOME" | "RENTAL"
     name: string
-    address: string
+    street_address: string
+    city: string
+    state: string
+    zip_code: string
     purchase_price: number
     purchase_date: string | null
     current_value: number
@@ -43,7 +48,10 @@ export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProp
     defaultValues: property ? {
       propertyType: property.property_type,
       name: property.name,
-      address: property.address,
+      streetAddress: property.street_address,
+      city: property.city,
+      state: property.state,
+      zipCode: property.zip_code,
       purchasePrice: new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
@@ -61,7 +69,10 @@ export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProp
     } : {
       propertyType: undefined,
       name: "",
-      address: "",
+      streetAddress: "",
+      city: "",
+      state: "",
+      zipCode: "",
       purchasePrice: "",
       purchaseDate: new Date(),
       currentValue: "",
@@ -79,7 +90,15 @@ export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProp
         <form onSubmit={form.handleSubmit(submitProperty)} className="space-y-4">
           <PropertyTypeSelect form={form} />
           <PropertyNameField form={form} />
-          <PropertyAddressField form={form} />
+          
+          <div className="space-y-4">
+            <StreetAddressField form={form} />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <CityField form={form} />
+              <StateField form={form} />
+              <ZipCodeField form={form} />
+            </div>
+          </div>
           
           <MoneyField 
             form={form}

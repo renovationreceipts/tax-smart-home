@@ -6,7 +6,10 @@ export interface Property {
   id: string
   property_type: "PRIMARY_HOME" | "SECOND_HOME" | "RENTAL"
   name: string
-  address: string
+  street_address: string
+  city: string
+  state: string
+  zip_code: string
   purchase_price: number
   purchase_date: string
   current_value: number
@@ -17,7 +20,7 @@ async function fetchProperties() {
   console.log("Fetching properties...")
   const { data, error } = await supabase
     .from("properties")
-    .select("id, property_type, name, address, purchase_price, purchase_date, current_value, lived_in_property_2_of_5_years")
+    .select("id, property_type, name, street_address, city, state, zip_code, purchase_price, purchase_date, current_value, lived_in_property_2_of_5_years")
     .returns<Property[]>()
   
   if (error) {

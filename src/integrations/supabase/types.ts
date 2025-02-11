@@ -159,7 +159,7 @@ export type Database = {
       }
       properties: {
         Row: {
-          address: string
+          city: string
           created_at: string | null
           current_value: number
           id: string
@@ -168,10 +168,13 @@ export type Database = {
           property_type: string
           purchase_date: string
           purchase_price: number
+          state: string
+          street_address: string
           user_id: string
+          zip_code: string
         }
         Insert: {
-          address: string
+          city?: string
           created_at?: string | null
           current_value: number
           id?: string
@@ -180,10 +183,13 @@ export type Database = {
           property_type: string
           purchase_date: string
           purchase_price: number
+          state?: string
+          street_address: string
           user_id: string
+          zip_code?: string
         }
         Update: {
-          address?: string
+          city?: string
           created_at?: string | null
           current_value?: number
           id?: string
@@ -192,7 +198,10 @@ export type Database = {
           property_type?: string
           purchase_date?: string
           purchase_price?: number
+          state?: string
+          street_address?: string
           user_id?: string
+          zip_code?: string
         }
         Relationships: []
       }
