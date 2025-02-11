@@ -82,16 +82,18 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
             <FileText className="h-6 w-6 text-primary" />
             <h3 className="text-lg font-semibold">Projects</h3>
           </div>
-          <Button 
-            onClick={onAddProject}
-            size="sm"
-            variant={projects.length > 0 ? "ghost" : "default"}
-            className="sm:!variant-default border border-primary bg-primary text-white hover:text-white hover:bg-primary/90"
-          >
-            <Plus className="h-4 w-4 mr-2 text-white" />
-            <span className="hidden sm:inline">Add Project</span>
-            <span className="sm:hidden">Add</span>
-          </Button>
+          {properties.length > 0 && (
+            <Button 
+              onClick={onAddProject}
+              size="sm"
+              variant={projects.length > 0 ? "ghost" : "default"}
+              className="sm:!variant-default border border-primary bg-primary text-white hover:text-white hover:bg-primary/90"
+            >
+              <Plus className="h-4 w-4 mr-2 text-white" />
+              <span className="hidden sm:inline">Add Project</span>
+              <span className="sm:hidden">Add</span>
+            </Button>
+          )}
         </div>
       </div>
 
