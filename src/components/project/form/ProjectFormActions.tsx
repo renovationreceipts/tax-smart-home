@@ -46,7 +46,20 @@ export function ProjectFormActions({ isEditing, onCancel }: ProjectFormActionsPr
 
   return (
     <div className="flex flex-col sm:flex-row sm:justify-between gap-4 pt-4">
-      <div className="flex gap-4 order-1 sm:order-none">
+      {isEditing && (
+        <div className="order-2 sm:order-none">
+          <Button
+            variant="ghost"
+            type="button"
+            onClick={handleDeleteProject}
+            className="w-full sm:w-auto text-[#ea384c] hover:bg-[#ea384c]/10 border-2 border-[#ea384c]"
+          >
+            <Trash2 className="mr-2 h-4 w-4" />
+            Delete Project
+          </Button>
+        </div>
+      )}
+      <div className="flex gap-4 order-1 sm:order-none sm:ml-auto">
         <Button variant="outline" type="button" onClick={onCancel} className="flex-1 sm:flex-none">
           Cancel
         </Button>
@@ -54,17 +67,6 @@ export function ProjectFormActions({ isEditing, onCancel }: ProjectFormActionsPr
           {isEditing ? "Update Project" : "Add Project"}
         </Button>
       </div>
-      {isEditing && (
-        <Button
-          variant="ghost"
-          type="button"
-          onClick={handleDeleteProject}
-          className="w-full sm:w-auto order-2 sm:order-none text-[#ea384c] hover:bg-[#ea384c]/10 border-2 border-[#ea384c]"
-        >
-          <Trash2 className="mr-2 h-4 w-4" />
-          Delete Project
-        </Button>
-      )}
     </div>
   )
 }
