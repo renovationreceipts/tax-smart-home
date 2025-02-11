@@ -34,7 +34,7 @@ export function AccountContent() {
     <>
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-2">
-          <House className="h-5 w-5" />
+          <House className="h-5 w-5 text-[#1EAEDB]" />
           <h2 className="text-lg font-bold text-gray-900">Properties</h2>
         </div>
         <AccountActions onAddProperty={() => navigate("/property/edit")} />
