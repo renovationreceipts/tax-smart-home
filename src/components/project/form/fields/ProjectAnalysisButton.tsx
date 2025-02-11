@@ -1,3 +1,4 @@
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Loader2, Lightbulb } from "lucide-react"
@@ -80,14 +81,14 @@ export function ProjectAnalysisButton({
     (credits && credits.used >= credits.limit)
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
       <Button
         type="button"
         variant="outline"
         size="sm"
         onClick={analyzeDescription}
         disabled={isButtonDisabled}
-        className="text-sm"
+        className="text-sm w-full sm:w-auto"
       >
         {isAnalyzing ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
