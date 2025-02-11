@@ -1,3 +1,4 @@
+
 import { BarChart2, Calculator, FileText, BrainCog } from "lucide-react";
 
 const features = [
@@ -19,7 +20,7 @@ const features = [
   {
     icon: <FileText className="h-6 w-6" />,
     title: "Tax Reporting Made Easy",
-    description: "Automatically export values into IRS Form 8949 for easy download or printing.",
+    description: "Automatically export the values you need for IRS Form 8949 for easy tax reporting.",
   },
 ];
 
