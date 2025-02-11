@@ -3,14 +3,7 @@ import { TableCell, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { RadioGroupItem } from "@/components/ui/radio-group"
 import { Pencil } from "lucide-react"
-
-interface Property {
-  id: string
-  name: string
-  address: string
-  purchase_price: number
-  current_value: number
-}
+import type { Property } from "@/hooks/useProperties"
 
 interface PropertyTableRowProps {
   property: Property
@@ -30,6 +23,7 @@ export function PropertyTableRow({
   totalProperties,
 }: PropertyTableRowProps) {
   const showRadio = totalProperties > 1;
+  const formattedAddress = `${property.street_address}, ${property.city}, ${property.state} ${property.zip_code}`;
 
   return (
     <TableRow 
@@ -63,7 +57,7 @@ export function PropertyTableRow({
           )}
           <div className="flex-grow">
             <h3 className="text-lg font-bold mb-1">{property.name}</h3>
-            <p className="text-gray-600">{property.address}</p>
+            <p className="text-gray-600">{formattedAddress}</p>
           </div>
           <div>
             <Button
@@ -91,11 +85,9 @@ export function PropertyTableRow({
       </TableCell>
       {/* Desktop View */}
       <TableCell className="hidden sm:table-cell py-4">
-        <div>
-          <div>{property.name}</div>
-        </div>
+        <div>{property.name}</div>
       </TableCell>
-      <TableCell className="hidden sm:table-cell py-4">{property.address}</TableCell>
+      <TableCell className="hidden sm:table-cell py-4">{formattedAddress}</TableCell>
       <TableCell className="hidden sm:table-cell py-4">{formatCurrency(property.purchase_price)}</TableCell>
       <TableCell className="hidden sm:table-cell py-4">{formatCurrency(property.current_value)}</TableCell>
       <TableCell className="hidden sm:table-cell py-4">
