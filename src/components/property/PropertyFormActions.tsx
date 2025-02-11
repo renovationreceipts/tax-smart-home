@@ -53,7 +53,7 @@ export function PropertyFormActions({ isEditing, onCancel }: PropertyFormActions
   }
 
   return (
-    <div className="flex flex-col sm:flex-row sm:justify-between gap-4 pt-4">
+    <div className="flex flex-col sm:flex-row sm:justify-between gap-8 pt-4">
       {isEditing && (
         <div className="order-2 sm:order-none">
           <Dialog>
