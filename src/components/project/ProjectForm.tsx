@@ -1,3 +1,4 @@
+
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form } from "@/components/ui/form"
@@ -9,6 +10,8 @@ import { ProjectFormActions } from "./form/ProjectFormActions"
 import { projectFormSchema, type ProjectFormValues } from "./form/ProjectFormTypes"
 import { useProjectSubmit } from "@/hooks/useProjectSubmit"
 import type { Project } from "@/hooks/useProjects"
+import { Button } from "@/components/ui/button"
+import { ArrowLeft } from "lucide-react"
 
 interface ProjectFormProps {
   propertyId: string
@@ -49,7 +52,16 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
   console.log("Form default values:", form.getValues())
 
   return (
-    <div className="space-y-6 p-8 bg-white rounded-lg shadow-sm border max-w-4xl mx-auto">
+    <div className="space-y-6 p-8 bg-white rounded-lg shadow-sm border max-w-4xl mx-auto relative">
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={onCancel}
+        className="absolute left-4 top-4"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        <span className="sr-only">Back to account</span>
+      </Button>
       <ProjectFormHeader isEditing={!!project} />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
