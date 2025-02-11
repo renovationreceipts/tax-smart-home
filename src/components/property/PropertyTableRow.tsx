@@ -35,7 +35,7 @@ export function PropertyTableRow({
     <TableRow 
       key={property.id}
       className={`${
-        property.id === selectedPropertyId ? "bg-primary/5" : ""
+        property.id === selectedPropertyId ? "bg-primary/5" : "bg-white"
       } flex flex-col sm:table-row`}
     >
       {showRadio && (
