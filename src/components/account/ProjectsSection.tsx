@@ -70,8 +70,8 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
           <Table>
             <TableHeader className="hidden sm:table-header-group">
               <TableRow>
-                <TableHead>Description</TableHead>
                 <TableHead>Project Name</TableHead>
+                <TableHead>Description</TableHead>
                 <TableHead className="text-right">Cost</TableHead>
                 <TableHead className="text-right">Completion Date</TableHead>
               </TableRow>
@@ -83,8 +83,8 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
                   onClick={() => onEditProject?.(project)}
                   className="cursor-pointer hover:bg-muted/50 flex flex-col sm:table-row"
                 >
-                  <TableCell className="py-2 sm:py-4">{project.description}</TableCell>
                   <TableCell className="font-medium py-2 sm:py-4">{project.name}</TableCell>
+                  <TableCell className="py-2 sm:py-4">{project.description}</TableCell>
                   <TableCell className="py-2 sm:py-4 sm:text-right">
                     <span className="font-medium sm:hidden">Cost: </span>
                     {formatCurrency(project.cost)}
