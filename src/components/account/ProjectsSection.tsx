@@ -83,15 +83,15 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
                   onClick={() => onEditProject?.(project)}
                   className="cursor-pointer hover:bg-muted/50 flex flex-col sm:table-row"
                 >
-                  <TableCell className="font-medium py-2 sm:py-4">{project.name}</TableCell>
-                  <TableCell className="py-2 sm:py-4">{project.description}</TableCell>
+                  <TableCell className="font-bold sm:font-medium py-2 sm:py-4">{project.name}</TableCell>
+                  <TableCell className="font-bold sm:font-normal py-2 sm:py-4">{project.description}</TableCell>
                   <TableCell className="py-2 sm:py-4 sm:text-right">
-                    <span className="font-medium sm:hidden">Cost: </span>
-                    {formatCurrency(project.cost)}
+                    <span className="font-bold sm:font-normal">Cost: </span>
+                    <span className="font-bold sm:font-normal">{formatCurrency(project.cost)}</span>
                   </TableCell>
                   <TableCell className="py-2 sm:py-4 sm:text-right">
-                    <span className="font-medium sm:hidden">Completion Date: </span>
-                    {formatDate(project.completion_date)}
+                    <span className="font-bold sm:font-normal">Completion Date: </span>
+                    <span className="font-bold sm:font-normal">{formatDate(project.completion_date)}</span>
                   </TableCell>
                 </TableRow>
               ))}
@@ -100,5 +100,5 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
         </div>
       )}
     </div>
-  )
+  );
 }
