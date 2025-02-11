@@ -84,7 +84,7 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
                   className="cursor-pointer hover:bg-muted/50 flex flex-col sm:table-row"
                 >
                   <TableCell className="font-bold sm:font-medium py-2 sm:py-4">{project.name}</TableCell>
-                  <TableCell className="py-2 sm:py-4">{project.description}</TableCell>
+                  <TableCell className="hidden sm:table-cell py-2 sm:py-4">{project.description}</TableCell>
                   <TableCell className="py-2 sm:py-4 sm:text-right">
                     <span className="font-medium sm:hidden">Cost: </span>
                     {formatCurrency(project.cost)}
@@ -100,5 +100,5 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
         </div>
       )}
     </div>
-  );
+  )
 }
