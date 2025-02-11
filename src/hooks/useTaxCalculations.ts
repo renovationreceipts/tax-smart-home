@@ -35,6 +35,7 @@ export function useTaxCalculations({ property, projects }: TaxCalculationsProps)
   const totalProjectCosts = projects.reduce((sum, project) => sum + (project.cost || 0), 0)
   const adjustedCostBasis = property ? property.purchase_price + totalProjectCosts : 0
   const newCostBasis = adjustedCostBasis // Since they're now the same
+  const totalCapitalGains = property ? property.current_value - adjustedCostBasis : 0
   const taxableGainWithBasis = property ? property.current_value - newCostBasis : 0
   const taxableGainWithoutBasis = property ? property.current_value - (property.purchase_price || 0) : 0
   const taxSavings = taxableGainWithoutBasis - taxableGainWithBasis
@@ -42,12 +43,12 @@ export function useTaxCalculations({ property, projects }: TaxCalculationsProps)
 
   return {
     userTaxRate,
-    totalProjectCosts,
+    totalProjectCosts: totalCapitalGains, // Changed to return totalCapitalGains instead
     newCostBasis,
     taxableGainWithBasis,
     taxableGainWithoutBasis,
     taxSavings,
     estimatedTaxSavings,
-    adjustedCostBasis, // Added this to the return object
+    adjustedCostBasis,
   }
 }
