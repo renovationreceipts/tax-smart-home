@@ -1,11 +1,15 @@
 
 import { TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
-export function PropertyTableHeader() {
+interface PropertyTableHeaderProps {
+  showRadio?: boolean;
+}
+
+export function PropertyTableHeader({ showRadio = true }: PropertyTableHeaderProps) {
   return (
     <TableHeader className="hidden sm:table-header-group">
       <TableRow>
-        <TableHead className="w-[50px]"></TableHead>
+        {showRadio && <TableHead className="w-[48px]"></TableHead>}
         <TableHead>Property Name</TableHead>
         <TableHead>Address</TableHead>
         <TableHead>Purchase Price</TableHead>
