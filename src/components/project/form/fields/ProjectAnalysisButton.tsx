@@ -93,7 +93,9 @@ export function ProjectAnalysisButton({
         size="sm"
         onClick={analyzeDescription}
         disabled={isButtonDisabled}
-        className="text-sm w-full sm:w-auto order-1 sm:order-2"
+        className={`text-sm w-full sm:w-auto order-1 sm:order-2 ${
+          !isButtonDisabled ? 'border-[#0090FF] text-[#0090FF] hover:text-[#0090FF] hover:border-[#0090FF]' : ''
+        }`}
       >
         {isAnalyzing ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
