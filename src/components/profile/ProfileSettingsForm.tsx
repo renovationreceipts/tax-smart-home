@@ -6,7 +6,7 @@ import * as z from "zod"
 import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
 import { Button } from "@/components/ui/button"
-import { Form } from "@/components/ui/form"
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { PercentageField } from "./PercentageField"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -58,11 +58,11 @@ export function ProfileSettingsForm() {
 
         console.log("Loaded profile data:", profile)
         
-        // Set form values with existing data
+        // Set form values with existing data, ensuring tax_filing_status is of the correct type
         form.reset({
           email: user.email,
           tax_rate: profile.tax_rate || 0,
-          tax_filing_status: profile.tax_filing_status || "Single"
+          tax_filing_status: (profile.tax_filing_status as typeof taxFilingStatuses[number]) || "Single"
         })
       } catch (error) {
         console.error("Error in loadProfile:", error)
@@ -150,42 +150,42 @@ export function ProfileSettingsForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Email</label>
-            <Input
-              {...form.register("email")}
-            />
-            {form.formState.errors.email && (
-              <p className="text-sm text-red-500">
-                {form.formState.errors.email.message}
-              </p>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
-          </div>
+          />
 
           <FormField
             control={form.control}
             name="tax_filing_status"
             render={({ field }) => (
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Tax Filing Status</label>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your filing status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {taxFilingStatuses.map((status) => (
-                      <SelectItem key={status} value={status}>
-                        {status}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {form.formState.errors.tax_filing_status && (
-                  <p className="text-sm text-red-500">
-                    {form.formState.errors.tax_filing_status.message}
-                  </p>
-                )}
-              </div>
+              <FormItem>
+                <FormLabel>Tax Filing Status</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select your filing status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {taxFilingStatuses.map((status) => (
+                        <SelectItem key={status} value={status}>
+                          {status}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
           />
 
