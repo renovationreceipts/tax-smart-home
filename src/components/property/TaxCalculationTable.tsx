@@ -43,7 +43,7 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
             value={adjustedCostBasis}
           />
           <TaxTableRow 
-            label="Basis Adjustments (Total Project Costs)"
+            label="Total Capital Gains Before Exemptions"
             value={totalProjectCosts}
           />
           <TaxTableRow 
