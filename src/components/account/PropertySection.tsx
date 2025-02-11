@@ -35,19 +35,23 @@ export function PropertySection({
         <EmptyPropertyState onAddProperty={() => navigate("/property/edit")} />
       ) : (
         <div className="bg-white rounded-lg shadow-sm border p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <House className="h-5 w-5 text-[#0090FF]" />
-              <h2 className="text-lg font-bold text-gray-900">Properties</h2>
+          <div className="pb-4 border-b">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <House className="h-5 w-5 text-[#0090FF]" />
+                <h2 className="text-lg font-bold text-gray-900">Properties</h2>
+              </div>
+              <AccountActions onAddProperty={() => navigate("/property/edit")} />
             </div>
-            <AccountActions onAddProperty={() => navigate("/property/edit")} />
           </div>
-          <PropertyList 
-            properties={properties}
-            selectedPropertyId={selectedPropertyId}
-            onPropertySelect={setSelectedPropertyId}
-            onEditProperty={handleEditProperty}
-          />
+          <div className="mt-4">
+            <PropertyList 
+              properties={properties}
+              selectedPropertyId={selectedPropertyId}
+              onPropertySelect={setSelectedPropertyId}
+              onEditProperty={handleEditProperty}
+            />
+          </div>
         </div>
       )}
     </div>

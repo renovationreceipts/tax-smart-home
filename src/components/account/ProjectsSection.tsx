@@ -76,25 +76,27 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
 
   return (
     <div className="bg-white rounded-lg shadow-sm border p-6">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <FileText className="h-6 w-6 text-primary" />
-          <h3 className="text-lg font-semibold">Projects</h3>
+      <div className="pb-4 border-b">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <FileText className="h-6 w-6 text-primary" />
+            <h3 className="text-lg font-semibold">Projects</h3>
+          </div>
+          <Button 
+            onClick={onAddProject}
+            size="sm"
+            variant={projects.length > 0 ? "ghost" : "default"}
+            className="sm:!variant-default border border-primary text-primary hover:text-primary"
+          >
+            <Plus className="h-4 w-4 mr-2 text-primary" />
+            <span className="hidden sm:inline">Add Project</span>
+            <span className="sm:hidden">Add</span>
+          </Button>
         </div>
-        <Button 
-          onClick={onAddProject}
-          size="sm"
-          variant={projects.length > 0 ? "ghost" : "default"}
-          className="sm:!variant-default border border-primary text-primary hover:text-primary"
-        >
-          <Plus className="h-4 w-4 mr-2 text-primary" />
-          <span className="hidden sm:inline">Add Project</span>
-          <span className="sm:hidden">Add</span>
-        </Button>
       </div>
 
       {projects.length === 0 ? (
-        <p className="text-gray-600 text-sm">
+        <p className="text-gray-600 text-sm mt-4">
           No projects added yet. Add your first project to start tracking improvements.
         </p>
       ) : (
