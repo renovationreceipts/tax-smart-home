@@ -6,18 +6,10 @@ import * as z from "zod"
 import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
 import { Button } from "@/components/ui/button"
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import { Form } from "@/components/ui/form"
+import { EmailField } from "./EmailField"
+import { TaxFilingStatusField, taxFilingStatuses } from "./TaxFilingStatusField"
 import { PercentageField } from "./PercentageField"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-
-const taxFilingStatuses = [
-  "Single",
-  "Married File Jointly",
-  "Married File Separately",
-  "Head of Household",
-  "Qualifying Widow(er)"
-] as const
 
 const profileFormSchema = z.object({
   email: z.string().email(),
@@ -150,45 +142,8 @@ export function ProfileSettingsForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-4">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="tax_filing_status"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tax Filing Status</FormLabel>
-                <FormControl>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select your filing status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {taxFilingStatuses.map((status) => (
-                        <SelectItem key={status} value={status}>
-                          {status}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
+          <EmailField form={form} />
+          <TaxFilingStatusField form={form} />
           <PercentageField
             form={form}
             name="tax_rate"
