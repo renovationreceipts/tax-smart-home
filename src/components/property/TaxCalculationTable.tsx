@@ -38,7 +38,7 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
             value={property?.current_value}
           />
           <TaxTableRow 
-            label="Purchase Price"
+            label="Your Adjusted Cost Basis (Purchase Price + Tracked Improvements)"
             value={property?.purchase_price}
           />
           <TaxTableRow 
