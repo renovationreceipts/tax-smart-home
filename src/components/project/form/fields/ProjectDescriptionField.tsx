@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react"
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
@@ -34,14 +35,7 @@ export function ProjectDescriptionField({ form }: ProjectDescriptionFieldProps) 
       name="description"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="flex items-center justify-between">
-            <span>Description</span>
-            <ProjectAnalysisButton 
-              description={field.value || ""} 
-              onAnalysisComplete={handleAnalysisComplete}
-              isDisabled={isAnalysisDisabled}
-            />
-          </FormLabel>
+          <FormLabel>Description</FormLabel>
           <FormControl>
             <Textarea 
               placeholder="Describe your project..."
@@ -49,6 +43,20 @@ export function ProjectDescriptionField({ form }: ProjectDescriptionFieldProps) 
               {...field}
             />
           </FormControl>
+          <div className="mt-2 sm:hidden">
+            <ProjectAnalysisButton 
+              description={field.value || ""} 
+              onAnalysisComplete={handleAnalysisComplete}
+              isDisabled={isAnalysisDisabled}
+            />
+          </div>
+          <div className="hidden sm:block absolute right-0 top-0">
+            <ProjectAnalysisButton 
+              description={field.value || ""} 
+              onAnalysisComplete={handleAnalysisComplete}
+              isDisabled={isAnalysisDisabled}
+            />
+          </div>
           <FormMessage />
           {analysis && (
             <div className="mt-2 text-sm p-3 bg-muted rounded-md">
