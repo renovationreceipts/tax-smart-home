@@ -54,10 +54,10 @@ export function PropertyFormActions({ isEditing, onCancel }: PropertyFormActions
       </div>
       {isEditing && (
         <Button
-          variant="destructive"
+          variant="ghost"
           type="button"
           onClick={handleDeleteProperty}
-          className="w-full sm:w-auto order-2 sm:order-none bg-[#ea384c] hover:bg-[#ea384c]/90"
+          className="w-full sm:w-auto order-2 sm:order-none text-[#ea384c] hover:bg-[#ea384c]/10 border-2 border-[#ea384c]"
         >
           <Trash2 className="mr-2 h-4 w-4" />
           Delete Property
