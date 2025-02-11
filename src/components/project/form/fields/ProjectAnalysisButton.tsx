@@ -81,7 +81,7 @@ export function ProjectAnalysisButton({
     (credits && credits.used >= credits.limit)
 
   return (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+    <div className="flex flex-col sm:flex-row items-center gap-2">
       <Button
         type="button"
         variant="outline"

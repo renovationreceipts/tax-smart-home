@@ -34,7 +34,7 @@ export function ProjectDescriptionField({ form }: ProjectDescriptionFieldProps) 
       control={form.control}
       name="description"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="relative">
           <FormLabel>Description</FormLabel>
           <FormControl>
             <Textarea 
@@ -43,14 +43,7 @@ export function ProjectDescriptionField({ form }: ProjectDescriptionFieldProps) 
               {...field}
             />
           </FormControl>
-          <div className="mt-2 sm:hidden">
-            <ProjectAnalysisButton 
-              description={field.value || ""} 
-              onAnalysisComplete={handleAnalysisComplete}
-              isDisabled={isAnalysisDisabled}
-            />
-          </div>
-          <div className="hidden sm:block absolute right-0 top-0">
+          <div className="mt-2 flex justify-end">
             <ProjectAnalysisButton 
               description={field.value || ""} 
               onAnalysisComplete={handleAnalysisComplete}
