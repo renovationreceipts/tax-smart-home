@@ -44,37 +44,45 @@ export function PropertyTableRow({
           />
         </div>
       </TableCell>
-      <TableCell className="font-medium py-2 flex items-center gap-2 sm:table-cell">
-        <div className="sm:hidden">
-          <RadioGroupItem 
-            value={property.id} 
-            id={property.id}
-            onClick={(e) => e.stopPropagation()} 
-          />
+      <TableCell className="py-4 flex flex-col gap-1 sm:table-cell">
+        <div className="flex items-start gap-4">
+          <div className="sm:hidden">
+            <RadioGroupItem 
+              value={property.id} 
+              id={property.id}
+              onClick={(e) => e.stopPropagation()} 
+            />
+          </div>
+          <div className="flex-grow">
+            <h3 className="text-lg font-bold mb-1">{property.name}</h3>
+            <p className="text-gray-600">{property.address}</p>
+          </div>
+          <div className="sm:hidden">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={(e) => {
+                e.stopPropagation()
+                onEditProperty(property)
+              }}
+            >
+              <Pencil className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
-        <span className="font-bold sm:font-medium">{property.name}</span>
-        <div className="ml-auto sm:hidden">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={(e) => {
-              e.stopPropagation()
-              onEditProperty(property)
-            }}
-          >
-            <Pencil className="h-4 w-4" />
-          </Button>
+        <div className="mt-3 space-y-2 sm:hidden">
+          <div className="flex justify-between">
+            <span className="text-gray-600">Purchase Price:</span>
+            <span className="font-medium">{formatCurrency(property.purchase_price)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-600">Current Value:</span>
+            <span className="font-medium">{formatCurrency(property.current_value)}</span>
+          </div>
         </div>
       </TableCell>
-      <TableCell className="py-1 sm:py-2">{property.address}</TableCell>
-      <TableCell className="py-1 sm:py-2">
-        <span className="font-medium sm:hidden">Purchase Price: </span>
-        {formatCurrency(property.purchase_price)}
-      </TableCell>
-      <TableCell className="py-1 sm:py-2">
-        <span className="font-medium sm:hidden">Current Value: </span>
-        {formatCurrency(property.current_value)}
-      </TableCell>
+      <TableCell className="hidden sm:table-cell py-4">{formatCurrency(property.purchase_price)}</TableCell>
+      <TableCell className="hidden sm:table-cell py-4">{formatCurrency(property.current_value)}</TableCell>
       <TableCell className="hidden sm:table-cell">
         <Button
           variant="ghost"
