@@ -71,9 +71,9 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
             <TableHeader className="hidden sm:table-header-group">
               <TableRow>
                 <TableHead>Project Name</TableHead>
-                <TableHead>Description</TableHead>
+                <TableHead className="w-[30%]">Description</TableHead>
                 <TableHead className="text-right">Cost</TableHead>
-                <TableHead className="text-right">Completion Date</TableHead>
+                <TableHead className="text-right w-[140px]">Completion Date</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
