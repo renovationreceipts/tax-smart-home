@@ -51,6 +51,11 @@ export function PropertyFormActions({ isEditing, onCancel }: PropertyFormActions
     }
   }
 
+  const handleModalClose = () => {
+    const closeButton = document.querySelector("button[data-dismiss]") as HTMLButtonElement;
+    if (closeButton) closeButton.click();
+  }
+
   return (
     <div className="flex flex-col sm:flex-row sm:justify-between gap-4 pt-4">
       {isEditing && (
@@ -80,10 +85,7 @@ export function PropertyFormActions({ isEditing, onCancel }: PropertyFormActions
                 <Button 
                   variant="outline" 
                   type="button" 
-                  onClick={() => {
-                    const closeButton = document.querySelector("button[data-dismiss]") as HTMLButtonElement;
-                    closeButton?.click();
-                  }}
+                  onClick={handleModalClose}
                 >
                   Cancel
                 </Button>
