@@ -9,8 +9,8 @@ const Footer = () => {
       <div className="container-width py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Logo and Description */}
-          <div className="space-y-4">
-            <div className="flex items-center">
+          <div className="space-y-4 text-center md:text-left">
+            <div className="flex items-center justify-center md:justify-start">
               <img 
                 src="/lovable-uploads/69bafa75-cbb8-49f9-a552-21142b9fa060.png" 
                 alt="RenovationReceipts.com"
@@ -23,7 +23,7 @@ const Footer = () => {
           </div>
 
           {/* Company Links */}
-          <div>
+          <div className="text-center md:text-left">
             <h3 className="font-semibold text-gray-900 mb-4">Company</h3>
             <ul className="space-y-3">
               <li><Link to="/about" className="text-gray-600 hover:text-gray-900">About</Link></li>
@@ -31,7 +31,7 @@ const Footer = () => {
           </div>
 
           {/* Legal Links */}
-          <div>
+          <div className="text-center md:text-left">
             <h3 className="font-semibold text-gray-900 mb-4">Legal</h3>
             <ul className="space-y-3">
               <li><Link to="/privacy-policy" className="text-gray-600 hover:text-gray-900">Privacy Policy</Link></li>
