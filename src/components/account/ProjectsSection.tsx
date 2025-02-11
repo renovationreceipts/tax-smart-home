@@ -76,7 +76,7 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
 
   return (
     <div className="bg-white rounded-lg shadow-sm border p-6">
-      <div className="pb-4 border-b">
+      <div className="pb-4 sm:pb-0 border-b sm:border-b-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <FileText className="h-6 w-6 text-primary" />
