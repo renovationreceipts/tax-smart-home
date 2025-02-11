@@ -76,10 +76,17 @@ export function ProjectFormActions({ isEditing, onCancel }: ProjectFormActionsPr
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <Button variant="outline" type="button" onClick={() => {
-                  const closeButton = document.querySelector("button[data-dismiss]") as HTMLButtonElement;
-                  closeButton?.click();
-                }}>
+                <Button 
+                  variant="outline" 
+                  type="button" 
+                  onClick={() => {
+                    const closeButton = document.querySelector("button[data-dismiss]") as HTMLButtonElement;
+                    closeButton?.click();
+                    const pathSegments = window.location.pathname.split('/')
+                    const propertyId = pathSegments[pathSegments.length - 3]
+                    navigate(`/account?propertyId=${propertyId}`)
+                  }}
+                >
                   Cancel
                 </Button>
                 <Button
@@ -105,4 +112,3 @@ export function ProjectFormActions({ isEditing, onCancel }: ProjectFormActionsPr
     </div>
   )
 }
-
