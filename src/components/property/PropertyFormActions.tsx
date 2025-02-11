@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button"
 import { Trash2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
@@ -42,26 +43,26 @@ export function PropertyFormActions({ isEditing, onCancel }: PropertyFormActions
   }
 
   return (
-    <div className="flex justify-between gap-4 pt-4">
+    <div className="flex flex-col sm:flex-row sm:justify-between gap-4 pt-4">
+      <div className="flex gap-4 order-1 sm:order-none">
+        <Button variant="outline" type="button" onClick={onCancel} className="flex-1 sm:flex-none">
+          Cancel
+        </Button>
+        <Button type="submit" className="flex-1 sm:flex-none">
+          {isEditing ? "Update Property" : "Add Property"}
+        </Button>
+      </div>
       {isEditing && (
         <Button
           variant="destructive"
           type="button"
           onClick={handleDeleteProperty}
-          className="bg-[#ea384c] hover:bg-[#ea384c]/90"
+          className="w-full sm:w-auto order-2 sm:order-none bg-[#ea384c] hover:bg-[#ea384c]/90"
         >
           <Trash2 className="mr-2 h-4 w-4" />
           Delete Property
         </Button>
       )}
-      <div className="flex gap-4 ml-auto">
-        <Button variant="outline" type="button" onClick={onCancel}>
-          Cancel
-        </Button>
-        <Button type="submit">
-          {isEditing ? "Update Property" : "Add Property"}
-        </Button>
-      </div>
     </div>
   )
 }
