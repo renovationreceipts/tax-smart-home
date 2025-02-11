@@ -55,7 +55,7 @@ export const Hero = () => {
           <img 
             src="/lovable-uploads/69bafa75-cbb8-49f9-a552-21142b9fa060.png" 
             alt="RenovationReceipts.com"
-            className="h-12 sm:h-20 w-auto"
+            className="h-16 sm:h-20 w-auto"
           />
         </div>
         {isMobile ? (
