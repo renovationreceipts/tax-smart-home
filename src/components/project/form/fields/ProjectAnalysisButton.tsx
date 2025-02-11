@@ -81,14 +81,19 @@ export function ProjectAnalysisButton({
     (credits && credits.used >= credits.limit)
 
   return (
-    <div className="flex flex-col sm:flex-row items-center gap-2">
+    <div className="flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:justify-end">
+      {credits && (
+        <div className="order-2 sm:order-1">
+          <CreditsDisplay used={credits.used} limit={credits.limit} />
+        </div>
+      )}
       <Button
         type="button"
         variant="outline"
         size="sm"
         onClick={analyzeDescription}
         disabled={isButtonDisabled}
-        className="text-sm w-full sm:w-auto"
+        className="text-sm w-full sm:w-auto order-1 sm:order-2"
       >
         {isAnalyzing ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -97,9 +102,6 @@ export function ProjectAnalysisButton({
         )}
         Does this Qualify? Ask IRS-GPT!
       </Button>
-      {credits && (
-        <CreditsDisplay used={credits.used} limit={credits.limit} />
-      )}
     </div>
   )
 }
