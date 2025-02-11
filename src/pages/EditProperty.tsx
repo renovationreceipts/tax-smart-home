@@ -1,6 +1,9 @@
+
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { PropertyForm } from "@/components/PropertyForm"
 import { useProperties } from "@/hooks/useProperties"
+import { Button } from "@/components/ui/button"
+import { ArrowLeft } from "lucide-react"
 
 export default function EditProperty() {
   const navigate = useNavigate()
@@ -18,6 +21,16 @@ export default function EditProperty() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-2xl mx-auto px-4">
+        <Button
+          variant="ghost"
+          className="mb-6"
+          onClick={() => navigate("/account")}
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Account
+        </Button>
+      </div>
       <PropertyForm
         property={property}
         onCancel={() => handleSuccess()}
