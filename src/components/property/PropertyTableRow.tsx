@@ -36,8 +36,7 @@ export function PropertyTableRow({
       key={property.id}
       className={`${
         property.id === selectedPropertyId ? "bg-primary/5" : ""
-      } cursor-pointer hover:bg-muted/50 flex flex-col sm:table-row`}
-      onClick={() => onPropertySelect(property.id)}
+      } flex flex-col sm:table-row`}
     >
       {showRadio && (
         <TableCell className="w-[48px] align-middle hidden sm:table-cell">
@@ -103,10 +102,7 @@ export function PropertyTableRow({
         <Button
           variant="ghost"
           size="icon"
-          onClick={(e) => {
-            e.stopPropagation()
-            onEditProperty(property)
-          }}
+          onClick={() => onEditProperty(property)}
         >
           <Pencil className="h-4 w-4" />
         </Button>
