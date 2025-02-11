@@ -5,8 +5,8 @@ import { UseFormReturn } from "react-hook-form"
 
 const taxFilingStatuses = [
   "Single",
-  "Married File Jointly",
-  "Married File Separately",
+  "Married Filing Jointly",
+  "Married Filing Separately",
   "Head of Household",
   "Qualifying Widow(er)"
 ] as const
