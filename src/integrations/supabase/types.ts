@@ -47,18 +47,21 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          tax_filing_status: string
           tax_rate: number | null
         }
         Insert: {
           created_at?: string
           email: string
           id: string
+          tax_filing_status?: string
           tax_rate?: number | null
         }
         Update: {
           created_at?: string
           email?: string
           id?: string
+          tax_filing_status?: string
           tax_rate?: number | null
         }
         Relationships: []

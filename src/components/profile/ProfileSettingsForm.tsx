@@ -1,3 +1,4 @@
+
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -8,10 +9,20 @@ import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { PercentageField } from "./PercentageField"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
+const taxFilingStatuses = [
+  "Single",
+  "Married File Jointly",
+  "Married File Separately",
+  "Head of Household",
+  "Qualifying Widow(er)"
+] as const
 
 const profileFormSchema = z.object({
   email: z.string().email(),
   tax_rate: z.number().min(0).max(100).optional(),
+  tax_filing_status: z.enum(taxFilingStatuses)
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
@@ -51,6 +62,7 @@ export function ProfileSettingsForm() {
         form.reset({
           email: user.email,
           tax_rate: profile.tax_rate || 0,
+          tax_filing_status: profile.tax_filing_status || "Single"
         })
       } catch (error) {
         console.error("Error in loadProfile:", error)
@@ -98,12 +110,13 @@ export function ProfileSettingsForm() {
         })
       }
 
-      // Always update the profile with tax rate
+      // Always update the profile with tax rate and filing status
       console.log("Updating profile with tax_rate:", data.tax_rate)
       const { error: profileError } = await supabase
         .from("profiles")
         .update({
           tax_rate: data.tax_rate,
+          tax_filing_status: data.tax_filing_status
         })
         .eq("id", user.id)
 
@@ -148,6 +161,33 @@ export function ProfileSettingsForm() {
               </p>
             )}
           </div>
+
+          <FormField
+            control={form.control}
+            name="tax_filing_status"
+            render={({ field }) => (
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Tax Filing Status</label>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select your filing status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {taxFilingStatuses.map((status) => (
+                      <SelectItem key={status} value={status}>
+                        {status}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {form.formState.errors.tax_filing_status && (
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.tax_filing_status.message}
+                  </p>
+                )}
+              </div>
+            )}
+          />
 
           <PercentageField
             form={form}
