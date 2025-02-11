@@ -4,6 +4,15 @@ import { Trash2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 interface ProjectFormActionsProps {
   isEditing: boolean
@@ -48,15 +57,38 @@ export function ProjectFormActions({ isEditing, onCancel }: ProjectFormActionsPr
     <div className="flex flex-col sm:flex-row sm:justify-between gap-4 pt-4">
       {isEditing && (
         <div className="order-2 sm:order-none">
-          <Button
-            variant="ghost"
-            type="button"
-            onClick={handleDeleteProject}
-            className="w-full sm:w-auto text-[#ea384c] hover:bg-[#ea384c]/10 border-2 border-[#ea384c]"
-          >
-            <Trash2 className="mr-2 h-4 w-4" />
-            Delete Project
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                variant="ghost"
+                type="button"
+                className="w-full sm:w-auto text-[#ea384c] hover:bg-[#ea384c]/10 border-2 border-[#ea384c]"
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete Project
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Delete Project</DialogTitle>
+                <DialogDescription>
+                  Are you sure you want to delete this project? This action cannot be undone.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <Button variant="outline" type="button" onClick={() => document.querySelector("button[data-dismiss]")?.click()}>
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  type="button"
+                  onClick={handleDeleteProject}
+                >
+                  Delete
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       )}
       <div className="flex gap-4 order-1 sm:order-none sm:ml-auto">
