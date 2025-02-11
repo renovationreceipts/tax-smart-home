@@ -84,6 +84,8 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
         <Button 
           onClick={onAddProject}
           size="sm"
+          variant={projects.length > 0 ? "ghost" : "default"}
+          className="sm:!variant-default"
         >
           <Plus className="h-4 w-4 mr-2" />
           Add Project
