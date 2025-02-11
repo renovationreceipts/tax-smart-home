@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react"
 import { supabase } from "@/integrations/supabase/client"
 
@@ -32,7 +33,8 @@ export function useTaxCalculations({ property, projects }: TaxCalculationsProps)
   }, [])
 
   const totalProjectCosts = projects.reduce((sum, project) => sum + (project.cost || 0), 0)
-  const newCostBasis = property ? property.purchase_price + totalProjectCosts : totalProjectCosts
+  const adjustedCostBasis = property ? property.purchase_price + totalProjectCosts : 0
+  const newCostBasis = adjustedCostBasis // Since they're now the same
   const taxableGainWithBasis = property ? property.current_value - newCostBasis : 0
   const taxableGainWithoutBasis = property ? property.current_value - (property.purchase_price || 0) : 0
   const taxSavings = taxableGainWithoutBasis - taxableGainWithBasis
@@ -46,5 +48,6 @@ export function useTaxCalculations({ property, projects }: TaxCalculationsProps)
     taxableGainWithoutBasis,
     taxSavings,
     estimatedTaxSavings,
+    adjustedCostBasis, // Added this to the return object
   }
 }

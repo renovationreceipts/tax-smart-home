@@ -20,6 +20,7 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
     taxableGainWithoutBasis,
     taxSavings,
     estimatedTaxSavings,
+    adjustedCostBasis,
   } = useTaxCalculations({ property, projects })
 
   return (
@@ -39,7 +40,7 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
           />
           <TaxTableRow 
             label="Your Adjusted Cost Basis (Purchase Price + Tracked Improvements)"
-            value={property?.purchase_price}
+            value={adjustedCostBasis}
           />
           <TaxTableRow 
             label="Basis Adjustments (Total Project Costs)"
