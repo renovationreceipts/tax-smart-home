@@ -76,7 +76,10 @@ export function ProjectFormActions({ isEditing, onCancel }: ProjectFormActionsPr
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <Button variant="outline" type="button" onClick={() => document.querySelector("button[data-dismiss]")?.click()}>
+                <Button variant="outline" type="button" onClick={() => {
+                  const closeButton = document.querySelector("button[data-dismiss]") as HTMLButtonElement;
+                  closeButton?.click();
+                }}>
                   Cancel
                 </Button>
                 <Button
@@ -102,3 +105,4 @@ export function ProjectFormActions({ isEditing, onCancel }: ProjectFormActionsPr
     </div>
   )
 }
+
