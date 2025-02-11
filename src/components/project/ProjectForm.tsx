@@ -37,6 +37,9 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
       completion_date: new Date(project.completion_date),
       builder_name: project.builder_name || "",
       builder_url: project.builder_url || "",
+      beforePhotos: null,
+      afterPhotos: null,
+      receipts: null,
     } : {
       name: "",
       description: "",
@@ -44,6 +47,9 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
       completion_date: new Date(),
       builder_name: "",
       builder_url: "",
+      beforePhotos: null,
+      afterPhotos: null,
+      receipts: null,
     },
   })
 

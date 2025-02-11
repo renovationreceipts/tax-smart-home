@@ -1,3 +1,4 @@
+
 import { z } from "zod"
 
 export const projectFormSchema = z.object({
@@ -9,9 +10,9 @@ export const projectFormSchema = z.object({
   }),
   builder_name: z.string().optional(),
   builder_url: z.string().url().optional().or(z.literal("")),
-  beforePhotos: z.instanceof(FileList).optional(),
-  afterPhotos: z.instanceof(FileList).optional(),
-  receipts: z.instanceof(FileList).optional(),
+  beforePhotos: z.instanceof(FileList).nullable().optional(),
+  afterPhotos: z.instanceof(FileList).nullable().optional(),
+  receipts: z.instanceof(FileList).nullable().optional(),
 })
 
 export type ProjectFormValues = z.infer<typeof projectFormSchema>
