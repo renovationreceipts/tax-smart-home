@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom"
 import { ProjectsSection } from "@/components/account/ProjectsSection"
 import { TaxCalculationTable } from "@/components/property/TaxCalculationTable"
@@ -39,7 +40,7 @@ export function ProjectAndTaxSection({
         <p className="text-gray-600 text-sm mb-4">
           {!selectedProperty 
             ? "Select a property to view detailed tax calculations and potential savings."
-            : "Get automated tax calculations based on your property improvements and expenses."
+            : "If you sold your property today..."
           }
         </p>
         <TaxCalculationTable 
