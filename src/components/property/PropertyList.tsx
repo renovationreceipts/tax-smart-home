@@ -3,14 +3,7 @@ import { Table, TableBody } from "@/components/ui/table"
 import { RadioGroup } from "@/components/ui/radio-group"
 import { PropertyTableHeader } from "./PropertyTableHeader"
 import { PropertyTableRow } from "./PropertyTableRow"
-
-interface Property {
-  id: string
-  name: string
-  address: string
-  purchase_price: number
-  current_value: number
-}
+import type { Property } from "@/hooks/useProperties"
 
 interface PropertyListProps {
   properties: Property[]
