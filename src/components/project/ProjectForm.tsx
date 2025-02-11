@@ -52,25 +52,28 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
   console.log("Form default values:", form.getValues())
 
   return (
-    <div className="space-y-6 p-8 bg-white rounded-lg shadow-sm border max-w-4xl mx-auto relative">
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={onCancel}
-        className="absolute left-4 top-4"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        <span className="sr-only">Back to account</span>
-      </Button>
-      <ProjectFormHeader isEditing={!!project} />
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <ProjectBasicFields form={form} />
-          <ProjectBuilderFields form={form} />
-          <ProjectFileFields form={form} projectId={project?.id} />
-          <ProjectFormActions isEditing={!!project} onCancel={onCancel} />
-        </form>
-      </Form>
-    </div>
+    <>
+      <div className="max-w-4xl mx-auto px-4">
+        <Button
+          variant="ghost"
+          className="mb-6"
+          onClick={onCancel}
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Account
+        </Button>
+      </div>
+      <div className="space-y-6 p-8 bg-white rounded-lg shadow-sm border max-w-4xl mx-auto">
+        <ProjectFormHeader isEditing={!!project} />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <ProjectBasicFields form={form} />
+            <ProjectBuilderFields form={form} />
+            <ProjectFileFields form={form} projectId={project?.id} />
+            <ProjectFormActions isEditing={!!project} onCancel={onCancel} />
+          </form>
+        </Form>
+      </div>
+    </>
   )
 }
