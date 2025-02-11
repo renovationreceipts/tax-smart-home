@@ -45,6 +45,35 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
     )
   }
 
+  const MobileProjectCard = ({ project }: { project: Project }) => (
+    <div 
+      className="border-b last:border-b-0 py-6 first:pt-2 last:pb-2 px-4 space-y-4"
+      onClick={() => onEditProject?.(project)}
+    >
+      <h3 className="text-xl font-bold">{project.name}</h3>
+      <div className="space-y-1">
+        <div className="flex justify-between">
+          <span className="text-gray-600">Project Cost:</span>
+          <span className="font-medium">{formatCurrency(project.cost)}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-gray-600">Completion Date:</span>
+          <span className="font-medium">{formatDate(project.completion_date)}</span>
+        </div>
+      </div>
+      <Button 
+        variant="outline" 
+        className="w-full text-primary hover:text-primary"
+        onClick={(e) => {
+          e.stopPropagation()
+          onEditProject?.(project)
+        }}
+      >
+        View Project
+      </Button>
+    </div>
+  )
+
   return (
     <div className="bg-white rounded-lg shadow-sm border p-6">
       <div className="flex items-center justify-between mb-4">
@@ -66,37 +95,38 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
           No projects added yet. Add your first project to start tracking improvements.
         </p>
       ) : (
-        <div className="mt-4 overflow-x-auto">
-          <Table>
-            <TableHeader className="hidden sm:table-header-group">
-              <TableRow>
-                <TableHead>Project Name</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead className="text-right">Cost</TableHead>
-                <TableHead className="text-right">Completion Date</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {projects.map((project) => (
-                <TableRow 
-                  key={project.id}
-                  onClick={() => onEditProject?.(project)}
-                  className="cursor-pointer hover:bg-muted/50 flex flex-col sm:table-row"
-                >
-                  <TableCell className="font-bold sm:font-medium py-2 sm:py-4">{project.name}</TableCell>
-                  <TableCell className="hidden sm:table-cell py-2 sm:py-4">{project.description}</TableCell>
-                  <TableCell className="py-2 sm:py-4 sm:text-right">
-                    <span className="font-medium sm:hidden">Cost: </span>
-                    {formatCurrency(project.cost)}
-                  </TableCell>
-                  <TableCell className="py-2 sm:py-4 sm:text-right">
-                    <span className="font-medium sm:hidden">Completion Date: </span>
-                    {formatDate(project.completion_date)}
-                  </TableCell>
+        <div className="mt-4">
+          <div className="block sm:hidden -mx-6">
+            {projects.map((project) => (
+              <MobileProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+          <div className="hidden sm:block overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Project Name</TableHead>
+                  <TableHead>Description</TableHead>
+                  <TableHead className="text-right">Cost</TableHead>
+                  <TableHead className="text-right">Completion Date</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {projects.map((project) => (
+                  <TableRow 
+                    key={project.id}
+                    onClick={() => onEditProject?.(project)}
+                    className="cursor-pointer hover:bg-muted/50"
+                  >
+                    <TableCell className="font-medium">{project.name}</TableCell>
+                    <TableCell>{project.description}</TableCell>
+                    <TableCell className="text-right">{formatCurrency(project.cost)}</TableCell>
+                    <TableCell className="text-right">{formatDate(project.completion_date)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       )}
     </div>
