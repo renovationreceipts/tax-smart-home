@@ -19,6 +19,12 @@ export default function EditProperty() {
     navigate(`/account${propertyId ? `?propertyId=${propertyId}` : ''}`)
   }
 
+  // Transform the property data to ensure lived_in_property_2_of_5_years has a boolean value
+  const transformedProperty = property ? {
+    ...property,
+    lived_in_property_2_of_5_years: property.lived_in_property_2_of_5_years ?? true
+  } : undefined
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-2xl mx-auto px-4">
@@ -32,7 +38,7 @@ export default function EditProperty() {
         </Button>
       </div>
       <PropertyForm
-        property={property}
+        property={transformedProperty}
         onCancel={() => handleSuccess()}
         onSuccess={() => handleSuccess()}
       />
