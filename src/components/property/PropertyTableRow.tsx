@@ -93,7 +93,7 @@ export function PropertyTableRow({
       {/* Desktop View */}
       <TableCell className="hidden sm:table-cell py-4">
         <div>
-          <div className="font-bold">{property.name}</div>
+          <div>{property.name}</div>
         </div>
       </TableCell>
       <TableCell className="hidden sm:table-cell py-4">{property.address}</TableCell>
