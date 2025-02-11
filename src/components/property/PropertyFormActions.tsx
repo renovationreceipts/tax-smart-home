@@ -77,9 +77,9 @@ export function PropertyFormActions({ isEditing, onCancel }: PropertyFormActions
                   </p>
                 </DialogDescription>
               </DialogHeader>
-              <DialogFooter>
+              <DialogFooter className="flex flex-col gap-4 sm:flex-row">
                 <DialogClose asChild>
-                  <Button variant="outline" type="button">
+                  <Button variant="outline" type="button" className="w-full sm:w-auto">
                     Cancel
                   </Button>
                 </DialogClose>
@@ -87,6 +87,7 @@ export function PropertyFormActions({ isEditing, onCancel }: PropertyFormActions
                   variant="destructive"
                   type="button"
                   onClick={handleDeleteProperty}
+                  className="w-full sm:w-auto"
                 >
                   Delete
                 </Button>
