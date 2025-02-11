@@ -1,7 +1,21 @@
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form } from "@/components/ui/form"
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { PropertyTypeSelect } from "./property/PropertyTypeSelect"
 import { PurchaseDateField } from "./property/PurchaseDateField"
 import { MoneyField } from "./property/MoneyField"
