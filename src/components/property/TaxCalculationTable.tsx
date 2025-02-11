@@ -47,7 +47,7 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
             value={totalProjectCosts}
           />
           <TaxTableRow 
-            label="New Cost Basis"
+            label="Tracked Home Improvements Reduced Your Reported Gain By"
             value={newCostBasis}
           />
         </TableBody>
