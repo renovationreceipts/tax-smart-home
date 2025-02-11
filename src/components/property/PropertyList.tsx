@@ -1,3 +1,4 @@
+
 import { Table, TableBody } from "@/components/ui/table"
 import { RadioGroup } from "@/components/ui/radio-group"
 import { PropertyTableHeader } from "./PropertyTableHeader"
@@ -33,10 +34,15 @@ export function PropertyList({
     }).format(amount)
   }
 
+  // If there's only one property and nothing is selected, select it
+  if (properties.length === 1 && !selectedPropertyId) {
+    onPropertySelect(properties[0].id)
+  }
+
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
       <RadioGroup 
-        value={selectedPropertyId || ""} 
+        value={properties.length === 1 ? properties[0].id : (selectedPropertyId || "")}
         onValueChange={onPropertySelect}
       >
         <Table>
@@ -46,7 +52,7 @@ export function PropertyList({
               <PropertyTableRow
                 key={property.id}
                 property={property}
-                selectedPropertyId={selectedPropertyId}
+                selectedPropertyId={properties.length === 1 ? properties[0].id : selectedPropertyId}
                 onPropertySelect={onPropertySelect}
                 onEditProperty={onEditProperty}
                 formatCurrency={formatCurrency}
