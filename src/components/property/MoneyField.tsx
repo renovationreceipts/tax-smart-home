@@ -40,7 +40,6 @@ export function MoneyField<T extends Record<string, any>>({
             <Input
               placeholder="$0"
               inputMode="numeric"
-              pattern="[0-9]*"
               {...field}
               onChange={(e) => {
                 const formatted = formatCurrency(e.target.value)
