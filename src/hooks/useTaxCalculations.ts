@@ -8,14 +8,16 @@ interface TaxCalculationsProps {
 }
 
 export function useTaxCalculations({ property, projects }: TaxCalculationsProps) {
-  const [userTaxRate, setUserTaxRate] = useState<number | null>(null)
-  const [userFilingStatus, setUserFilingStatus] = useState<string>("Single")
+  const [userTaxRate, setUserTaxRate] = useState(0)
+  const [userFilingStatus, setUserFilingStatus] = useState("Single")
 
   useEffect(() => {
+    let isMounted = true
+
     async function fetchUserTaxInfo() {
       try {
         const { data: { user } } = await supabase.auth.getUser()
-        if (!user) return
+        if (!user || !isMounted) return
 
         const { data: profile } = await supabase
           .from('profiles')
@@ -23,15 +25,21 @@ export function useTaxCalculations({ property, projects }: TaxCalculationsProps)
           .eq('id', user.id)
           .single()
 
-        // Convert the tax rate to decimal (e.g., 15% -> 0.15)
-        setUserTaxRate(profile?.tax_rate ? profile.tax_rate / 100 : 0)
-        setUserFilingStatus(profile?.tax_filing_status || "Single")
+        if (profile && isMounted) {
+          // Convert the tax rate to decimal (e.g., 15% -> 0.15)
+          setUserTaxRate(profile.tax_rate ? profile.tax_rate / 100 : 0)
+          setUserFilingStatus(profile.tax_filing_status || "Single")
+        }
       } catch (error) {
         console.error('Error fetching tax rate:', error)
       }
     }
 
     fetchUserTaxInfo()
+
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   const calculateExemptionAmount = (filingStatus: string, livedIn2of5: boolean | null): number => {
@@ -50,19 +58,19 @@ export function useTaxCalculations({ property, projects }: TaxCalculationsProps)
     }
   }
 
-  const totalProjectCosts = projects.reduce((sum, project) => sum + (project.cost || 0), 0)
-  const adjustedCostBasis = property ? property.purchase_price + totalProjectCosts : 0
-  const totalCapitalGains = property ? property.current_value - adjustedCostBasis : 0
-  const taxableGainWithBasis = property ? property.current_value - adjustedCostBasis : 0
-  const taxableGainWithoutBasis = property ? property.current_value - (property.purchase_price || 0) : 0
+  const totalProjectCosts = projects?.reduce((sum, project) => sum + (project?.cost || 0), 0) || 0
+  const adjustedCostBasis = property ? (property.purchase_price || 0) + totalProjectCosts : 0
+  const totalCapitalGains = property ? (property.current_value || 0) - adjustedCostBasis : 0
+  const taxableGainWithBasis = property ? (property.current_value || 0) - adjustedCostBasis : 0
+  const taxableGainWithoutBasis = property ? (property.current_value || 0) - (property.purchase_price || 0) : 0
 
   const exemptionAmount = calculateExemptionAmount(
     userFilingStatus,
-    property?.lived_in_property_2_of_5_years
+    property?.lived_in_property_2_of_5_years ?? false
   )
 
   const taxSavings = exemptionAmount
-  const estimatedTaxSavings = taxSavings * (userTaxRate || 0)
+  const estimatedTaxSavings = taxSavings * userTaxRate
 
   return {
     userTaxRate,
