@@ -12,6 +12,7 @@ import { useProjectSubmit } from "@/hooks/useProjectSubmit"
 import type { Project } from "@/hooks/useProjects"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
+import { useState } from "react"
 
 interface ProjectFormProps {
   propertyId: string
@@ -21,6 +22,7 @@ interface ProjectFormProps {
 }
 
 export function ProjectForm({ propertyId, project, onSuccess, onCancel }: ProjectFormProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false)
   console.log("Project data received:", project)
 
   const form = useForm<ProjectFormValues>({
@@ -55,6 +57,15 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
 
   const { onSubmit } = useProjectSubmit({ propertyId, project, onSuccess })
 
+  const handleSubmit = async (data: ProjectFormValues) => {
+    setIsSubmitting(true)
+    try {
+      await onSubmit(data)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   console.log("Form default values:", form.getValues())
 
   return (
@@ -72,11 +83,15 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
       <div className="space-y-6 p-8 bg-white rounded-lg shadow-sm border max-w-4xl mx-auto">
         <ProjectFormHeader isEditing={!!project} />
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
             <ProjectBasicFields form={form} />
             <ProjectBuilderFields form={form} />
             <ProjectFileFields form={form} projectId={project?.id} />
-            <ProjectFormActions isEditing={!!project} onCancel={onCancel} />
+            <ProjectFormActions 
+              isEditing={!!project} 
+              onCancel={onCancel}
+              isSubmitting={isSubmitting}
+            />
           </form>
         </Form>
       </div>

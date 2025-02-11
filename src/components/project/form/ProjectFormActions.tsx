@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button"
-import { Trash2 } from "lucide-react"
+import { Trash2, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
@@ -17,9 +17,10 @@ import {
 interface ProjectFormActionsProps {
   isEditing: boolean
   onCancel: () => void
+  isSubmitting: boolean
 }
 
-export function ProjectFormActions({ isEditing, onCancel }: ProjectFormActionsProps) {
+export function ProjectFormActions({ isEditing, onCancel, isSubmitting }: ProjectFormActionsProps) {
   const { toast } = useToast()
   const navigate = useNavigate()
 
@@ -99,11 +100,28 @@ export function ProjectFormActions({ isEditing, onCancel }: ProjectFormActionsPr
         </div>
       )}
       <div className="flex gap-4 order-1 sm:order-none sm:ml-auto">
-        <Button variant="outline" type="button" onClick={onCancel} className="flex-1 sm:flex-none">
+        <Button 
+          variant="outline" 
+          type="button" 
+          onClick={onCancel} 
+          className="flex-1 sm:flex-none"
+          disabled={isSubmitting}
+        >
           Cancel
         </Button>
-        <Button type="submit" className="flex-1 sm:flex-none">
-          {isEditing ? "Update Project" : "Add Project"}
+        <Button 
+          type="submit" 
+          className="flex-1 sm:flex-none"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Updating...
+            </>
+          ) : (
+            isEditing ? "Update Project" : "Add Project"
+          )}
         </Button>
       </div>
     </div>
