@@ -87,9 +87,13 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
               onClick={onAddProject}
               size="sm"
               variant={projects.length > 0 ? "ghost" : "default"}
-              className="sm:!variant-default border border-primary bg-primary text-white hover:text-white hover:bg-primary/90"
+              className={`border ${
+                projects.length > 0 
+                  ? "bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
+                  : "border-primary bg-primary text-white hover:text-white hover:bg-primary/90"
+              }`}
             >
-              <Plus className="h-4 w-4 mr-2 text-white" />
+              <Plus className={`h-4 w-4 mr-2 ${projects.length > 0 ? "text-[#0090FF]" : "text-white"}`} />
               <span className="hidden sm:inline">Add Project</span>
               <span className="sm:hidden">Add</span>
             </Button>
