@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 
@@ -8,9 +9,15 @@ interface AccountActionsProps {
 export function AccountActions({ onAddProperty }: AccountActionsProps) {
   return (
     <div className="flex gap-4">
-      <Button onClick={onAddProperty}>
+      <Button 
+        onClick={onAddProperty}
+        size="sm"
+        variant="ghost"
+        className="sm:!variant-default border border-input"
+      >
         <Plus className="h-4 w-4 mr-2" />
-        Add Property
+        <span className="hidden sm:inline">Add Property</span>
+        <span className="sm:hidden">Add</span>
       </Button>
     </div>
   )
