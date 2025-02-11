@@ -1,3 +1,4 @@
+
 import {
   Tooltip,
   TooltipContent,
@@ -15,7 +16,7 @@ export function CreditsDisplay({ used, limit }: CreditsDisplayProps) {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <span className="text-sm text-gray-500 cursor-help">
+          <span className="text-sm text-gray-500 cursor-help text-right w-full">
             {used}/{limit} credits used
           </span>
         </TooltipTrigger>
