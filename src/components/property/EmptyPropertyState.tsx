@@ -81,7 +81,7 @@ export function EmptyPropertyState({ onAddProperty }: EmptyPropertyStateProps) {
                     Step 3: View your tax savings
                   </h3>
                   <p className="text-sm sm:text-base text-gray-600">
-                    The best part - see how much you can save by increasing the cost basis in your property
+                    Keep adding home projects and watch your tax savings add up.
                   </p>
                 </div>
               </div>
