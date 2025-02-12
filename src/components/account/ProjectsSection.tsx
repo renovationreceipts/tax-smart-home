@@ -39,7 +39,7 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
             <Wrench className="h-5 w-5 text-[#0090FF]" />
           </div>
           <div>
-            <h2 className="text-sm font-medium text-gray-900">Step 2: Track your renovations</h2>
+            <h2 className="text-sm font-bold text-gray-900">Step 2: Track your renovations</h2>
             <p className="text-gray-600 mt-1">
               See if your renovations qualify for tax savings using our IRS-GPT analyzer.
             </p>
