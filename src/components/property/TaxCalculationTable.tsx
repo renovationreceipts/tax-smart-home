@@ -79,7 +79,7 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
                   value={taxableGainWithoutBasis}
                 />
                 <TaxTableRow 
-                  label="📉 Eligible Federal Capital Gains Exemption Applied (Based on filing status)"
+                  label="Eligible Federal Capital Gains Exemption Applied (Based on filing status)"
                   value={taxSavings}
                 />
                 <TaxTableRow 
