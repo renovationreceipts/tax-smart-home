@@ -24,7 +24,7 @@ export function ProjectAndTaxSection({
     navigate(`/project/edit/${selectedPropertyId}/${project.id}`)
   }
 
-  const NoProjectsTaxPreview = () => (
+  const TaxPreview = ({ disabled = false }: { disabled?: boolean }) => (
     <div className="bg-white rounded-lg shadow-sm border p-6">
       <div className="flex items-center gap-3 mb-6">
         <DollarSign className="h-6 w-6 text-[#0090FF]" />
@@ -45,9 +45,9 @@ export function ProjectAndTaxSection({
             </div>
           </div>
           <Button 
-            disabled 
-            variant="secondary" 
-            className="shrink-0 bg-[#f3f3f3] text-[#8E9196] hover:bg-[#f3f3f3] hover:text-[#8E9196]"
+            disabled={disabled}
+            onClick={() => !disabled && navigate(`/project/edit/${selectedPropertyId}`)}
+            className={`shrink-0 ${disabled ? 'bg-[#f3f3f3] text-[#8E9196] hover:bg-[#f3f3f3] hover:text-[#8E9196]' : 'bg-primary text-white hover:bg-primary/90'}`}
           >
             View Savings
           </Button>
@@ -65,32 +65,7 @@ export function ProjectAndTaxSection({
         onEditProject={handleEditProject}
       />
 
-      {selectedProperty && (
-        projects.length > 0 ? (
-          <>
-            <div className="bg-white rounded-lg shadow-sm border p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <DollarSign className="h-6 w-6 text-[#0090FF]" />
-                <h3 className="text-lg font-semibold">Tax Calculation</h3>
-              </div>
-              <p className="text-gray-600 text-sm mb-4">
-                If you sold your property today...
-              </p>
-              <TaxCalculationTable 
-                property={selectedProperty}
-                projects={projects}
-              />
-            </div>
-
-            <TaxFormGenerator 
-              property={selectedProperty}
-              projects={projects}
-            />
-          </>
-        ) : (
-          <NoProjectsTaxPreview />
-        )
-      )}
+      {selectedProperty && <TaxPreview disabled={projects.length === 0} />}
     </div>
   )
 }
