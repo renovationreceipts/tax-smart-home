@@ -69,7 +69,6 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
           <TaxTableRow 
             label="Final Federal Taxable Gain After Exemption"
             value={estimatedTaxSavings}
-            isHighlighted
           />
         </TableBody>
       </Table>
