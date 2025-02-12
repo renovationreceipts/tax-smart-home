@@ -5,6 +5,7 @@ import { ProjectsSection } from "@/components/account/ProjectsSection"
 import { TaxCalculationTable } from "@/components/property/TaxCalculationTable"
 import { TaxFormGenerator } from "@/components/property/tax-form/TaxFormGenerator"
 import { useProjects } from "@/hooks/useProjects"
+import { useModalViews } from "@/hooks/useModalViews"
 import { DollarSign } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TaxSavingsModal } from "./TaxSavingsModal"
@@ -21,16 +22,22 @@ export function ProjectAndTaxSection({
 }: ProjectAndTaxSectionProps) {
   const navigate = useNavigate()
   const { data: projects = [] } = useProjects(selectedPropertyId)
+  const { modalView, setModalViewed } = useModalViews(selectedPropertyId)
   const [showModal, setShowModal] = useState(false)
-  const [showTaxCalculation, setShowTaxCalculation] = useState(false)
+  const [showTaxCalculation, setShowTaxCalculation] = useState(
+    modalView?.tax_savings_modal_viewed ?? false
+  )
 
   const handleEditProject = (project: Project) => {
     navigate(`/project/edit/${selectedPropertyId}/${project.id}`)
   }
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     setShowModal(false)
     setShowTaxCalculation(true)
+    if (selectedPropertyId) {
+      await setModalViewed.mutateAsync()
+    }
   }
 
   const TaxPreview = ({ disabled = false }: { disabled?: boolean }) => (
@@ -98,7 +105,7 @@ export function ProjectAndTaxSection({
       />
 
       {selectedProperty && (
-        showTaxCalculation ? (
+        showTaxCalculation || (modalView?.tax_savings_modal_viewed && projects.length > 0) ? (
           <TaxCalculationSection />
         ) : (
           <TaxPreview disabled={projects.length === 0} />

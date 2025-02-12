@@ -205,6 +205,41 @@ export type Database = {
         }
         Relationships: []
       }
+      property_modal_views: {
+        Row: {
+          created_at: string
+          id: string
+          property_id: string
+          tax_savings_modal_viewed: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          property_id: string
+          tax_savings_modal_viewed?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          property_id?: string
+          tax_savings_modal_viewed?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_modal_views_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tax_forms: {
         Row: {
           created_at: string | null
