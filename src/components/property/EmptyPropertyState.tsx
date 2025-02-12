@@ -99,7 +99,7 @@ export function EmptyPropertyState({ onAddProperty }: EmptyPropertyStateProps) {
         <Button 
           onClick={onAddProperty}
           size="lg"
-          className="w-full sm:inline-flex bg-primary hover:bg-primary/90 text-white px-6 py-3 text-base sm:text-lg"
+          className="hidden sm:inline-flex bg-primary hover:bg-primary/90 text-white px-6 py-3 text-base sm:text-lg"
         >
           Get started by adding your first property
         </Button>
