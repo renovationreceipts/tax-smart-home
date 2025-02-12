@@ -74,7 +74,7 @@ export function useTaxCalculations({ property, projects }: TaxCalculationsProps)
 
   return {
     userTaxRate,
-    totalProjectCosts: totalCapitalGains,
+    totalProjectCosts,
     newCostBasis: totalProjectCosts,
     taxableGainWithBasis,
     taxableGainWithoutBasis,

@@ -60,7 +60,7 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
         <TableBody>
           <TaxTableRow 
             label="Without Tracking, Your Reported Gain Would Have Been"
-            value={taxableGainWithBasis}
+            value={taxableGainWithoutBasis}
           />
           <TaxTableRow 
             label="📉 Eligible Federal Capital Gains Exemption Applied (Based on filing status)"
