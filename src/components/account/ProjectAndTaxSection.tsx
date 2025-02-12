@@ -32,19 +32,23 @@ export function ProjectAndTaxSection({
       </div>
       
       <div className="bg-gray-50 rounded-lg p-6">
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between gap-6">
           <div className="flex items-start gap-4">
             <div className="mt-1">
               <span className="text-2xl">💰</span>
             </div>
             <div>
               <h3 className="font-semibold text-gray-900">Step 3: View your tax savings</h3>
-              <p className="text-gray-600 mt-1">
+              <p className="text-gray-600 mt-1 max-w-[400px]">
                 The best part - see how much you'll save by tracking projects and increasing your cost basis
               </p>
             </div>
           </div>
-          <Button disabled variant="secondary" className="text-gray-500">
+          <Button 
+            disabled 
+            variant="secondary" 
+            className="shrink-0 bg-[#f3f3f3] text-[#8E9196] hover:bg-[#f3f3f3] hover:text-[#8E9196]"
+          >
             View Savings
           </Button>
         </div>
