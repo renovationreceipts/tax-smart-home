@@ -1,5 +1,5 @@
 
-import { Home, Target, Trophy } from "lucide-react"
+import { Home } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
@@ -9,71 +9,93 @@ interface EmptyPropertyStateProps {
 
 export function EmptyPropertyState({ onAddProperty }: EmptyPropertyStateProps) {
   return (
-    <Card className="border-2">
+    <Card className="border rounded-lg">
       <CardContent className="flex flex-col items-center justify-center py-12 px-4 space-y-8">
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center gap-2">
-            <span role="img" aria-label="house" className="text-3xl">🏡</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-              Welcome to RenovationReceipts!
+            <h2 className="text-2xl font-bold text-gray-900">
+              Welcome <span role="img" aria-label="waving hand">👋</span>
             </h2>
           </div>
-          <div className="flex items-center justify-center gap-2">
-            <Target className="w-5 h-5 text-red-500" />
-            <p className="text-lg text-gray-700">
-              Your mission: Maximize savings & track your home's value!
+          <div className="space-y-2">
+            <h3 className="text-xl font-semibold text-gray-900">Your Mission:</h3>
+            <p className="text-lg text-gray-700 max-w-xl">
+              Track your home improvements and renovations and maximize your tax savings
             </p>
           </div>
         </div>
 
-        <div className="w-full max-w-2xl space-y-4">
+        <div className="w-full max-w-2xl space-y-6">
           {/* Step 1 */}
-          <div className="bg-gray-50 p-4 rounded-lg flex items-center gap-3">
-            <div className="bg-blue-100 p-2 rounded">
-              <span role="img" aria-label="diamond" className="text-xl">💎</span>
+          <div className="bg-gray-50 p-6 rounded-lg flex items-center justify-between">
+            <div className="flex gap-4">
+              <span role="img" aria-label="house" className="text-2xl">🏠</span>
+              <div>
+                <h3 className="font-semibold text-gray-900 text-lg mb-1">
+                  Step 1: Add your property
+                </h3>
+                <p className="text-gray-600">
+                  We support primary homes, rentals, and vacation homes.
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-semibold text-gray-900">
-                Step 1: Add Your First Property
-              </h3>
-              <p className="text-sm text-gray-600">Earn 100 XP!</p>
-            </div>
+            <Button 
+              onClick={onAddProperty}
+              className="bg-blue-500 hover:bg-blue-600 text-white"
+            >
+              Add Property
+            </Button>
           </div>
 
           {/* Step 2 */}
-          <div className="bg-gray-50 p-4 rounded-lg flex items-center gap-3">
-            <div className="bg-blue-100 p-2 rounded">
-              <span role="img" aria-label="diamond" className="text-xl">💎</span>
+          <div className="bg-gray-50 p-6 rounded-lg flex items-center justify-between">
+            <div className="flex gap-4">
+              <span role="img" aria-label="tools" className="text-2xl">🛠️</span>
+              <div>
+                <h3 className="font-semibold text-gray-900 text-lg mb-1">
+                  Step 2: Track your renovations
+                </h3>
+                <p className="text-gray-600">
+                  See if your renovations qualify for tax savings using our IRS-GPT analyzer.
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-semibold text-gray-900">
-                Step 2: Track Your First Renovation
-              </h3>
-              <p className="text-sm text-gray-600">Unlock tax benefits!</p>
-            </div>
+            <Button 
+              disabled
+              className="bg-gray-200 text-gray-500"
+            >
+              Add Project
+            </Button>
           </div>
 
           {/* Step 3 */}
-          <div className="bg-gray-50 p-4 rounded-lg flex items-center gap-3">
-            <div className="bg-blue-100 p-2 rounded">
-              <span role="img" aria-label="diamond" className="text-xl">💎</span>
+          <div className="bg-gray-50 p-6 rounded-lg flex items-center justify-between">
+            <div className="flex gap-4">
+              <span role="img" aria-label="money bag" className="text-2xl">💰</span>
+              <div>
+                <h3 className="font-semibold text-gray-900 text-lg mb-1">
+                  Step 3: View your tax savings
+                </h3>
+                <p className="text-gray-600">
+                  The best part - see how much you can save by increasing the cost basis in your property
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-semibold text-gray-900">
-                Step 3: View Your Tax Savings
-              </h3>
-              <p className="text-sm text-gray-600">How much can you save?</p>
-            </div>
+            <Button 
+              disabled
+              className="bg-gray-200 text-gray-500"
+            >
+              View Savings
+            </Button>
           </div>
         </div>
 
         <Button 
           onClick={onAddProperty}
           size="lg"
-          className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-8 py-6 text-lg font-medium"
+          className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 text-lg w-full max-w-2xl"
         >
-          <Trophy className="mr-2 h-5 w-5" />
-          Get Started & Earn Your First Badge!
+          Get started by adding your first property
         </Button>
       </CardContent>
     </Card>
