@@ -9,21 +9,21 @@ const Footer = () => {
       <div className="container-width py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
           {/* Logo and Description */}
-          <div className="md:col-span-6 space-y-6">
-            <div className="flex items-center md:justify-start">
+          <div className="md:col-span-6 space-y-6 text-center md:text-left">
+            <div className="flex items-center justify-center md:justify-start">
               <img 
                 src="/lovable-uploads/69bafa75-cbb8-49f9-a552-21142b9fa060.png" 
                 alt="RenovationReceipts.com"
                 className="h-12 w-auto"
               />
             </div>
-            <p className="text-gray-600 text-sm leading-relaxed max-w-md">
+            <p className="text-gray-600 text-sm leading-relaxed max-w-md mx-auto md:mx-0">
               Helping property owners track renovation costs and tax records efficiently.
             </p>
           </div>
 
           {/* Company Links */}
-          <div className="md:col-span-3">
+          <div className="md:col-span-3 text-center md:text-left">
             <h3 className="font-semibold text-gray-900 mb-4 text-sm">Company</h3>
             <ul className="space-y-2.5">
               <li>
@@ -35,7 +35,7 @@ const Footer = () => {
           </div>
 
           {/* Legal Links */}
-          <div className="md:col-span-3">
+          <div className="md:col-span-3 text-center md:text-left">
             <h3 className="font-semibold text-gray-900 mb-4 text-sm">Legal</h3>
             <ul className="space-y-2.5">
               <li>
