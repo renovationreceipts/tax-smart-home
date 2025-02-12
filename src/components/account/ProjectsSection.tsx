@@ -1,5 +1,5 @@
 
-import { FileText, Plus } from "lucide-react"
+import { FileText, Plus, Lock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import type { Project } from "@/hooks/useProjects"
@@ -30,16 +30,33 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
   if (!propertyId) {
     return (
       <div className="bg-white rounded-lg shadow-sm border p-6">
-        <div className="flex items-center gap-3">
-          <FileText className="h-6 w-6 text-primary" />
-          <h3 className="text-lg font-semibold">Projects</h3>
+        <div className="flex items-center gap-3 mb-4">
+          <Lock className="h-6 w-6 text-gray-400" />
+          <h3 className="text-lg font-semibold">Unlock by adding a property</h3>
         </div>
-        <p className="text-gray-600 text-sm mt-2">
-          {properties.length === 0 
-            ? "Add a property first and then you can start tracking your improvement projects"
-            : "Select a property to view and manage its projects"
-          }
-        </p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-4">
+          <div className="flex items-start gap-4">
+            <span role="img" aria-label="tools" className="text-2xl">🛠️</span>
+            <div>
+              <h3 className="font-semibold text-gray-900 text-lg mb-2">
+                Step 2: Track your renovations
+              </h3>
+              <p className="text-gray-600">
+                See if your renovations qualify for tax savings using our IRS-GPT analyzer.
+              </p>
+            </div>
+          </div>
+          <div className="mt-4 flex justify-end">
+            <Button 
+              disabled
+              className="bg-gray-200 text-gray-500"
+            >
+              Add Project
+            </Button>
+          </div>
+        </div>
+
         {properties.length === 0 && <ProjectTypeExamples />}
       </div>
     )
