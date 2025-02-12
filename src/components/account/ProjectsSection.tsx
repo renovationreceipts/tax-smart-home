@@ -1,4 +1,5 @@
-import { FileText, Plus } from "lucide-react"
+
+import { FileText, Plus, Wrench, DollarSign } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import type { Project } from "@/hooks/useProjects"
@@ -29,6 +30,67 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
   if (!propertyId || properties.length === 0) {
     return null
   }
+
+  const EmptyState = () => (
+    <div className="space-y-8">
+      <div className="text-center space-y-2">
+        <h2 className="text-2xl font-semibold">Nice Job!</h2>
+        <p className="text-gray-600">
+          Add your home improvement and renovation projects now and watch your tax savings grow.
+        </p>
+      </div>
+
+      <div className="space-y-4">
+        <div className="bg-gray-50 rounded-lg p-6">
+          <div className="flex items-start justify-between">
+            <div className="flex items-start gap-4">
+              <div className="mt-1">
+                <Wrench className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Step 2: Track your renovations</h3>
+                <p className="text-gray-600 mt-1">
+                  See if your renovations qualify for tax savings using our IRS-GPT analyzer.
+                </p>
+              </div>
+            </div>
+            <Button onClick={onAddProject} className="bg-[#0090FF] hover:bg-[#0090FF]/90 text-white">
+              Add Project
+            </Button>
+          </div>
+        </div>
+
+        <div className="bg-gray-50 rounded-lg p-6">
+          <div className="flex items-start justify-between">
+            <div className="flex items-start gap-4">
+              <div className="mt-1">
+                <DollarSign className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Step 3: View your tax savings</h3>
+                <p className="text-gray-600 mt-1">
+                  The best part - see how much you can save by increasing the cost basis in your property
+                </p>
+              </div>
+            </div>
+            <Button disabled variant="secondary" className="text-gray-500">
+              View Savings
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-center">
+        <Button 
+          onClick={onAddProject}
+          size="lg"
+          className="w-full sm:w-auto bg-[#0090FF] hover:bg-[#0090FF]/90 text-white"
+        >
+          Add Project
+        </Button>
+      </div>
+    </div>
+  )
 
   const MobileProjectCard = ({ project }: { project: Project }) => (
     <div 
@@ -67,18 +129,14 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
             <FileText className="h-6 w-6 text-primary" />
             <h3 className="text-lg font-semibold">Projects</h3>
           </div>
-          {properties.length > 0 && (
+          {projects.length > 0 && (
             <Button 
               onClick={onAddProject}
               size="sm"
-              variant={projects.length > 0 ? "ghost" : "default"}
-              className={`border ${
-                projects.length > 0 
-                  ? "bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
-                  : "border-primary bg-primary text-white hover:text-white hover:bg-primary/90"
-              }`}
+              variant="ghost"
+              className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
             >
-              <Plus className={`h-4 w-4 mr-2 ${projects.length > 0 ? "text-[#0090FF]" : "text-white"}`} />
+              <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
               <span className="hidden sm:inline">Add Project</span>
               <span className="sm:hidden">Add</span>
             </Button>
@@ -87,9 +145,9 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
       </div>
 
       {projects.length === 0 ? (
-        <p className="text-gray-600 text-sm mt-4">
-          No projects added yet. Add your first project to start tracking improvements.
-        </p>
+        <div className="mt-4">
+          <EmptyState />
+        </div>
       ) : (
         <div className="mt-4">
           <div className="block sm:hidden -mx-6">
