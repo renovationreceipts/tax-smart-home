@@ -1,3 +1,4 @@
+
 import { FileText, Plus, Wrench, ClipboardList } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -38,7 +39,7 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
             <Wrench className="h-5 w-5 text-[#0090FF]" />
           </div>
           <div>
-            <h3 className="text-xl font-semibold text-gray-900">Step 2: Track your renovations</h3>
+            <h2 className="text-2xl font-semibold text-gray-900">Step 2: Track your renovations</h2>
             <p className="text-gray-600 mt-1">
               See if your renovations qualify for tax savings using our IRS-GPT analyzer.
             </p>
