@@ -33,25 +33,27 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
 
   const EmptyState = () => (
     <div className="space-y-8">
-      <div className="bg-gray-50 rounded-lg p-6 flex items-start justify-between">
-        <div className="flex items-start gap-4">
-          <div className="mt-1">
-            <Wrench className="h-5 w-5 text-[#0090FF]" />
+      <div className="bg-gray-50 rounded-lg p-6">
+        <div className="flex sm:items-start sm:justify-between flex-col sm:flex-row gap-4 sm:gap-0">
+          <div className="flex items-start gap-4">
+            <div className="mt-1">
+              <Wrench className="h-5 w-5 text-[#0090FF]" />
+            </div>
+            <div>
+              <h2 className="font-bold text-gray-800">Step 2: Add your home projects</h2>
+              <p className="hidden sm:block text-gray-600 mt-1">
+                See if your renovations qualify for tax savings using our IRS-GPT analyzer.
+              </p>
+            </div>
           </div>
-          <div>
-            <h2 className="font-bold text-gray-800">Step 2: Add your home projects</h2>
-            <p className="hidden sm:block text-gray-600 mt-1">
-              See if your renovations qualify for tax savings using our IRS-GPT analyzer.
-            </p>
-          </div>
+          <Button 
+            onClick={onAddProject} 
+            className="sm:!variant-default border border-primary text-white hover:text-white"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Project
+          </Button>
         </div>
-        <Button 
-          onClick={onAddProject} 
-          className="sm:!variant-default border border-primary text-white hover:text-white"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Project
-        </Button>
       </div>
 
       <ProjectTypeExamples />
