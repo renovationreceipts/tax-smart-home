@@ -23,6 +23,9 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
     adjustedCostBasis,
   } = useTaxCalculations({ property, projects })
 
+  // Calculate total capital gains before exemptions
+  const totalCapitalGains = property ? (property.current_value || 0) - adjustedCostBasis : 0
+
   return (
     <div className="space-y-6">
       {/* First Table: Cost Basis Calculation */}
@@ -44,7 +47,7 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
           />
           <TaxTableRow 
             label="Total Capital Gains Before Exemptions"
-            value={totalProjectCosts}
+            value={totalCapitalGains}
           />
           <TaxTableRow 
             label="Tracked Home Improvements Reduced Your Reported Gain By"
