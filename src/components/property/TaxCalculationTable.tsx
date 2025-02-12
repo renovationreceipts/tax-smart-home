@@ -67,7 +67,7 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
             value={taxSavings}
           />
           <TaxTableRow 
-            label={`Based on ${userTaxRate !== null ? `${(userTaxRate * 100).toFixed(1)}%` : '0%'} Tax Rate This Saved You`}
+            label="Final Federal Taxable Gain After Exemption"
             value={estimatedTaxSavings}
             isHighlighted
           />
