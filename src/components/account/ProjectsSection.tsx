@@ -40,7 +40,7 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
               <Wrench className="h-5 w-5 text-[#0090FF]" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">Step 2: Add your home projects</h2>
+              <h2 className="text-xl font-semibold text-gray-900">Step 2: Add your home projects</h2>
               <p className="text-base text-gray-600 mt-1">
                 Store photos, receipts and document your projects for safekeeping.
               </p>
