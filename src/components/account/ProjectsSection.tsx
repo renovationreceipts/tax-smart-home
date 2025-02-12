@@ -1,4 +1,3 @@
-
 import { FileText, Plus, Wrench, ClipboardList } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -34,7 +33,7 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
   const EmptyState = () => (
     <div className="space-y-8">
       <div className="bg-gray-50 rounded-lg p-6">
-        <div className="flex sm:items-start sm:justify-between flex-col sm:flex-row gap-4 sm:gap-0">
+        <div className="sm:flex sm:items-start sm:justify-between">
           <div className="flex items-start gap-4">
             <div className="mt-1">
               <Wrench className="h-5 w-5 text-[#0090FF]" />
@@ -46,17 +45,29 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
               </p>
             </div>
           </div>
-          <Button 
-            onClick={onAddProject} 
-            className="sm:!variant-default border border-primary text-white hover:text-white"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Project
-          </Button>
+          <div className="hidden sm:block">
+            <Button 
+              onClick={onAddProject} 
+              className="border border-primary text-white hover:text-white"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Project
+            </Button>
+          </div>
         </div>
       </div>
 
       <ProjectTypeExamples />
+
+      <div className="sm:hidden">
+        <Button 
+          onClick={onAddProject} 
+          className="w-full border border-primary text-white hover:text-white"
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          Add Project
+        </Button>
+      </div>
     </div>
   )
 
