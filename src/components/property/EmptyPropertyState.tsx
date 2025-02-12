@@ -20,7 +20,7 @@ export function EmptyPropertyState({ onAddProperty }: EmptyPropertyStateProps) {
           <div className="space-y-2">
             <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Your Mission:</h3>
             <p className="text-base sm:text-lg text-gray-700 max-w-xl">
-              Track your home improvements and renovations and maximize your tax savings
+              Add and track your home improvements, renovations and DIY projects to maximize your tax savings
             </p>
           </div>
         </div>
