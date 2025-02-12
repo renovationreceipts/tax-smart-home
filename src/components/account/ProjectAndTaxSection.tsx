@@ -39,8 +39,8 @@ export function ProjectAndTaxSection({
             </div>
             <div>
               <h3 className="font-semibold text-gray-900">Step 3: View your tax savings</h3>
-              <p className="hidden sm:block text-gray-600 mt-1 max-w-[400px]">
-                The best part - see how much you'll save by tracking projects and increasing your cost basis
+              <p className="hidden sm:block text-gray-600 mt-1">
+                Keep adding your home projects and watch your tax savings add up
               </p>
             </div>
           </div>
