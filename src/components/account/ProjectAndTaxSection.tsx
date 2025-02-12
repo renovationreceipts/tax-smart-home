@@ -41,21 +41,21 @@ export function ProjectAndTaxSection({
   }
 
   const TaxPreview = ({ disabled = false }: { disabled?: boolean }) => (
-    <div className="bg-white rounded-lg shadow-sm border p-6">
-      <div className="flex items-center gap-3 mb-6">
-        <DollarSign className="h-6 w-6 text-[#0090FF]" />
-        <h3 className="text-lg font-semibold">Tax Calculation</h3>
+    <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+      <div className="flex items-center gap-3 mb-4 sm:mb-6">
+        <DollarSign className="h-5 w-5 sm:h-6 sm:w-6 text-[#0090FF]" />
+        <h3 className="text-base sm:text-lg font-semibold">Tax Calculation</h3>
       </div>
       
-      <div className="bg-gray-50 rounded-lg p-6">
-        <div className="flex sm:items-start sm:justify-between flex-col sm:flex-row gap-4 sm:gap-6">
-          <div className="flex items-start gap-4">
+      <div className="bg-gray-50 rounded-lg p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-6">
+          <div className="flex items-start gap-3 sm:gap-4">
             <div className="mt-1">
-              <span className="text-2xl">💰</span>
+              <span className="text-xl sm:text-2xl">💰</span>
             </div>
-            <div>
-              <h3 className="font-semibold text-gray-900">Step 3: View your tax savings</h3>
-              <p className="hidden sm:block text-gray-600 mt-1">
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Step 3: View your tax savings</h3>
+              <p className="text-gray-600 mt-1 text-sm">
                 Keep adding your home projects and watch your tax savings add up
               </p>
             </div>
@@ -63,7 +63,7 @@ export function ProjectAndTaxSection({
           <Button 
             disabled={disabled}
             onClick={() => !disabled && setShowModal(true)}
-            className={`shrink-0 ${disabled ? 'bg-[#f3f3f3] text-[#8E9196] hover:bg-[#f3f3f3] hover:text-[#8E9196]' : 'bg-primary text-white hover:bg-primary/90'}`}
+            className={`w-full sm:w-auto shrink-0 ${disabled ? 'bg-[#f3f3f3] text-[#8E9196] hover:bg-[#f3f3f3] hover:text-[#8E9196]' : 'bg-primary text-white hover:bg-primary/90'}`}
           >
             View Savings
           </Button>
@@ -74,12 +74,12 @@ export function ProjectAndTaxSection({
 
   const TaxCalculationSection = () => (
     <>
-      <div className="bg-white rounded-lg shadow-sm border p-6">
+      <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
         <div className="flex items-center gap-3 mb-4">
-          <DollarSign className="h-6 w-6 text-[#0090FF]" />
-          <h3 className="text-lg font-semibold">Tax Calculation</h3>
+          <DollarSign className="h-5 w-5 sm:h-6 sm:w-6 text-[#0090FF]" />
+          <h3 className="text-base sm:text-lg font-semibold">Tax Calculation</h3>
         </div>
-        <p className="text-gray-600 text-sm mb-4">
+        <p className="text-sm text-gray-600 mb-4">
           If you sold your property today...
         </p>
         <TaxCalculationTable 
@@ -96,7 +96,7 @@ export function ProjectAndTaxSection({
   )
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 px-4 sm:px-0">
       <ProjectsSection 
         propertyId={selectedPropertyId}
         projects={projects}
