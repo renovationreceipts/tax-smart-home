@@ -28,6 +28,9 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
 
   // Calculate total capital gains before exemptions
   const totalCapitalGains = property ? (property.current_value || 0) - adjustedCostBasis : 0
+  
+  // Calculate the federal capital gains tax amount
+  const federalCapGainsTax = estimatedTaxSavings * userTaxRate
 
   return (
     <div className="space-y-6">
@@ -81,6 +84,10 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
                 <TaxTableRow 
                   label="Final Federal Taxable Gain After Exemption"
                   value={estimatedTaxSavings}
+                />
+                <TaxTableRow 
+                  label="Using your capital gains tax rate, your Federal cap gains tax would be"
+                  value={federalCapGainsTax}
                 />
               </TableBody>
             </Table>
