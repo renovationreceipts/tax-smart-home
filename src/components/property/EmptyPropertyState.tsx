@@ -1,3 +1,4 @@
+
 import { Home } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -54,7 +55,7 @@ export function EmptyPropertyState({ onAddProperty }: EmptyPropertyStateProps) {
                 <span role="img" aria-label="tools" className="text-xl sm:text-2xl mt-1">🛠️</span>
                 <div>
                   <h3 className="font-semibold text-gray-900 text-base sm:text-lg mb-1">
-                    Step 2: Track your renovations
+                    Step 2: Add your projects
                   </h3>
                   <p className="text-sm sm:text-base text-gray-600">
                     Store photos, receipts and document your projects for safekeeping.
