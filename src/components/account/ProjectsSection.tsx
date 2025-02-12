@@ -33,15 +33,15 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
 
   const EmptyState = () => (
     <div className="space-y-8">
-      <div className="bg-gray-50 rounded-lg p-6">
+      <div className="bg-gray-50 rounded-lg p-4 sm:p-6">
         <div className="sm:flex sm:items-start sm:justify-between">
           <div className="flex items-start gap-4">
             <div className="mt-1">
               <Wrench className="h-5 w-5 text-[#0090FF]" />
             </div>
             <div>
-              <h2 className="font-bold text-gray-800">Step 2: Add your home projects</h2>
-              <p className="text-gray-600 mt-1">
+              <h2 className="text-xl font-bold text-gray-900">Step 2: Add your home projects</h2>
+              <p className="text-base text-gray-600 mt-1">
                 Store photos, receipts and document your projects for safekeeping.
               </p>
             </div>
