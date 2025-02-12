@@ -1,7 +1,8 @@
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Loader2 } from "lucide-react"
 import * as z from "zod"
 import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
@@ -21,6 +22,7 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>
 
 export function ProfileSettingsForm() {
   const { toast } = useToast()
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
   })
@@ -65,8 +67,9 @@ export function ProfileSettingsForm() {
   }, [])
 
   const onSubmit = async (data: ProfileFormValues) => {
-    console.log("Profile form submitted with data:", data)
+    setIsSubmitting(true)
     try {
+      console.log("Profile form submitted with data:", data)
       const { data: { user } } = await supabase.auth.getUser()
       console.log("Current auth user:", user)
 
@@ -135,6 +138,8 @@ export function ProfileSettingsForm() {
           description: "Failed to update profile",
         })
       }
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -151,8 +156,15 @@ export function ProfileSettingsForm() {
           />
         </div>
 
-        <Button type="submit">
-          Save Profile Changes
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Saving...
+            </>
+          ) : (
+            "Save Profile Changes"
+          )}
         </Button>
       </form>
     </Form>
