@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom"
 import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
@@ -34,7 +35,7 @@ export default function Account() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <AccountHeader onSignOut={handleSignOut} />
-      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-grow w-full max-w-7xl mx-auto py-6 sm:py-8">
         <AccountContent />
       </main>
       <Footer />

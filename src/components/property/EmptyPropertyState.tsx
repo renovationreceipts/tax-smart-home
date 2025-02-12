@@ -10,90 +10,96 @@ interface EmptyPropertyStateProps {
 export function EmptyPropertyState({ onAddProperty }: EmptyPropertyStateProps) {
   return (
     <Card className="border rounded-lg">
-      <CardContent className="flex flex-col items-center justify-center py-12 px-4 space-y-8">
-        <div className="text-center space-y-4">
+      <CardContent className="flex flex-col items-center justify-center py-8 px-4 sm:py-12 sm:px-6 space-y-6 sm:space-y-8">
+        <div className="text-center space-y-3 sm:space-y-4">
           <div className="flex items-center justify-center gap-2">
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
               Welcome <span role="img" aria-label="waving hand">👋</span>
             </h2>
           </div>
           <div className="space-y-2">
-            <h3 className="text-xl font-semibold text-gray-900">Your Mission:</h3>
-            <p className="text-lg text-gray-700 max-w-xl">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Your Mission:</h3>
+            <p className="text-base sm:text-lg text-gray-700 max-w-xl">
               Track your home improvements and renovations and maximize your tax savings
             </p>
           </div>
         </div>
 
-        <div className="w-full max-w-2xl space-y-6">
+        <div className="w-full max-w-2xl space-y-4 sm:space-y-6">
           {/* Step 1 */}
-          <div className="bg-gray-50 p-6 rounded-lg flex items-center justify-between">
-            <div className="flex gap-4">
-              <span role="img" aria-label="house" className="text-2xl">🏠</span>
-              <div>
-                <h3 className="font-semibold text-gray-900 text-lg mb-1">
-                  Step 1: Add your property
-                </h3>
-                <p className="text-gray-600">
-                  We support primary homes, rentals, and vacation homes.
-                </p>
+          <div className="bg-gray-50 p-4 sm:p-6 rounded-lg">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex gap-3 sm:gap-4">
+                <span role="img" aria-label="house" className="text-xl sm:text-2xl mt-1">🏠</span>
+                <div>
+                  <h3 className="font-semibold text-gray-900 text-base sm:text-lg mb-1">
+                    Step 1: Add your property
+                  </h3>
+                  <p className="text-sm sm:text-base text-gray-600">
+                    We support primary homes, rentals, and vacation homes.
+                  </p>
+                </div>
               </div>
+              <Button 
+                onClick={onAddProperty}
+                className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white"
+              >
+                Add Property
+              </Button>
             </div>
-            <Button 
-              onClick={onAddProperty}
-              className="bg-blue-500 hover:bg-blue-600 text-white"
-            >
-              Add Property
-            </Button>
           </div>
 
           {/* Step 2 */}
-          <div className="bg-gray-50 p-6 rounded-lg flex items-center justify-between">
-            <div className="flex gap-4">
-              <span role="img" aria-label="tools" className="text-2xl">🛠️</span>
-              <div>
-                <h3 className="font-semibold text-gray-900 text-lg mb-1">
-                  Step 2: Track your renovations
-                </h3>
-                <p className="text-gray-600">
-                  See if your renovations qualify for tax savings using our IRS-GPT analyzer.
-                </p>
+          <div className="bg-gray-50 p-4 sm:p-6 rounded-lg">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex gap-3 sm:gap-4">
+                <span role="img" aria-label="tools" className="text-xl sm:text-2xl mt-1">🛠️</span>
+                <div>
+                  <h3 className="font-semibold text-gray-900 text-base sm:text-lg mb-1">
+                    Step 2: Track your renovations
+                  </h3>
+                  <p className="text-sm sm:text-base text-gray-600">
+                    See if your renovations qualify for tax savings using our IRS-GPT analyzer.
+                  </p>
+                </div>
               </div>
+              <Button 
+                disabled
+                className="w-full sm:w-auto bg-gray-200 text-gray-500"
+              >
+                Add Project
+              </Button>
             </div>
-            <Button 
-              disabled
-              className="bg-gray-200 text-gray-500"
-            >
-              Add Project
-            </Button>
           </div>
 
           {/* Step 3 */}
-          <div className="bg-gray-50 p-6 rounded-lg flex items-center justify-between">
-            <div className="flex gap-4">
-              <span role="img" aria-label="money bag" className="text-2xl">💰</span>
-              <div>
-                <h3 className="font-semibold text-gray-900 text-lg mb-1">
-                  Step 3: View your tax savings
-                </h3>
-                <p className="text-gray-600">
-                  The best part - see how much you can save by increasing the cost basis in your property
-                </p>
+          <div className="bg-gray-50 p-4 sm:p-6 rounded-lg">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex gap-3 sm:gap-4">
+                <span role="img" aria-label="money bag" className="text-xl sm:text-2xl mt-1">💰</span>
+                <div>
+                  <h3 className="font-semibold text-gray-900 text-base sm:text-lg mb-1">
+                    Step 3: View your tax savings
+                  </h3>
+                  <p className="text-sm sm:text-base text-gray-600">
+                    The best part - see how much you can save by increasing the cost basis in your property
+                  </p>
+                </div>
               </div>
+              <Button 
+                disabled
+                className="w-full sm:w-auto bg-gray-200 text-gray-500"
+              >
+                View Savings
+              </Button>
             </div>
-            <Button 
-              disabled
-              className="bg-gray-200 text-gray-500"
-            >
-              View Savings
-            </Button>
           </div>
         </div>
 
         <Button 
           onClick={onAddProperty}
           size="lg"
-          className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 text-lg w-full max-w-2xl"
+          className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white px-6 py-3 text-base sm:text-lg"
         >
           Get started by adding your first property
         </Button>
