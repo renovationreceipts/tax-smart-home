@@ -32,7 +32,7 @@ export function ProjectAndTaxSection({
       </div>
       
       <div className="bg-gray-50 rounded-lg p-6">
-        <div className="flex items-start justify-between gap-6">
+        <div className="flex sm:items-start sm:justify-between flex-col sm:flex-row gap-4 sm:gap-6">
           <div className="flex items-start gap-4">
             <div className="mt-1">
               <span className="text-2xl">💰</span>
