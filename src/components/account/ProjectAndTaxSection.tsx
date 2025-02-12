@@ -1,4 +1,5 @@
 
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { ProjectsSection } from "@/components/account/ProjectsSection"
 import { TaxCalculationTable } from "@/components/property/TaxCalculationTable"
@@ -6,6 +7,7 @@ import { TaxFormGenerator } from "@/components/property/tax-form/TaxFormGenerato
 import { useProjects } from "@/hooks/useProjects"
 import { DollarSign } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { TaxSavingsModal } from "./TaxSavingsModal"
 import type { Project } from "@/hooks/useProjects"
 
 interface ProjectAndTaxSectionProps {
@@ -19,9 +21,16 @@ export function ProjectAndTaxSection({
 }: ProjectAndTaxSectionProps) {
   const navigate = useNavigate()
   const { data: projects = [] } = useProjects(selectedPropertyId)
+  const [showModal, setShowModal] = useState(false)
+  const [showTaxCalculation, setShowTaxCalculation] = useState(false)
 
   const handleEditProject = (project: Project) => {
     navigate(`/project/edit/${selectedPropertyId}/${project.id}`)
+  }
+
+  const handleContinue = () => {
+    setShowModal(false)
+    setShowTaxCalculation(true)
   }
 
   const TaxPreview = ({ disabled = false }: { disabled?: boolean }) => (
@@ -46,7 +55,7 @@ export function ProjectAndTaxSection({
           </div>
           <Button 
             disabled={disabled}
-            onClick={() => !disabled && navigate(`/project/edit/${selectedPropertyId}`)}
+            onClick={() => !disabled && setShowModal(true)}
             className={`shrink-0 ${disabled ? 'bg-[#f3f3f3] text-[#8E9196] hover:bg-[#f3f3f3] hover:text-[#8E9196]' : 'bg-primary text-white hover:bg-primary/90'}`}
           >
             View Savings
@@ -54,6 +63,29 @@ export function ProjectAndTaxSection({
         </div>
       </div>
     </div>
+  )
+
+  const TaxCalculationSection = () => (
+    <>
+      <div className="bg-white rounded-lg shadow-sm border p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <DollarSign className="h-6 w-6 text-[#0090FF]" />
+          <h3 className="text-lg font-semibold">Tax Calculation</h3>
+        </div>
+        <p className="text-gray-600 text-sm mb-4">
+          If you sold your property today...
+        </p>
+        <TaxCalculationTable 
+          property={selectedProperty}
+          projects={projects}
+        />
+      </div>
+
+      <TaxFormGenerator 
+        property={selectedProperty}
+        projects={projects}
+      />
+    </>
   )
 
   return (
@@ -65,7 +97,19 @@ export function ProjectAndTaxSection({
         onEditProject={handleEditProject}
       />
 
-      {selectedProperty && <TaxPreview disabled={projects.length === 0} />}
+      {selectedProperty && (
+        showTaxCalculation ? (
+          <TaxCalculationSection />
+        ) : (
+          <TaxPreview disabled={projects.length === 0} />
+        )
+      )}
+
+      <TaxSavingsModal 
+        open={showModal}
+        onOpenChange={setShowModal}
+        onContinue={handleContinue}
+      />
     </div>
   )
 }
