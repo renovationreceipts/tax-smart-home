@@ -95,7 +95,7 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
 
             <div className="mt-6 bg-gray-50 border rounded-lg px-4 py-3 text-sm text-gray-600">
               <div className="flex items-center">
-                Update your personalized capital gains tax rate in your{" "}
+                Update your tax filing status and cap gains tax rate in your{" "}
                 <button 
                   onClick={() => navigate("/profile")} 
                   className="text-primary hover:underline font-medium ml-1"
