@@ -47,7 +47,7 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
         </div>
         <Button 
           onClick={onAddProject} 
-          className="bg-[#9b87f5] hover:bg-[#9b87f5]/90 text-white px-6 rounded-full"
+          className="sm:!variant-default border border-primary text-primary hover:text-primary"
         >
           Add Project
         </Button>
