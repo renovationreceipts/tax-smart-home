@@ -14,9 +14,9 @@ export function useModalViews(propertyId: string | null) {
         .from('property_modal_views')
         .select('*')
         .eq('property_id', propertyId)
-        .single()
+        .maybeSingle()
 
-      if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
+      if (error) {
         console.error('Error fetching modal view:', error)
         throw error
       }
@@ -30,11 +30,14 @@ export function useModalViews(propertyId: string | null) {
     mutationFn: async () => {
       if (!propertyId) return
 
+      const { data: user } = await supabase.auth.getUser()
+      if (!user.user) throw new Error('User not authenticated')
+
       const { data: existingView } = await supabase
         .from('property_modal_views')
         .select('id')
         .eq('property_id', propertyId)
-        .single()
+        .maybeSingle()
 
       if (existingView) {
         // Update existing record
@@ -42,6 +45,7 @@ export function useModalViews(propertyId: string | null) {
           .from('property_modal_views')
           .update({ tax_savings_modal_viewed: true })
           .eq('property_id', propertyId)
+          .eq('user_id', user.user.id)
 
         if (error) throw error
       } else {
@@ -50,6 +54,7 @@ export function useModalViews(propertyId: string | null) {
           .from('property_modal_views')
           .insert({
             property_id: propertyId,
+            user_id: user.user.id,
             tax_savings_modal_viewed: true
           })
 
