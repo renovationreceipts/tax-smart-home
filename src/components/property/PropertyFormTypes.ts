@@ -4,7 +4,7 @@ import { z } from "zod"
 export const propertyFormSchema = z.object({
   propertyType: z.enum(["PRIMARY_HOME", "SECOND_HOME", "RENTAL"], {
     required_error: "Please select a property type.",
-  }),
+  }).default("PRIMARY_HOME"),
   name: z.string().min(1, "Property name is required"),
   streetAddress: z.string().min(1, "Street address is required"),
   city: z.string().min(1, "City is required"),
@@ -19,3 +19,4 @@ export const propertyFormSchema = z.object({
 })
 
 export type PropertyFormValues = z.infer<typeof propertyFormSchema>
+

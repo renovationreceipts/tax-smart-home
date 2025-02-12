@@ -81,7 +81,7 @@ export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProp
       }).format(property.current_value),
       livedInProperty2of5Years: property.lived_in_property_2_of_5_years ?? true
     } : {
-      propertyType: undefined,
+      propertyType: "PRIMARY_HOME",
       name: "",
       streetAddress: "",
       city: "",
