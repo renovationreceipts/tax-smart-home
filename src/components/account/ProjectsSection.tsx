@@ -42,7 +42,7 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
             <div>
               <h2 className="font-bold text-gray-800">Step 2: Add your home projects</h2>
               <p className="hidden sm:block text-gray-600 mt-1">
-                See if your renovations qualify for tax savings using our IRS-GPT analyzer.
+                Store photos, receipts and document your projects for safekeeping.
               </p>
             </div>
           </div>
