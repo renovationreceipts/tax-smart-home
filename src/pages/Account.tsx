@@ -35,7 +35,7 @@ export default function Account() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <AccountHeader onSignOut={handleSignOut} />
-      <main className="flex-grow w-full max-w-7xl mx-auto py-6 sm:py-8">
+      <main className="flex-grow w-full max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-16">
         <AccountContent />
       </main>
       <Footer />
