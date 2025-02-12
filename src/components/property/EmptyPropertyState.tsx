@@ -1,4 +1,3 @@
-
 import { Home } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -18,7 +17,6 @@ export function EmptyPropertyState({ onAddProperty }: EmptyPropertyStateProps) {
             </h2>
           </div>
           <div className="space-y-2">
-            <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Your Mission:</h3>
             <p className="text-base sm:text-lg text-gray-700 max-w-xl">
               Add and track your home improvements, renovations and DIY projects to maximize your tax savings
             </p>
