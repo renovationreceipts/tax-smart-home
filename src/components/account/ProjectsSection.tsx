@@ -1,3 +1,4 @@
+
 import { FileText, Plus, Wrench, ClipboardList } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -57,7 +58,9 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
         </div>
       </div>
 
-      <ProjectTypeExamples />
+      <div className="hidden sm:block">
+        <ProjectTypeExamples />
+      </div>
 
       <div className="sm:hidden">
         <Button 
