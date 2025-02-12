@@ -58,6 +58,7 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
           <TaxTableRow 
             label="Tracked Home Improvements Reduced Your Reported Gain By"
             value={newCostBasis}
+            isHighlighted={true}
           />
         </TableBody>
       </Table>
