@@ -32,22 +32,21 @@ export function ProjectAndTaxSection({
         onEditProject={handleEditProject}
       />
 
-      <div className="bg-white rounded-lg shadow-sm border p-6">
-        <div className="flex items-center gap-3 mb-4">
-          <DollarSign className="h-6 w-6 text-primary" />
-          <h3 className="text-lg font-semibold">Tax Calculation</h3>
+      {selectedProperty && (
+        <div className="bg-white rounded-lg shadow-sm border p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <DollarSign className="h-6 w-6 text-primary" />
+            <h3 className="text-lg font-semibold">Tax Calculation</h3>
+          </div>
+          <p className="text-gray-600 text-sm mb-4">
+            If you sold your property today...
+          </p>
+          <TaxCalculationTable 
+            property={selectedProperty}
+            projects={projects}
+          />
         </div>
-        <p className="text-gray-600 text-sm mb-4">
-          {!selectedProperty 
-            ? "Select a property to view detailed tax calculations and potential savings."
-            : "If you sold your property today..."
-          }
-        </p>
-        <TaxCalculationTable 
-          property={selectedProperty}
-          projects={projects}
-        />
-      </div>
+      )}
 
       {selectedProperty && (
         <TaxFormGenerator 
