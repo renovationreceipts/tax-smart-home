@@ -69,8 +69,8 @@ export function useTaxCalculations({ property, projects }: TaxCalculationsProps)
     property?.lived_in_property_2_of_5_years ?? false
   )
 
-  const taxSavings = exemptionAmount
-  const estimatedTaxSavings = taxSavings * userTaxRate
+  // Calculate final taxable gain after exemption
+  const finalTaxableGain = property ? Math.max(0, (property.current_value || 0) - adjustedCostBasis - exemptionAmount) : 0
 
   return {
     userTaxRate,
@@ -78,8 +78,8 @@ export function useTaxCalculations({ property, projects }: TaxCalculationsProps)
     newCostBasis: totalProjectCosts,
     taxableGainWithBasis,
     taxableGainWithoutBasis,
-    taxSavings,
-    estimatedTaxSavings,
+    taxSavings: exemptionAmount,
+    estimatedTaxSavings: finalTaxableGain,
     adjustedCostBasis,
   }
 }
