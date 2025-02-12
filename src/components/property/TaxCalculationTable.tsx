@@ -64,7 +64,7 @@ export function TaxCalculationTable({ property, projects }: TaxCalculationTableP
       </Table>
 
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-        <CollapsibleTrigger className="flex items-center gap-2 text-primary hover:underline">
+        <CollapsibleTrigger className="flex items-center gap-2 text-black hover:underline">
           See Detailed Calculation
           <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'transform rotate-180' : ''}`} />
         </CollapsibleTrigger>
