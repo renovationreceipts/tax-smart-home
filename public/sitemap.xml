@@ -21,6 +21,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://renovationreceipts.com/blog/track-home-improvement-receipts</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://renovationreceipts.com/privacy-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

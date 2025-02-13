@@ -12,6 +12,7 @@ import SignUp from "@/pages/SignUp"
 import Community from "@/pages/Community"
 import About from "@/pages/About"
 import Blog from "@/pages/Blog"
+import TrackHomeImprovements from "@/pages/blog/TrackHomeImprovements"
 import Disclaimers from './pages/Disclaimers.tsx';
 import Terms from './pages/Terms.tsx';
 import Privacy from './pages/Privacy.tsx';
@@ -42,6 +43,15 @@ const router = createBrowserRouter([
     element: (
       <>
         <Blog />
+        <ScrollRestoration />
+      </>
+    ),
+  },
+  {
+    path: "/blog/track-home-improvement-receipts",
+    element: (
+      <>
+        <TrackHomeImprovements />
         <ScrollRestoration />
       </>
     ),
