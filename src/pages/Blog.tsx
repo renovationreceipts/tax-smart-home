@@ -1,3 +1,4 @@
+
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
@@ -11,7 +12,13 @@ const blogPosts: BlogPost[] = [
     thumbnail: "/lovable-uploads/de0711d6-5e88-442a-845c-efb3fd3caba4.png",
     date: "March 19, 2024"
   },
-  // More blog posts will be added here
+  {
+    slug: "homeowners-guide-tax-savings",
+    title: "The Homeowner's Guide to Tax Savings: Tracking Renovations the Smart Way",
+    description: "A comprehensive guide to maximizing your tax benefits through strategic renovation tracking and documentation. Learn what qualifies and how to track effectively.",
+    thumbnail: "/lovable-uploads/69bafa75-cbb8-49f9-a552-21142b9fa060.png",
+    date: "March 19, 2024"
+  }
 ];
 
 const Blog = () => {
