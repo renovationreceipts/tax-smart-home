@@ -10,8 +10,7 @@ const WhyTrackCosts = () => {
   return (
     <div className="container-width py-16 sm:py-20">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-6 flex items-center gap-3 justify-center text-center">
-          <span role="img" aria-label="lightbulb" className="text-3xl">💡</span>
+        <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-center">
           Why Should You Track Your Home Improvements?
         </h2>
         
