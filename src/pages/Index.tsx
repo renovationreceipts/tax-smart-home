@@ -9,9 +9,7 @@ const WhyTrackCosts = () => {
       <div className="max-w-4xl mx-auto">
         <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-center">Why Should I Track Home Improvement Expenses?</h2>
         
-        <p className="text-lg text-gray-600 mb-10 text-center px-[19px]">
-          Most homeowners forget that the money they put into their home can actually reduce their tax bill later. When you sell your home, the IRS allows you to increase your home's cost basis with qualifying improvements—lowering your taxable capital gains.
-        </p>
+        <p className="text-lg text-gray-600 mb-10 text-center px-[26px]">Most homeowners forget that the money they put into their home can actually reduce their tax bill later. When you sell your home, the IRS allows you to increase your home's cost basis with qualifying improvements - lowering your taxable capital gains.</p>
 
         <div className="bg-gray-50 p-6 sm:p-8 rounded-lg">
           <h3 className="font-semibold text-xl mb-6 text-center">For example:</h3>
