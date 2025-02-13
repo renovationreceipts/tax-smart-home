@@ -1,37 +1,29 @@
-
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import BlogCard, { BlogPost } from "@/components/blog/BlogCard";
-
-const blogPosts: BlogPost[] = [
-  {
-    slug: "track-home-improvement-receipts",
-    title: "Should I Track My Home Improvement Receipts? Here's Why It Could Save You Thousands",
-    description: "Learn how tracking your home improvement expenses can save you thousands in taxes when you sell your home. Get started with digital receipt tracking today.",
-    thumbnail: "/lovable-uploads/de0711d6-5e88-442a-845c-efb3fd3caba4.png",
-    date: "February 8, 2025"
-  },
-  {
-    slug: "homeowners-guide-tax-savings",
-    title: "The Homeowner's Guide to Tax Savings: Tracking Renovations the Smart Way",
-    description: "A comprehensive guide to maximizing your tax benefits through strategic renovation tracking and documentation. Learn what qualifies and how to track effectively.",
-    thumbnail: "/lovable-uploads/69bafa75-cbb8-49f9-a552-21142b9fa060.png",
-    date: "February 8, 2025"
-  },
-  {
-    slug: "capital-gains-101",
-    title: "Capital Gains 101: How to Reduce Your Taxable Gain When Selling Your Home",
-    description: "Understanding capital gains tax on your home sale and legal strategies to minimize your tax burden through proper improvement tracking and documentation.",
-    thumbnail: "/lovable-uploads/6509f569-6024-48bb-b69e-73a69de6f023.png",
-    date: "February 8, 2025"
-  }
-];
-
+const blogPosts: BlogPost[] = [{
+  slug: "track-home-improvement-receipts",
+  title: "Should I Track My Home Improvement Receipts? Here's Why It Could Save You Thousands",
+  description: "Learn how tracking your home improvement expenses can save you thousands in taxes when you sell your home. Get started with digital receipt tracking today.",
+  thumbnail: "/lovable-uploads/de0711d6-5e88-442a-845c-efb3fd3caba4.png",
+  date: "February 8, 2025"
+}, {
+  slug: "homeowners-guide-tax-savings",
+  title: "The Homeowner's Guide to Tax Savings: Tracking Renovations the Smart Way",
+  description: "A comprehensive guide to maximizing your tax benefits through strategic renovation tracking and documentation. Learn what qualifies and how to track effectively.",
+  thumbnail: "/lovable-uploads/69bafa75-cbb8-49f9-a552-21142b9fa060.png",
+  date: "February 8, 2025"
+}, {
+  slug: "capital-gains-101",
+  title: "Capital Gains 101: How to Reduce Your Taxable Gain When Selling Your Home",
+  description: "Understanding capital gains tax on your home sale and legal strategies to minimize your tax burden through proper improvement tracking and documentation.",
+  thumbnail: "/lovable-uploads/6509f569-6024-48bb-b69e-73a69de6f023.png",
+  date: "February 8, 2025"
+}];
 const Blog = () => {
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container-width py-8 sm:py-12">
+  return <div className="min-h-screen bg-gray-50">
+      <div className="container-width py-8 sm:py-12 bg-slate-50">
         <div className="mb-12">
           <Link to="/" className="text-gray-600 hover:text-gray-900 inline-flex items-center gap-2 mb-6">
             <ArrowLeft className="h-4 w-4" />
@@ -44,14 +36,10 @@ const Blog = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogPosts.map((post) => (
-            <BlogCard key={post.slug} post={post} />
-          ))}
+          {blogPosts.map(post => <BlogCard key={post.slug} post={post} />)}
         </div>
       </div>
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Blog;
