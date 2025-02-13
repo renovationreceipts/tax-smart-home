@@ -23,7 +23,7 @@ const blogPosts: BlogPost[] = [{
 }];
 const Blog = () => {
   return <div className="min-h-screen bg-gray-50">
-      <div className="container-width py-8 sm:py-12 bg-slate-50">
+      <div className="container-width py-8 sm:py-12 bg-neutral-50">
         <div className="mb-12">
           <Link to="/" className="text-gray-600 hover:text-gray-900 inline-flex items-center gap-2 mb-6">
             <ArrowLeft className="h-4 w-4" />
