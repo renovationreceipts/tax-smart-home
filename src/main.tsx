@@ -1,4 +1,3 @@
-
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider, ScrollRestoration } from "react-router-dom";
 import App from './App.tsx'
@@ -12,6 +11,7 @@ import Profile from "@/pages/Profile"
 import SignUp from "@/pages/SignUp"
 import Community from "@/pages/Community"
 import About from "@/pages/About"
+import Blog from "@/pages/Blog"
 import Disclaimers from './pages/Disclaimers.tsx';
 import Terms from './pages/Terms.tsx';
 import Privacy from './pages/Privacy.tsx';
@@ -33,6 +33,15 @@ const router = createBrowserRouter([
     element: (
       <>
         <Features />
+        <ScrollRestoration />
+      </>
+    ),
+  },
+  {
+    path: "/blog",
+    element: (
+      <>
+        <Blog />
         <ScrollRestoration />
       </>
     ),
