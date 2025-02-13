@@ -16,6 +16,7 @@ import Disclaimers from './pages/Disclaimers.tsx';
 import Terms from './pages/Terms.tsx';
 import Privacy from './pages/Privacy.tsx';
 import GenerateOGImage from './pages/GenerateOGImage.tsx';
+import Features from './pages/Features.tsx';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,15 @@ const router = createBrowserRouter([
     element: (
       <>
         <Index />
+        <ScrollRestoration />
+      </>
+    ),
+  },
+  {
+    path: "/features",
+    element: (
+      <>
+        <Features />
         <ScrollRestoration />
       </>
     ),
@@ -143,4 +153,3 @@ root.render(
     <RouterProvider router={router} />
   </App>
 );
-
