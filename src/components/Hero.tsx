@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -49,7 +50,7 @@ export const Hero = () => {
             </Button>
             {isMenuOpen && <MobileMenu />}
           </div> : <div className="flex gap-4 items-center">
-            <Link to="/login" className="text-gray-600 hover:text-gray-900" onClick={handleLoginClick}>
+            <Link to="/login" className="text-black hover:text-gray-900" onClick={handleLoginClick}>
               Login
             </Link>
             <Link to="/signup" className="text-white bg-primary hover:bg-primary/90 px-4 py-2 rounded-md" onClick={handleSignUpClick}>
