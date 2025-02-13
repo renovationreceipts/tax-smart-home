@@ -71,7 +71,7 @@ View your tax savings</h3>
       <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
         <div className="flex items-center gap-3 mb-4">
           <DollarSign className="h-5 w-5 sm:h-6 sm:w-6 text-[#0090FF]" />
-          <h3 className="text-base sm:text-lg font-semibold">Tax Calculation</h3>
+          <h3 className="sm:text-lg font-semibold text-lg">Tax Calculation</h3>
         </div>
         <p className="text-sm text-gray-600 mb-4">
           If you sold your property today...
