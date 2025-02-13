@@ -64,9 +64,6 @@ export function ProjectAndTaxSection({
               <p className="text-gray-600 mt-1 text-sm">
                 Keep adding your home projects and watch your tax savings add up
               </p>
-              <a href="/about" className="text-primary hover:text-primary/90 text-sm mt-2 inline-block">
-                Learn more about how we calculate tax savings →
-              </a>
             </div>
           </div>
           <Button disabled={disabled} onClick={() => !disabled && setShowModal(true)} className={`w-full sm:w-auto shrink-0 ${disabled ? 'bg-[#f3f3f3] text-[#8E9196] hover:bg-[#f3f3f3] hover:text-[#8E9196]' : 'bg-primary text-white hover:bg-primary/90'}`}>
@@ -86,9 +83,6 @@ export function ProjectAndTaxSection({
           If you sold your property today...
         </p>
         <TaxCalculationTable property={selectedProperty} projects={projects} />
-        <a href="/about" className="text-primary hover:text-primary/90 text-sm mt-4 inline-block">
-          Learn more about how we calculate tax savings →
-        </a>
       </div>
 
       <TaxFormGenerator property={selectedProperty} projects={projects} />
