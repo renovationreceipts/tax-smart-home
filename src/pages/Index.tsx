@@ -1,18 +1,13 @@
-
 import { Hero } from "@/components/Hero";
 import { Features } from "@/components/Features";
 import { HowItWorks } from "@/components/HowItWorks";
 import Reviews from "@/components/Reviews";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
-
 const WhyTrackCosts = () => {
-  return (
-    <div className="container-width py-16 sm:py-20">
+  return <div className="container-width py-16 sm:py-20">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-center">
-          Why Should You Track Your Home Improvements?
-        </h2>
+        <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-center">Why Should I Track Home Improvement Expenses?</h2>
         
         <p className="text-lg text-gray-600 mb-10 text-center">
           Most homeowners forget that the money they put into their home can actually reduce their tax bill later. When you sell your home, the IRS allows you to increase your home's cost basis with qualifying improvements—lowering your taxable capital gains.
@@ -69,13 +64,10 @@ const WhyTrackCosts = () => {
           </p>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 const Index = () => {
-  return (
-    <div className="min-h-screen">
+  return <div className="min-h-screen">
       <Hero />
       <WhyTrackCosts />
       <HowItWorks />
@@ -83,8 +75,6 @@ const Index = () => {
       <Reviews />
       <FAQ />
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
