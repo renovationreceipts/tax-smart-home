@@ -1,5 +1,5 @@
 
-import { ArrowLeft, LayoutDashboard, Receipt, Camera, Calculator, FileText } from "lucide-react";
+import { ArrowLeft, LayoutDashboard, Receipt, Camera, Calculator, FileText, FileOutput } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const detailedFeatures = [
@@ -27,6 +27,11 @@ const detailedFeatures = [
     icon: <FileText className="h-6 w-6" />,
     title: "IRS Qualification Check",
     description: "We help determine if your project qualifies for tax benefits based on current IRS guidelines.",
+  },
+  {
+    icon: <FileText className="h-6 w-6" />,
+    title: "Tax Form Export",
+    description: "Export all the documentation you need for IRS form 8949.",
   }
 ];
 
