@@ -32,7 +32,7 @@ const detailedFeatures = [
 
 const Features = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <div className="container-width py-8 sm:py-12">
         <div className="mb-8">
           <Link to="/" className="text-gray-600 hover:text-gray-900 inline-flex items-center gap-2 mb-6">
