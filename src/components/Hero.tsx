@@ -57,7 +57,7 @@ export const Hero = () => {
             </Link>
           </div>}
       </nav>
-      <div className="w-full py-16 sm:py-20 lg:py-24 px-4">
+      <div className="w-full py-16 sm:py-20 px-4 lg:py-[110px]">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
             <div className="space-y-8">
