@@ -1,3 +1,4 @@
+
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
@@ -14,13 +15,13 @@ const TrackHomeImprovements = () => {
         </div>
 
         <article className="bg-white p-8 rounded-lg shadow-sm border">
-          <h2 className="text-3xl font-bold mb-6">
+          <h1 className="text-3xl font-bold mb-6">
             Introducing Renovation Receipts: The Smartest Way to Track Your Home Improvement Expenses & Maximize Tax Savings
-          </h2>
+          </h1>
           
-          <h3 className="text-xl font-semibold text-gray-700 mb-6">
+          <h2 className="text-xl font-semibold text-gray-700 mb-6">
             Stop Stuffing Receipts in a Filing Cabinet – Go Digital Instead!
-          </h3>
+          </h2>
 
           <div className="prose max-w-none">
             <p className="mb-6">
