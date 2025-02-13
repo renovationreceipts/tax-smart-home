@@ -1,4 +1,3 @@
-
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
@@ -150,10 +149,6 @@ const Blog = () => {
               <li className="flex items-start">
                 <span className="mr-2">🛠</span>
                 <span>Try it out, break it, tell us what you love & what you want to see next.</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2">🔗</span>
-                <Link to="/signup" className="text-primary hover:text-primary/90">Sign up now at RenovationReceipts.com</Link>
               </li>
             </ul>
 
