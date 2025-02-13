@@ -87,7 +87,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
       <AuthBackButton />
       <div className="max-w-md w-full space-y-8">
         <AuthHeader 
@@ -148,7 +148,7 @@ export default function Login() {
                     <span className="w-full border-t" />
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-gray-50 px-2 text-muted-foreground">
+                    <span className="bg-white px-2 text-muted-foreground">
                       Or continue with
                     </span>
                   </div>
