@@ -43,7 +43,7 @@ export const Hero = () => {
         className="block px-4 py-2 text-primary hover:bg-gray-50"
         onClick={handleSignUpClick}
       >
-        Sign Up
+        Sign Up for Free
       </Link>
     </div>
   );
@@ -88,7 +88,7 @@ export const Hero = () => {
               className="text-white bg-primary hover:bg-primary/90 px-4 py-2 rounded-md"
               onClick={handleSignUpClick}
             >
-              Sign Up
+              Sign Up for Free
             </Link>
           </div>
         )}
