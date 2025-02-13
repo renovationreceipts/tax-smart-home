@@ -18,6 +18,13 @@ const blogPosts: BlogPost[] = [
     description: "A comprehensive guide to maximizing your tax benefits through strategic renovation tracking and documentation. Learn what qualifies and how to track effectively.",
     thumbnail: "/lovable-uploads/69bafa75-cbb8-49f9-a552-21142b9fa060.png",
     date: "March 19, 2024"
+  },
+  {
+    slug: "capital-gains-101",
+    title: "Capital Gains 101: How to Reduce Your Taxable Gain When Selling Your Home",
+    description: "Understanding capital gains tax on your home sale and legal strategies to minimize your tax burden through proper improvement tracking and documentation.",
+    thumbnail: "/lovable-uploads/6509f569-6024-48bb-b69e-73a69de6f023.png",
+    date: "March 19, 2024"
   }
 ];
 

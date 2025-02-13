@@ -14,6 +14,7 @@ import About from "@/pages/About"
 import Blog from "@/pages/Blog"
 import TrackHomeImprovements from "@/pages/blog/TrackHomeImprovements"
 import HomeownersGuideTaxSavings from "@/pages/blog/HomeownersGuideTaxSavings"
+import CapitalGains101 from "@/pages/blog/CapitalGains101"
 import Disclaimers from './pages/Disclaimers.tsx';
 import Terms from './pages/Terms.tsx';
 import Privacy from './pages/Privacy.tsx';
@@ -62,6 +63,15 @@ const router = createBrowserRouter([
     element: (
       <>
         <HomeownersGuideTaxSavings />
+        <ScrollRestoration />
+      </>
+    ),
+  },
+  {
+    path: "/blog/capital-gains-101",
+    element: (
+      <>
+        <CapitalGains101 />
         <ScrollRestoration />
       </>
     ),
