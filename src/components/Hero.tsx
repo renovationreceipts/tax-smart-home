@@ -106,7 +106,7 @@ export const Hero = () => {
               <div className="flex justify-center gap-4">
                 <Link to="/signup" onClick={handleSignUpClick}>
                   <Button size="lg" className="text-base sm:text-lg">
-                    Get Started <ArrowRight className="ml-2 h-5 w-5" />
+                    Get Started for Free <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
               </div>
