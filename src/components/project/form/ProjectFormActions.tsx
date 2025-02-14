@@ -27,11 +27,15 @@ export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectI
   const navigate = useNavigate()
   const location = useLocation()
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
   
   // Extract propertyId from the URL path
   const propertyId = location.pathname.split('/')[3]
 
   const handleDeleteProject = async () => {
+    if (isDeleting) return
+
+    setIsDeleting(true)
     try {
       if (!projectId) {
         console.error('No project ID available:', projectId)
@@ -66,12 +70,14 @@ export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectI
         title: "Error",
         description: "Failed to delete project. Please try again.",
       })
+    } finally {
+      setIsDeleting(false)
     }
   }
 
   return (
     <div className="flex flex-col sm:flex-row sm:justify-between gap-4 pt-4">
-      {isEditing && (
+      {isEditing && projectId && (
         <div className="order-2 sm:order-none">
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
@@ -96,6 +102,7 @@ export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectI
                   variant="outline" 
                   type="button" 
                   onClick={() => setDialogOpen(false)}
+                  disabled={isDeleting}
                 >
                   Cancel
                 </Button>
@@ -103,8 +110,16 @@ export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectI
                   variant="destructive"
                   type="button"
                   onClick={handleDeleteProject}
+                  disabled={isDeleting}
                 >
-                  Delete
+                  {isDeleting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Deleting...
+                    </>
+                  ) : (
+                    'Delete'
+                  )}
                 </Button>
               </DialogFooter>
             </DialogContent>
