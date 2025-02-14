@@ -31,9 +31,13 @@ export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectI
   
   // Extract propertyId from the URL path
   const propertyId = location.pathname.split('/')[3]
+  
+  console.log("ProjectFormActions - Project ID received:", projectId)
+  console.log("ProjectFormActions - Property ID from URL:", propertyId)
 
   const handleDeleteProject = async () => {
     if (isDeleting) return
+    console.log("Delete initiated - Project ID:", projectId)
 
     setIsDeleting(true)
     try {
@@ -54,6 +58,7 @@ export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectI
         throw error
       }
 
+      console.log('Project successfully deleted')
       setDialogOpen(false)
       
       toast({

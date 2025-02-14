@@ -23,7 +23,8 @@ interface ProjectFormProps {
 
 export function ProjectForm({ propertyId, project, onSuccess, onCancel }: ProjectFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  console.log("Project data received:", project)
+  console.log("ProjectForm - Project data:", project)
+  console.log("ProjectForm - Project ID:", project?.id)
 
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
@@ -66,8 +67,6 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
     }
   }
 
-  console.log("Form default values:", form.getValues())
-
   return (
     <>
       <div className="max-w-4xl mx-auto px-4">
@@ -91,6 +90,7 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
               isEditing={!!project} 
               onCancel={onCancel}
               isSubmitting={isSubmitting}
+              projectId={project?.id}
             />
           </form>
         </Form>
