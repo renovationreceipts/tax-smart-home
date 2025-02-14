@@ -13,7 +13,7 @@ const blogPosts: BlogPost[] = [{
   slug: "homeowners-guide-tax-savings",
   title: "The Homeowner's Guide to Tax Savings: Tracking Renovations the Smart Way",
   description: "A comprehensive guide to maximizing your tax benefits through strategic renovation tracking and documentation. Learn what qualifies and how to track effectively.",
-  thumbnail: "/lovable-uploads/0ffbd49c-6bdc-4ee8-87cd-4359ae98a02c.png",
+  thumbnail: "/lovable-uploads/b7991edb-8f33-4954-870d-418db6c5c3d7.png",
   date: "February 8, 2025"
 }, {
   slug: "capital-gains-101",
