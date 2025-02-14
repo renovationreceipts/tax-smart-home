@@ -8,7 +8,8 @@ export function useModalViews(propertyId: string | null) {
   const { data: modalView } = useQuery({
     queryKey: ['modalViews', propertyId],
     queryFn: async () => {
-      if (!propertyId) return null
+      // Don't query if propertyId is null or 'edit'
+      if (!propertyId || propertyId === 'edit') return null
 
       const { data, error } = await supabase
         .from('property_modal_views')
@@ -23,12 +24,12 @@ export function useModalViews(propertyId: string | null) {
 
       return data
     },
-    enabled: !!propertyId
+    enabled: !!propertyId && propertyId !== 'edit'
   })
 
   const setModalViewed = useMutation({
     mutationFn: async () => {
-      if (!propertyId) return
+      if (!propertyId || propertyId === 'edit') return
 
       const { data: user } = await supabase.auth.getUser()
       if (!user.user) throw new Error('User not authenticated')
