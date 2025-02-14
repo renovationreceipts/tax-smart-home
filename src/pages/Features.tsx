@@ -33,7 +33,7 @@ const Features = () => {
             <ArrowLeft className="h-4 w-4" />
             Back to Home
           </Link>
-          <h1 className="text-4xl font-bold mb-4">Features & Benefits</h1>
+          <h1 className="text-4xl font-bold mb-4">Features</h1>
           <p className="text-gray-600 text-lg">
             Discover how our app simplifies home improvement documentation and maximizes your tax benefits.
           </p>
