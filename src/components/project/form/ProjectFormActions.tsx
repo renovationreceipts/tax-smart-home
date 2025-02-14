@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button"
 import { Trash2, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
 import {
   Dialog,
@@ -24,6 +24,7 @@ interface ProjectFormActionsProps {
 export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectId }: ProjectFormActionsProps) {
   const { toast } = useToast()
   const navigate = useNavigate()
+  const { propertyId } = useParams() // Get propertyId from URL params
 
   const handleDeleteProject = async () => {
     try {
@@ -43,8 +44,8 @@ export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectI
         description: "The project has been successfully removed from your account.",
       })
 
-      // Navigate back to the account page
-      navigate('/account')
+      // Navigate back to the property page with the correct propertyId
+      navigate(`/account?propertyId=${propertyId}`)
     } catch (error) {
       console.error('Error deleting project:', error)
       toast({
