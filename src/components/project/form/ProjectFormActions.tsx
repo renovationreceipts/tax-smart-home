@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { useState } from "react"
 
 interface ProjectFormActionsProps {
   isEditing: boolean
@@ -25,6 +26,7 @@ export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectI
   const { toast } = useToast()
   const navigate = useNavigate()
   const location = useLocation()
+  const [dialogOpen, setDialogOpen] = useState(false)
   
   // Extract propertyId from the URL path
   const propertyId = location.pathname.split('/')[3]
@@ -32,16 +34,24 @@ export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectI
   const handleDeleteProject = async () => {
     try {
       if (!projectId) {
+        console.error('No project ID available:', projectId)
         throw new Error('Project ID is required for deletion')
       }
 
+      console.log('Attempting to delete project:', projectId)
+      
       const { error } = await supabase
         .from('projects')
         .delete()
         .eq('id', projectId)
 
-      if (error) throw error
+      if (error) {
+        console.error('Supabase deletion error:', error)
+        throw error
+      }
 
+      setDialogOpen(false)
+      
       toast({
         title: "Project Deleted",
         description: "The project has been successfully removed from your account.",
@@ -63,7 +73,7 @@ export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectI
     <div className="flex flex-col sm:flex-row sm:justify-between gap-4 pt-4">
       {isEditing && (
         <div className="order-2 sm:order-none">
-          <Dialog>
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
               <Button
                 variant="ghost"
@@ -85,10 +95,7 @@ export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectI
                 <Button 
                   variant="outline" 
                   type="button" 
-                  onClick={() => {
-                    const closeButton = document.querySelector("button[data-dismiss]") as HTMLButtonElement;
-                    closeButton?.click();
-                  }}
+                  onClick={() => setDialogOpen(false)}
                 >
                   Cancel
                 </Button>
