@@ -1,3 +1,4 @@
+
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
@@ -12,7 +13,7 @@ const blogPosts: BlogPost[] = [{
   slug: "homeowners-guide-tax-savings",
   title: "The Homeowner's Guide to Tax Savings: Tracking Renovations the Smart Way",
   description: "A comprehensive guide to maximizing your tax benefits through strategic renovation tracking and documentation. Learn what qualifies and how to track effectively.",
-  thumbnail: "/lovable-uploads/69bafa75-cbb8-49f9-a552-21142b9fa060.png",
+  thumbnail: "/lovable-uploads/0ffbd49c-6bdc-4ee8-87cd-4359ae98a02c.png",
   date: "February 8, 2025"
 }, {
   slug: "capital-gains-101",
