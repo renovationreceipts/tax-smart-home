@@ -1,4 +1,3 @@
-
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { PropertyForm } from "@/components/PropertyForm"
 import { useProperties } from "@/hooks/useProperties"
@@ -10,12 +9,12 @@ export default function EditProperty() {
   const { id } = useParams()
   const [searchParams] = useSearchParams()
   const { data: properties = [] } = useProperties()
-  const property = id ? properties.find(p => p.id === id) : undefined
+  const property = id && id !== 'edit' ? properties.find(p => p.id === id) : undefined
 
   const handleSuccess = () => {
     // If we're editing an existing property, use that ID
     // Otherwise use the current selected property from the query params
-    const propertyId = id || searchParams.get("propertyId")
+    const propertyId = id && id !== 'edit' ? id : searchParams.get("propertyId")
     navigate(`/account${propertyId ? `?propertyId=${propertyId}` : ''}`)
   }
 
@@ -26,7 +25,7 @@ export default function EditProperty() {
   } : undefined
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-white py-8">
       <div className="max-w-2xl mx-auto px-4">
         <Button
           variant="ghost"
