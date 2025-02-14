@@ -18,17 +18,19 @@ interface ProjectFormActionsProps {
   isEditing: boolean
   onCancel: () => void
   isSubmitting: boolean
+  projectId?: string
 }
 
-export function ProjectFormActions({ isEditing, onCancel, isSubmitting }: ProjectFormActionsProps) {
+export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectId }: ProjectFormActionsProps) {
   const { toast } = useToast()
   const navigate = useNavigate()
 
   const handleDeleteProject = async () => {
     try {
-      const pathSegments = window.location.pathname.split('/')
-      const projectId = pathSegments[pathSegments.length - 1]
-      
+      if (!projectId) {
+        throw new Error('Project ID is required for deletion')
+      }
+
       const { error } = await supabase
         .from('projects')
         .delete()
@@ -41,9 +43,8 @@ export function ProjectFormActions({ isEditing, onCancel, isSubmitting }: Projec
         description: "The project has been successfully removed from your account.",
       })
 
-      // Navigate back to the property page
-      const propertyId = pathSegments[pathSegments.length - 3]
-      navigate(`/account?propertyId=${propertyId}`)
+      // Navigate back to the account page
+      navigate('/account')
     } catch (error) {
       console.error('Error deleting project:', error)
       toast({
