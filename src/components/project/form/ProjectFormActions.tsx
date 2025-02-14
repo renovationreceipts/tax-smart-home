@@ -77,7 +77,7 @@ export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectI
 
   return (
     <div className="flex flex-col sm:flex-row sm:justify-between gap-4 pt-4">
-      {isEditing && projectId && (
+      {isEditing && (
         <div className="order-2 sm:order-none">
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
