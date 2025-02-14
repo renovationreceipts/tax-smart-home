@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button"
 import { Trash2, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
 import {
   Dialog,
@@ -24,7 +24,10 @@ interface ProjectFormActionsProps {
 export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectId }: ProjectFormActionsProps) {
   const { toast } = useToast()
   const navigate = useNavigate()
-  const { propertyId } = useParams() // Get propertyId from URL params
+  const location = useLocation()
+  
+  // Extract propertyId from the URL path
+  const propertyId = location.pathname.split('/')[3]
 
   const handleDeleteProject = async () => {
     try {
