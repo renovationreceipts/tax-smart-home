@@ -5,7 +5,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import type { Project } from "@/hooks/useProjects";
 import { useProperties } from "@/hooks/useProperties";
 import { ProjectTypeExamples } from "@/components/project/ProjectTypeExamples";
-import { WhySaveRecords } from "./WhySaveRecords";
 
 interface ProjectsSectionProps {
   propertyId: string | null;
@@ -136,9 +135,6 @@ export function ProjectsSection({
                   </TableRow>)}
               </TableBody>
             </Table>
-          </div>
-          <div className="mt-8 px-0">
-            <WhySaveRecords />
           </div>
         </div>}
     </div>;
