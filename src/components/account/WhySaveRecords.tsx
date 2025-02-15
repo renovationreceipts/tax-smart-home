@@ -1,4 +1,3 @@
-
 import { Home, Shield, FileText } from "lucide-react";
 export function WhySaveRecords() {
   return <div className="bg-white rounded-lg shadow-sm border p-6 mt-6">
@@ -7,7 +6,7 @@ export function WhySaveRecords() {
       <div className="space-y-6">
         <div className="flex items-start gap-4">
           <Home className="h-6 w-6 mt-1 text-gray-600" />
-          <span className="text-base">Proof for future home sale tax savings</span>
+          <span className="text-base font-normal">Future Tax Savings: Detailed records will help you lower your taxable gains by proving your cost basis when you sell.</span>
         </div>
 
         <div className="flex items-start gap-4">
