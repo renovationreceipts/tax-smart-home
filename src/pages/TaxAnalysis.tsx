@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client"
 import { useToast } from "@/hooks/use-toast"
 import { useState, useEffect } from "react"
 import { formatCurrency } from "@/lib/utils"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 
 export default function TaxAnalysis() {
   const navigate = useNavigate()
@@ -88,34 +89,56 @@ export default function TaxAnalysis() {
               <div className="text-gray-500 text-lg">Lifetime projected savings</div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 mt-6">
-              <div className="bg-white rounded-xl border p-4 text-center">
-                <h3 className="font-semibold">Future Tax Savings</h3>
-              </div>
-              <div className="bg-white rounded-xl border p-4 text-center">
-                <h3 className="text-gray-500">Tax Credits</h3>
-              </div>
-              <div className="bg-white rounded-xl border p-4 text-center">
-                <h3 className="text-gray-500">Insurance Savings</h3>
-              </div>
-            </div>
+            <Tabs defaultValue="tax-savings" className="mt-6">
+              <TabsList className="grid w-full grid-cols-3 h-auto">
+                <TabsTrigger value="tax-savings" className="py-3">
+                  <div className="text-center">
+                    <h3 className="font-semibold">Future Tax Savings</h3>
+                  </div>
+                </TabsTrigger>
+                <TabsTrigger value="tax-credits" className="py-3">
+                  <div className="text-center">
+                    <h3 className="font-semibold">Tax Credits</h3>
+                  </div>
+                </TabsTrigger>
+                <TabsTrigger value="insurance" className="py-3">
+                  <div className="text-center">
+                    <h3 className="font-semibold">Insurance Savings</h3>
+                  </div>
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="tax-savings" className="mt-6">
+                <div className="bg-white rounded-xl p-6 shadow-sm">
+                  <h2 className="text-xl font-semibold mb-6">Detailed Tax Calculation</h2>
+                  {selectedProperty ? (
+                    <TaxCalculationTable 
+                      property={selectedProperty}
+                      projects={projects}
+                    />
+                  ) : (
+                    <p className="text-gray-500">No property selected. Please add a property to view tax calculations.</p>
+                  )}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="tax-credits" className="mt-6">
+                <div className="bg-white rounded-xl p-6 shadow-sm text-center">
+                  <h2 className="text-xl font-semibold mb-4">Tax Credits</h2>
+                  <p className="text-gray-500">Coming soon! We're working on bringing you valuable tax credit opportunities.</p>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="insurance" className="mt-6">
+                <div className="bg-white rounded-xl p-6 shadow-sm text-center">
+                  <h2 className="text-xl font-semibold mb-4">Insurance Savings</h2>
+                  <p className="text-gray-500">Coming soon! We're working on bringing you insurance saving opportunities.</p>
+                </div>
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </div>
-
-      <main className="flex-grow w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-xl p-6 shadow-sm">
-          <h2 className="text-xl font-semibold mb-6">Detailed Tax Calculation</h2>
-          {selectedProperty ? (
-            <TaxCalculationTable 
-              property={selectedProperty}
-              projects={projects}
-            />
-          ) : (
-            <p className="text-gray-500">No property selected. Please add a property to view tax calculations.</p>
-          )}
-        </div>
-      </main>
       <Footer />
     </div>
   )
