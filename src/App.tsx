@@ -1,26 +1,18 @@
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Toaster } from "@/components/ui/toaster"
-import "./App.css"
+import { ThemeProvider } from "@/components/theme-provider"
+import { BrowserRouter as Router } from "react-router-dom"
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 0,
-      gcTime: 0,
-      retry: false,
-    },
-  },
-})
+const queryClient = new QueryClient()
 
-interface AppProps {
-  children: React.ReactNode
-}
-
-export default function App({ children }: AppProps) {
+export default function App({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
-      <Toaster />
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+        {children}
+        <Toaster />
+      </ThemeProvider>
     </QueryClientProvider>
   )
 }
