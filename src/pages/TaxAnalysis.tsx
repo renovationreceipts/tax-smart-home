@@ -158,6 +158,16 @@ export default function TaxAnalysis() {
                     </div>
                   </div>
 
+                  <div className="mt-8 bg-gray-50 p-6 rounded-lg">
+                    <h2 className="text-xl font-bold mb-3">How Does it Save Me Money?</h2>
+                    <p className="text-gray-700 leading-relaxed">
+                      When you sell your home, you may be subject to capital gains tax on the proceeds of the sale. 
+                      Tracking eligible home improvements carefully can save you money by increasing the cost basis 
+                      of your property. Proceeds = Sale price - cost basis. Meaning you want your cost basis as high 
+                      as possible
+                    </p>
+                  </div>
+
                   <div className="mt-8">
                     <h2 className="text-xl font-semibold mb-6">Detailed Tax Calculation</h2>
                     {selectedProperty ? (
