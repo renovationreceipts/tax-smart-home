@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProjectsSection } from "@/components/account/ProjectsSection";
+import { WhySaveRecords } from "@/components/account/WhySaveRecords";
 import { useProjects } from "@/hooks/useProjects";
 import type { Project } from "@/hooks/useProjects";
 
@@ -31,6 +32,7 @@ export function ProjectAndTaxSection({
         onAddProject={() => navigate(`/project/edit/${selectedPropertyId}`)} 
         onEditProject={handleEditProject} 
       />
+      <WhySaveRecords />
     </div>
   );
 }
