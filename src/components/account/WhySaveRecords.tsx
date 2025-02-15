@@ -1,3 +1,4 @@
+
 import { Home, Shield, FileText } from "lucide-react";
 export function WhySaveRecords() {
   return <div className="bg-white rounded-lg shadow-sm border p-6 mt-6">
@@ -32,10 +33,6 @@ export function WhySaveRecords() {
             </div>
           </div>
         </div>
-
-        <button className="text-xl font-medium hover:underline">
-          Learn More About Our Security
-        </button>
       </div>
     </div>;
 }
