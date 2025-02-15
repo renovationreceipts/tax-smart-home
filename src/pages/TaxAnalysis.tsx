@@ -95,18 +95,27 @@ export default function TaxAnalysis() {
             </div>
 
             <Tabs defaultValue="tax-savings" className="mt-6">
-              <TabsList className="grid w-full grid-cols-3 h-auto">
-                <TabsTrigger value="tax-savings" className="py-3">
+              <TabsList className="grid w-full grid-cols-3 h-auto bg-gray-100 p-1 rounded-lg">
+                <TabsTrigger 
+                  value="tax-savings" 
+                  className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all"
+                >
                   <div className="text-center">
                     <h3 className="font-semibold">Future Tax Savings</h3>
                   </div>
                 </TabsTrigger>
-                <TabsTrigger value="tax-credits" className="py-3">
+                <TabsTrigger 
+                  value="tax-credits" 
+                  className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all"
+                >
                   <div className="text-center">
                     <h3 className="font-semibold">Tax Credits</h3>
                   </div>
                 </TabsTrigger>
-                <TabsTrigger value="insurance" className="py-3">
+                <TabsTrigger 
+                  value="insurance" 
+                  className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all"
+                >
                   <div className="text-center">
                     <h3 className="font-semibold">Insurance Savings</h3>
                   </div>
