@@ -4,6 +4,7 @@ import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
 import { ArrowRight, ChevronRight, Info, Lock, Plus, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { PropertySection } from "@/components/account/PropertySection"
 import { ProjectAndTaxSection } from "@/components/account/ProjectAndTaxSection"
 import { AccountHeader } from "@/components/account/AccountHeader"
@@ -94,7 +95,7 @@ export default function Account() {
                     <Info className="h-5 w-5 text-gray-400" />
                     <span>Insurance Savings</span>
                   </div>
-                  <span className="font-semibold">$450/yr</span>
+                  <Badge variant="secondary" className="font-medium">Coming Soon</Badge>
                 </div>
               </div>
 
