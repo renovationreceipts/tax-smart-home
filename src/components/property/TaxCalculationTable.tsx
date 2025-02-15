@@ -1,113 +1,108 @@
 
-import { Table, TableHeader, TableBody, TableHead, TableRow } from "@/components/ui/table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { TaxTableRow } from "./TaxTableRow"
+import { formatCurrency } from "@/lib/utils"
 import { useTaxCalculations } from "@/hooks/useTaxCalculations"
-import { useNavigate } from "react-router-dom"
-import { ChevronDown } from "lucide-react"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { useState } from "react"
+import type { Project } from "@/hooks/useProjects"
 
 interface TaxCalculationTableProps {
   property: any
-  projects: any[]
+  projects: Project[]
+  onProjectClick?: (project: Project) => void
 }
 
-export function TaxCalculationTable({ property, projects }: TaxCalculationTableProps) {
-  const navigate = useNavigate()
-  const [isOpen, setIsOpen] = useState(false)
+export function TaxCalculationTable({ property, projects, onProjectClick }: TaxCalculationTableProps) {
   const {
-    userTaxRate,
     totalProjectCosts,
-    newCostBasis,
+    adjustedCostBasis,
     taxableGainWithBasis,
     taxableGainWithoutBasis,
-    taxSavings,
-    estimatedTaxSavings,
-    adjustedCostBasis,
   } = useTaxCalculations({ property, projects })
 
-  // Calculate total capital gains before exemptions
-  const totalCapitalGains = property ? (property.current_value || 0) - adjustedCostBasis : 0
-  
-  // Calculate the federal capital gains tax amount
-  const federalCapGainsTax = estimatedTaxSavings * userTaxRate
-
   return (
-    <div className="space-y-6">
-      {/* First Table: Cost Basis Calculation */}
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Category</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TaxTableRow 
-            label="Current Home Value"
-            value={property?.current_value}
-          />
-          <TaxTableRow 
-            label="Your Adjusted Cost Basis (Purchase Price + Tracked Improvements)"
-            value={adjustedCostBasis}
-          />
-          <TaxTableRow 
-            label="Total Capital Gains Before Exemptions"
-            value={totalCapitalGains}
-          />
-          <TaxTableRow 
-            label="Tracked Home Improvements Reduced Your Reported Gain By"
-            value={newCostBasis}
-            isHighlighted={true}
-          />
-        </TableBody>
-      </Table>
-
-      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-        <CollapsibleTrigger className="flex items-center gap-2 text-black hover:underline">
-          See Detailed Calculation
-          <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'transform rotate-180' : ''}`} />
-        </CollapsibleTrigger>
-        
-        <CollapsibleContent>
-          {/* Second Table: Tax Calculations */}
-          <div className="mt-6">
-            <Table>
-              <TableBody>
-                <TaxTableRow 
-                  label="Without Tracking, Your Reported Gain Would Have Been"
-                  value={taxableGainWithoutBasis}
-                />
-                <TaxTableRow 
-                  label="Eligible Federal Capital Gains Exemption Applied (Based on filing status)"
-                  value={taxSavings}
-                />
-                <TaxTableRow 
-                  label="Final Federal Taxable Gain After Exemption"
-                  value={estimatedTaxSavings}
-                />
-                <TaxTableRow 
-                  label="Using your capital gains tax rate, your Federal cap gains tax would be"
-                  value={federalCapGainsTax}
-                />
-              </TableBody>
-            </Table>
-
-            <div className="mt-6 bg-gray-50 border rounded-lg px-4 py-3 text-sm text-gray-600">
-              <div className="flex items-center">
-                Update your tax filing status and cap gains tax rate in your{" "}
-                <button 
-                  onClick={() => navigate("/profile")} 
-                  className="text-primary hover:underline font-medium ml-1"
+    <div className="space-y-8">
+      <div>
+        <h3 className="font-semibold mb-4">Project Details</h3>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Project Name</TableHead>
+              <TableHead>Completion Date</TableHead>
+              <TableHead className="text-right">Cost</TableHead>
+              <TableHead>Status</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {projects.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={4} className="text-center text-gray-500">
+                  No projects added yet
+                </TableCell>
+              </TableRow>
+            ) : (
+              projects.map((project) => (
+                <TableRow 
+                  key={project.id} 
+                  className="cursor-pointer hover:bg-gray-50"
+                  onClick={() => onProjectClick?.(project)}
                 >
-                  Profile
-                </button>
-                .
-              </div>
-            </div>
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
+                  <TableCell>{project.name}</TableCell>
+                  <TableCell>
+                    {new Date(project.completion_date).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {formatCurrency(project.cost)}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full ${project.qualifies_for_basis ? 'bg-green-500' : 'bg-red-500'}`} />
+                      <span className="text-sm">
+                        {project.qualifies_for_basis ? 'Qualifies' : 'Does Not Qualify'}
+                      </span>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div>
+        <h3 className="font-semibold mb-4">Tax Impact</h3>
+        <Table>
+          <TableBody>
+            <TaxTableRow
+              label="Original Purchase Price"
+              value={property.purchase_price}
+            />
+            <TaxTableRow
+              label="Total Cost Basis Improvements"
+              value={totalProjectCosts}
+              className="border-t"
+            />
+            <TaxTableRow
+              label="New Cost Basis"
+              value={adjustedCostBasis}
+              isTotal
+            />
+            <TaxTableRow
+              label="Current Value"
+              value={property.current_value}
+              className="border-t"
+            />
+            <TaxTableRow
+              label="Taxable Gain (with improvements)"
+              value={taxableGainWithBasis}
+              isHighlighted
+            />
+            <TaxTableRow
+              label="Taxable Gain (without improvements)"
+              value={taxableGainWithoutBasis}
+            />
+          </TableBody>
+        </Table>
+      </div>
     </div>
   )
 }
