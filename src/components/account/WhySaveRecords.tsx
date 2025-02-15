@@ -1,4 +1,3 @@
-
 import { Home, Shield, FileText } from "lucide-react";
 export function WhySaveRecords() {
   return <div className="bg-white rounded-lg shadow-sm border p-6 mt-6">
@@ -12,7 +11,7 @@ export function WhySaveRecords() {
 
         <div className="flex items-start gap-4">
           <Shield className="h-6 w-6 mt-1 text-gray-600" />
-          <span className="text-base">Documentation for insurance claims: Have proof of home upgrades when you need it most.</span>
+          <span className="text-base">Documentation for Insurance Claims: Have proof of home upgrades when you need it most.</span>
         </div>
 
         <div className="flex items-start gap-4">
