@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -12,6 +11,7 @@ import { useToast } from "@/hooks/use-toast"
 import { useState, useEffect } from "react"
 import { formatCurrency } from "@/lib/utils"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 export default function TaxAnalysis() {
   const navigate = useNavigate()
@@ -61,6 +61,11 @@ export default function TaxAnalysis() {
         description: "Please try again.",
       })
     }
+  }
+
+  // Format date function
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString()
   }
 
   return (
@@ -125,6 +130,31 @@ export default function TaxAnalysis() {
                         <span className="text-2xl font-bold">{formatCurrency(projectedTaxSavings)}</span>
                       </div>
                       <div className="text-sm text-gray-500">Future Tax Savings</div>
+                    </div>
+                  </div>
+
+                  <div className="mt-8">
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Project Name</TableHead>
+                            <TableHead>Description</TableHead>
+                            <TableHead className="text-right">Cost</TableHead>
+                            <TableHead className="text-right">Completion Date</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {projects.map((project) => (
+                            <TableRow key={project.id}>
+                              <TableCell className="font-medium">{project.name}</TableCell>
+                              <TableCell>{project.description}</TableCell>
+                              <TableCell className="text-right">{formatCurrency(project.cost)}</TableCell>
+                              <TableCell className="text-right">{formatDate(project.completion_date)}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
                     </div>
                   </div>
 
