@@ -12,6 +12,7 @@ import SignUp from "@/pages/SignUp"
 import Community from "@/pages/Community"
 import About from "@/pages/About"
 import Blog from "@/pages/Blog"
+import TaxAnalysis from "@/pages/TaxAnalysis"
 import TrackHomeImprovements from "@/pages/blog/TrackHomeImprovements"
 import HomeownersGuideTaxSavings from "@/pages/blog/HomeownersGuideTaxSavings"
 import CapitalGains101 from "@/pages/blog/CapitalGains101"
@@ -27,6 +28,15 @@ const router = createBrowserRouter([
     element: (
       <>
         <Index />
+        <ScrollRestoration />
+      </>
+    ),
+  },
+  {
+    path: "/tax-analysis",
+    element: (
+      <>
+        <TaxAnalysis />
         <ScrollRestoration />
       </>
     ),

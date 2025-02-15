@@ -102,8 +102,10 @@ export default function Account() {
               <Button 
                 variant="link" 
                 className="w-full mt-6 text-blue-600 hover:text-blue-700"
+                onClick={() => navigate("/tax-analysis")}
               >
                 View Full Analysis
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
 
