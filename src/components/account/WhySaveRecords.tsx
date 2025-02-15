@@ -1,3 +1,4 @@
+
 import { Home, Shield, FileText } from "lucide-react";
 export function WhySaveRecords() {
   return <div className="bg-white rounded-lg shadow-sm border p-6 mt-6">
@@ -26,9 +27,6 @@ export function WhySaveRecords() {
             <FileText className="h-6 w-6 mt-1 text-gray-600" />
             <div>
               <h3 className="font-medium mb-2 text-base">You're making a smart choice! All your records are encrypted and securely stored.</h3>
-              <p className="text-gray-600 text-base">
-                Your data is protected with bank-level security, ensuring your valuable home improvement history is safe and accessible when you need it.
-              </p>
             </div>
           </div>
         </div>
