@@ -1,6 +1,6 @@
 
 import { useNavigate } from "react-router-dom"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TaxCalculationTable } from "@/components/property/TaxCalculationTable"
 import Footer from "@/components/Footer"
@@ -109,16 +109,36 @@ export default function TaxAnalysis() {
               </TabsList>
               
               <TabsContent value="tax-savings" className="mt-6">
-                <div className="bg-white rounded-xl p-6 shadow-sm">
-                  <h2 className="text-xl font-semibold mb-6">Detailed Tax Calculation</h2>
-                  {selectedProperty ? (
-                    <TaxCalculationTable 
-                      property={selectedProperty}
-                      projects={projects}
-                    />
-                  ) : (
-                    <p className="text-gray-500">No property selected. Please add a property to view tax calculations.</p>
-                  )}
+                <div className="bg-white rounded-xl border p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="space-y-1">
+                      <h2 className="text-xl font-bold">AI Analysis</h2>
+                      <p className="text-gray-600 max-w-3xl">
+                        These projects appear to meet IRS guidelines considered capital improvements that add value 
+                        and extend the useful life of the property, making them eligible for increasing the cost 
+                        basis according to IRS guidelines.
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <div className="flex items-center gap-2 justify-end">
+                        <TrendingUp className="h-5 w-5 text-green-500" />
+                        <span className="text-2xl font-bold">{formatCurrency(projectedTaxSavings)}</span>
+                      </div>
+                      <div className="text-sm text-gray-500">Future Tax Savings</div>
+                    </div>
+                  </div>
+
+                  <div className="mt-8">
+                    <h2 className="text-xl font-semibold mb-6">Detailed Tax Calculation</h2>
+                    {selectedProperty ? (
+                      <TaxCalculationTable 
+                        property={selectedProperty}
+                        projects={projects}
+                      />
+                    ) : (
+                      <p className="text-gray-500">No property selected. Please add a property to view tax calculations.</p>
+                    )}
+                  </div>
                 </div>
               </TabsContent>
 
