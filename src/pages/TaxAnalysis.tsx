@@ -122,7 +122,7 @@ export default function TaxAnalysis() {
                 </TabsTrigger>
               </TabsList>
               
-              <TabsContent value="tax-savings" className="mt-6">
+              <TabsContent value="tax-savings" className="mt-6 space-y-6">
                 <div className="bg-white rounded-xl border p-6">
                   <div className="flex justify-between items-start mb-4">
                     <div className="space-y-1">
