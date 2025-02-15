@@ -6,6 +6,7 @@ import { TaxCalculationTable } from "@/components/property/TaxCalculationTable"
 import Footer from "@/components/Footer"
 import { useProperties } from "@/hooks/useProperties"
 import { useProjects } from "@/hooks/useProjects"
+import { Hero } from "@/components/Hero"
 
 export default function TaxAnalysis() {
   const navigate = useNavigate()
@@ -15,6 +16,7 @@ export default function TaxAnalysis() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
+      <Hero />
       <header className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center gap-4">
