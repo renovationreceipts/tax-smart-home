@@ -87,7 +87,7 @@ export default function Account() {
                     <Info className="h-5 w-5 text-gray-400" />
                     <span>Tax Credits</span>
                   </div>
-                  <span className="font-semibold">$2,500</span>
+                  <Badge variant="secondary" className="font-medium">Coming Soon</Badge>
                 </div>
 
                 <div className="flex justify-between items-center">
