@@ -5,10 +5,13 @@ import { supabase } from "@/integrations/supabase/client"
 import { ChevronRight, Info, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Footer from "@/components/Footer"
+import { PropertySection } from "@/components/account/PropertySection"
+import { useState } from "react"
 
 export default function Account() {
   const navigate = useNavigate()
   const { toast } = useToast()
+  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null)
   
   const handleSignOut = async () => {
     try {
@@ -48,6 +51,11 @@ export default function Account() {
                 Add Project
               </Button>
             </div>
+
+            <PropertySection
+              selectedPropertyId={selectedPropertyId}
+              setSelectedPropertyId={setSelectedPropertyId}
+            />
             
             <div className="bg-white rounded-lg p-6 shadow-sm">
               <h2 className="text-xl font-bold mb-2">Recent Projects</h2>
