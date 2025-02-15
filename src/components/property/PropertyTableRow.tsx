@@ -57,7 +57,7 @@ export function PropertyTableRow({
           )}
           <div className="flex-grow">
             <h3 className="text-lg font-bold mb-1">{property.name}</h3>
-            <p className="text-gray-600">{formattedAddress}</p>
+            <p className="text-gray-600 text-base">{formattedAddress}</p>
           </div>
           <div>
             <Button
@@ -72,7 +72,7 @@ export function PropertyTableRow({
             </Button>
           </div>
         </div>
-        <div className="mt-3 space-y-2">
+        <div className="mt-3 space-y-2 text-base">
           <div className="flex justify-between">
             <span className="text-gray-600">Purchase Price:</span>
             <span className="font-medium">{formatCurrency(property.purchase_price)}</span>
@@ -84,12 +84,10 @@ export function PropertyTableRow({
         </div>
       </TableCell>
       {/* Desktop View */}
-      <TableCell className="hidden sm:table-cell py-4">
-        <div>{property.name}</div>
-      </TableCell>
-      <TableCell className="hidden sm:table-cell py-4">{formattedAddress}</TableCell>
-      <TableCell className="hidden sm:table-cell py-4">{formatCurrency(property.purchase_price)}</TableCell>
-      <TableCell className="hidden sm:table-cell py-4">{formatCurrency(property.current_value)}</TableCell>
+      <TableCell className="hidden sm:table-cell py-4 text-base">{property.name}</TableCell>
+      <TableCell className="hidden sm:table-cell py-4 text-base">{formattedAddress}</TableCell>
+      <TableCell className="hidden sm:table-cell py-4 text-base">{formatCurrency(property.purchase_price)}</TableCell>
+      <TableCell className="hidden sm:table-cell py-4 text-base">{formatCurrency(property.current_value)}</TableCell>
       <TableCell className="hidden sm:table-cell py-4">
         <Button
           variant="ghost"
