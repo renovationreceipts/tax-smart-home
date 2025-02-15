@@ -1,17 +1,20 @@
+
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, House } from "lucide-react"
 import { ProfileSettingsForm } from "./ProfileSettingsForm"
 import { PasswordChangeForm } from "./PasswordChangeForm"
+import { PropertySection } from "@/components/account/PropertySection"
 
 export function UserProfile() {
   const navigate = useNavigate()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(true)
+  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null)
 
   console.log("UserProfile component rendered")
 
@@ -76,6 +79,18 @@ export function UserProfile() {
       </Button>
 
       <div className="space-y-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>My Properties</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <PropertySection 
+              selectedPropertyId={selectedPropertyId}
+              setSelectedPropertyId={setSelectedPropertyId}
+            />
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader>
             <CardTitle>Profile Settings</CardTitle>
