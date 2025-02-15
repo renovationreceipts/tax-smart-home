@@ -6,6 +6,7 @@ import { ArrowRight, ChevronRight, Info, Lock, Plus, TrendingUp } from "lucide-r
 import { Button } from "@/components/ui/button"
 import { PropertySection } from "@/components/account/PropertySection"
 import { ProjectAndTaxSection } from "@/components/account/ProjectAndTaxSection"
+import { AccountHeader } from "@/components/account/AccountHeader"
 import Footer from "@/components/Footer"
 import { useState } from "react"
 import { useProperties } from "@/hooks/useProperties"
@@ -38,6 +39,7 @@ export default function Account() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
+      <AccountHeader onSignOut={handleSignOut} />
       <main className="flex-grow w-full max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
