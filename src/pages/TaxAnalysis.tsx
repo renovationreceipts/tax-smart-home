@@ -6,17 +6,39 @@ import { TaxCalculationTable } from "@/components/property/TaxCalculationTable"
 import Footer from "@/components/Footer"
 import { useProperties } from "@/hooks/useProperties"
 import { useProjects } from "@/hooks/useProjects"
-import { Hero } from "@/components/Hero"
+import { AccountHeader } from "@/components/account/AccountHeader"
+import { supabase } from "@/integrations/supabase/client"
+import { useToast } from "@/hooks/use-toast"
 
 export default function TaxAnalysis() {
   const navigate = useNavigate()
+  const { toast } = useToast()
   const { data: properties = [] } = useProperties()
   const selectedProperty = properties[0] // For now, we'll show the first property
   const { data: projects = [] } = useProjects(selectedProperty?.id)
 
+  const handleSignOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut()
+      if (error) throw error
+      navigate("/")
+      toast({
+        title: "Signed out successfully",
+        description: "You have been signed out of your account.",
+      })
+    } catch (error) {
+      console.error("Error signing out:", error)
+      toast({
+        variant: "destructive",
+        title: "Error signing out",
+        description: "Please try again.",
+      })
+    }
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <Hero />
+      <AccountHeader onSignOut={handleSignOut} />
       <header className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center gap-4">
