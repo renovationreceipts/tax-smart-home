@@ -139,7 +139,7 @@ export default function Account() {
             {/* Ready to Save Card */}
             <div className="bg-white rounded-xl p-6 shadow-sm">
               <h2 className="font-bold mb-2 text-2xl">Go Premium</h2>
-              <p className="text-gray-500 mb-6">Generate documents and unlock monitoring</p>
+              <p className="text-gray-500 mb-6"></p>
 
               <div className="space-y-4 mb-8">
                 <div className="flex items-center gap-3">
