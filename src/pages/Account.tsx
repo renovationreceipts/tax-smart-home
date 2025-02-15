@@ -126,7 +126,7 @@ export default function Account() {
                     <Info className="h-5 w-5 text-gray-400" />
                     <span>Insurance Savings</span>
                   </div>
-                  <Badge variant="secondary" className="font-medium">Coming Soon</Badge>
+                  <Badge variant="secondary" className="font-medium bg-zinc-950 hover:bg-zinc-800">Coming Soon</Badge>
                 </div>
               </div>
 
