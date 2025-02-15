@@ -1,5 +1,7 @@
+
+import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider, ScrollRestoration } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, ScrollRestoration } from "react-router-dom"
 import App from './App.tsx'
 import './index.css'
 import Account from "@/pages/Account"
@@ -16,11 +18,11 @@ import TaxAnalysis from "@/pages/TaxAnalysis"
 import TrackHomeImprovements from "@/pages/blog/TrackHomeImprovements"
 import HomeownersGuideTaxSavings from "@/pages/blog/HomeownersGuideTaxSavings"
 import CapitalGains101 from "@/pages/blog/CapitalGains101"
-import Disclaimers from './pages/Disclaimers.tsx';
-import Terms from './pages/Terms.tsx';
-import Privacy from './pages/Privacy.tsx';
-import GenerateOGImage from './pages/GenerateOGImage.tsx';
-import Features from './pages/Features.tsx';
+import Disclaimers from './pages/Disclaimers.tsx'
+import Terms from './pages/Terms.tsx'
+import Privacy from './pages/Privacy.tsx'
+import GenerateOGImage from './pages/GenerateOGImage.tsx'
+import Features from './pages/Features.tsx'
 
 const router = createBrowserRouter([
   {
