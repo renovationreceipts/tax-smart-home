@@ -26,183 +26,91 @@ import Features from './pages/Features.tsx'
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: (
-      <>
-        <Index />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/tax-analysis",
-    element: (
-      <>
-        <TaxAnalysis />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/features",
-    element: (
-      <>
-        <Features />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/blog",
-    element: (
-      <>
-        <Blog />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/blog/track-home-improvement-receipts",
-    element: (
-      <>
-        <TrackHomeImprovements />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/blog/homeowners-guide-tax-savings",
-    element: (
-      <>
-        <HomeownersGuideTaxSavings />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/blog/capital-gains-101",
-    element: (
-      <>
-        <CapitalGains101 />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/account",
-    element: (
-      <>
-        <Account />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/login",
-    element: (
-      <>
-        <Login />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/signup",
-    element: (
-      <>
-        <SignUp />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/profile",
-    element: (
-      <>
-        <Profile />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/community",
-    element: (
-      <>
-        <Community />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/about",
-    element: (
-      <>
-        <About />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/property/edit/:id?",
-    element: (
-      <>
-        <EditProperty />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/project/edit/:propertyId/:id?",
-    element: (
-      <>
-        <EditProject />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/disclaimers",
-    element: (
-      <>
-        <Disclaimers />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/terms",
-    element: (
-      <>
-        <Terms />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/privacy-policy",
-    element: (
-      <>
-        <Privacy />
-        <ScrollRestoration />
-      </>
-    ),
-  },
-  {
-    path: "/generate-og-image",
-    element: (
-      <>
-        <GenerateOGImage />
-        <ScrollRestoration />
-      </>
-    ),
+    element: <App><ScrollRestoration /></App>,
+    children: [
+      {
+        path: "/",
+        element: <Index />
+      },
+      {
+        path: "/tax-analysis",
+        element: <TaxAnalysis />
+      },
+      {
+        path: "/features",
+        element: <Features />
+      },
+      {
+        path: "/blog",
+        element: <Blog />
+      },
+      {
+        path: "/blog/track-home-improvement-receipts",
+        element: <TrackHomeImprovements />
+      },
+      {
+        path: "/blog/homeowners-guide-tax-savings",
+        element: <HomeownersGuideTaxSavings />
+      },
+      {
+        path: "/blog/capital-gains-101",
+        element: <CapitalGains101 />
+      },
+      {
+        path: "/account",
+        element: <Account />
+      },
+      {
+        path: "/login",
+        element: <Login />
+      },
+      {
+        path: "/signup",
+        element: <SignUp />
+      },
+      {
+        path: "/profile",
+        element: <Profile />
+      },
+      {
+        path: "/community",
+        element: <Community />
+      },
+      {
+        path: "/about",
+        element: <About />
+      },
+      {
+        path: "/property/edit/:id?",
+        element: <EditProperty />
+      },
+      {
+        path: "/project/edit/:propertyId/:id?",
+        element: <EditProject />
+      },
+      {
+        path: "/disclaimers",
+        element: <Disclaimers />
+      },
+      {
+        path: "/terms",
+        element: <Terms />
+      },
+      {
+        path: "/privacy-policy",
+        element: <Privacy />
+      },
+      {
+        path: "/generate-og-image",
+        element: <GenerateOGImage />
+      }
+    ]
   }
 ]);
 
 const root = createRoot(document.getElementById("root")!)
 root.render(
   <React.StrictMode>
-    <App>
-      <RouterProvider router={router} />
-    </App>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
