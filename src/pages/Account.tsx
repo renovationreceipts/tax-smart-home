@@ -167,7 +167,7 @@ export default function Account() {
                 </div>
               </div>
 
-              <Button className="w-full bg-black hover:bg-gray-800 text-white">
+              <Button className="w-full text-white bg-[#2463eb]">
                 Generate Documents
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
