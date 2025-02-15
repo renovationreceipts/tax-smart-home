@@ -1,38 +1,37 @@
-
-import { FileText, Plus, Wrench, ClipboardList } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import type { Project } from "@/hooks/useProjects"
-import { useProperties } from "@/hooks/useProperties"
-import { ProjectTypeExamples } from "@/components/project/ProjectTypeExamples"
-
+import { FileText, Plus, Wrench, ClipboardList } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import type { Project } from "@/hooks/useProjects";
+import { useProperties } from "@/hooks/useProperties";
+import { ProjectTypeExamples } from "@/components/project/ProjectTypeExamples";
 interface ProjectsSectionProps {
-  propertyId: string | null
-  projects: Project[]
-  onAddProject: () => void
-  onEditProject?: (project: Project) => void
+  propertyId: string | null;
+  projects: Project[];
+  onAddProject: () => void;
+  onEditProject?: (project: Project) => void;
 }
-
-export function ProjectsSection({ propertyId, projects, onAddProject, onEditProject }: ProjectsSectionProps) {
-  const { data: properties = [] } = useProperties()
-
+export function ProjectsSection({
+  propertyId,
+  projects,
+  onAddProject,
+  onEditProject
+}: ProjectsSectionProps) {
+  const {
+    data: properties = []
+  } = useProperties();
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "USD",
-    }).format(amount)
-  }
-
+      currency: "USD"
+    }).format(amount);
+  };
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString()
-  }
-
+    return new Date(dateString).toLocaleDateString();
+  };
   if (!propertyId || properties.length === 0) {
-    return null
+    return null;
   }
-
-  const EmptyState = () => (
-    <div className="space-y-8">
+  const EmptyState = () => <div className="space-y-8">
       <div className="bg-gray-50 rounded-lg p-4 sm:p-6">
         <div className="sm:flex sm:items-start sm:justify-between">
           <div className="flex items-start gap-4">
@@ -47,10 +46,7 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
             </div>
           </div>
           <div className="hidden sm:block">
-            <Button 
-              onClick={onAddProject} 
-              className="border border-primary text-white hover:text-white"
-            >
+            <Button onClick={onAddProject} className="border border-primary text-white hover:text-white">
               <Plus className="h-4 w-4 mr-2" />
               Add Project
             </Button>
@@ -63,22 +59,17 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
       </div>
 
       <div className="sm:hidden">
-        <Button 
-          onClick={onAddProject} 
-          className="w-full border border-primary text-white hover:text-white"
-        >
+        <Button onClick={onAddProject} className="w-full border border-primary text-white hover:text-white">
           <Plus className="h-4 w-4 mr-2" />
           Add Project
         </Button>
       </div>
-    </div>
-  )
-
-  const MobileProjectCard = ({ project }: { project: Project }) => (
-    <div 
-      className="border-b last:border-b-0 py-6 first:pt-2 last:pb-2 px-4 space-y-4"
-      onClick={() => onEditProject?.(project)}
-    >
+    </div>;
+  const MobileProjectCard = ({
+    project
+  }: {
+    project: Project;
+  }) => <div className="border-b last:border-b-0 py-6 first:pt-2 last:pb-2 px-4 space-y-4" onClick={() => onEditProject?.(project)}>
       <h3 className="text-xl font-bold">{project.name}</h3>
       <div className="space-y-1">
         <div className="flex justify-between">
@@ -90,52 +81,33 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
           <span className="font-medium">{formatDate(project.completion_date)}</span>
         </div>
       </div>
-      <Button 
-        variant="outline" 
-        className="w-full text-primary hover:text-primary"
-        onClick={(e) => {
-          e.stopPropagation()
-          onEditProject?.(project)
-        }}
-      >
+      <Button variant="outline" className="w-full text-primary hover:text-primary" onClick={e => {
+      e.stopPropagation();
+      onEditProject?.(project);
+    }}>
         View Project
       </Button>
-    </div>
-  )
-
-  return (
-    <div className="bg-white rounded-lg shadow-sm border p-6">
+    </div>;
+  return <div className="bg-white rounded-lg shadow-sm border p-6">
       <div className="pb-4 sm:pb-0 border-b sm:border-b-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <FileText className="h-6 w-6 text-[#0090FF]" />
-            <h3 className="text-lg font-semibold">Projects</h3>
+            <h3 className="font-semibold text-2xl">Projects</h3>
           </div>
-          {projects.length > 0 && (
-            <Button 
-              onClick={onAddProject}
-              size="sm"
-              variant="ghost"
-              className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
-            >
+          {projects.length > 0 && <Button onClick={onAddProject} size="sm" variant="ghost" className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]">
               <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
               <span className="hidden sm:inline">Add Project</span>
               <span className="sm:hidden">Add</span>
-            </Button>
-          )}
+            </Button>}
         </div>
       </div>
 
-      {projects.length === 0 ? (
-        <div className="mt-4">
+      {projects.length === 0 ? <div className="mt-4">
           <EmptyState />
-        </div>
-      ) : (
-        <div className="mt-4">
+        </div> : <div className="mt-4">
           <div className="block sm:hidden -mx-6">
-            {projects.map((project) => (
-              <MobileProjectCard key={project.id} project={project} />
-            ))}
+            {projects.map(project => <MobileProjectCard key={project.id} project={project} />)}
           </div>
           <div className="hidden sm:block overflow-x-auto">
             <Table>
@@ -148,23 +120,15 @@ export function ProjectsSection({ propertyId, projects, onAddProject, onEditProj
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {projects.map((project) => (
-                  <TableRow 
-                    key={project.id}
-                    onClick={() => onEditProject?.(project)}
-                    className="cursor-pointer hover:bg-muted/50"
-                  >
+                {projects.map(project => <TableRow key={project.id} onClick={() => onEditProject?.(project)} className="cursor-pointer hover:bg-muted/50">
                     <TableCell className="font-medium">{project.name}</TableCell>
                     <TableCell>{project.description}</TableCell>
                     <TableCell className="text-right">{formatCurrency(project.cost)}</TableCell>
                     <TableCell className="text-right">{formatDate(project.completion_date)}</TableCell>
-                  </TableRow>
-                ))}
+                  </TableRow>)}
               </TableBody>
             </Table>
           </div>
-        </div>
-      )}
-    </div>
-  )
+        </div>}
+    </div>;
 }

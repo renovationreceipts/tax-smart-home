@@ -1,8 +1,7 @@
-
 import { Home, Shield, FileText } from "lucide-react";
 export function WhySaveRecords() {
   return <div className="bg-white rounded-lg shadow-sm border p-6 mt-6">
-      <h2 className="font-bold mb-8 text-lg">Why Save Your Records?</h2>
+      <h2 className="font-bold mb-8 text-2xl">Why Save Your Records?</h2>
 
       <div className="space-y-6">
         <div className="flex items-start gap-4">
