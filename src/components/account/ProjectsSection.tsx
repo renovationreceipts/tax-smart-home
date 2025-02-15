@@ -123,7 +123,6 @@ export function ProjectsSection({
               <TableHeader>
                 <TableRow>
                   <TableHead className="text-base">Project Name</TableHead>
-                  <TableHead className="text-base">Description</TableHead>
                   <TableHead className="text-right text-base">Cost</TableHead>
                   <TableHead className="text-right text-base">Completion Date</TableHead>
                 </TableRow>
@@ -131,7 +130,6 @@ export function ProjectsSection({
               <TableBody>
                 {projects.map(project => <TableRow key={project.id} onClick={() => onEditProject?.(project)} className="cursor-pointer hover:bg-muted/50">
                     <TableCell className="font-medium text-base">{project.name}</TableCell>
-                    <TableCell className="text-base">{project.description}</TableCell>
                     <TableCell className="text-right text-base">{formatCurrency(project.cost)}</TableCell>
                     <TableCell className="text-right text-base">{formatDate(project.completion_date)}</TableCell>
                   </TableRow>)}
