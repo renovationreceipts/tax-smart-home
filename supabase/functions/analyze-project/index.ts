@@ -1,3 +1,4 @@
+
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
@@ -16,6 +17,22 @@ interface OpenAIResponse {
       content: string;
     };
   }>;
+}
+
+interface AnalysisResult {
+  qualifies: boolean;
+  analysis: string;
+}
+
+function parseAnalysisResponse(content: string): AnalysisResult {
+  const lowerContent = content.toLowerCase();
+  // Look for clear yes/no indicators at the start of the response
+  const qualifies = lowerContent.includes('yes') && !lowerContent.includes('no');
+  
+  return {
+    qualifies,
+    analysis: content
+  };
 }
 
 function createOpenAIRequest(description: string) {
@@ -103,8 +120,11 @@ async function handleAnalysisRequest(req: Request): Promise<Response> {
       throw new Error('Invalid response format from OpenAI');
     }
 
+    const analysisResult = parseAnalysisResponse(data.choices[0].message.content);
+    console.log('Analysis result:', analysisResult);
+
     return new Response(
-      JSON.stringify({ analysis: data.choices[0].message.content }), 
+      JSON.stringify(analysisResult), 
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {

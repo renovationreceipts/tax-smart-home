@@ -26,7 +26,6 @@ export function useTaxCalculations({ property, projects }: TaxCalculationsProps)
           .single()
 
         if (profile && isMounted) {
-          // Convert the tax rate to decimal (e.g., 15% -> 0.15)
           setUserTaxRate(profile.tax_rate ? profile.tax_rate / 100 : 0)
           setUserFilingStatus(profile.tax_filing_status || "Single")
         }
@@ -54,11 +53,18 @@ export function useTaxCalculations({ property, projects }: TaxCalculationsProps)
       case "Head of Household":
         return 250000
       default:
-        return 250000 // Default to single exemption amount
+        return 250000
     }
   }
 
-  const totalProjectCosts = projects?.reduce((sum, project) => sum + (project?.cost || 0), 0) || 0
+  // Only sum costs from projects that qualify for basis adjustment
+  const totalProjectCosts = projects?.reduce((sum, project) => {
+    if (project?.qualifies_for_basis) {
+      return sum + (project?.cost || 0)
+    }
+    return sum
+  }, 0) || 0
+
   const adjustedCostBasis = property ? (property.purchase_price || 0) + totalProjectCosts : 0
   const totalCapitalGains = property ? (property.current_value || 0) - adjustedCostBasis : 0
   const taxableGainWithBasis = property ? (property.current_value || 0) - adjustedCostBasis : 0
@@ -69,7 +75,6 @@ export function useTaxCalculations({ property, projects }: TaxCalculationsProps)
     property?.lived_in_property_2_of_5_years ?? false
   )
 
-  // Calculate final taxable gain after exemption
   const finalTaxableGain = property ? Math.max(0, (property.current_value || 0) - adjustedCostBasis - exemptionAmount) : 0
 
   return {

@@ -30,12 +30,11 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
         size: file.size
       })
 
-      const fileExt = file.name.split('.').pop()?.toLowerCase() // Ensure lowercase extension
+      const fileExt = file.name.split('.').pop()?.toLowerCase()
       const filePath = `${projectId}/${crypto.randomUUID()}.${fileExt}`
 
       console.log(`Preparing to upload file: ${file.name} to path: ${filePath}`)
       
-      // Determine content type - explicitly handle .ico files
       let contentType = file.type
       if (fileExt === 'ico') {
         contentType = 'image/x-icon'
@@ -83,6 +82,20 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
     }
   }
 
+  const analyzeProject = async (description: string): Promise<{ qualifies: boolean; analysis: string }> => {
+    try {
+      const { data, error } = await supabase.functions.invoke('analyze-project', {
+        body: { description }
+      });
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error analyzing project:', error);
+      return { qualifies: false, analysis: 'Analysis failed' };
+    }
+  };
+
   const onSubmit = async (data: ProjectFormValues) => {
     try {
       const { data: { user } } = await supabase.auth.getUser()
@@ -98,6 +111,9 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
 
       const numericCost = Number(data.cost.replace(/[^0-9.-]/g, ""))
       
+      // Analyze the project description
+      const { qualifies, analysis } = await analyzeProject(data.description || data.name);
+      
       if (project) {
         const { error } = await supabase
           .from("projects")
@@ -108,12 +124,13 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
             completion_date: format(data.completion_date, "yyyy-MM-dd"),
             builder_name: data.builder_name || null,
             builder_url: data.builder_url || null,
+            qualifies_for_basis: qualifies,
+            ai_analysis_result: analysis
           })
           .eq('id', project.id)
 
         if (error) throw error
 
-        // Handle file uploads for existing project
         const uploadPromises = []
         if (data.beforePhotos?.length) {
           uploadPromises.push(handleFileUpload(data.beforePhotos, 'before_photo', project.id))
@@ -138,13 +155,14 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
             completion_date: format(data.completion_date, "yyyy-MM-dd"),
             builder_name: data.builder_name || null,
             builder_url: data.builder_url || null,
+            qualifies_for_basis: qualifies,
+            ai_analysis_result: analysis
           })
           .select()
           .single()
 
         if (error) throw error
 
-        // Handle file uploads for new project
         const uploadPromises = []
         if (data.beforePhotos?.length) {
           uploadPromises.push(handleFileUpload(data.beforePhotos, 'before_photo', projectData.id))

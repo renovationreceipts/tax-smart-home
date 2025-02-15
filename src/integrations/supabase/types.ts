@@ -106,6 +106,7 @@ export type Database = {
       }
       projects: {
         Row: {
+          ai_analysis_result: string | null
           builder_name: string | null
           builder_url: string | null
           completion_date: string
@@ -116,10 +117,12 @@ export type Database = {
           id: string
           name: string
           property_id: string
+          qualifies_for_basis: boolean | null
           start_date: string | null
           user_id: string
         }
         Insert: {
+          ai_analysis_result?: string | null
           builder_name?: string | null
           builder_url?: string | null
           completion_date: string
@@ -130,10 +133,12 @@ export type Database = {
           id?: string
           name: string
           property_id: string
+          qualifies_for_basis?: boolean | null
           start_date?: string | null
           user_id: string
         }
         Update: {
+          ai_analysis_result?: string | null
           builder_name?: string | null
           builder_url?: string | null
           completion_date?: string
@@ -144,6 +149,7 @@ export type Database = {
           id?: string
           name?: string
           property_id?: string
+          qualifies_for_basis?: boolean | null
           start_date?: string | null
           user_id?: string
         }
