@@ -50,6 +50,7 @@ export function TaxAnalysisTabs({ projectedTaxSavings, projects, selectedPropert
           <AIAnalysisCard 
             projectedTaxSavings={projectedTaxSavings}
             projects={projects}
+            onProjectClick={setSelectedProject}
           />
 
           <div className="bg-white rounded-xl border p-6">
