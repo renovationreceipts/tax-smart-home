@@ -6,12 +6,15 @@ import { ChevronRight, Info, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Footer from "@/components/Footer"
 import { PropertySection } from "@/components/account/PropertySection"
+import { ProjectsSection } from "@/components/account/ProjectsSection"
 import { useState } from "react"
+import { useProjects } from "@/hooks/useProjects"
 
 export default function Account() {
   const navigate = useNavigate()
   const { toast } = useToast()
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null)
+  const { data: projects = [] } = useProjects(selectedPropertyId)
   
   const handleSignOut = async () => {
     try {
@@ -57,27 +60,12 @@ export default function Account() {
               setSelectedPropertyId={setSelectedPropertyId}
             />
             
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <h2 className="text-xl font-bold mb-2">Recent Projects</h2>
-              <p className="text-gray-500 mb-6">Track improvements, repairs, and upgrades</p>
-              
-              <div className="border rounded-lg p-6">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg font-semibold">Kitchen Remodel</h3>
-                    <p className="text-gray-500">Added Feb 2024 • $45,000</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <span className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm">
-                      Energy Efficient
-                    </span>
-                    <span className="bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm">
-                      Value Add
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ProjectsSection
+              propertyId={selectedPropertyId}
+              projects={projects}
+              onAddProject={() => navigate('/project/new')}
+              onEditProject={(project) => navigate(`/project/${project.id}`)}
+            />
 
             <div className="bg-white rounded-lg p-6 shadow-sm">
               <h2 className="text-xl font-bold mb-6">Why Save Your Records?</h2>
