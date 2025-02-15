@@ -17,7 +17,7 @@ export function WhySaveRecords() {
 
         <div className="flex items-start gap-4">
           <FileText className="h-6 w-6 mt-1 text-gray-600" />
-          <span className="text-base">Audit-Proof Records: Have the backup you need to support tax credits and deductions.</span>
+          <span className="text-base"><strong>Audit-Proof Records</strong>: Have the backup you need to support tax credits and deductions.</span>
         </div>
       </div>
     </div>;
