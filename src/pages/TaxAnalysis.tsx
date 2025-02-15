@@ -1,7 +1,7 @@
+
 import { useNavigate } from "react-router-dom"
-import { ArrowLeft, TrendingUp } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { TaxCalculationTable } from "@/components/property/TaxCalculationTable"
 import Footer from "@/components/Footer"
 import { useProperties } from "@/hooks/useProperties"
 import { useProjects } from "@/hooks/useProjects"
@@ -9,9 +9,8 @@ import { AccountHeader } from "@/components/account/AccountHeader"
 import { supabase } from "@/integrations/supabase/client"
 import { useToast } from "@/hooks/use-toast"
 import { useState, useEffect } from "react"
-import { formatCurrency } from "@/lib/utils"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { TaxAnalysisHeader } from "@/components/tax-analysis/TaxAnalysisHeader"
+import { TaxAnalysisTabs } from "@/components/tax-analysis/TaxAnalysisTabs"
 
 export default function TaxAnalysis() {
   const navigate = useNavigate()
@@ -63,11 +62,6 @@ export default function TaxAnalysis() {
     }
   }
 
-  // Format date function
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString()
-  }
-
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <AccountHeader onSignOut={handleSignOut} />
@@ -84,127 +78,12 @@ export default function TaxAnalysis() {
           </Button>
 
           <div className="bg-white rounded-xl">
-            <div className="mb-2">
-              <h1 className="text-3xl font-bold">Full Savings Analysis</h1>
-              <p className="text-gray-500 text-lg">Comprehensive breakdown of your potential savings</p>
-            </div>
-
-            <div className="bg-gray-50 rounded-xl p-8 mt-6 text-center">
-              <div className="text-5xl font-bold mb-2">{formatCurrency(projectedTaxSavings)}</div>
-              <div className="text-gray-500 text-lg">Lifetime projected savings</div>
-            </div>
-
-            <Tabs defaultValue="tax-savings" className="mt-6">
-              <TabsList className="grid w-full grid-cols-3 h-auto bg-gray-100 p-1 rounded-lg">
-                <TabsTrigger 
-                  value="tax-savings" 
-                  className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all"
-                >
-                  <div className="text-center">
-                    <h3 className="font-semibold">Future Tax Savings</h3>
-                  </div>
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="tax-credits" 
-                  className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all"
-                >
-                  <div className="text-center">
-                    <h3 className="font-semibold">Tax Credits</h3>
-                  </div>
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="insurance" 
-                  className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all"
-                >
-                  <div className="text-center">
-                    <h3 className="font-semibold">Insurance Savings</h3>
-                  </div>
-                </TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="tax-savings" className="mt-6 space-y-6">
-                <div className="bg-white rounded-xl border p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="space-y-1">
-                      <h2 className="text-xl font-bold">AI Analysis</h2>
-                      <p className="text-gray-600 max-w-3xl">
-                        These projects appear to meet IRS guidelines considered capital improvements that add value 
-                        and extend the useful life of the property, making them eligible for increasing the cost 
-                        basis according to IRS guidelines.
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <div className="flex items-center gap-2 justify-end">
-                        <TrendingUp className="h-5 w-5 text-green-500" />
-                        <span className="text-2xl font-bold">{formatCurrency(projectedTaxSavings)}</span>
-                      </div>
-                      <div className="text-sm text-gray-500">Future Tax Savings</div>
-                    </div>
-                  </div>
-
-                  <div className="mt-8">
-                    <div className="overflow-x-auto">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Project Name</TableHead>
-                            <TableHead>Description</TableHead>
-                            <TableHead className="text-right">Cost</TableHead>
-                            <TableHead className="text-right">Completion Date</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {projects.map((project) => (
-                            <TableRow key={project.id}>
-                              <TableCell className="font-medium">{project.name}</TableCell>
-                              <TableCell>{project.description}</TableCell>
-                              <TableCell className="text-right">{formatCurrency(project.cost)}</TableCell>
-                              <TableCell className="text-right">{formatDate(project.completion_date)}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  </div>
-
-                  <div className="mt-8 bg-gray-50 p-6 rounded-lg">
-                    <h2 className="text-xl font-bold mb-3">How Does it Save Me Money?</h2>
-                    <p className="text-gray-700 leading-relaxed">
-                      When you sell your home, you may be subject to capital gains tax on the proceeds of the sale. 
-                      Tracking eligible home improvements carefully can save you money by increasing the cost basis 
-                      of your property. Proceeds = Sale price - cost basis. Meaning you want your cost basis as high 
-                      as possible
-                    </p>
-                  </div>
-
-                  <div className="mt-8">
-                    <h2 className="text-xl font-semibold mb-6">Detailed Tax Calculation</h2>
-                    {selectedProperty ? (
-                      <TaxCalculationTable 
-                        property={selectedProperty}
-                        projects={projects}
-                      />
-                    ) : (
-                      <p className="text-gray-500">No property selected. Please add a property to view tax calculations.</p>
-                    )}
-                  </div>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="tax-credits" className="mt-6">
-                <div className="bg-white rounded-xl p-6 shadow-sm text-center">
-                  <h2 className="text-xl font-semibold mb-4">Tax Credits</h2>
-                  <p className="text-gray-500">Coming soon! We're working on bringing you valuable tax credit opportunities.</p>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="insurance" className="mt-6">
-                <div className="bg-white rounded-xl p-6 shadow-sm text-center">
-                  <h2 className="text-xl font-semibold mb-4">Insurance Savings</h2>
-                  <p className="text-gray-500">Coming soon! We're working on bringing you insurance saving opportunities.</p>
-                </div>
-              </TabsContent>
-            </Tabs>
+            <TaxAnalysisHeader projectedTaxSavings={projectedTaxSavings} />
+            <TaxAnalysisTabs 
+              projectedTaxSavings={projectedTaxSavings}
+              projects={projects}
+              selectedProperty={selectedProperty}
+            />
           </div>
         </div>
       </div>
