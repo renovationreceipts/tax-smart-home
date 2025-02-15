@@ -6,17 +6,17 @@ export function WhySaveRecords() {
       <div className="space-y-6">
         <div className="flex items-start gap-4">
           <Home className="h-6 w-6 mt-1 text-gray-600" />
-          <span className="text-base font-normal">Future Tax Savings: Detailed records will help you lower your taxable gains by proving your cost basis when you sell.</span>
+          <span className="text-base font-normal">Future Tax Savings: Lower your taxable gains by documenting increases your cost basis.</span>
         </div>
 
         <div className="flex items-start gap-4">
           <Shield className="h-6 w-6 mt-1 text-gray-600" />
-          <span className="text-base">Documentation for insurance claims</span>
+          <span className="text-base">Documentation for insurance claims: Have proof of home upgrades when you need it most.</span>
         </div>
 
         <div className="flex items-start gap-4">
           <FileText className="h-6 w-6 mt-1 text-gray-600" />
-          <span className="text-base">Records for tax credits and deductions</span>
+          <span className="text-base">Audit-Proof Records: Have the backup you need to support tax credits and deductions.</span>
         </div>
       </div>
     </div>;
