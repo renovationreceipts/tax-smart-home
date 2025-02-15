@@ -136,6 +136,12 @@ export function ProjectsSection({
               </TableBody>
             </Table>
           </div>
+          <div className="border-t mt-6 pt-6">
+            <div className="flex items-start gap-4">
+              <FileText className="h-6 w-6 mt-1 text-gray-600" />
+              <h3 className="font-medium text-base">You're making a smart choice! All your records are encrypted and securely stored.</h3>
+            </div>
+          </div>
         </div>}
     </div>;
 }
