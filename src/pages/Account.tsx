@@ -118,7 +118,7 @@ export default function Account() {
                     <Info className="h-5 w-5 text-gray-400" />
                     <span>Tax Credits</span>
                   </div>
-                  <Badge variant="secondary" className="font-medium">Coming Soon</Badge>
+                  <Badge variant="secondary" className="font-medium bg-gray-950 hover:bg-gray-800">Coming Soon</Badge>
                 </div>
 
                 <div className="flex justify-between items-center">
