@@ -26,82 +26,85 @@ import Features from './pages/Features.tsx'
 
 const router = createBrowserRouter([
   {
-    element: <App><ScrollRestoration /></App>,
+    path: "/",
+    element: (
+      <App />
+    ),
     children: [
       {
-        path: "/",
+        index: true,
         element: <Index />
       },
       {
-        path: "/tax-analysis",
+        path: "tax-analysis",
         element: <TaxAnalysis />
       },
       {
-        path: "/features",
+        path: "features",
         element: <Features />
       },
       {
-        path: "/blog",
+        path: "blog",
         element: <Blog />
       },
       {
-        path: "/blog/track-home-improvement-receipts",
+        path: "blog/track-home-improvement-receipts",
         element: <TrackHomeImprovements />
       },
       {
-        path: "/blog/homeowners-guide-tax-savings",
+        path: "blog/homeowners-guide-tax-savings",
         element: <HomeownersGuideTaxSavings />
       },
       {
-        path: "/blog/capital-gains-101",
+        path: "blog/capital-gains-101",
         element: <CapitalGains101 />
       },
       {
-        path: "/account",
+        path: "account",
         element: <Account />
       },
       {
-        path: "/login",
+        path: "login",
         element: <Login />
       },
       {
-        path: "/signup",
+        path: "signup",
         element: <SignUp />
       },
       {
-        path: "/profile",
+        path: "profile",
         element: <Profile />
       },
       {
-        path: "/community",
+        path: "community",
         element: <Community />
       },
       {
-        path: "/about",
+        path: "about",
         element: <About />
       },
       {
-        path: "/property/edit/:id?",
+        path: "property/edit/:id?",
         element: <EditProperty />
       },
       {
-        path: "/project/edit/:propertyId/:id?",
+        path: "project/edit/:propertyId/:id?",
         element: <EditProject />
       },
       {
-        path: "/disclaimers",
+        path: "disclaimers",
         element: <Disclaimers />
       },
       {
-        path: "/terms",
+        path: "terms",
         element: <Terms />
       },
       {
-        path: "/privacy-policy",
+        path: "privacy-policy",
         element: <Privacy />
       },
       {
-        path: "/generate-og-image",
+        path: "generate-og-image",
         element: <GenerateOGImage />
       }
     ]
