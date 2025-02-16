@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -99,9 +100,9 @@ export default function Account() {
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
                     <TrendingUp className="h-5 w-5 text-gray-400" />
-                    <span>Your Tax Rate</span>
+                    <span>Total Projects Cost</span>
                   </div>
-                  <span className="font-semibold">{(userTaxRate * 100).toFixed(1)}%</span>
+                  <span className="font-semibold">{formatCurrency(totalProjectCosts)}</span>
                 </div>
 
                 <div className="flex justify-between items-center">
@@ -109,7 +110,7 @@ export default function Account() {
                     <Info className="h-5 w-5 text-gray-400" />
                     <span>x Your Tax Rate</span>
                   </div>
-                  <Badge variant="secondary" className="font-medium bg-gray-950 hover:bg-gray-800">Coming Soon</Badge>
+                  <span className="font-semibold">{(userTaxRate * 100).toFixed(1)}%</span>
                 </div>
 
                 <div className="flex justify-between items-center">
