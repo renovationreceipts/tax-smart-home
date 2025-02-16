@@ -1,3 +1,4 @@
+
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { TaxCalculationTable } from "@/components/property/TaxCalculationTable";
 import { AIAnalysisCard } from "./AIAnalysisCard";
@@ -5,17 +6,20 @@ import { ProjectAnalysisModal } from "../project/ProjectAnalysisModal";
 import { useState } from "react";
 import type { Project } from "@/hooks/useProjects";
 import type { Property } from "@/hooks/useProperties";
+
 interface TaxAnalysisTabsProps {
   projectedTaxSavings: number;
   projects: Project[];
   selectedProperty: Property | undefined;
 }
+
 export function TaxAnalysisTabs({
   projectedTaxSavings,
   projects,
   selectedProperty
 }: TaxAnalysisTabsProps) {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
   return <>
       <Tabs defaultValue="tax-savings" className="mt-6">
         <TabsList className="grid w-full grid-cols-3 h-auto bg-gray-100 p-1 rounded-lg">
@@ -40,7 +44,6 @@ export function TaxAnalysisTabs({
           <AIAnalysisCard projectedTaxSavings={projectedTaxSavings} projects={projects} onProjectClick={setSelectedProject} />
 
           <div className="bg-white rounded-xl border p-6">
-            <h2 className="text-xl font-semibold mb-6">If You Sold Your Property...</h2>
             {selectedProperty ? <TaxCalculationTable property={selectedProperty} projects={projects} onProjectClick={setSelectedProject} /> : <p className="text-gray-500">No property selected. Please add a property to view tax calculations.</p>}
           </div>
         </TabsContent>
