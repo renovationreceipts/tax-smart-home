@@ -5,6 +5,7 @@ import type { Project } from "@/hooks/useProjects";
 import { formatCurrency } from "@/lib/utils";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ArrowUpRight } from "lucide-react";
+import { useTaxCalculations } from "@/hooks/useTaxCalculations";
 
 interface AIAnalysisCardProps {
   projectedTaxSavings: number;
@@ -20,12 +21,32 @@ export function AIAnalysisCard({
   const qualifyingProjects = projects.filter(p => p.qualifies_for_basis);
   const nonQualifyingProjects = projects.filter(p => !p.qualifies_for_basis);
 
+  const { userTaxRate, totalProjectCosts, houseValueGrowthRate } = useTaxCalculations({ 
+    property: projects[0]?.property_id ? { id: projects[0].property_id } : null, 
+    projects 
+  });
+
   return <Card className="p-6">
-      <img 
-        src="/lovable-uploads/95b45829-e994-47e6-9606-b66eaff22992.png"
-        alt="Tax savings explanation"
-        className="w-full rounded-lg mb-8"
-      />
+      <div className="mb-8 border rounded-lg p-6">
+        <h3 className="text-lg font-semibold mb-4">Your Future Tax Savings Explained</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-2">
+            <p className="text-sm text-gray-600">Lifetime Projected Savings</p>
+            <p className="text-2xl font-bold text-primary">{formatCurrency(projectedTaxSavings)}</p>
+            <p className="text-sm text-gray-500">Based on your current tax rate of {userTaxRate * 100}%</p>
+          </div>
+          <div className="space-y-2">
+            <p className="text-sm text-gray-600">Total Project Costs</p>
+            <p className="text-2xl font-bold">{formatCurrency(totalProjectCosts)}</p>
+            <p className="text-sm text-gray-500">Added to your cost basis</p>
+          </div>
+          <div className="space-y-2">
+            <p className="text-sm text-gray-600">Home Value Growth Rate</p>
+            <p className="text-2xl font-bold">{houseValueGrowthRate}%</p>
+            <p className="text-sm text-gray-500">Annual appreciation rate</p>
+          </div>
+        </div>
+      </div>
 
       <h2 className="text-xl font-semibold mb-6">AI Tax Analysis</h2>
 
