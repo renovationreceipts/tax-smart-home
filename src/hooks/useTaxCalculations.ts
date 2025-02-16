@@ -80,11 +80,13 @@ export function useTaxCalculations({ property, projects }: TaxCalculationsProps)
   return {
     userTaxRate,
     totalProjectCosts,
-    newCostBasis: totalProjectCosts,
+    adjustedCostBasis,
     taxableGainWithBasis,
     taxableGainWithoutBasis,
+    exemptionAmount,
+    finalTaxableGain,
     taxSavings: exemptionAmount,
     estimatedTaxSavings: finalTaxableGain,
-    adjustedCostBasis,
+    newCostBasis: totalProjectCosts,
   }
 }
