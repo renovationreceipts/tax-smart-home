@@ -11,19 +11,14 @@ import { useState, useEffect } from "react";
 import { useProperties } from "@/hooks/useProperties";
 import { useProjects } from "@/hooks/useProjects";
 import { formatCurrency } from "@/lib/utils";
+
 export default function Account() {
   const navigate = useNavigate();
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
   const [userTaxRate, setUserTaxRate] = useState(0);
-  const {
-    data: properties = []
-  } = useProperties();
-  const {
-    data: projects = []
-  } = useProjects(selectedPropertyId);
+  const { data: properties = [] } = useProperties();
+  const { data: projects = [] } = useProjects(selectedPropertyId);
   const selectedProperty = properties.find(p => p.id === selectedPropertyId);
 
   // Set the first property as selected by default
@@ -32,17 +27,12 @@ export default function Account() {
       setSelectedPropertyId(properties[0].id);
     }
   }, [properties, selectedPropertyId]);
+
   useEffect(() => {
     const fetchUserTaxRate = async () => {
-      const {
-        data: {
-          user
-        }
-      } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
-      const {
-        data: profile
-      } = await supabase.from('profiles').select('tax_rate').eq('id', user.id).single();
+      const { data: profile } = await supabase.from('profiles').select('tax_rate').eq('id', user.id).single();
       if (profile) {
         setUserTaxRate(profile.tax_rate ? profile.tax_rate / 100 : 0);
       }
@@ -53,11 +43,10 @@ export default function Account() {
   // Calculate total project costs and tax savings
   const totalProjectCosts = projects.reduce((sum, project) => sum + (project?.cost || 0), 0);
   const projectedTaxSavings = totalProjectCosts * userTaxRate;
+
   const handleSignOut = async () => {
     try {
-      const {
-        error
-      } = await supabase.auth.signOut();
+      const { error } = await supabase.auth.signOut();
       if (error) throw error;
       navigate("/");
       toast({
@@ -73,10 +62,12 @@ export default function Account() {
       });
     }
   };
+
   if (properties.length === 0) {
     navigate("/property/edit");
     return null;
   }
+
   return <div className="min-h-screen flex flex-col bg-gray-50">
       <AccountHeader onSignOut={handleSignOut} />
       <main className="flex-grow w-full max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
@@ -108,9 +99,9 @@ export default function Account() {
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
                     <TrendingUp className="h-5 w-5 text-gray-400" />
-                    <span>Total Projects Cost</span>
+                    <span>Your Tax Rate</span>
                   </div>
-                  <span className="font-semibold">{formatCurrency(projectedTaxSavings)}</span>
+                  <span className="font-semibold">{(userTaxRate * 100).toFixed(1)}%</span>
                 </div>
 
                 <div className="flex justify-between items-center">
