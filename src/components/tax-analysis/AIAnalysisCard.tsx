@@ -19,20 +19,20 @@ export function AIAnalysisCard({ projectedTaxSavings, projects, onProjectClick }
     <Card className="p-6">
       <h2 className="text-xl font-semibold mb-6">AI Tax Analysis</h2>
       <Tabs defaultValue="qualifying" className="w-full">
-        <div className="flex gap-6 mb-6">
+        <TabsList className="flex h-auto space-x-6 bg-transparent mb-6">
           <TabsTrigger 
             value="qualifying" 
-            className="bg-transparent p-0 data-[state=active]:bg-transparent data-[state=active]:font-bold data-[state=active]:underline hover:text-primary/90"
+            className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:font-bold data-[state=active]:underline hover:text-primary/90"
           >
             Projects That Qualify for Tax Basis ({qualifyingProjects.length})
           </TabsTrigger>
           <TabsTrigger 
             value="non-qualifying" 
-            className="bg-transparent p-0 data-[state=active]:bg-transparent data-[state=active]:font-bold data-[state=active]:underline hover:text-primary/90"
+            className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:font-bold data-[state=active]:underline hover:text-primary/90"
           >
             Projects that Don't Qualify ({nonQualifyingProjects.length})
           </TabsTrigger>
-        </div>
+        </TabsList>
 
         <TabsContent value="qualifying">
           <Table>
