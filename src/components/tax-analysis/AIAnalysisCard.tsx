@@ -4,7 +4,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import type { Project } from "@/hooks/useProjects"
 import { formatCurrency } from "@/lib/utils"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { ArrowUpRight, Receipt, Clock, Sparkles } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 
 interface AIAnalysisCardProps {
   projectedTaxSavings: number
@@ -19,55 +19,6 @@ export function AIAnalysisCard({ projectedTaxSavings, projects, onProjectClick }
   return (
     <Card className="p-6">
       <h2 className="text-xl font-semibold mb-6">AI Tax Analysis</h2>
-
-      <div className="mb-8 border rounded-lg p-6">
-        <div className="flex justify-between items-start mb-6">
-          <div className="max-w-2xl">
-            <h3 className="text-lg font-semibold mb-2">Your Future Tax Savings Explained</h3>
-            <p className="text-gray-600">
-              Looking on your home projects, our AI has identified potential future tax savings through cost basis
-              adjustments. If you ever sell your home, you'll pay tax only on the profit after subtracting your tracked
-              improvements—potentially saving you thousands. The more you track, the more you save!
-            </p>
-          </div>
-          <div className="text-right">
-            <div className="flex items-center gap-1 text-2xl font-bold">
-              {formatCurrency(projectedTaxSavings)} <ArrowUpRight className="h-5 w-5" />
-            </div>
-            <div className="text-gray-500">Future Tax Savings</div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="flex gap-3">
-            <Receipt className="h-5 w-5 text-gray-600 flex-shrink-0 mt-1" />
-            <div>
-              <h4 className="font-medium mb-1">Cost Basis Explained</h4>
-              <p className="text-gray-600 text-sm">
-                Your home's cost basis is your purchase price plus qualifying improvements. A higher cost basis means lower taxable profit when you sell.
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <Sparkles className="h-5 w-5 text-gray-600 flex-shrink-0 mt-1" />
-            <div>
-              <h4 className="font-medium mb-1">What Qualifies</h4>
-              <p className="text-gray-600 text-sm">
-                Improvements that add value, prolong life, or adapt your home to new uses. Regular repairs don't count.
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <Clock className="h-5 w-5 text-gray-600 flex-shrink-0 mt-1" />
-            <div>
-              <h4 className="font-medium mb-1">When You Save</h4>
-              <p className="text-gray-600 text-sm">
-                Savings apply when you sell your home. Track now to reduce taxes later!
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <Tabs defaultValue="qualifying" className="w-full">
         <TabsList className="flex h-auto space-x-6 bg-transparent mb-6 justify-start">
