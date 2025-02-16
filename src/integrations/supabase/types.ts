@@ -46,6 +46,7 @@ export type Database = {
         Row: {
           created_at: string
           email: string
+          house_value_growth_rate: number | null
           id: string
           tax_filing_status: string
           tax_rate: number | null
@@ -53,6 +54,7 @@ export type Database = {
         Insert: {
           created_at?: string
           email: string
+          house_value_growth_rate?: number | null
           id: string
           tax_filing_status?: string
           tax_rate?: number | null
@@ -60,6 +62,7 @@ export type Database = {
         Update: {
           created_at?: string
           email?: string
+          house_value_growth_rate?: number | null
           id?: string
           tax_filing_status?: string
           tax_rate?: number | null

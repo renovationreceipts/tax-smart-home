@@ -10,6 +10,7 @@ interface TaxCalculationsProps {
 export function useTaxCalculations({ property, projects }: TaxCalculationsProps) {
   const [userTaxRate, setUserTaxRate] = useState(0)
   const [userFilingStatus, setUserFilingStatus] = useState("Single")
+  const [houseValueGrowthRate, setHouseValueGrowthRate] = useState(4.92)
 
   useEffect(() => {
     let isMounted = true
@@ -21,13 +22,14 @@ export function useTaxCalculations({ property, projects }: TaxCalculationsProps)
 
         const { data: profile } = await supabase
           .from('profiles')
-          .select('tax_rate, tax_filing_status')
+          .select('tax_rate, tax_filing_status, house_value_growth_rate')
           .eq('id', user.id)
           .single()
 
         if (profile && isMounted) {
           setUserTaxRate(profile.tax_rate ? profile.tax_rate / 100 : 0)
           setUserFilingStatus(profile.tax_filing_status || "Single")
+          setHouseValueGrowthRate(profile.house_value_growth_rate || 4.92)
         }
       } catch (error) {
         console.error('Error fetching tax rate:', error)
@@ -88,5 +90,6 @@ export function useTaxCalculations({ property, projects }: TaxCalculationsProps)
     taxSavings: exemptionAmount,
     estimatedTaxSavings: finalTaxableGain,
     newCostBasis: totalProjectCosts,
+    houseValueGrowthRate,
   }
 }
