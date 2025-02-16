@@ -15,7 +15,8 @@ import { PercentageField } from "./PercentageField"
 const profileFormSchema = z.object({
   email: z.string().email(),
   tax_rate: z.number().min(0).max(100).optional(),
-  tax_filing_status: z.enum(taxFilingStatuses)
+  tax_filing_status: z.enum(taxFilingStatuses),
+  house_value_growth_rate: z.number().min(0).max(100).optional(),
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
@@ -52,11 +53,12 @@ export function ProfileSettingsForm() {
 
         console.log("Loaded profile data:", profile)
         
-        // Set form values with existing data, ensuring tax_filing_status is of the correct type
+        // Set form values with existing data
         form.reset({
           email: user.email,
           tax_rate: profile.tax_rate || 0,
-          tax_filing_status: (profile.tax_filing_status as typeof taxFilingStatuses[number]) || "Single"
+          tax_filing_status: (profile.tax_filing_status as typeof taxFilingStatuses[number]) || "Single",
+          house_value_growth_rate: profile.house_value_growth_rate || 4.92,
         })
       } catch (error) {
         console.error("Error in loadProfile:", error)
@@ -105,13 +107,14 @@ export function ProfileSettingsForm() {
         })
       }
 
-      // Always update the profile with tax rate and filing status
-      console.log("Updating profile with tax_rate:", data.tax_rate)
+      // Always update the profile with tax rate, filing status, and house value growth rate
+      console.log("Updating profile with data:", data)
       const { error: profileError } = await supabase
         .from("profiles")
         .update({
           tax_rate: data.tax_rate,
-          tax_filing_status: data.tax_filing_status
+          tax_filing_status: data.tax_filing_status,
+          house_value_growth_rate: data.house_value_growth_rate,
         })
         .eq("id", user.id)
 
@@ -152,7 +155,12 @@ export function ProfileSettingsForm() {
           <PercentageField
             form={form}
             name="tax_rate"
-            label="Tax Rate"
+            label="Capital Gains Tax Rate"
+          />
+          <PercentageField
+            form={form}
+            name="house_value_growth_rate"
+            label="Home Value Annual Appreciation Rate"
           />
         </div>
 
