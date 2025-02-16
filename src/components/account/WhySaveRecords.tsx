@@ -1,4 +1,3 @@
-
 import { Home, Shield, FileText } from "lucide-react";
 export function WhySaveRecords() {
   return <div className="bg-white rounded-lg shadow-sm border p-6 mt-6">
@@ -10,7 +9,7 @@ export function WhySaveRecords() {
             <Home className="h-6 w-6 text-blue-600" />
           </div>
           <h3 className="font-semibold text-lg mb-2"><strong>Future Tax Savings</strong></h3>
-          <p className="text-gray-600">Lower your taxable gains by documenting increases your cost basis.</p>
+          <p className="text-gray-600">Lower your taxable gains by documenting increases in your cost basis.</p>
         </div>
 
         <div className="bg-gray-50 rounded-lg p-6 flex flex-col items-center text-center">
