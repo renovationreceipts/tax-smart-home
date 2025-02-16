@@ -21,6 +21,12 @@ export function AIAnalysisCard({
   const nonQualifyingProjects = projects.filter(p => !p.qualifies_for_basis);
 
   return <Card className="p-6">
+      <img 
+        src="/lovable-uploads/95b45829-e994-47e6-9606-b66eaff22992.png"
+        alt="Tax savings explanation"
+        className="w-full rounded-lg mb-8"
+      />
+
       <h2 className="text-xl font-semibold mb-6">AI Tax Analysis</h2>
 
       <Tabs defaultValue="qualifying" className="w-full">
