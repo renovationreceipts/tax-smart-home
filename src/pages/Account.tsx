@@ -108,7 +108,7 @@ export default function Account() {
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
                     <TrendingUp className="h-5 w-5 text-gray-400" />
-                    <span>Future Tax Savings</span>
+                    <span>Total Projects Cost</span>
                   </div>
                   <span className="font-semibold">{formatCurrency(projectedTaxSavings)}</span>
                 </div>
@@ -116,7 +116,7 @@ export default function Account() {
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
                     <Info className="h-5 w-5 text-gray-400" />
-                    <span>Tax Credits</span>
+                    <span>x Your Tax Rate</span>
                   </div>
                   <Badge variant="secondary" className="font-medium bg-gray-950 hover:bg-gray-800">Coming Soon</Badge>
                 </div>
@@ -124,7 +124,7 @@ export default function Account() {
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
                     <Info className="h-5 w-5 text-gray-400" />
-                    <span>Insurance Savings</span>
+                    <span>= Lifetime savings</span>
                   </div>
                   <Badge variant="secondary" className="font-medium bg-zinc-950 hover:bg-zinc-800">Coming Soon</Badge>
                 </div>
