@@ -1,10 +1,17 @@
 
-import { FileText, Plus, Wrench, ClipboardList } from "lucide-react";
+import { FileText, Plus, Wrench, ClipboardList, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import type { Project } from "@/hooks/useProjects";
 import { useProperties } from "@/hooks/useProperties";
 import { ProjectTypeExamples } from "@/components/project/ProjectTypeExamples";
+import { useNavigate } from "react-router-dom";
 
 interface ProjectsSectionProps {
   propertyId: string | null;
@@ -19,9 +26,12 @@ export function ProjectsSection({
   onAddProject,
   onEditProject
 }: ProjectsSectionProps) {
+  const navigate = useNavigate();
   const {
     data: properties = []
   } = useProperties();
+
+  const selectedProperty = properties.find(p => p.id === propertyId);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -103,6 +113,31 @@ export function ProjectsSection({
           <div className="flex items-center gap-3">
             <FileText className="h-6 w-6 text-[#0090FF]" />
             <h3 className="font-semibold text-2xl">Projects</h3>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="ml-2">
+                  {selectedProperty?.name || "Select Property"}
+                  <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-[200px]">
+                {properties.map((property) => (
+                  <DropdownMenuItem
+                    key={property.id}
+                    onClick={() => navigate(`/account?propertyId=${property.id}`)}
+                  >
+                    {property.name}
+                  </DropdownMenuItem>
+                ))}
+                <DropdownMenuItem
+                  className="text-[#0090FF] border-t"
+                  onClick={() => navigate("/property/edit")}
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add New Property
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           {projects.length > 0 && <Button onClick={onAddProject} size="sm" variant="ghost" className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]">
               <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
