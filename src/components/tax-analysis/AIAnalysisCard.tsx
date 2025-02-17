@@ -5,11 +5,13 @@ import { formatCurrency } from "@/lib/utils";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ArrowUpRight, InfoIcon, Check, X } from "lucide-react";
 import { useTaxCalculations } from "@/hooks/useTaxCalculations";
+
 interface AIAnalysisCardProps {
   projectedTaxSavings: number;
   projects: Project[];
   onProjectClick?: (project: Project) => void;
 }
+
 export function AIAnalysisCard({
   projectedTaxSavings,
   projects,
@@ -17,24 +19,20 @@ export function AIAnalysisCard({
 }: AIAnalysisCardProps) {
   const qualifyingProjects = projects.filter(p => p.qualifies_for_basis);
   const nonQualifyingProjects = projects.filter(p => !p.qualifies_for_basis);
-  const {
-    userTaxRate,
-    totalProjectCosts,
-    houseValueGrowthRate
-  } = useTaxCalculations({
-    property: projects[0]?.property_id ? {
-      id: projects[0].property_id
-    } : null,
-    projects
+
+  const { userTaxRate, totalProjectCosts, houseValueGrowthRate } = useTaxCalculations({ 
+    property: projects[0]?.property_id ? { id: projects[0].property_id } : null, 
+    projects 
   });
+
   const projectedTaxAmount = totalProjectCosts * (userTaxRate || 0.15); // Default to 15% if no user tax rate
 
   return <div className="space-y-6">
       <Card className="p-6">
-        <h2 className="text-xl mb-4 font-bold">How Does This Save You Money</h2>
+        <h2 className="text-xl font-semibold mb-4">How Does This Save You Money</h2>
         <div className="space-y-4">
           <div className="p-4 bg-gray-50 rounded-lg flex gap-3">
-            <InfoIcon className="h-5 w-5 text-gray-600 flex-shrink-0 mt-0.5" />
+            <span className="h-5 w-5 text-gray-600 flex-shrink-0 mt-0.5">🏷️</span>
             <div>
               <p className="text-gray-600">
                 When you sell your home, you're taxed on the profit—the difference between your sale price and your cost basis. 
