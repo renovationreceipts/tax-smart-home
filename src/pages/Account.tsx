@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowRight, Info, Lock, TrendingUp, BankNote } from "lucide-react";
+import { ArrowRight, Info, Lock, TrendingUp, Banknote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ProjectAndTaxSection } from "@/components/account/ProjectAndTaxSection";
@@ -121,7 +121,7 @@ export default function Account() {
 
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2 text-lg">
-              <BankNote className="h-5 w-5 text-gray-400" />
+              <Banknote className="h-5 w-5 text-gray-400" />
               <span className="text-sm">x Your Tax Rate</span>
             </div>
             <span className="text-sm">{(userTaxRate * 100).toFixed(1)}%</span>
@@ -129,7 +129,7 @@ export default function Account() {
 
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2 text-lg">
-              <BankNote className="h-5 w-5 text-gray-400" />
+              <Banknote className="h-5 w-5 text-gray-400" />
               <span className="text-sm">= Lifetime savings</span>
             </div>
             <span className="text-sm">{formatCurrency(projectedTaxSavings)}</span>
