@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -83,7 +84,7 @@ export default function Account() {
   const TotalSavingsCard = () => <div className="bg-white rounded-xl shadow-sm">
       <div className="hidden sm:flex justify-between items-center p-6">
         <div className="flex items-center gap-2">
-          <PiggyBank className="h-5 w-5 text-gray-400" />
+          <PiggyBank className="h-6 w-6 text-[#0090FF]" />
           <h3 className="text-2xl font-semibold">Total Savings</h3>
         </div>
       </div>
@@ -94,7 +95,11 @@ export default function Account() {
             <div className="text-3xl font-bold mb-1">{formatCurrency(projectedTaxSavings)}</div>
             <div className="text-gray-600 text-sm">Lifetime projected savings</div>
           </div>
-          <Button variant="link" onClick={() => navigate("/tax-analysis")} className="text-[#0090FF] hover:text-[#0090FF]/90 p-0 text-sm">
+          <Button 
+            variant="link" 
+            onClick={() => navigate("/tax-analysis")} 
+            className="text-[#0090FF] hover:text-[#0090FF]/90 p-0 text-sm"
+          >
             View Details
           </Button>
         </div>
@@ -134,7 +139,11 @@ export default function Account() {
           </div>
         </div>
 
-        <Button variant="outline" onClick={() => navigate("/tax-analysis")} className="w-full mt-8 text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal my-[28px]">
+        <Button 
+          variant="outline" 
+          onClick={() => navigate("/tax-analysis")} 
+          className="w-full mt-8 text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal my-[28px]"
+        >
           View Full Analysis
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
