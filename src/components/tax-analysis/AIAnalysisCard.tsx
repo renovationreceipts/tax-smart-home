@@ -1,3 +1,4 @@
+
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import type { Project } from "@/hooks/useProjects";
@@ -105,9 +106,16 @@ export function AIAnalysisCard({
       </Card>
 
       <Card className="p-6">
-        <h2 className="text-xl mb-6 font-bold">AI Tax Analysis</h2>
+        <h2 className="text-xl mb-2 font-bold">AI Tax Analysis</h2>
+        
+        <div className="mt-2 p-4 bg-gray-50 rounded-lg">
+          <p className="text-sm text-gray-600">
+            Based on our AI analysis, we've identified which of your home improvement projects qualify 
+            for tax basis adjustment. Click on any project to see the detailed analysis.
+          </p>
+        </div>
 
-        <Tabs defaultValue="qualifying" className="w-full">
+        <Tabs defaultValue="qualifying" className="w-full mt-6">
           <TabsList className="flex h-auto space-x-6 bg-transparent mb-6 justify-start">
             <TabsTrigger value="qualifying" className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:font-bold data-[state=active]:underline hover:text-primary/90 text-left">
               Projects That Qualify for Tax Basis ({qualifyingProjects.length})
@@ -163,13 +171,7 @@ export function AIAnalysisCard({
             </Table>
           </TabsContent>
         </Tabs>
-
-        <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-          <p className="text-sm text-gray-600">
-            Based on our AI analysis, we've identified which of your home improvement projects qualify 
-            for tax basis adjustment. Click on any project to see the detailed analysis.
-          </p>
-        </div>
       </Card>
     </div>;
 }
+
