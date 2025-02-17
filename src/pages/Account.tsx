@@ -140,19 +140,19 @@ export default function Account() {
       <div className="space-y-4 mb-8">
         <div className="flex items-center gap-3">
           <Lock className="h-5 w-5 text-gray-400" />
-          <span className="text-gray-700">Generate IRS-ready tax documents</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <Lock className="h-5 w-5 text-gray-400" />
-          <span className="text-gray-700">Insurance discount request package</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <Lock className="h-5 w-5 text-gray-400" />
-          <span className="text-gray-700">Continuous monitoring for new savings</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <Lock className="h-5 w-5 text-gray-400" />
           <span className="text-gray-700">Unlimited project storage</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <Lock className="h-5 w-5 text-gray-400" />
+          <span className="text-gray-700">Export to tax filing format (XML, PDF, TXF, CSV)</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <Lock className="h-5 w-5 text-gray-400" />
+          <span className="text-gray-700">See if your projects qualify for tax credits, rebates and incentives</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <Lock className="h-5 w-5 text-gray-400" />
+          <span className="text-gray-700">See if your projects qualify for savings on homeowners insurance premium</span>
         </div>
       </div>
 
