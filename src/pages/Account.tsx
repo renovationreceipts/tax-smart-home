@@ -85,7 +85,7 @@ export default function Account() {
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="hidden sm:block space-y-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-gray-400" />
