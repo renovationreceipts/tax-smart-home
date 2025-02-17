@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -90,15 +89,13 @@ export default function Account() {
       </div>
 
       <div className="sm:hidden py-4 px-6">
-        <div className="flex justify-between items-start">
+        <div className="flex justify-between items-center">
           <div>
-            <div className="flex items-center gap-3 mb-1">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#7CC6B3]">
-                <DollarSign className="h-4 w-4 text-white" />
-              </div>
+            <div className="text-3xl font-bold mb-1">{formatCurrency(projectedTaxSavings)}</div>
+            <div className="flex items-center gap-3">
+              <DollarSign className="h-4 w-4 text-[#0EA5E9]" />
               <div className="text-gray-600 text-sm">Lifetime projected savings</div>
             </div>
-            <div className="text-3xl font-bold">{formatCurrency(projectedTaxSavings)}</div>
           </div>
           <Button 
             variant="link" 
