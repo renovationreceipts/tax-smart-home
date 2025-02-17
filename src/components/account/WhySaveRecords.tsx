@@ -1,10 +1,10 @@
 
-import { Home, Shield, FileText, CircleDollarSign } from "lucide-react";
+import { Home, Shield, FileText, Archive } from "lucide-react";
 
 export function WhySaveRecords() {
   return <div className="bg-white rounded-lg shadow-sm border p-6 mt-6">
       <div className="flex items-center gap-2">
-        <CircleDollarSign className="h-6 w-6 text-[#0090FF]" />
+        <Archive className="h-6 w-6 text-[#0090FF]" />
         <h2 className="font-bold mb-8 text-2xl">Why Save Your Records?</h2>
       </div>
 
