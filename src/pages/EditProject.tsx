@@ -1,3 +1,4 @@
+
 import { useNavigate, useParams } from "react-router-dom"
 import { ProjectForm } from "@/components/project/ProjectForm"
 import { useProjects } from "@/hooks/useProjects"
@@ -14,6 +15,9 @@ export default function EditProject() {
   }
 
   const handleNavigateBack = () => {
+    // Scroll to top before navigation
+    window.scrollTo(0, 0)
+    
     navigate(`/account?propertyId=${propertyId}`)
   }
 
