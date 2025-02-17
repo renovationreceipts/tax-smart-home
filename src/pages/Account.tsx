@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowRight, Info, Lock, TrendingUp, DollarSign } from "lucide-react";
+import { ArrowRight, Info, Lock, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ProjectAndTaxSection } from "@/components/account/ProjectAndTaxSection";
@@ -92,10 +92,7 @@ export default function Account() {
         <div className="flex justify-between items-center">
           <div>
             <div className="text-3xl font-bold mb-1">{formatCurrency(projectedTaxSavings)}</div>
-            <div className="flex items-center gap-3">
-              <DollarSign className="h-4 w-4 text-[#0EA5E9]" />
-              <div className="text-gray-600 text-sm">Lifetime projected savings</div>
-            </div>
+            <div className="text-gray-600 text-sm">Lifetime projected savings</div>
           </div>
           <Button 
             variant="link" 
