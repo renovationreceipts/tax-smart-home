@@ -17,8 +17,21 @@ export function useAuth() {
       const { data: { session } } = await supabase.auth.getSession();
       console.log("Checking existing session:", { exists: !!session });
       if (session) {
-        console.log("Found existing session, redirecting to account");
-        navigate("/account", { replace: true });
+        // Check if user has any properties
+        const { data: properties } = await supabase
+          .from('properties')
+          .select('id')
+          .limit(1);
+
+        console.log("Checking properties:", { hasProperties: properties && properties.length > 0 });
+
+        if (properties && properties.length > 0) {
+          console.log("User has properties, redirecting to account");
+          navigate("/account", { replace: true });
+        } else {
+          console.log("No properties found, redirecting to property creation");
+          navigate("/property/edit", { replace: true });
+        }
       }
     };
     checkSession();
@@ -29,13 +42,24 @@ export function useAuth() {
 
       if (event === 'SIGNED_IN' || event === 'USER_UPDATED' || event === 'INITIAL_SESSION') {
         if (session) {
-          console.log("Valid session detected, redirecting to account");
+          console.log("Valid session detected");
           
           // Store the session in localStorage to persist it
           localStorage.setItem('supabase.auth.token', JSON.stringify(session));
           
-          // Force a hard redirect to /account to handle hash fragments properly
-          window.location.href = `${window.location.origin}/account`;
+          // Check if user has any properties
+          const { data: properties } = await supabase
+            .from('properties')
+            .select('id')
+            .limit(1);
+
+          console.log("Checking properties after sign in:", { hasProperties: properties && properties.length > 0 });
+
+          // Determine redirect path based on whether user has properties
+          const redirectPath = properties && properties.length > 0 ? '/account' : '/property/edit';
+          
+          // Force a hard redirect to handle hash fragments properly
+          window.location.href = `${window.location.origin}${redirectPath}`;
           
           toast({
             title: "Success!",
@@ -62,7 +86,14 @@ export function useAuth() {
         
         if (session) {
           console.log("Successfully recovered session from hash");
-          window.location.href = `${window.location.origin}/account`;
+          // Check if user has any properties
+          const { data: properties } = await supabase
+            .from('properties')
+            .select('id')
+            .limit(1);
+
+          const redirectPath = properties && properties.length > 0 ? '/account' : '/property/edit';
+          window.location.href = `${window.location.origin}${redirectPath}`;
         }
       }
     };
