@@ -1,5 +1,6 @@
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { TaxCalculationTable } from "@/components/property/TaxCalculationTable";
 import { AIAnalysisCard } from "./AIAnalysisCard";
 import { ProjectAnalysisModal } from "../project/ProjectAnalysisModal";
@@ -19,10 +20,28 @@ export function TaxAnalysisTabs({
   selectedProperty
 }: TaxAnalysisTabsProps) {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [currentTab, setCurrentTab] = useState("tax-savings");
 
   return <>
-      <Tabs defaultValue="tax-savings" className="mt-6">
-        <TabsList className="grid w-full grid-cols-3 h-auto bg-gray-100 p-1 rounded-lg">
+      <Tabs value={currentTab} onValueChange={setCurrentTab} className="mt-6">
+        <div className="block sm:hidden">
+          <Select value={currentTab} onValueChange={setCurrentTab}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select view">
+                {currentTab === "tax-savings" && "Future Tax Savings"}
+                {currentTab === "tax-credits" && "Tax Credits"}
+                {currentTab === "insurance" && "Insurance Savings"}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="tax-savings">Future Tax Savings</SelectItem>
+              <SelectItem value="tax-credits">Tax Credits</SelectItem>
+              <SelectItem value="insurance">Insurance Savings</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <TabsList className="hidden sm:grid w-full grid-cols-3 h-auto bg-gray-100 p-1 rounded-lg">
           <TabsTrigger value="tax-savings" className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all">
             <div className="text-center">
               <h3 className="font-semibold">Future Tax Savings</h3>
