@@ -44,31 +44,33 @@ export function useAuth() {
         if (session) {
           console.log("Valid session detected");
           
-          // Store the session in localStorage to persist it
-          localStorage.setItem('supabase.auth.token', JSON.stringify(session));
-          
-          // Check if user has any properties
-          const { data: properties } = await supabase
-            .from('properties')
-            .select('id')
-            .limit(1);
+          try {
+            // Check if user has any properties
+            const { data: properties, error } = await supabase
+              .from('properties')
+              .select('id')
+              .limit(1);
 
-          console.log("Checking properties after sign in:", { hasProperties: properties && properties.length > 0 });
+            if (error) throw error;
 
-          // Determine redirect path based on whether user has properties
-          const redirectPath = properties && properties.length > 0 ? '/account' : '/property/edit';
-          
-          // Force a hard redirect to handle hash fragments properly
-          window.location.href = `${window.location.origin}${redirectPath}`;
-          
-          toast({
-            title: "Success!",
-            description: "You have successfully signed in.",
-          });
+            console.log("Checking properties after sign in:", { hasProperties: properties && properties.length > 0 });
+
+            // Determine redirect path based on whether user has properties
+            const redirectPath = properties && properties.length > 0 ? '/account' : '/property/edit';
+            navigate(redirectPath, { replace: true });
+            
+            toast({
+              title: "Success!",
+              description: "You have successfully signed in.",
+            });
+          } catch (error) {
+            console.error("Error checking properties:", error);
+            // If we can't check properties, default to account page
+            navigate("/account", { replace: true });
+          }
         }
       } else if (event === 'SIGNED_OUT') {
         console.log("User signed out");
-        localStorage.removeItem('supabase.auth.token');
         navigate("/", { replace: true });
       }
     });
@@ -86,14 +88,21 @@ export function useAuth() {
         
         if (session) {
           console.log("Successfully recovered session from hash");
-          // Check if user has any properties
-          const { data: properties } = await supabase
-            .from('properties')
-            .select('id')
-            .limit(1);
+          try {
+            // Check if user has any properties
+            const { data: properties, error: propertiesError } = await supabase
+              .from('properties')
+              .select('id')
+              .limit(1);
 
-          const redirectPath = properties && properties.length > 0 ? '/account' : '/property/edit';
-          window.location.href = `${window.location.origin}${redirectPath}`;
+            if (propertiesError) throw propertiesError;
+
+            const redirectPath = properties && properties.length > 0 ? '/account' : '/property/edit';
+            navigate(redirectPath, { replace: true });
+          } catch (error) {
+            console.error("Error checking properties:", error);
+            navigate("/account", { replace: true });
+          }
         }
       }
     };
