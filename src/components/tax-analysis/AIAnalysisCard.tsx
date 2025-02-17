@@ -1,4 +1,3 @@
-
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import type { Project } from "@/hooks/useProjects";
@@ -6,13 +5,11 @@ import { formatCurrency } from "@/lib/utils";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ArrowUpRight, InfoIcon, Check, X } from "lucide-react";
 import { useTaxCalculations } from "@/hooks/useTaxCalculations";
-
 interface AIAnalysisCardProps {
   projectedTaxSavings: number;
   projects: Project[];
   onProjectClick?: (project: Project) => void;
 }
-
 export function AIAnalysisCard({
   projectedTaxSavings,
   projects,
@@ -20,17 +17,21 @@ export function AIAnalysisCard({
 }: AIAnalysisCardProps) {
   const qualifyingProjects = projects.filter(p => p.qualifies_for_basis);
   const nonQualifyingProjects = projects.filter(p => !p.qualifies_for_basis);
-
-  const { userTaxRate, totalProjectCosts, houseValueGrowthRate } = useTaxCalculations({ 
-    property: projects[0]?.property_id ? { id: projects[0].property_id } : null, 
-    projects 
+  const {
+    userTaxRate,
+    totalProjectCosts,
+    houseValueGrowthRate
+  } = useTaxCalculations({
+    property: projects[0]?.property_id ? {
+      id: projects[0].property_id
+    } : null,
+    projects
   });
-
   const projectedTaxAmount = totalProjectCosts * (userTaxRate || 0.15); // Default to 15% if no user tax rate
 
   return <div className="space-y-6">
       <Card className="p-6">
-        <h2 className="text-xl font-semibold mb-4">How Does This Save You Money</h2>
+        <h2 className="text-xl mb-4 font-bold">How Does This Save You Money</h2>
         <div className="space-y-4">
           <div className="p-4 bg-gray-50 rounded-lg flex gap-3">
             <InfoIcon className="h-5 w-5 text-gray-600 flex-shrink-0 mt-0.5" />
@@ -69,14 +70,14 @@ export function AIAnalysisCard({
       </Card>
 
       <Card className="p-6">
-        <h2 className="text-2xl font-bold mb-2">Does Every Project Count?</h2>
-        <p className="text-gray-500 text-lg mb-8">Not Every Project Counts—But We've Got You Covered</p>
+        <h2 className="font-bold mb-2 text-xl">Does Every Project Count?</h2>
+        <p className="text-gray-500 mb-8 text-base">Not Every Project Counts—But We've Got You Covered</p>
 
         <div className="space-y-6">
           <div className="flex gap-3">
             <Check className="h-6 w-6 text-green-500 flex-shrink-0 mt-1" />
             <div>
-              <h3 className="text-lg font-semibold mb-1">Qualifying Improvements</h3>
+              <h3 className="font-semibold mb-1 text-base">Qualifying Improvements</h3>
               <p className="text-gray-500">
                 Improvements that add value, extend the home's life, or adapt it to new uses count.
               </p>
@@ -86,7 +87,7 @@ export function AIAnalysisCard({
           <div className="flex gap-3">
             <X className="h-6 w-6 text-red-500 flex-shrink-0 mt-1" />
             <div>
-              <h3 className="text-lg font-semibold mb-1">Non-Qualifying Projects</h3>
+              <h3 className="font-semibold mb-1 text-base">Non-Qualifying Projects</h3>
               <p className="text-gray-500">
                 Repairs and maintenance (like fixing a leaky faucet or repainting a room) don't count.
               </p>
@@ -106,7 +107,7 @@ export function AIAnalysisCard({
       </Card>
 
       <Card className="p-6">
-        <h2 className="text-xl font-semibold mb-6">AI Tax Analysis</h2>
+        <h2 className="text-xl mb-6 font-bold">AI Tax Analysis</h2>
 
         <Tabs defaultValue="qualifying" className="w-full">
           <TabsList className="flex h-auto space-x-6 bg-transparent mb-6 justify-start">
