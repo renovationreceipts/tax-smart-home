@@ -59,17 +59,15 @@ export function TaxAnalysisTabs({
           </TabsTrigger>
         </TabsList>
 
-        <div className="mt-6 space-y-6">
-          <AIAnalysisCard projectedTaxSavings={projectedTaxSavings} projects={projects} onProjectClick={setSelectedProject} />
-        </div>
-        
         <TabsContent value="tax-savings" className="mt-6 space-y-6">
+          <AIAnalysisCard projectedTaxSavings={projectedTaxSavings} projects={projects} onProjectClick={setSelectedProject} />
           <div className="bg-white rounded-xl border p-6">
             {selectedProperty ? <TaxCalculationTable property={selectedProperty} projects={projects} onProjectClick={setSelectedProject} /> : <p className="text-gray-500">No property selected. Please add a property to view tax calculations.</p>}
           </div>
         </TabsContent>
 
         <TabsContent value="tax-credits" className="mt-6">
+          <AIAnalysisCard projectedTaxSavings={projectedTaxSavings} projects={projects} onProjectClick={setSelectedProject} />
           <div className="bg-white rounded-xl p-6 shadow-sm text-center">
             <h2 className="text-xl font-semibold mb-4">Tax Credits</h2>
             <p className="text-gray-500">Coming soon! We're working on bringing you valuable tax credit opportunities.</p>
@@ -77,6 +75,7 @@ export function TaxAnalysisTabs({
         </TabsContent>
 
         <TabsContent value="insurance" className="mt-6">
+          <AIAnalysisCard projectedTaxSavings={projectedTaxSavings} projects={projects} onProjectClick={setSelectedProject} />
           <div className="bg-white rounded-xl p-6 shadow-sm text-center">
             <h2 className="text-xl font-semibold mb-4">Insurance Savings</h2>
             <p className="text-gray-500">Coming soon! We're working on bringing you insurance saving opportunities.</p>
