@@ -1,8 +1,7 @@
-
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowRight, Info, Lock, Building2, Banknote, FileText, PiggyBank, Rocket } from "lucide-react";
+import { ArrowRight, Info, Lock, Building2, Banknote, FileText, CircleDollarSign, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ProjectAndTaxSection } from "@/components/account/ProjectAndTaxSection";
@@ -84,7 +83,7 @@ export default function Account() {
   const TotalSavingsCard = () => <div className="bg-white rounded-xl shadow-sm">
       <div className="hidden sm:flex justify-between items-center p-6">
         <div className="flex items-center gap-2">
-          <PiggyBank className="h-6 w-6 text-[#0090FF]" />
+          <CircleDollarSign className="h-6 w-6 text-[#0090FF]" />
           <h3 className="text-2xl font-semibold">Total Savings</h3>
         </div>
       </div>
