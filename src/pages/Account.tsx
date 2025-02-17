@@ -136,9 +136,13 @@ export default function Account() {
           </div>
         </div>
 
-        <Button variant="link" onClick={() => navigate("/tax-analysis")} className="w-full mt-8 text-[#0090FF] hover:text-[#0090FF]/90 font-normal text-lg rounded my-[25px]">
+        <Button 
+          variant="outline"
+          onClick={() => navigate("/tax-analysis")} 
+          className="w-full mt-8 text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal"
+        >
           View Full Analysis
-          <ArrowRight className="ml-2 h-5 w-5" />
+          <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>
     </div>;
