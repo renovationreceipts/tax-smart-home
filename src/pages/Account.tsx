@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowRight, Info, Lock, Building2, Banknote, FileText, PiggyBank } from "lucide-react";
+import { ArrowRight, Info, Lock, Building2, Banknote, FileText, PiggyBank, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ProjectAndTaxSection } from "@/components/account/ProjectAndTaxSection";
@@ -151,7 +151,10 @@ export default function Account() {
     </div>;
 
   const PremiumCard = () => <div className="bg-white rounded-xl shadow-sm p-6">
-      <h2 className="font-bold mb-2 text-2xl">Go Premium</h2>
+      <div className="flex items-center gap-2">
+        <Rocket className="h-6 w-6 text-[#0090FF]" />
+        <h2 className="font-bold mb-2 text-2xl">Go Premium</h2>
+      </div>
       <p className="text-gray-500 mb-6"></p>
 
       <div className="space-y-4 mb-8">
