@@ -1,25 +1,17 @@
-
 import { FileText, Plus, Wrench, ClipboardList, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import type { Project } from "@/hooks/useProjects";
 import { useProperties } from "@/hooks/useProperties";
 import { ProjectTypeExamples } from "@/components/project/ProjectTypeExamples";
 import { useNavigate } from "react-router-dom";
-
 interface ProjectsSectionProps {
   propertyId: string | null;
   projects: Project[];
   onAddProject: () => void;
   onEditProject?: (project: Project) => void;
 }
-
 export function ProjectsSection({
   propertyId,
   projects,
@@ -30,24 +22,19 @@ export function ProjectsSection({
   const {
     data: properties = []
   } = useProperties();
-
   const selectedProperty = properties.find(p => p.id === propertyId);
-
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD"
     }).format(amount);
   };
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
   };
-
   if (!propertyId || properties.length === 0) {
     return null;
   }
-
   const EmptyState = () => <div className="space-y-8">
       <div className="bg-gray-50 rounded-lg p-4 sm:p-6">
         <div className="sm:flex sm:items-start sm:justify-between">
@@ -82,7 +69,6 @@ export function ProjectsSection({
         </Button>
       </div>
     </div>;
-
   const MobileProjectCard = ({
     project
   }: {
@@ -106,7 +92,6 @@ export function ProjectsSection({
         View Project
       </Button>
     </div>;
-
   return <div className="bg-white rounded-lg shadow-sm border p-6">
       <div className="pb-4 sm:pb-0 border-b sm:border-b-0">
         {/* Desktop Header */}
@@ -122,18 +107,10 @@ export function ProjectsSection({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-[200px]">
-                {properties.map((property) => (
-                  <DropdownMenuItem
-                    key={property.id}
-                    onClick={() => navigate(`/account?propertyId=${property.id}`)}
-                  >
+                {properties.map(property => <DropdownMenuItem key={property.id} onClick={() => navigate(`/account?propertyId=${property.id}`)}>
                     {property.name}
-                  </DropdownMenuItem>
-                ))}
-                <DropdownMenuItem
-                  className="text-[#0090FF] border-t"
-                  onClick={() => navigate("/property/edit")}
-                >
+                  </DropdownMenuItem>)}
+                <DropdownMenuItem className="text-[#0090FF] border-t" onClick={() => navigate("/property/edit")}>
                   <Plus className="mr-2 h-4 w-4" />
                   Add New Property
                 </DropdownMenuItem>
@@ -153,12 +130,10 @@ export function ProjectsSection({
               <FileText className="h-6 w-6 text-[#0090FF]" />
               <h3 className="font-semibold text-2xl">Projects</h3>
             </div>
-            {projects.length > 0 && (
-              <Button onClick={onAddProject} size="sm" variant="ghost" className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]">
+            {projects.length > 0 && <Button onClick={onAddProject} size="sm" variant="ghost" className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]">
                 <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
                 Add
-              </Button>
-            )}
+              </Button>}
           </div>
           
           <DropdownMenu>
@@ -169,18 +144,10 @@ export function ProjectsSection({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-[200px]">
-              {properties.map((property) => (
-                <DropdownMenuItem
-                  key={property.id}
-                  onClick={() => navigate(`/account?propertyId=${property.id}`)}
-                >
+              {properties.map(property => <DropdownMenuItem key={property.id} onClick={() => navigate(`/account?propertyId=${property.id}`)}>
                   {property.name}
-                </DropdownMenuItem>
-              ))}
-              <DropdownMenuItem
-                className="text-[#0090FF] border-t"
-                onClick={() => navigate("/property/edit")}
-              >
+                </DropdownMenuItem>)}
+              <DropdownMenuItem className="text-[#0090FF] border-t" onClick={() => navigate("/property/edit")}>
                 <Plus className="mr-2 h-4 w-4" />
                 Add New Property
               </DropdownMenuItem>
@@ -216,10 +183,9 @@ export function ProjectsSection({
           <div className="border-t mt-6 pt-6">
             <div className="flex items-start gap-4">
               <FileText className="h-6 w-6 mt-1 text-gray-600" />
-              <h3 className="font-medium text-base">You're making a smart choice! All your records are encrypted and securely stored.</h3>
+              <h3 className="text-base font-normal">You're making a smart choice! All your records are encrypted and securely stored.</h3>
             </div>
           </div>
         </div>}
     </div>;
 }
-
