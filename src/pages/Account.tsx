@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -6,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ProjectAndTaxSection } from "@/components/account/ProjectAndTaxSection";
 import { AccountHeader } from "@/components/account/AccountHeader";
+import { EmptyPropertyState } from "@/components/property/EmptyPropertyState";
 import Footer from "@/components/Footer";
 import { useState, useEffect } from "react";
 import { useProperties } from "@/hooks/useProperties";
@@ -14,17 +16,11 @@ import { formatCurrency } from "@/lib/utils";
 
 export default function Account() {
   const navigate = useNavigate();
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
   const [userTaxRate, setUserTaxRate] = useState(0);
-  const {
-    data: properties = []
-  } = useProperties();
-  const {
-    data: projects = []
-  } = useProjects(selectedPropertyId);
+  const { data: properties = [] } = useProperties();
+  const { data: projects = [] } = useProjects(selectedPropertyId);
   const selectedProperty = properties.find(p => p.id === selectedPropertyId);
 
   useEffect(() => {
@@ -35,15 +31,9 @@ export default function Account() {
 
   useEffect(() => {
     const fetchUserTaxRate = async () => {
-      const {
-        data: {
-          user
-        }
-      } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
-      const {
-        data: profile
-      } = await supabase.from('profiles').select('tax_rate').eq('id', user.id).single();
+      const { data: profile } = await supabase.from('profiles').select('tax_rate').eq('id', user.id).single();
       if (profile) {
         setUserTaxRate(profile.tax_rate ? profile.tax_rate / 100 : 0);
       }
@@ -56,9 +46,7 @@ export default function Account() {
 
   const handleSignOut = async () => {
     try {
-      const {
-        error
-      } = await supabase.auth.signOut();
+      const { error } = await supabase.auth.signOut();
       if (error) throw error;
       navigate("/");
       toast({
@@ -74,11 +62,6 @@ export default function Account() {
       });
     }
   };
-
-  if (properties.length === 0) {
-    navigate("/property/edit");
-    return null;
-  }
 
   const TotalSavingsCard = () => <div className="bg-white rounded-xl shadow-sm">
       <div className="hidden sm:flex justify-between items-center p-6">
@@ -191,23 +174,27 @@ export default function Account() {
   return <div className="min-h-screen flex flex-col bg-gray-50">
       <AccountHeader onSignOut={handleSignOut} />
       <main className="flex-grow w-full max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <div className="lg:hidden mb-6">
-              <TotalSavingsCard />
+        {properties.length === 0 ? (
+          <EmptyPropertyState onAddProperty={() => navigate("/property/edit")} />
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <div className="lg:hidden mb-6">
+                <TotalSavingsCard />
+              </div>
+              <ProjectAndTaxSection selectedPropertyId={selectedPropertyId} selectedProperty={selectedProperty} />
             </div>
-            <ProjectAndTaxSection selectedPropertyId={selectedPropertyId} selectedProperty={selectedProperty} />
-          </div>
 
-          <div className="hidden lg:block space-y-6">
-            <TotalSavingsCard />
-            <PremiumCard />
-          </div>
+            <div className="hidden lg:block space-y-6">
+              <TotalSavingsCard />
+              <PremiumCard />
+            </div>
 
-          <div className="lg:hidden">
-            <PremiumCard />
+            <div className="lg:hidden">
+              <PremiumCard />
+            </div>
           </div>
-        </div>
+        )}
       </main>
       <Footer />
     </div>;
