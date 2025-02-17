@@ -81,7 +81,7 @@ export default function Account() {
   }
 
   const TotalSavingsCard = () => (
-    <div className="bg-white rounded-xl p-6 shadow-sm px-0 py-0">
+    <div className="bg-white rounded-xl shadow-sm">
       <div className="hidden sm:flex justify-between items-center p-6">
         <h2 className="text-2xl">Total Savings</h2>
         <button>
@@ -154,7 +154,8 @@ export default function Account() {
     </div>
   );
 
-  const PremiumCard = () => <div className="bg-white rounded-xl p-6 shadow-sm">
+  const PremiumCard = () => (
+    <div className="bg-white rounded-xl shadow-sm p-6">
       <h2 className="font-bold mb-2 text-2xl">Go Premium</h2>
       <p className="text-gray-500 mb-6"></p>
 
@@ -188,9 +189,11 @@ export default function Account() {
         Generate Documents
         <ArrowRight className="ml-2 h-4 w-4" />
       </Button>
-    </div>;
+    </div>
+  );
 
-  return <div className="min-h-screen flex flex-col bg-gray-50">
+  return (
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <AccountHeader onSignOut={handleSignOut} />
       <main className="flex-grow w-full max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -212,5 +215,6 @@ export default function Account() {
         </div>
       </main>
       <Footer />
-    </div>;
+    </div>
+  );
 }
