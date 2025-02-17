@@ -82,8 +82,8 @@ export default function Account() {
 
   const TotalSavingsCard = () => (
     <div className="bg-white rounded-xl p-6 shadow-sm px-0 py-0">
-      <div className="hidden sm:flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Total Savings</h2>
+      <div className="hidden sm:flex justify-between items-center p-6">
+        <h2 className="text-2xl">Total Savings</h2>
         <button>
           <Info className="h-5 w-5 text-gray-400" />
         </button>
@@ -108,47 +108,47 @@ export default function Account() {
         </Button>
       </div>
 
-      <div className="hidden sm:block">
-        <div className="p-6 mb-6">
+      <div className="hidden sm:block px-6">
+        <div className="mb-16">
           <div className="text-center">
-            <div className="text-4xl font-bold">{formatCurrency(projectedTaxSavings)}</div>
-            <div className="text-gray-500 mt-1">Lifetime projected savings</div>
+            <div className="text-[56px] leading-none font-normal mb-3">{formatCurrency(projectedTaxSavings)}</div>
+            <div className="text-gray-500 text-lg">Lifetime projected savings</div>
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-lg">
               <TrendingUp className="h-5 w-5 text-gray-400" />
               <span>Total Projects Cost</span>
             </div>
-            <span className="font-semibold">{formatCurrency(totalProjectCosts)}</span>
+            <span className="text-lg">{formatCurrency(totalProjectCosts)}</span>
           </div>
 
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-lg">
               <Info className="h-5 w-5 text-gray-400" />
               <span>x Your Tax Rate</span>
             </div>
-            <span className="font-semibold">{(userTaxRate * 100).toFixed(1)}%</span>
+            <span className="text-lg">{(userTaxRate * 100).toFixed(1)}%</span>
           </div>
 
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-lg">
               <Info className="h-5 w-5 text-gray-400" />
               <span>= Lifetime savings</span>
             </div>
-            <span className="font-semibold">{formatCurrency(projectedTaxSavings)}</span>
+            <span className="text-lg">{formatCurrency(projectedTaxSavings)}</span>
           </div>
         </div>
 
         <Button 
           variant="link" 
           onClick={() => navigate("/tax-analysis")} 
-          className="w-full mt-6 text-blue-600 hover:text-blue-700"
+          className="w-full mt-12 text-[#0090FF] hover:text-[#0090FF]/90 font-normal text-lg"
         >
           View Full Analysis
-          <ArrowRight className="ml-2 h-4 w-4" />
+          <ArrowRight className="ml-2 h-5 w-5" />
         </Button>
       </div>
     </div>
