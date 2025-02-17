@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import { useProperties } from "@/hooks/useProperties";
 import { useProjects } from "@/hooks/useProjects";
 import { formatCurrency } from "@/lib/utils";
+
 export default function Account() {
   const navigate = useNavigate();
   const {
@@ -25,11 +26,13 @@ export default function Account() {
     data: projects = []
   } = useProjects(selectedPropertyId);
   const selectedProperty = properties.find(p => p.id === selectedPropertyId);
+
   useEffect(() => {
     if (properties.length > 0 && !selectedPropertyId) {
       setSelectedPropertyId(properties[0].id);
     }
   }, [properties, selectedPropertyId]);
+
   useEffect(() => {
     const fetchUserTaxRate = async () => {
       const {
@@ -47,8 +50,10 @@ export default function Account() {
     };
     fetchUserTaxRate();
   }, []);
+
   const totalProjectCosts = projects.reduce((sum, project) => sum + (project?.cost || 0), 0);
   const projectedTaxSavings = totalProjectCosts * userTaxRate;
+
   const handleSignOut = async () => {
     try {
       const {
@@ -69,13 +74,15 @@ export default function Account() {
       });
     }
   };
+
   if (properties.length === 0) {
     navigate("/property/edit");
     return null;
   }
+
   const TotalSavingsCard = () => <div className="bg-white rounded-xl shadow-sm">
       <div className="hidden sm:flex justify-between items-center p-6">
-        <h2 className="text-2xl font-semibold">Total Savings</h2>
+        <h3 className="text-2xl font-semibold">Total Savings</h3>
         <button>
           <Info className="h-5 w-5 text-gray-400" />
         </button>
@@ -133,6 +140,7 @@ export default function Account() {
         </Button>
       </div>
     </div>;
+
   const PremiumCard = () => <div className="bg-white rounded-xl shadow-sm p-6">
       <h2 className="font-bold mb-2 text-2xl">Go Premium</h2>
       <p className="text-gray-500 mb-6"></p>
@@ -168,6 +176,7 @@ export default function Account() {
         <ArrowRight className="ml-2 h-4 w-4" />
       </Button>
     </div>;
+
   return <div className="min-h-screen flex flex-col bg-gray-50">
       <AccountHeader onSignOut={handleSignOut} />
       <main className="flex-grow w-full max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
