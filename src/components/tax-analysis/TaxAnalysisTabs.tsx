@@ -24,7 +24,7 @@ export function TaxAnalysisTabs({
               <h3 className="font-semibold">Future Tax Savings</h3>
             </div>
           </TabsTrigger>
-          <TabsTrigger value="tax-credits" className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all">
+          <TabsTrigger value="tax-credits" className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all rounded-md">
             <div className="text-center">
               <h3 className="font-semibold">Tax Credits</h3>
             </div>
