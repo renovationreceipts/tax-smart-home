@@ -71,7 +71,7 @@ export default function Account() {
 
   const TotalSavingsCard = () => (
     <div className="bg-white rounded-xl p-6 shadow-sm">
-      <div className="flex justify-between items-center mb-6">
+      <div className="hidden sm:flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Total Savings</h2>
         <button>
           <Info className="h-5 w-5 text-gray-400" />
