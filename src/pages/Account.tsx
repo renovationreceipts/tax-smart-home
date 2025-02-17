@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -117,7 +118,7 @@ export default function Account() {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2 text-lg">
               <Banknote className="h-5 w-5 text-gray-400" />
-              <span className="text-sm">= Lifetime savings</span>
+              <span className="text-sm">= Lifetime Savings</span>
             </div>
             <span className="text-sm">{formatCurrency(projectedTaxSavings)}</span>
           </div>
