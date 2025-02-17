@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowRight, Info, Lock, TrendingUp } from "lucide-react";
+import { ArrowRight, Info, Lock, TrendingUp, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ProjectAndTaxSection } from "@/components/account/ProjectAndTaxSection";
@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import { useProperties } from "@/hooks/useProperties";
 import { useProjects } from "@/hooks/useProjects";
 import { formatCurrency } from "@/lib/utils";
+
 export default function Account() {
   const navigate = useNavigate();
   const {
@@ -26,7 +27,6 @@ export default function Account() {
   } = useProjects(selectedPropertyId);
   const selectedProperty = properties.find(p => p.id === selectedPropertyId);
 
-  // Set the first property as selected by default
   useEffect(() => {
     if (properties.length > 0 && !selectedPropertyId) {
       setSelectedPropertyId(properties[0].id);
@@ -50,9 +50,9 @@ export default function Account() {
     fetchUserTaxRate();
   }, []);
 
-  // Calculate total project costs and tax savings
   const totalProjectCosts = projects.reduce((sum, project) => sum + (project?.cost || 0), 0);
   const projectedTaxSavings = totalProjectCosts * userTaxRate;
+
   const handleSignOut = async () => {
     try {
       const {
@@ -73,11 +73,14 @@ export default function Account() {
       });
     }
   };
+
   if (properties.length === 0) {
     navigate("/property/edit");
     return null;
   }
-  const TotalSavingsCard = () => <div className="bg-white rounded-xl p-6 shadow-sm px-0 py-0">
+
+  const TotalSavingsCard = () => (
+    <div className="bg-white rounded-xl p-6 shadow-sm px-0 py-0">
       <div className="hidden sm:flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Total Savings</h2>
         <button>
@@ -85,44 +88,71 @@ export default function Account() {
         </button>
       </div>
 
-      <div className="bg-gray-50 rounded-xl p-6 mb-6 py-0">
-        <div className="text-center">
-          <div className="text-4xl font-bold">{formatCurrency(projectedTaxSavings)}</div>
-          <div className="text-gray-500 mt-1 py-0 my-0">Lifetime projected savings</div>
+      <div className="sm:hidden text-center p-6">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#7CC6B3] mb-4">
+          <DollarSign className="h-8 w-8 text-white" />
         </div>
+        <div className="text-gray-600 text-base mb-2">Lifetime projected savings</div>
+        <div className="text-4xl font-bold mb-2">{formatCurrency(projectedTaxSavings)}</div>
+        <div className="text-gray-500 text-sm flex items-center justify-center gap-2 mb-4">
+          <Info className="h-4 w-4" />
+          <span>{projects.length} projects tracking savings</span>
+        </div>
+        <Button 
+          variant="link" 
+          onClick={() => navigate("/tax-analysis")} 
+          className="text-[#0090FF] hover:text-[#0090FF]/90 p-0"
+        >
+          View Details
+        </Button>
       </div>
 
-      <div className="hidden sm:block space-y-4">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-gray-400" />
-            <span>Total Projects Cost</span>
+      <div className="hidden sm:block">
+        <div className="bg-gray-50 rounded-xl p-6 mb-6">
+          <div className="text-center">
+            <div className="text-4xl font-bold">{formatCurrency(projectedTaxSavings)}</div>
+            <div className="text-gray-500 mt-1">Lifetime projected savings</div>
           </div>
-          <span className="font-semibold">{formatCurrency(totalProjectCosts)}</span>
         </div>
 
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <Info className="h-5 w-5 text-gray-400" />
-            <span>x Your Tax Rate</span>
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-gray-400" />
+              <span>Total Projects Cost</span>
+            </div>
+            <span className="font-semibold">{formatCurrency(totalProjectCosts)}</span>
           </div>
-          <span className="font-semibold">{(userTaxRate * 100).toFixed(1)}%</span>
+
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <Info className="h-5 w-5 text-gray-400" />
+              <span>x Your Tax Rate</span>
+            </div>
+            <span className="font-semibold">{(userTaxRate * 100).toFixed(1)}%</span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <Info className="h-5 w-5 text-gray-400" />
+              <span>= Lifetime savings</span>
+            </div>
+            <span className="font-semibold">{formatCurrency(projectedTaxSavings)}</span>
+          </div>
         </div>
 
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <Info className="h-5 w-5 text-gray-400" />
-            <span>= Lifetime savings</span>
-          </div>
-          <span className="font-semibold">{formatCurrency(projectedTaxSavings)}</span>
-        </div>
+        <Button 
+          variant="link" 
+          onClick={() => navigate("/tax-analysis")} 
+          className="w-full mt-6 text-blue-600 hover:text-blue-700"
+        >
+          View Full Analysis
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
       </div>
+    </div>
+  );
 
-      <Button variant="link" onClick={() => navigate("/tax-analysis")} className="w-full mt-6 text-blue-600 hover:text-blue-700 py-0 my-0">
-        View Full Analysis
-        <ArrowRight className="ml-2 h-4 w-4" />
-      </Button>
-    </div>;
   const PremiumCard = () => <div className="bg-white rounded-xl p-6 shadow-sm">
       <h2 className="font-bold mb-2 text-2xl">Go Premium</h2>
       <p className="text-gray-500 mb-6"></p>
@@ -158,26 +188,23 @@ export default function Account() {
         <ArrowRight className="ml-2 h-4 w-4" />
       </Button>
     </div>;
+
   return <div className="min-h-screen flex flex-col bg-gray-50">
       <AccountHeader onSignOut={handleSignOut} />
       <main className="flex-grow w-full max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
           <div className="lg:col-span-2">
-            {/* Show Total Savings Card only on mobile, above ProjectAndTaxSection */}
             <div className="lg:hidden mb-6">
               <TotalSavingsCard />
             </div>
             <ProjectAndTaxSection selectedPropertyId={selectedPropertyId} selectedProperty={selectedProperty} />
           </div>
 
-          {/* Right Rail - hidden on mobile since we show Total Savings at the top */}
           <div className="hidden lg:block space-y-6">
             <TotalSavingsCard />
             <PremiumCard />
           </div>
 
-          {/* Show Premium Card at the bottom on mobile */}
           <div className="lg:hidden">
             <PremiumCard />
           </div>
