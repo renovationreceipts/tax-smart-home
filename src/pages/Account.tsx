@@ -108,7 +108,7 @@ export default function Account() {
       <div className="hidden sm:block px-6">
         <div className="mb-8">
           <div className="text-center">
-            <div className="text-[56px] font-semibold leading-none mb-2">{formatCurrency(projectedTaxSavings)}</div>
+            <div className="text-2xl font-semibold leading-none mb-2">{formatCurrency(projectedTaxSavings)}</div>
             <div className="text-gray-500 text-lg">Lifetime projected savings</div>
           </div>
         </div>
