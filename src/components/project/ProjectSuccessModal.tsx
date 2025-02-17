@@ -1,7 +1,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Plus, X, CheckCircle2, Lock } from "lucide-react"
+import { Plus, Lock, CheckCircle2 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { formatCurrency } from "@/lib/utils"
 
@@ -28,11 +28,8 @@ export function ProjectSuccessModal({
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center">
             <DialogTitle className="text-xl font-bold">Project Added Successfully!</DialogTitle>
-            <Button variant="ghost" size="icon" onClick={onClose} className="h-6 w-6 p-0">
-              <X className="h-4 w-4" />
-            </Button>
           </div>
           <p className="text-gray-500 text-sm mt-1">We've analyzed your project for potential savings</p>
         </DialogHeader>
