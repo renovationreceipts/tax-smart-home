@@ -6,6 +6,7 @@ import { formatCurrency } from "@/lib/utils";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ArrowUpRight } from "lucide-react";
 import { useTaxCalculations } from "@/hooks/useTaxCalculations";
+import { InfoIcon } from "lucide-react";
 
 interface AIAnalysisCardProps {
   projectedTaxSavings: number;
@@ -46,6 +47,16 @@ export function AIAnalysisCard({
             <p className="text-gray-800">
               At the {(userTaxRate * 100).toFixed(0)}% capital gains tax rate, this means you'll save {formatCurrency(projectedTaxAmount)} in taxes!
             </p>
+          </div>
+
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg flex gap-3">
+            <InfoIcon className="h-5 w-5 text-gray-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-1">Important Tax Threshold</h3>
+              <p className="text-gray-600">
+                If your taxable profit is over $250K (single) or $500K (married), tracking improvements reduces your taxable gain and saves you thousands.
+              </p>
+            </div>
           </div>
         </div>
       </Card>
