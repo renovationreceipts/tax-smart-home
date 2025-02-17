@@ -31,7 +31,7 @@ export function ProjectSuccessModal({
           <div className="flex items-center">
             <DialogTitle className="text-xl font-bold">Project Added Successfully!</DialogTitle>
           </div>
-          <p className="text-gray-500 text-sm mt-1">We've analyzed your project for potential savings</p>
+          <p className="text-gray-500 text-sm mt-1 pb-4 border-b border-gray-200">We've analyzed your project for potential savings</p>
         </DialogHeader>
 
         <div className="space-y-6">
