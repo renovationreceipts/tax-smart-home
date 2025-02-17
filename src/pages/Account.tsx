@@ -172,9 +172,9 @@ export default function Account() {
 
   return <div className="min-h-screen flex flex-col bg-gray-50">
       <AccountHeader onSignOut={handleSignOut} />
-      <main className="flex-grow w-full max-w-7xl mx-auto py-6 sm:py-8 px-0 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 px-4 sm:px-0">
+      <main className="flex-grow w-full max-w-7xl mx-auto py-6 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 px-4 sm:px-6 lg:px-8">
+          <div className="lg:col-span-2">
             <div className="lg:hidden mb-6">
               <TotalSavingsCard />
             </div>
@@ -189,7 +189,7 @@ export default function Account() {
             <PremiumCard />
           </div>
 
-          <div className="lg:hidden px-4 sm:px-0">
+          <div className="lg:hidden">
             <PremiumCard />
           </div>
         </div>
