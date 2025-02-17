@@ -41,7 +41,7 @@ export function TaxAnalysisTabs({
           </Select>
         </div>
 
-        <TabsList className="hidden sm:grid w-full grid-cols-3 h-auto bg-gray-100 p-1 rounded-lg">
+        <TabsList className="hidden sm:grid w-full grid-cols-3 h-auto bg-gray-100 p-1 rounded-lg [&>*:not(:last-child)]:border-r [&>*]:border-gray-200">
           <TabsTrigger value="tax-savings" className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all">
             <div className="text-center">
               <h3 className="font-semibold">Future Tax Savings</h3>
