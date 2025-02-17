@@ -27,27 +27,6 @@ export function AIAnalysisCard({
   });
 
   return <Card className="p-6">
-      <div className="mb-8 border rounded-lg p-6">
-        <h3 className="text-lg font-semibold mb-4">Your Future Tax Savings Explained</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="space-y-2">
-            <p className="text-sm text-gray-600">Lifetime Projected Savings</p>
-            <p className="text-2xl font-bold text-primary">{formatCurrency(projectedTaxSavings)}</p>
-            <p className="text-sm text-gray-500">Based on your current tax rate of {userTaxRate * 100}%</p>
-          </div>
-          <div className="space-y-2">
-            <p className="text-sm text-gray-600">Total Project Costs</p>
-            <p className="text-2xl font-bold">{formatCurrency(totalProjectCosts)}</p>
-            <p className="text-sm text-gray-500">Added to your cost basis</p>
-          </div>
-          <div className="space-y-2">
-            <p className="text-sm text-gray-600">Home Value Growth Rate</p>
-            <p className="text-2xl font-bold">{houseValueGrowthRate}%</p>
-            <p className="text-sm text-gray-500">Annual appreciation rate</p>
-          </div>
-        </div>
-      </div>
-
       <h2 className="text-xl font-semibold mb-6">AI Tax Analysis</h2>
 
       <Tabs defaultValue="qualifying" className="w-full">
