@@ -163,8 +163,8 @@ export default function Account() {
         </div>
       </div>
 
-      <Button className="w-full text-white bg-[#2463eb]">
-        Generate Documents
+      <Button className="w-full text-white bg-[#2463eb]" disabled>
+        Premium Plan Coming Soon
         <ArrowRight className="ml-2 h-4 w-4" />
       </Button>
     </div>;
