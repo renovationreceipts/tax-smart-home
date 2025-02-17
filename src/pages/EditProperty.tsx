@@ -1,3 +1,4 @@
+
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { PropertyForm } from "@/components/PropertyForm"
 import { useProperties } from "@/hooks/useProperties"
@@ -15,6 +16,10 @@ export default function EditProperty() {
     // If we're editing an existing property, use that ID
     // Otherwise use the current selected property from the query params
     const propertyId = id && id !== 'edit' ? id : searchParams.get("propertyId")
+    
+    // Scroll to top before navigation
+    window.scrollTo(0, 0)
+    
     navigate(`/account${propertyId ? `?propertyId=${propertyId}` : ''}`)
   }
 
