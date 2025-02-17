@@ -26,13 +26,28 @@ export function AIAnalysisCard({
     projects 
   });
 
+  const projectedTaxAmount = totalProjectCosts * (userTaxRate || 0.15); // Default to 15% if no user tax rate
+
   return <div className="space-y-6">
       <Card className="p-6">
         <h2 className="text-xl font-semibold mb-4">How Does This Save You Money</h2>
-        <p className="text-gray-600">
-          When you sell your home, you're taxed on the profit—the difference between your sale price and your cost basis. 
-          Your cost basis includes what you originally paid for your home plus qualifying improvements you've made over time.
-        </p>
+        <div className="space-y-4">
+          <p className="text-gray-600">
+            When you sell your home, you're taxed on the profit—the difference between your sale price and your cost basis. 
+            Your cost basis includes what you originally paid for your home plus qualifying improvements you've made over time.
+          </p>
+          
+          <div className="space-y-2">
+            <p className="text-gray-800">
+              By tracking {formatCurrency(totalProjectCosts)} in eligible improvements, you're increasing your cost basis by the same amount. 
+              This reduces your taxable profit by {formatCurrency(totalProjectCosts)} when you sell.
+            </p>
+            
+            <p className="text-gray-800">
+              At the {(userTaxRate * 100).toFixed(0)}% capital gains tax rate, this means you'll save {formatCurrency(projectedTaxAmount)} in taxes!
+            </p>
+          </div>
+        </div>
       </Card>
 
       <Card className="p-6">
