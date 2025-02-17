@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,14 +11,19 @@ import { useState, useEffect } from "react";
 import { useProperties } from "@/hooks/useProperties";
 import { useProjects } from "@/hooks/useProjects";
 import { formatCurrency } from "@/lib/utils";
-
 export default function Account() {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
   const [userTaxRate, setUserTaxRate] = useState(0);
-  const { data: properties = [] } = useProperties();
-  const { data: projects = [] } = useProjects(selectedPropertyId);
+  const {
+    data: properties = []
+  } = useProperties();
+  const {
+    data: projects = []
+  } = useProjects(selectedPropertyId);
   const selectedProperty = properties.find(p => p.id === selectedPropertyId);
 
   // Set the first property as selected by default
@@ -28,12 +32,17 @@ export default function Account() {
       setSelectedPropertyId(properties[0].id);
     }
   }, [properties, selectedPropertyId]);
-
   useEffect(() => {
     const fetchUserTaxRate = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) return;
-      const { data: profile } = await supabase.from('profiles').select('tax_rate').eq('id', user.id).single();
+      const {
+        data: profile
+      } = await supabase.from('profiles').select('tax_rate').eq('id', user.id).single();
       if (profile) {
         setUserTaxRate(profile.tax_rate ? profile.tax_rate / 100 : 0);
       }
@@ -44,10 +53,11 @@ export default function Account() {
   // Calculate total project costs and tax savings
   const totalProjectCosts = projects.reduce((sum, project) => sum + (project?.cost || 0), 0);
   const projectedTaxSavings = totalProjectCosts * userTaxRate;
-
   const handleSignOut = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
+      const {
+        error
+      } = await supabase.auth.signOut();
       if (error) throw error;
       navigate("/");
       toast({
@@ -63,14 +73,11 @@ export default function Account() {
       });
     }
   };
-
   if (properties.length === 0) {
     navigate("/property/edit");
     return null;
   }
-
-  const TotalSavingsCard = () => (
-    <div className="bg-white rounded-xl p-6 shadow-sm">
+  const TotalSavingsCard = () => <div className="bg-white rounded-xl p-6 shadow-sm px-0 py-0">
       <div className="hidden sm:flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Total Savings</h2>
         <button>
@@ -78,10 +85,10 @@ export default function Account() {
         </button>
       </div>
 
-      <div className="bg-gray-50 rounded-xl p-6 mb-6">
+      <div className="bg-gray-50 rounded-xl p-6 mb-6 py-0">
         <div className="text-center">
           <div className="text-4xl font-bold">{formatCurrency(projectedTaxSavings)}</div>
-          <div className="text-gray-500 mt-1">Lifetime projected savings</div>
+          <div className="text-gray-500 mt-1 py-0 my-0">Lifetime projected savings</div>
         </div>
       </div>
 
@@ -111,15 +118,12 @@ export default function Account() {
         </div>
       </div>
 
-      <Button variant="link" className="w-full mt-6 text-blue-600 hover:text-blue-700" onClick={() => navigate("/tax-analysis")}>
+      <Button variant="link" onClick={() => navigate("/tax-analysis")} className="w-full mt-6 text-blue-600 hover:text-blue-700 py-0 my-0">
         View Full Analysis
         <ArrowRight className="ml-2 h-4 w-4" />
       </Button>
-    </div>
-  );
-
-  const PremiumCard = () => (
-    <div className="bg-white rounded-xl p-6 shadow-sm">
+    </div>;
+  const PremiumCard = () => <div className="bg-white rounded-xl p-6 shadow-sm">
       <h2 className="font-bold mb-2 text-2xl">Go Premium</h2>
       <p className="text-gray-500 mb-6"></p>
 
@@ -153,9 +157,7 @@ export default function Account() {
         Generate Documents
         <ArrowRight className="ml-2 h-4 w-4" />
       </Button>
-    </div>
-  );
-
+    </div>;
   return <div className="min-h-screen flex flex-col bg-gray-50">
       <AccountHeader onSignOut={handleSignOut} />
       <main className="flex-grow w-full max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
