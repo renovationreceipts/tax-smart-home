@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -105,14 +106,14 @@ export default function Account() {
       </div>
 
       <div className="hidden sm:block px-6">
-        <div className="mb-16">
+        <div className="mb-8">
           <div className="text-center">
-            <div className="text-[56px] font-semibold leading-none mb-3">{formatCurrency(projectedTaxSavings)}</div>
+            <div className="text-[56px] font-semibold leading-none mb-2">{formatCurrency(projectedTaxSavings)}</div>
             <div className="text-gray-500 text-lg">Lifetime projected savings</div>
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2 text-lg">
               <TrendingUp className="h-5 w-5 text-gray-400" />
@@ -138,7 +139,7 @@ export default function Account() {
           </div>
         </div>
 
-        <Button variant="link" onClick={() => navigate("/tax-analysis")} className="w-full mt-12 text-[#0090FF] hover:text-[#0090FF]/90 font-normal text-lg">
+        <Button variant="link" onClick={() => navigate("/tax-analysis")} className="w-full mt-8 text-[#0090FF] hover:text-[#0090FF]/90 font-normal text-lg">
           View Full Analysis
           <ArrowRight className="ml-2 h-5 w-5" />
         </Button>
