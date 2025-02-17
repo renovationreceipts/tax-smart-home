@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowRight, Info, Lock, TrendingUp, Banknote, Building2 } from "lucide-react";
+import { ArrowRight, Info, Lock, TrendingUp, Banknote, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ProjectAndTaxSection } from "@/components/account/ProjectAndTaxSection";
@@ -121,7 +121,7 @@ export default function Account() {
 
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2 text-lg">
-              <Building2 className="h-5 w-5 text-gray-400" />
+              <FileText className="h-5 w-5 text-gray-400" />
               <span className="text-sm">x Your Tax Rate</span>
             </div>
             <span className="text-sm">{(userTaxRate * 100).toFixed(1)}%</span>
