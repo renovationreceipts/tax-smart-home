@@ -85,19 +85,19 @@ export function ProjectSuccessModal({
             </div>
           </div>
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex flex-col gap-3 pt-2">
             <Button 
               onClick={onAddAnother} 
-              variant="outline" 
-              className="flex-1"
+              variant="default"
+              className="w-full"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Another Project
             </Button>
             <Button 
               onClick={onClose}
-              variant="secondary" 
-              className="flex-1"
+              variant="ghost" 
+              className="w-full"
             >
               Close
             </Button>
