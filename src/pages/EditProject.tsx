@@ -2,12 +2,19 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { ProjectForm } from "@/components/project/ProjectForm"
 import { useProjects } from "@/hooks/useProjects"
+import { useState } from "react"
+import { ProjectSuccessModal } from "@/components/project/ProjectSuccessModal"
 
 export default function EditProject() {
   const navigate = useNavigate()
   const { propertyId, id } = useParams()
   const { data: projects = [] } = useProjects(propertyId || null)
   const project = id ? projects.find(p => p.id === id) : null
+  const [successProject, setSuccessProject] = useState<{
+    name: string
+    cost: number
+    qualifies_for_basis: boolean
+  } | null>(null)
 
   if (!propertyId) {
     navigate("/account")
@@ -17,8 +24,21 @@ export default function EditProject() {
   const handleNavigateBack = () => {
     // Scroll to top before navigation
     window.scrollTo(0, 0)
-    
     navigate(`/account?propertyId=${propertyId}`)
+  }
+
+  const handleAddAnother = () => {
+    setSuccessProject(null)
+    // Reset form by navigating to new project route
+    navigate(`/project/edit/${propertyId}`)
+  }
+
+  const handleSuccess = (project: { 
+    name: string
+    cost: number
+    qualifies_for_basis: boolean 
+  }) => {
+    setSuccessProject(project)
   }
 
   return (
@@ -27,7 +47,13 @@ export default function EditProject() {
         propertyId={propertyId}
         project={project}
         onCancel={handleNavigateBack}
-        onSuccess={handleNavigateBack}
+        onSuccess={handleSuccess}
+      />
+      <ProjectSuccessModal
+        open={!!successProject}
+        project={successProject}
+        onClose={handleNavigateBack}
+        onAddAnother={handleAddAnother}
       />
     </div>
   )

@@ -17,7 +17,7 @@ import { useState } from "react"
 interface ProjectFormProps {
   propertyId: string
   project?: Project | null
-  onSuccess: () => void
+  onSuccess: (project: { name: string; cost: number; qualifies_for_basis: boolean }) => void
   onCancel: () => void
 }
 
@@ -56,12 +56,20 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
     },
   })
 
-  const { onSubmit } = useProjectSubmit({ propertyId, project, onSuccess })
+  const { onSubmit: submitProject } = useProjectSubmit({ propertyId, project, onSuccess: (data) => {
+    // Extract the required fields for the success modal
+    const successData = {
+      name: data.name,
+      cost: Number(data.cost.replace(/[^0-9.-]/g, "")),
+      qualifies_for_basis: data.qualifies_for_basis || false
+    }
+    onSuccess(successData)
+  }})
 
   const handleSubmit = async (data: ProjectFormValues) => {
     setIsSubmitting(true)
     try {
-      await onSubmit(data)
+      await submitProject(data)
     } finally {
       setIsSubmitting(false)
     }
