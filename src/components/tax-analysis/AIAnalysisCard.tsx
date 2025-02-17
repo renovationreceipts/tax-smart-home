@@ -4,9 +4,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import type { Project } from "@/hooks/useProjects";
 import { formatCurrency } from "@/lib/utils";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, InfoIcon, Check, X } from "lucide-react";
 import { useTaxCalculations } from "@/hooks/useTaxCalculations";
-import { InfoIcon } from "lucide-react";
 
 interface AIAnalysisCardProps {
   projectedTaxSavings: number;
@@ -58,6 +57,43 @@ export function AIAnalysisCard({
               <h3 className="font-semibold text-gray-900 mb-1">Important Tax Threshold</h3>
               <p className="text-gray-600">
                 If your taxable profit is over $250K (single) or $500K (married), tracking improvements reduces your taxable gain and saves you thousands.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <Card className="p-6">
+        <h2 className="text-2xl font-bold mb-2">Does Every Project Count?</h2>
+        <p className="text-gray-500 text-lg mb-8">Not Every Project Counts—But We've Got You Covered</p>
+
+        <div className="space-y-6">
+          <div className="flex gap-3">
+            <Check className="h-6 w-6 text-green-500 flex-shrink-0 mt-1" />
+            <div>
+              <h3 className="text-lg font-semibold mb-1">Qualifying Improvements</h3>
+              <p className="text-gray-500">
+                Improvements that add value, extend the home's life, or adapt it to new uses count.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-3">
+            <X className="h-6 w-6 text-red-500 flex-shrink-0 mt-1" />
+            <div>
+              <h3 className="text-lg font-semibold mb-1">Non-Qualifying Projects</h3>
+              <p className="text-gray-500">
+                Repairs and maintenance (like fixing a leaky faucet or repainting a room) don't count.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg flex gap-3">
+            <InfoIcon className="h-5 w-5 text-gray-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-1">How We Help</h3>
+              <p className="text-gray-600">
+                Our AI automatically analyzes your projects and tells you which ones qualify—so you don't have to guess. Below, you'll see the improvements that increase your cost basis (and save you money) and those that don't.
               </p>
             </div>
           </div>
