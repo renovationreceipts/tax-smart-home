@@ -1,3 +1,4 @@
+
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { TaxCalculationTable } from "@/components/property/TaxCalculationTable";
 import { AIAnalysisCard } from "./AIAnalysisCard";
@@ -5,26 +6,29 @@ import { ProjectAnalysisModal } from "../project/ProjectAnalysisModal";
 import { useState } from "react";
 import type { Project } from "@/hooks/useProjects";
 import type { Property } from "@/hooks/useProperties";
+
 interface TaxAnalysisTabsProps {
   projectedTaxSavings: number;
   projects: Project[];
   selectedProperty: Property | undefined;
 }
+
 export function TaxAnalysisTabs({
   projectedTaxSavings,
   projects,
   selectedProperty
 }: TaxAnalysisTabsProps) {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
   return <>
       <Tabs defaultValue="tax-savings" className="mt-6">
         <TabsList className="grid w-full grid-cols-3 h-auto bg-gray-100 p-1 rounded-lg">
-          <TabsTrigger value="tax-savings" className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all rounded-md">
+          <TabsTrigger value="tax-savings" className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all">
             <div className="text-center">
               <h3 className="font-semibold">Future Tax Savings</h3>
             </div>
           </TabsTrigger>
-          <TabsTrigger value="tax-credits" className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all rounded-md">
+          <TabsTrigger value="tax-credits" className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all">
             <div className="text-center">
               <h3 className="font-semibold">Tax Credits</h3>
             </div>
