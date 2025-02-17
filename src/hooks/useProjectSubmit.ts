@@ -8,7 +8,12 @@ import type { Project } from "@/hooks/useProjects"
 interface UseProjectSubmitProps {
   propertyId: string
   project?: Project | null
-  onSuccess: () => void
+  onSuccess: (data: { 
+    name: string
+    cost: number
+    qualifies_for_basis: boolean
+    description?: string | null
+  }) => void
 }
 
 export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectSubmitProps) {
@@ -143,6 +148,13 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
         }
 
         await Promise.all(uploadPromises)
+
+        onSuccess({
+          name: data.name,
+          cost: numericCost,
+          qualifies_for_basis: qualifies,
+          description: data.description
+        })
       } else {
         const { data: projectData, error } = await supabase
           .from("projects")
@@ -175,14 +187,19 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
         }
 
         await Promise.all(uploadPromises)
+
+        onSuccess({
+          name: data.name,
+          cost: numericCost,
+          qualifies_for_basis: qualifies,
+          description: data.description
+        })
       }
 
       toast({
         title: "Success",
         description: `Project has been ${project ? 'updated' : 'added'} successfully.`,
       })
-      
-      onSuccess()
     } catch (error) {
       console.error("Error saving project:", error)
       toast({
