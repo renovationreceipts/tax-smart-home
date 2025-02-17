@@ -38,15 +38,18 @@ export function AIAnalysisCard({
             Your cost basis includes what you originally paid for your home plus qualifying improvements you've made over time.
           </p>
           
-          <div className="space-y-2">
-            <p className="text-gray-800">
-              By tracking {formatCurrency(totalProjectCosts)} in eligible improvements, you're increasing your cost basis by the same amount. 
-              This reduces your taxable profit by {formatCurrency(totalProjectCosts)} when you sell.
-            </p>
-            
-            <p className="text-gray-800">
-              At the {(userTaxRate * 100).toFixed(0)}% capital gains tax rate, this means you'll save {formatCurrency(projectedTaxAmount)} in taxes!
-            </p>
+          <div className="p-4 bg-gray-50 rounded-lg flex gap-3">
+            <InfoIcon className="h-5 w-5 text-gray-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-gray-800">
+                By tracking {formatCurrency(totalProjectCosts)} in eligible improvements, you're increasing your cost basis by the same amount. 
+                This reduces your taxable profit by {formatCurrency(totalProjectCosts)} when you sell.
+              </p>
+              
+              <p className="text-gray-800 mt-2">
+                At the {(userTaxRate * 100).toFixed(0)}% capital gains tax rate, this means you'll save {formatCurrency(projectedTaxAmount)} in taxes!
+              </p>
+            </div>
           </div>
 
           <div className="mt-6 p-4 bg-gray-50 rounded-lg flex gap-3">
