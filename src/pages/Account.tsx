@@ -91,7 +91,7 @@ export default function Account() {
 
       <div className="sm:hidden text-center p-6">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#7CC6B3] mb-4">
-          <DollarSign className="h-8 w-8 text-white" />
+          <DollarSign className="h-4 w-4 text-white" />
         </div>
         <div className="text-gray-600 text-base mb-2">Lifetime projected savings</div>
         <div className="text-4xl font-bold mb-2">{formatCurrency(projectedTaxSavings)}</div>
