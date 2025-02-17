@@ -109,7 +109,8 @@ export function ProjectsSection({
 
   return <div className="bg-white rounded-lg shadow-sm border p-6">
       <div className="pb-4 sm:pb-0 border-b sm:border-b-0">
-        <div className="flex items-center justify-between">
+        {/* Desktop Header */}
+        <div className="hidden sm:flex items-center justify-between">
           <div className="flex items-center gap-3">
             <FileText className="h-6 w-6 text-[#0090FF]" />
             <h3 className="font-semibold text-2xl">Projects</h3>
@@ -141,9 +142,50 @@ export function ProjectsSection({
           </div>
           {projects.length > 0 && <Button onClick={onAddProject} size="sm" variant="ghost" className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]">
               <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
-              <span className="hidden sm:inline">Add Project</span>
-              <span className="sm:hidden">Add</span>
+              Add Project
             </Button>}
+        </div>
+
+        {/* Mobile Header */}
+        <div className="sm:hidden space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <FileText className="h-6 w-6 text-[#0090FF]" />
+              <h3 className="font-semibold text-2xl">Projects</h3>
+            </div>
+            {projects.length > 0 && (
+              <Button onClick={onAddProject} size="sm" variant="ghost" className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]">
+                <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
+                Add
+              </Button>
+            )}
+          </div>
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="w-full justify-between">
+                {selectedProperty?.name || "Select Property"}
+                <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-[200px]">
+              {properties.map((property) => (
+                <DropdownMenuItem
+                  key={property.id}
+                  onClick={() => navigate(`/account?propertyId=${property.id}`)}
+                >
+                  {property.name}
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuItem
+                className="text-[#0090FF] border-t"
+                onClick={() => navigate("/property/edit")}
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Add New Property
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
@@ -180,3 +222,4 @@ export function ProjectsSection({
         </div>}
     </div>;
 }
+
