@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -108,7 +109,7 @@ export default function Account() {
       </div>
 
       <div className="hidden sm:block">
-        <div className="bg-gray-50 rounded-xl p-6 mb-6">
+        <div className="p-6 mb-6">
           <div className="text-center">
             <div className="text-4xl font-bold">{formatCurrency(projectedTaxSavings)}</div>
             <div className="text-gray-500 mt-1">Lifetime projected savings</div>
