@@ -32,10 +32,15 @@ export function AIAnalysisCard({
       <Card className="p-6">
         <h2 className="text-xl font-semibold mb-4">How Does This Save You Money</h2>
         <div className="space-y-4">
-          <p className="text-gray-600">
-            When you sell your home, you're taxed on the profit—the difference between your sale price and your cost basis. 
-            Your cost basis includes what you originally paid for your home plus qualifying improvements you've made over time.
-          </p>
+          <div className="p-4 bg-gray-50 rounded-lg flex gap-3">
+            <InfoIcon className="h-5 w-5 text-gray-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-gray-600">
+                When you sell your home, you're taxed on the profit—the difference between your sale price and your cost basis. 
+                Your cost basis includes what you originally paid for your home plus qualifying improvements you've made over time.
+              </p>
+            </div>
+          </div>
           
           <div className="p-4 bg-gray-50 rounded-lg flex gap-3">
             <InfoIcon className="h-5 w-5 text-gray-600 flex-shrink-0 mt-0.5" />
