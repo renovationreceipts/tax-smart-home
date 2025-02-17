@@ -57,10 +57,10 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
   })
 
   const { onSubmit: submitProject } = useProjectSubmit({ propertyId, project, onSuccess: (data) => {
-    // Extract the required fields for the success modal
+    // Since data.cost is already a number from useProjectSubmit, we don't need to parse it
     const successData = {
       name: data.name,
-      cost: Number(data.cost.replace(/[^0-9.-]/g, "")),
+      cost: data.cost,
       qualifies_for_basis: data.qualifies_for_basis || false
     }
     onSuccess(successData)
