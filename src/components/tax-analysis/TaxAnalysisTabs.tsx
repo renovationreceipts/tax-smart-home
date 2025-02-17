@@ -58,10 +58,12 @@ export function TaxAnalysisTabs({
             </div>
           </TabsTrigger>
         </TabsList>
+
+        <div className="mt-6 space-y-6">
+          <AIAnalysisCard projectedTaxSavings={projectedTaxSavings} projects={projects} onProjectClick={setSelectedProject} />
+        </div>
         
         <TabsContent value="tax-savings" className="mt-6 space-y-6">
-          <AIAnalysisCard projectedTaxSavings={projectedTaxSavings} projects={projects} onProjectClick={setSelectedProject} />
-
           <div className="bg-white rounded-xl border p-6">
             {selectedProperty ? <TaxCalculationTable property={selectedProperty} projects={projects} onProjectClick={setSelectedProject} /> : <p className="text-gray-500">No property selected. Please add a property to view tax calculations.</p>}
           </div>
