@@ -89,20 +89,20 @@ export default function Account() {
         </button>
       </div>
 
-      <div className="sm:hidden text-center p-6">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#7CC6B3] mb-4">
+      <div className="sm:hidden text-center py-4 px-6">
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#7CC6B3] mb-2">
           <DollarSign className="h-4 w-4 text-white" />
         </div>
-        <div className="text-gray-600 text-base mb-2">Lifetime projected savings</div>
-        <div className="text-4xl font-bold mb-2">{formatCurrency(projectedTaxSavings)}</div>
-        <div className="text-gray-500 text-sm flex items-center justify-center gap-2 mb-4">
-          <Info className="h-4 w-4" />
+        <div className="text-gray-600 text-sm mb-1">Lifetime projected savings</div>
+        <div className="text-3xl font-bold mb-1">{formatCurrency(projectedTaxSavings)}</div>
+        <div className="text-gray-500 text-xs flex items-center justify-center gap-1 mb-2">
+          <Info className="h-3 w-3" />
           <span>{projects.length} projects tracking savings</span>
         </div>
         <Button 
           variant="link" 
           onClick={() => navigate("/tax-analysis")} 
-          className="text-[#0090FF] hover:text-[#0090FF]/90 p-0"
+          className="text-[#0090FF] hover:text-[#0090FF]/90 p-0 text-sm"
         >
           View Details
         </Button>
