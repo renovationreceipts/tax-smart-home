@@ -25,11 +25,8 @@ export function TaxAnalysisTabs({
   const {
     totalProjectCosts,
     adjustedCostBasis,
-    taxableGainWithBasis,
-    taxableGainWithoutBasis,
     userTaxRate,
     exemptionAmount,
-    finalTaxableGain,
     houseValueGrowthRate
   } = useTaxCalculations({
     property: selectedProperty,
@@ -55,8 +52,12 @@ export function TaxAnalysisTabs({
     { value: "15", label: "In 15 years" }
   ];
 
-  const taxableAmountWithoutTracking = Math.max(0, taxableGainWithoutBasis - exemptionAmount);
-  const taxableAmountWithTracking = Math.max(0, taxableGainWithBasis - exemptionAmount);
+  // Calculate gains by subtracting cost basis from sale price
+  const gainWithoutTracking = projectedValue - (selectedProperty?.purchase_price || 0);
+  const gainWithTracking = projectedValue - adjustedCostBasis;
+
+  const taxableAmountWithoutTracking = Math.max(0, gainWithoutTracking - exemptionAmount);
+  const taxableAmountWithTracking = Math.max(0, gainWithTracking - exemptionAmount);
   
   const taxWithoutTracking = taxableAmountWithoutTracking * userTaxRate;
   const taxWithTracking = taxableAmountWithTracking * userTaxRate;
@@ -113,8 +114,8 @@ export function TaxAnalysisTabs({
             </TableRow>
             <TableRow>
               <TableCell>Gain on Sale</TableCell>
-              <TableCell className="text-right">{formatCurrency(taxableGainWithoutBasis)}</TableCell>
-              <TableCell className="text-right">{formatCurrency(taxableGainWithBasis)}</TableCell>
+              <TableCell className="text-right">{formatCurrency(gainWithoutTracking)}</TableCell>
+              <TableCell className="text-right">{formatCurrency(gainWithTracking)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Exempt Amount</TableCell>
