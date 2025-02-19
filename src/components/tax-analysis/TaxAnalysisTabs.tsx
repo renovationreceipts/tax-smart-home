@@ -55,15 +55,11 @@ export function TaxAnalysisTabs({
     { value: "15", label: "In 15 years" }
   ];
 
-  const taxWithoutTracking = Math.max(
-    0,
-    (projectedValue - (selectedProperty?.purchase_price || 0) - exemptionAmount) * userTaxRate
-  );
+  const taxableAmountWithoutTracking = Math.max(0, taxableGainWithoutBasis - exemptionAmount);
+  const taxableAmountWithTracking = Math.max(0, taxableGainWithBasis - exemptionAmount);
   
-  const taxWithTracking = Math.max(
-    0,
-    (projectedValue - adjustedCostBasis - exemptionAmount) * userTaxRate
-  );
+  const taxWithoutTracking = taxableAmountWithoutTracking * userTaxRate;
+  const taxWithTracking = taxableAmountWithTracking * userTaxRate;
 
   const showNoSavingsMessage = taxWithoutTracking === taxWithTracking;
 
@@ -125,8 +121,19 @@ export function TaxAnalysisTabs({
               <TableCell className="text-right">{formatCurrency(exemptionAmount)}</TableCell>
               <TableCell className="text-right">{formatCurrency(exemptionAmount)}</TableCell>
             </TableRow>
-            <TableRow className="font-medium">
-              <TableCell>Federal Tax Owed</TableCell>
+            <TableRow>
+              <TableCell>Taxable Amount</TableCell>
+              <TableCell className="text-right">{formatCurrency(taxableAmountWithoutTracking)}</TableCell>
+              <TableCell className="text-right">
+                {taxableAmountWithTracking === 0 ? (
+                  <span>Fully Exempt 🎉</span>
+                ) : (
+                  formatCurrency(taxableAmountWithTracking)
+                )}
+              </TableCell>
+            </TableRow>
+            <TableRow className="border-t font-medium">
+              <TableCell>Federal Tax Owed ({(userTaxRate * 100).toFixed(1)}%)</TableCell>
               <TableCell className="text-right">{formatCurrency(taxWithoutTracking)}</TableCell>
               <TableCell className="text-right">
                 {taxWithTracking === 0 ? (
@@ -135,11 +142,6 @@ export function TaxAnalysisTabs({
                   formatCurrency(taxWithTracking)
                 )}
               </TableCell>
-            </TableRow>
-            <TableRow className="border-t">
-              <TableCell>Federal Tax Rate</TableCell>
-              <TableCell className="text-right">{(userTaxRate * 100).toFixed(1)}%</TableCell>
-              <TableCell className="text-right">{(userTaxRate * 100).toFixed(1)}%</TableCell>
             </TableRow>
           </TableBody>
         </Table>
