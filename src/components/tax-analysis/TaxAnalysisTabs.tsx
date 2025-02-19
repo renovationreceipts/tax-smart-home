@@ -7,12 +7,15 @@ import type { Project } from "@/hooks/useProjects";
 import type { Property } from "@/hooks/useProperties";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+
 interface TaxAnalysisTabsProps {
   projectedTaxSavings: number;
   projects: Project[];
   selectedProperty: Property | undefined;
 }
+
 type TimeFrame = "today" | "3" | "5" | "10" | "15";
+
 export function TaxAnalysisTabs({
   projects,
   selectedProperty
@@ -28,11 +31,14 @@ export function TaxAnalysisTabs({
     property: selectedProperty,
     projects
   });
+
   const calculateProjectedValue = (currentValue: number, years: number, growthRate: number) => {
     return currentValue * Math.pow(1 + growthRate / 100, years);
   };
+
   const yearsToProject = selectedTimeFrame === "today" ? 0 : parseInt(selectedTimeFrame);
   const projectedValue = calculateProjectedValue(selectedProperty?.current_value || 0, yearsToProject, houseValueGrowthRate);
+
   const timeFrameOptions = [{
     value: "today",
     label: "Today"
@@ -49,6 +55,7 @@ export function TaxAnalysisTabs({
     value: "15",
     label: "In 15 years"
   }];
+
   const gainWithoutTracking = projectedValue - (selectedProperty?.purchase_price || 0);
   const gainWithTracking = projectedValue - adjustedCostBasis;
   const taxableAmountWithoutTracking = Math.max(0, gainWithoutTracking - exemptionAmount);
@@ -57,6 +64,7 @@ export function TaxAnalysisTabs({
   const taxWithTracking = taxableAmountWithTracking * userTaxRate;
   const taxSavings = taxWithoutTracking - taxWithTracking;
   const showNoSavingsMessage = taxWithoutTracking === taxWithTracking;
+
   return <div className="space-y-8">
       <div className="flex items-center gap-4">
         <h2 className="text-xl font-bold">If You Sold Your Property...</h2>
@@ -124,10 +132,10 @@ export function TaxAnalysisTabs({
           </TableBody>
         </Table>
 
-        {taxSavings > 0 && <div className="mt-6 space-y-2">
-            <p className="text-blue-500 font-semibold flex items-center gap-2 text-lg text-center">
+        {taxSavings > 0 && <div className="mt-6 space-y-2 text-center">
+            <p className="text-blue-500 font-semibold flex items-center gap-2 text-lg justify-center">
               <span className="text-2xl">💰</span>
-              By tracking home improvements, this homeowner saved {formatCurrency(taxSavings)} in taxes!
+              By tracking home improvements, you saved {formatCurrency(taxSavings)} in taxes!
             </p>
             <p className="text-gray-600 text-base">
               Update your tax filing status and cap gains tax rate in your{" "}
