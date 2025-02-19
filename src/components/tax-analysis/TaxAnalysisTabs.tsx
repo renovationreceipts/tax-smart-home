@@ -87,62 +87,62 @@ export function TaxAnalysisTabs({
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               <TableHead className="w-1/3">Category</TableHead>
+              <TableHead className="w-1/3 text-right bg-[#D3E4FD]">With Renovation Receipts</TableHead>
               <TableHead className="w-1/3 text-right">Without Tracking Projects</TableHead>
-              <TableHead className="w-1/3 text-right">With Renovation Receipts</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow>
               <TableCell>Purchase Price</TableCell>
-              <TableCell className="text-right">{formatCurrency(selectedProperty?.purchase_price || 0)}</TableCell>
+              <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(selectedProperty?.purchase_price || 0)}</TableCell>
               <TableCell className="text-right">{formatCurrency(selectedProperty?.purchase_price || 0)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Home Improvements</TableCell>
+              <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(totalProjectCosts)} ✅</TableCell>
               <TableCell className="text-right">Unknown 🤷</TableCell>
-              <TableCell className="text-right">{formatCurrency(totalProjectCosts)} ✅</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Sale Price</TableCell>
-              <TableCell className="text-right">{formatCurrency(projectedValue)}</TableCell>
+              <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(projectedValue)}</TableCell>
               <TableCell className="text-right">{formatCurrency(projectedValue)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Cost Basis</TableCell>
+              <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(adjustedCostBasis)}</TableCell>
               <TableCell className="text-right">{formatCurrency(selectedProperty?.purchase_price || 0)}</TableCell>
-              <TableCell className="text-right">{formatCurrency(adjustedCostBasis)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Gain on Sale</TableCell>
+              <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(gainWithTracking)}</TableCell>
               <TableCell className="text-right">{formatCurrency(gainWithoutTracking)}</TableCell>
-              <TableCell className="text-right">{formatCurrency(gainWithTracking)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Exempt Amount</TableCell>
-              <TableCell className="text-right">{formatCurrency(exemptionAmount)}</TableCell>
+              <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(exemptionAmount)}</TableCell>
               <TableCell className="text-right">{formatCurrency(exemptionAmount)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Taxable Amount</TableCell>
-              <TableCell className="text-right">{formatCurrency(taxableAmountWithoutTracking)}</TableCell>
-              <TableCell className="text-right">
+              <TableCell className="text-right bg-[#D3E4FD]">
                 {taxableAmountWithTracking === 0 ? (
                   <span>Fully Exempt 🎉</span>
                 ) : (
                   formatCurrency(taxableAmountWithTracking)
                 )}
               </TableCell>
+              <TableCell className="text-right">{formatCurrency(taxableAmountWithoutTracking)}</TableCell>
             </TableRow>
             <TableRow className="border-t font-medium">
               <TableCell>Federal Tax Owed ({(userTaxRate * 100).toFixed(1)}%)</TableCell>
-              <TableCell className="text-right">{formatCurrency(taxWithoutTracking)}</TableCell>
-              <TableCell className="text-right">
+              <TableCell className="text-right bg-[#D3E4FD]">
                 {taxWithTracking === 0 ? (
                   <span>Fully Exempt 🎉</span>
                 ) : (
                   formatCurrency(taxWithTracking)
                 )}
               </TableCell>
+              <TableCell className="text-right">{formatCurrency(taxWithoutTracking)}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
