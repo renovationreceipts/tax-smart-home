@@ -7,12 +7,15 @@ import type { Project } from "@/hooks/useProjects";
 import type { Property } from "@/hooks/useProperties";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+
 interface TaxAnalysisTabsProps {
   projectedTaxSavings: number;
   projects: Project[];
   selectedProperty: Property | undefined;
 }
+
 type TimeFrame = "today" | "3" | "5" | "10" | "15";
+
 export function TaxAnalysisTabs({
   projects,
   selectedProperty
@@ -28,11 +31,14 @@ export function TaxAnalysisTabs({
     property: selectedProperty,
     projects
   });
+
   const calculateProjectedValue = (currentValue: number, years: number, growthRate: number) => {
     return currentValue * Math.pow(1 + growthRate / 100, years);
   };
+
   const yearsToProject = selectedTimeFrame === "today" ? 0 : parseInt(selectedTimeFrame);
   const projectedValue = calculateProjectedValue(selectedProperty?.current_value || 0, yearsToProject, houseValueGrowthRate);
+
   const timeFrameOptions = [{
     value: "today",
     label: "Today"
@@ -49,6 +55,7 @@ export function TaxAnalysisTabs({
     value: "15",
     label: "In 15 years"
   }];
+
   const gainWithoutTracking = projectedValue - (selectedProperty?.purchase_price || 0);
   const gainWithTracking = projectedValue - adjustedCostBasis;
   const taxableAmountWithoutTracking = Math.max(0, gainWithoutTracking - exemptionAmount);
@@ -57,6 +64,7 @@ export function TaxAnalysisTabs({
   const taxWithTracking = taxableAmountWithTracking * userTaxRate;
   const taxSavings = taxWithoutTracking - taxWithTracking;
   const showNoSavingsMessage = taxWithoutTracking === taxWithTracking;
+
   return <div className="space-y-8">
       <div className="flex items-center gap-4">
         <h2 className="text-xl font-bold">If You Sold Your Property...</h2>
@@ -77,46 +85,46 @@ export function TaxAnalysisTabs({
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               <TableHead className="w-1/3">Category</TableHead>
-              <TableHead className="w-1/3 text-right bg-[#D3E4FD]">With Renovation Receipts</TableHead>
+              <TableHead className="w-1/3 text-right bg-[#F7FAFC]">With Renovation Receipts</TableHead>
               <TableHead className="w-1/3 text-right">Without Tracking Projects</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow>
               <TableCell>Sale Price</TableCell>
-              <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(projectedValue)}</TableCell>
+              <TableCell className="text-right bg-[#F7FAFC]">{formatCurrency(projectedValue)}</TableCell>
               <TableCell className="text-right">{formatCurrency(projectedValue)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Minus Purchase Price</TableCell>
-              <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(selectedProperty?.purchase_price || 0)}</TableCell>
+              <TableCell className="text-right bg-[#F7FAFC]">{formatCurrency(selectedProperty?.purchase_price || 0)}</TableCell>
               <TableCell className="text-right">{formatCurrency(selectedProperty?.purchase_price || 0)}</TableCell>
             </TableRow>
             <TableRow className="border-b-2 border-gray-300">
               <TableCell>Minus Eligible Home Improvements</TableCell>
-              <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(totalProjectCosts)} ✅</TableCell>
+              <TableCell className="text-right bg-[#F7FAFC]">{formatCurrency(totalProjectCosts)} ✅</TableCell>
               <TableCell className="text-right">Unknown 🤷</TableCell>
             </TableRow>
             <TableRow>
               <TableCell><span className="font-medium">= Gain on Sale</span></TableCell>
-              <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(gainWithTracking)}</TableCell>
+              <TableCell className="text-right bg-[#F7FAFC]">{formatCurrency(gainWithTracking)}</TableCell>
               <TableCell className="text-right">{formatCurrency(gainWithoutTracking)}</TableCell>
             </TableRow>
             <TableRow className="border-b-2 border-gray-300">
               <TableCell>Minus Exempt Amount</TableCell>
-              <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(exemptionAmount)}</TableCell>
+              <TableCell className="text-right bg-[#F7FAFC]">{formatCurrency(exemptionAmount)}</TableCell>
               <TableCell className="text-right">{formatCurrency(exemptionAmount)}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell><span className="font-medium">= Taxable Gain</span></TableCell>
-              <TableCell className="text-right bg-[#D3E4FD]">
+              <TableCell className="text-right bg-[#F7FAFC]">
                 {taxableAmountWithTracking === 0 && taxableAmountWithoutTracking > 0 ? <span>Fully Exempt 🎉</span> : formatCurrency(taxableAmountWithTracking)}
               </TableCell>
               <TableCell className="text-right">{formatCurrency(taxableAmountWithoutTracking)}</TableCell>
             </TableRow>
             <TableRow className="font-bold">
               <TableCell>Federal Tax Owed ({(userTaxRate * 100).toFixed(1)}%)</TableCell>
-              <TableCell className="text-right bg-[#D3E4FD]">
+              <TableCell className="text-right bg-[#F7FAFC]">
                 {taxWithTracking === 0 && taxWithoutTracking > 0 ? <span>Fully Exempt 🎉</span> : formatCurrency(taxWithTracking)}
               </TableCell>
               <TableCell className="text-right">{formatCurrency(taxWithoutTracking)}</TableCell>
