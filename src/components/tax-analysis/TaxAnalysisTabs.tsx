@@ -7,7 +7,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Info } from "lucide-react";
 import type { Project } from "@/hooks/useProjects";
 import type { Property } from "@/hooks/useProperties";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 interface TaxAnalysisTabsProps {
@@ -23,6 +23,9 @@ export function TaxAnalysisTabs({
   selectedProperty
 }: TaxAnalysisTabsProps) {
   const [selectedTimeFrame, setSelectedTimeFrame] = useState<TimeFrame>("10");
+  const [isSalePriceTooltipOpen, setIsSalePriceTooltipOpen] = useState(false);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
   const {
     totalProjectCosts,
     adjustedCostBasis,
@@ -33,6 +36,24 @@ export function TaxAnalysisTabs({
     property: selectedProperty,
     projects
   });
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
+        setIsSalePriceTooltipOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleInfoClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsSalePriceTooltipOpen(!isSalePriceTooltipOpen);
+  };
 
   const calculateProjectedValue = (currentValue: number, years: number, growthRate: number) => {
     return currentValue * Math.pow(1 + growthRate / 100, years);
@@ -96,11 +117,11 @@ export function TaxAnalysisTabs({
               <TableCell className="flex items-center gap-1">
                 Sale Price
                 <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
+                  <Tooltip open={isSalePriceTooltipOpen}>
+                    <TooltipTrigger asChild onClick={handleInfoClick}>
                       <Info className="h-4 w-4 text-gray-400 cursor-pointer" />
                     </TooltipTrigger>
-                    <TooltipContent className="max-w-sm">
+                    <TooltipContent className="max-w-sm" ref={tooltipRef}>
                       <div className="space-y-2">
                         <p className="font-semibold">Sale Price</p>
                         <p className="text-sm">
