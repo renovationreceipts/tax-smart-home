@@ -1,4 +1,3 @@
-
 import { useTaxCalculations } from "@/hooks/useTaxCalculations";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -7,6 +6,7 @@ import { formatCurrency } from "@/lib/utils";
 import type { Project } from "@/hooks/useProjects";
 import type { Property } from "@/hooks/useProperties";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface TaxAnalysisTabsProps {
   projectedTaxSavings: number;
@@ -52,7 +52,6 @@ export function TaxAnalysisTabs({
     { value: "15", label: "In 15 years" }
   ];
 
-  // Calculate gains by subtracting cost basis from sale price
   const gainWithoutTracking = projectedValue - (selectedProperty?.purchase_price || 0);
   const gainWithTracking = projectedValue - adjustedCostBasis;
 
@@ -61,6 +60,8 @@ export function TaxAnalysisTabs({
   
   const taxWithoutTracking = taxableAmountWithoutTracking * userTaxRate;
   const taxWithTracking = taxableAmountWithTracking * userTaxRate;
+
+  const taxSavings = taxWithoutTracking - taxWithTracking;
 
   const showNoSavingsMessage = taxWithoutTracking === taxWithTracking;
 
@@ -141,6 +142,22 @@ export function TaxAnalysisTabs({
             </TableRow>
           </TableBody>
         </Table>
+
+        {taxSavings > 0 && (
+          <div className="mt-6 space-y-2">
+            <p className="text-2xl text-blue-500 font-semibold flex items-center gap-2">
+              <span className="text-2xl">💰</span>
+              By tracking home improvements, this homeowner saved {formatCurrency(taxSavings)} in taxes!
+            </p>
+            <p className="text-gray-600 text-lg">
+              Update your tax filing status and cap gains tax rate in your{" "}
+              <Link to="/profile" className="text-blue-500 hover:underline">
+                Profile
+              </Link>
+              .
+            </p>
+          </div>
+        )}
       </div>
 
       {showNoSavingsMessage && (
@@ -156,4 +173,3 @@ export function TaxAnalysisTabs({
     </div>
   );
 }
-
