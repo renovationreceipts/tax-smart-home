@@ -129,7 +129,7 @@ export function TaxAnalysisTabs({
               <span className="text-2xl">💰</span>
               By tracking home improvements, this homeowner saved {formatCurrency(taxSavings)} in taxes!
             </p>
-            <p className="text-gray-600 text-lg">
+            <p className="text-gray-600 text-base">
               Update your tax filing status and cap gains tax rate in your{" "}
               <Link to="/profile" className="text-blue-500 hover:underline">
                 Profile
