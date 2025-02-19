@@ -1,4 +1,3 @@
-
 import { useTaxCalculations } from "@/hooks/useTaxCalculations";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -86,7 +85,7 @@ export function TaxAnalysisTabs({
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               <TableHead className="w-1/3">Category</TableHead>
-              <TableHead className="w-1/3 text-right bg-[#F7FAFC]">With Renovation Receipts</TableHead>
+              <TableHead className="w-1/3 text-right bg-[#F7FAFC] font-bold">With Renovation Receipts</TableHead>
               <TableHead className="w-1/3 text-right">Without Tracking Projects</TableHead>
             </TableRow>
           </TableHeader>
