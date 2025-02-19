@@ -14,6 +14,8 @@ export default function EditProject() {
     name: string
     cost: number
     qualifies_for_basis: boolean
+    tax_credits_eligible: boolean
+    insurance_reduction_eligible: boolean
   } | null>(null)
 
   if (!propertyId) {
@@ -37,6 +39,8 @@ export default function EditProject() {
     name: string
     cost: number
     qualifies_for_basis: boolean 
+    tax_credits_eligible: boolean
+    insurance_reduction_eligible: boolean
   }) => {
     setSuccessProject(project)
   }
