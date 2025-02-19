@@ -3,6 +3,8 @@ import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { formatCurrency } from "@/lib/utils";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Info } from "lucide-react";
 import type { Project } from "@/hooks/useProjects";
 import type { Property } from "@/hooks/useProperties";
 import { useState } from "react";
@@ -91,7 +93,26 @@ export function TaxAnalysisTabs({
           </TableHeader>
           <TableBody>
             <TableRow className="hover:bg-transparent">
-              <TableCell>Sale Price</TableCell>
+              <TableCell className="flex items-center gap-1">
+                Sale Price
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Info className="h-4 w-4 text-gray-400 cursor-pointer" />
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-sm">
+                      <div className="space-y-2">
+                        <p className="font-semibold">Sale Price</p>
+                        <p className="text-sm">
+                          This value represents your current home value (that you entered when you added the property) 
+                          appreciated by the home value appreciation rate in your Profile over the number of years 
+                          you have set in the dropdown selector.
+                        </p>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </TableCell>
               <TableCell className="text-right bg-[#F7FAFC]">{formatCurrency(projectedValue)}</TableCell>
               <TableCell className="text-right">{formatCurrency(projectedValue)}</TableCell>
             </TableRow>
