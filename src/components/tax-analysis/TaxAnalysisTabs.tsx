@@ -1,3 +1,4 @@
+
 import { useTaxCalculations } from "@/hooks/useTaxCalculations";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -138,7 +139,7 @@ export function TaxAnalysisTabs({
               By tracking home improvements, you saved {formatCurrency(taxSavings)} in taxes!
             </p>
             <p className="text-gray-600 text-base">
-              Update your tax filing status and cap gains tax rate in your{" "}
+              Update your tax filing status, federal cap gains rate, and home value appreciation rate in your{" "}
               <Link to="/profile" className="text-blue-500 hover:underline">
                 Profile
               </Link>
