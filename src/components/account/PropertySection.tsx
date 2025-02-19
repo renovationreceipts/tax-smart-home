@@ -31,29 +31,27 @@ export function PropertySection({
     navigate(`/property/edit/${property.id}`);
   };
 
-  return <div className="mb-8">
-      {properties.length === 0 ? (
-        <EmptyPropertyState onAddProperty={() => navigate("/property/edit")} />
-      ) : (
-        <div>
-          <div className="pb-4 border-b">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <House className="h-5 w-5 text-[#0090FF]" />
-                <h2 className="font-bold text-gray-900 text-2xl">Properties</h2>
-              </div>
-              <AccountActions onAddProperty={() => navigate("/property/edit")} />
-            </div>
-          </div>
-          <div className="mt-4">
-            <PropertyList 
-              properties={properties} 
-              selectedPropertyId={selectedPropertyId} 
-              onPropertySelect={setSelectedPropertyId} 
-              onEditProperty={handleEditProperty} 
-            />
-          </div>
-        </div>
-      )}
-    </div>;
+  if (properties.length === 0) {
+    return <EmptyPropertyState onAddProperty={() => navigate("/property/edit")} />;
+  }
+
+  return (
+    <div>
+      <div className="flex items-center justify-between pb-4 border-b">
+        <h2 className="font-bold text-gray-900 text-2xl flex items-center gap-2">
+          <House className="h-5 w-5 text-[#0090FF]" />
+          Properties
+        </h2>
+        <AccountActions onAddProperty={() => navigate("/property/edit")} />
+      </div>
+      <div className="mt-4">
+        <PropertyList 
+          properties={properties} 
+          selectedPropertyId={selectedPropertyId} 
+          onPropertySelect={setSelectedPropertyId} 
+          onEditProperty={handleEditProperty} 
+        />
+      </div>
+    </div>
+  );
 }
