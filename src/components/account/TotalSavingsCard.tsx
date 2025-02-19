@@ -73,10 +73,10 @@ export function TotalSavingsCard({
               Lifetime projected savings
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
+                  <TooltipTrigger asChild>
                     <Info className="h-4 w-4 text-gray-400 cursor-pointer" />
                   </TooltipTrigger>
-                  <TooltipContent>{tooltipContent}</TooltipContent>
+                  <TooltipContent side="bottom">{tooltipContent}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </div>
@@ -97,10 +97,10 @@ export function TotalSavingsCard({
               Lifetime projected savings
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
+                  <TooltipTrigger asChild>
                     <Info className="h-4 w-4 text-gray-400 cursor-pointer" />
                   </TooltipTrigger>
-                  <TooltipContent>{tooltipContent}</TooltipContent>
+                  <TooltipContent side="bottom">{tooltipContent}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </div>
