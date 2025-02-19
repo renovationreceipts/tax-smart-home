@@ -23,9 +23,16 @@ export function useAuth() {
           if (!window.location.pathname.includes('/account')) {
             navigate("/account", { replace: true });
           }
+        } else {
+          // If no session and not on public routes, redirect to login
+          const publicRoutes = ['/', '/login', '/signup'];
+          if (!publicRoutes.some(route => window.location.pathname.startsWith(route))) {
+            navigate("/login", { replace: true });
+          }
         }
       } catch (error) {
         console.error("Error checking session:", error);
+        navigate("/login", { replace: true });
       }
     };
     checkSession();
@@ -34,21 +41,23 @@ export function useAuth() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session) => {
       console.log("Auth state changed:", { event, sessionExists: !!session, userId: session?.user?.id });
 
-      if (event === 'SIGNED_IN' || event === 'USER_UPDATED' || event === 'INITIAL_SESSION') {
-        if (session) {
-          console.log("Valid session detected");
-          navigate("/account", { replace: true });
-          toast({
-            title: "Success!",
-            description: "You have successfully signed in.",
-          });
-        }
-      } else if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED') {
-        console.log("User signed out or token refreshed");
+      if (event === 'SIGNED_IN') {
+        console.log("Valid session detected");
+        navigate("/account", { replace: true });
+        toast({
+          title: "Success!",
+          description: "You have successfully signed in.",
+        });
+      } else if (event === 'SIGNED_OUT') {
+        console.log("User signed out");
         // Only redirect to home if we're not already there
         if (window.location.pathname !== '/') {
           navigate("/", { replace: true });
         }
+      } else if (event === 'TOKEN_REFRESHED') {
+        console.log("Token refreshed successfully");
+      } else if (event === 'USER_UPDATED') {
+        console.log("User data updated");
       }
     });
 
@@ -61,7 +70,6 @@ export function useAuth() {
           
           if (error) {
             console.error("Error recovering session:", error);
-            // If there's an error with the session, clear it and redirect to login
             await supabase.auth.signOut();
             navigate("/login", { replace: true });
             return;
