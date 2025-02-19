@@ -1,10 +1,11 @@
+
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { ArrowLeft, Plus, House } from "lucide-react"
+import { ArrowLeft, Plus } from "lucide-react"
 import { ProfileSettingsForm } from "./ProfileSettingsForm"
 import { PasswordChangeForm } from "./PasswordChangeForm"
 import { PropertySection } from "@/components/account/PropertySection"
@@ -74,7 +75,7 @@ export function UserProfile() {
         onClick={handleBackClick}
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
-        Back to Account
+        Back to Dashboard
       </Button>
 
       <div className="space-y-6">
