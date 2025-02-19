@@ -1,11 +1,11 @@
-
 import { useNavigate, useParams } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useProjects } from "@/hooks/useProjects"
-import { ArrowLeft, Edit, Lock } from "lucide-react"
+import { ArrowLeft, Edit, Lock, CheckCircle2, XCircle } from "lucide-react"
 import { format } from "date-fns"
 import { useToast } from "@/hooks/use-toast"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 export default function ViewProject() {
   const navigate = useNavigate()
@@ -33,6 +33,23 @@ export default function ViewProject() {
   const handleBack = () => {
     navigate(`/account?propertyId=${propertyId}`)
   }
+
+  const renderQualificationStatus = (qualifies: boolean | null, analysis: string | null) => {
+    if (qualifies === null) return null;
+    
+    return (
+      <div className="flex items-center gap-2">
+        {qualifies ? (
+          <CheckCircle2 className="h-5 w-5 text-green-500" />
+        ) : (
+          <XCircle className="h-5 w-5 text-red-500" />
+        )}
+        <span className={qualifies ? "text-green-700" : "text-red-700"}>
+          {qualifies ? "Eligible" : "Not Eligible"}
+        </span>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -69,7 +86,6 @@ export default function ViewProject() {
         </div>
 
         <div className="space-y-6">
-          {/* Project Details Card */}
           <Card>
             <CardHeader>
               <CardTitle>Project Details</CardTitle>
@@ -122,31 +138,77 @@ export default function ViewProject() {
             </CardContent>
           </Card>
 
-          {/* IRS-GPT Assessment Card */}
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>IRS-GPT Assessment</CardTitle>
-              {project.qualifies_for_basis && (
-                <div className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
-                  Eligible
-                </div>
-              )}
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">
-                {project.ai_analysis_result || "No assessment available."}
-              </p>
-            </CardContent>
-          </Card>
+          <div className="space-y-4">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>Cost Basis Assessment</CardTitle>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      {renderQualificationStatus(project.qualifies_for_basis, project.ai_analysis_result)}
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="max-w-xs">This analysis determines if the project can be added to your home's cost basis for tax purposes.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  {project.ai_analysis_result || "No assessment available."}
+                </p>
+              </CardContent>
+            </Card>
 
-          {/* Storage Vault Card */}
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>Tax Credits Assessment</CardTitle>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      {renderQualificationStatus(project.tax_credits_eligible, project.tax_credits_analysis)}
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="max-w-xs">This analysis identifies potential tax credits available for your improvement project.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  {project.tax_credits_analysis || "No assessment available."}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>Insurance Premium Assessment</CardTitle>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      {renderQualificationStatus(project.insurance_reduction_eligible, project.insurance_reduction_analysis)}
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="max-w-xs">This analysis evaluates if your improvement could qualify for insurance premium reductions.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  {project.insurance_reduction_analysis || "No assessment available."}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
           <Card>
             <CardHeader>
               <CardTitle>Storage Vault</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {/* We'll implement the storage vault view here */}
                 <div className="min-h-[100px] p-4 border rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
                   No before photos uploaded
                 </div>

@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query"
 import { supabase } from "@/integrations/supabase/client"
 
@@ -14,6 +13,10 @@ export interface Project {
   builder_url: string | null
   qualifies_for_basis: boolean | null
   ai_analysis_result: string | null
+  tax_credits_eligible: boolean | null
+  tax_credits_analysis: string | null
+  insurance_reduction_eligible: boolean | null
+  insurance_reduction_analysis: string | null
 }
 
 async function fetchProjects(propertyId: string) {

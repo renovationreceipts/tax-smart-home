@@ -1,4 +1,3 @@
-
 import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
 import { format } from "date-fns"
@@ -87,7 +86,11 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
     }
   }
 
-  const analyzeProject = async (description: string): Promise<{ qualifies: boolean; analysis: string }> => {
+  const analyzeProject = async (description: string): Promise<{
+    costBasis: { qualifies: boolean; analysis: string };
+    taxCredits: { qualifies: boolean; analysis: string };
+    insuranceReduction: { qualifies: boolean; analysis: string };
+  }> => {
     try {
       const { data, error } = await supabase.functions.invoke('analyze-project', {
         body: { description }
@@ -97,7 +100,11 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
       return data;
     } catch (error) {
       console.error('Error analyzing project:', error);
-      return { qualifies: false, analysis: 'Analysis failed' };
+      return {
+        costBasis: { qualifies: false, analysis: 'Analysis failed' },
+        taxCredits: { qualifies: false, analysis: 'Analysis failed' },
+        insuranceReduction: { qualifies: false, analysis: 'Analysis failed' }
+      };
     }
   };
 
@@ -117,7 +124,7 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
       const numericCost = Number(data.cost.replace(/[^0-9.-]/g, ""))
       
       // Analyze the project description
-      const { qualifies, analysis } = await analyzeProject(data.description || data.name);
+      const analysis = await analyzeProject(data.description || data.name);
       
       if (project) {
         const { error } = await supabase
@@ -129,8 +136,12 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
             completion_date: format(data.completion_date, "yyyy-MM-dd"),
             builder_name: data.builder_name || null,
             builder_url: data.builder_url || null,
-            qualifies_for_basis: qualifies,
-            ai_analysis_result: analysis
+            qualifies_for_basis: analysis.costBasis.qualifies,
+            ai_analysis_result: analysis.costBasis.analysis,
+            tax_credits_eligible: analysis.taxCredits.qualifies,
+            tax_credits_analysis: analysis.taxCredits.analysis,
+            insurance_reduction_eligible: analysis.insuranceReduction.qualifies,
+            insurance_reduction_analysis: analysis.insuranceReduction.analysis
           })
           .eq('id', project.id)
 
@@ -152,7 +163,7 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
         onSuccess({
           name: data.name,
           cost: numericCost,
-          qualifies_for_basis: qualifies,
+          qualifies_for_basis: analysis.costBasis.qualifies,
           description: data.description
         })
       } else {
@@ -167,8 +178,12 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
             completion_date: format(data.completion_date, "yyyy-MM-dd"),
             builder_name: data.builder_name || null,
             builder_url: data.builder_url || null,
-            qualifies_for_basis: qualifies,
-            ai_analysis_result: analysis
+            qualifies_for_basis: analysis.costBasis.qualifies,
+            ai_analysis_result: analysis.costBasis.analysis,
+            tax_credits_eligible: analysis.taxCredits.qualifies,
+            tax_credits_analysis: analysis.taxCredits.analysis,
+            insurance_reduction_eligible: analysis.insuranceReduction.qualifies,
+            insurance_reduction_analysis: analysis.insuranceReduction.analysis
           })
           .select()
           .single()
@@ -191,7 +206,7 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
         onSuccess({
           name: data.name,
           cost: numericCost,
-          qualifies_for_basis: qualifies,
+          qualifies_for_basis: analysis.costBasis.qualifies,
           description: data.description
         })
       }

@@ -118,10 +118,14 @@ export type Database = {
           description: string | null
           end_date: string | null
           id: string
+          insurance_reduction_analysis: string | null
+          insurance_reduction_eligible: boolean | null
           name: string
           property_id: string
           qualifies_for_basis: boolean | null
           start_date: string | null
+          tax_credits_analysis: string | null
+          tax_credits_eligible: boolean | null
           user_id: string
         }
         Insert: {
@@ -134,10 +138,14 @@ export type Database = {
           description?: string | null
           end_date?: string | null
           id?: string
+          insurance_reduction_analysis?: string | null
+          insurance_reduction_eligible?: boolean | null
           name: string
           property_id: string
           qualifies_for_basis?: boolean | null
           start_date?: string | null
+          tax_credits_analysis?: string | null
+          tax_credits_eligible?: boolean | null
           user_id: string
         }
         Update: {
@@ -150,10 +158,14 @@ export type Database = {
           description?: string | null
           end_date?: string | null
           id?: string
+          insurance_reduction_analysis?: string | null
+          insurance_reduction_eligible?: boolean | null
           name?: string
           property_id?: string
           qualifies_for_basis?: boolean | null
           start_date?: string | null
+          tax_credits_analysis?: string | null
+          tax_credits_eligible?: boolean | null
           user_id?: string
         }
         Relationships: [
