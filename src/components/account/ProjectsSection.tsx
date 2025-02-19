@@ -6,12 +6,14 @@ import type { Project } from "@/hooks/useProjects";
 import { useProperties } from "@/hooks/useProperties";
 import { ProjectTypeExamples } from "@/components/project/ProjectTypeExamples";
 import { useNavigate } from "react-router-dom";
+
 interface ProjectsSectionProps {
   propertyId: string | null;
   projects: Project[];
   onAddProject: () => void;
   onEditProject?: (project: Project) => void;
 }
+
 export function ProjectsSection({
   propertyId,
   projects,
@@ -23,18 +25,24 @@ export function ProjectsSection({
     data: properties = []
   } = useProperties();
   const selectedProperty = properties.find(p => p.id === propertyId);
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD"
     }).format(amount);
   };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
   };
+
+  const totalProjectCosts = projects.reduce((sum, project) => sum + (project.cost || 0), 0);
+
   if (!propertyId || properties.length === 0) {
     return null;
   }
+
   const EmptyState = () => <div className="space-y-8">
       <div className="bg-gray-50 rounded-lg p-4 sm:p-6">
         <div className="sm:flex sm:items-start sm:justify-between">
@@ -69,6 +77,7 @@ export function ProjectsSection({
         </Button>
       </div>
     </div>;
+
   const MobileProjectCard = ({
     project
   }: {
@@ -92,9 +101,9 @@ export function ProjectsSection({
         View Project
       </Button>
     </div>;
+
   return <div className="bg-white rounded-lg shadow-sm border p-6">
       <div className="pb-4 sm:pb-0 border-b sm:border-b-0">
-        {/* Desktop Header */}
         <div className="hidden sm:flex items-center justify-between">
           <div className="flex items-center gap-3">
             <FileText className="h-6 w-6 text-[#0090FF]" />
@@ -123,7 +132,6 @@ export function ProjectsSection({
             </Button>}
         </div>
 
-        {/* Mobile Header */}
         <div className="sm:hidden space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -161,6 +169,12 @@ export function ProjectsSection({
         </div> : <div className="mt-4">
           <div className="block sm:hidden -mx-6">
             {projects.map(project => <MobileProjectCard key={project.id} project={project} />)}
+            <div className="px-4 py-4 border-t">
+              <div className="flex justify-between items-center">
+                <span className="text-base font-semibold">Total Projects Cost</span>
+                <span className="text-base font-semibold">{formatCurrency(totalProjectCosts)}</span>
+              </div>
+            </div>
           </div>
           <div className="hidden sm:block overflow-x-auto">
             <Table>
@@ -177,6 +191,11 @@ export function ProjectsSection({
                     <TableCell className="text-right text-base">{formatCurrency(project.cost)}</TableCell>
                     <TableCell className="text-right text-base">{formatDate(project.completion_date)}</TableCell>
                   </TableRow>)}
+                <TableRow className="border-t">
+                  <TableCell className="font-semibold text-base">Total Projects Cost</TableCell>
+                  <TableCell className="text-right font-semibold text-base">{formatCurrency(totalProjectCosts)}</TableCell>
+                  <TableCell className="text-right" />
+                </TableRow>
               </TableBody>
             </Table>
           </div>
