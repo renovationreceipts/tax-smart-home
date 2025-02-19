@@ -17,10 +17,10 @@ export default defineConfig(({ mode }) => ({
   build: {
     rollupOptions: {
       output: {
-        // Enhanced cache busting with more specific patterns
-        entryFileNames: 'assets/[name]-[hash]-[timestamp].js',
-        chunkFileNames: 'assets/[name]-[hash]-[timestamp].js',
-        assetFileNames: 'assets/[name]-[hash]-[timestamp].[ext]',
+        // Enhanced cache busting with valid pattern
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]',
       },
     },
     // Ensure source maps are generated for better debugging
