@@ -1,3 +1,4 @@
+
 import { useTaxCalculations } from "@/hooks/useTaxCalculations";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -90,39 +91,39 @@ export function TaxAnalysisTabs({
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
+            <TableRow className="hover:bg-transparent">
               <TableCell>Sale Price</TableCell>
               <TableCell className="text-right bg-[#F7FAFC]">{formatCurrency(projectedValue)}</TableCell>
               <TableCell className="text-right">{formatCurrency(projectedValue)}</TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow className="hover:bg-transparent">
               <TableCell>Minus Purchase Price</TableCell>
               <TableCell className="text-right bg-[#F7FAFC]">{formatCurrency(selectedProperty?.purchase_price || 0)}</TableCell>
               <TableCell className="text-right">{formatCurrency(selectedProperty?.purchase_price || 0)}</TableCell>
             </TableRow>
-            <TableRow className="border-b-2 border-gray-300">
+            <TableRow className="hover:bg-transparent border-b-2 border-gray-300">
               <TableCell>Minus Eligible Home Improvements</TableCell>
               <TableCell className="text-right bg-[#F7FAFC]">{formatCurrency(totalProjectCosts)} ✅</TableCell>
               <TableCell className="text-right">Unknown 🤷</TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow className="hover:bg-transparent">
               <TableCell><span className="font-medium">= Gain on Sale</span></TableCell>
               <TableCell className="text-right bg-[#F7FAFC]">{formatCurrency(gainWithTracking)}</TableCell>
               <TableCell className="text-right">{formatCurrency(gainWithoutTracking)}</TableCell>
             </TableRow>
-            <TableRow className="border-b-2 border-gray-300">
+            <TableRow className="hover:bg-transparent border-b-2 border-gray-300">
               <TableCell>Minus Exempt Amount</TableCell>
               <TableCell className="text-right bg-[#F7FAFC]">{formatCurrency(exemptionAmount)}</TableCell>
               <TableCell className="text-right">{formatCurrency(exemptionAmount)}</TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow className="hover:bg-transparent">
               <TableCell><span className="font-medium">= Taxable Gain</span></TableCell>
               <TableCell className="text-right bg-[#F7FAFC]">
                 {taxableAmountWithTracking === 0 && taxableAmountWithoutTracking > 0 ? <span>Fully Exempt 🎉</span> : formatCurrency(taxableAmountWithTracking)}
               </TableCell>
               <TableCell className="text-right">{formatCurrency(taxableAmountWithoutTracking)}</TableCell>
             </TableRow>
-            <TableRow className="font-bold">
+            <TableRow className="hover:bg-transparent font-bold">
               <TableCell>Federal Tax Owed ({(userTaxRate * 100).toFixed(1)}%)</TableCell>
               <TableCell className="text-right bg-[#F7FAFC]">
                 {taxWithTracking === 0 && taxWithoutTracking > 0 ? <span>Fully Exempt 🎉</span> : formatCurrency(taxWithTracking)}
