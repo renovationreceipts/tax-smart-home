@@ -93,37 +93,32 @@ export function TaxAnalysisTabs({
           </TableHeader>
           <TableBody>
             <TableRow>
-              <TableCell>Purchase Price</TableCell>
-              <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(selectedProperty?.purchase_price || 0)}</TableCell>
-              <TableCell className="text-right">{formatCurrency(selectedProperty?.purchase_price || 0)}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Home Improvements</TableCell>
-              <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(totalProjectCosts)} ✅</TableCell>
-              <TableCell className="text-right">Unknown 🤷</TableCell>
-            </TableRow>
-            <TableRow>
               <TableCell>Sale Price</TableCell>
               <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(projectedValue)}</TableCell>
               <TableCell className="text-right">{formatCurrency(projectedValue)}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>Cost Basis</TableCell>
-              <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(adjustedCostBasis)}</TableCell>
+              <TableCell>Minus Purchase Price</TableCell>
+              <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(selectedProperty?.purchase_price || 0)}</TableCell>
               <TableCell className="text-right">{formatCurrency(selectedProperty?.purchase_price || 0)}</TableCell>
             </TableRow>
+            <TableRow className="border-b-2 border-gray-300">
+              <TableCell>Minus Eligible Home Improvements</TableCell>
+              <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(totalProjectCosts)} ✅</TableCell>
+              <TableCell className="text-right">Unknown 🤷</TableCell>
+            </TableRow>
             <TableRow>
-              <TableCell>Gain on Sale</TableCell>
+              <TableCell><span className="font-medium">= Gain on Sale</span></TableCell>
               <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(gainWithTracking)}</TableCell>
               <TableCell className="text-right">{formatCurrency(gainWithoutTracking)}</TableCell>
             </TableRow>
-            <TableRow>
-              <TableCell>Exempt Amount</TableCell>
+            <TableRow className="border-b-2 border-gray-300">
+              <TableCell>Minus Exempt Amount</TableCell>
               <TableCell className="text-right bg-[#D3E4FD]">{formatCurrency(exemptionAmount)}</TableCell>
               <TableCell className="text-right">{formatCurrency(exemptionAmount)}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>Taxable Amount</TableCell>
+              <TableCell><span className="font-medium">= Taxable Gain</span></TableCell>
               <TableCell className="text-right bg-[#D3E4FD]">
                 {taxableAmountWithTracking === 0 ? (
                   <span>Fully Exempt 🎉</span>
@@ -133,7 +128,7 @@ export function TaxAnalysisTabs({
               </TableCell>
               <TableCell className="text-right">{formatCurrency(taxableAmountWithoutTracking)}</TableCell>
             </TableRow>
-            <TableRow className="border-t font-medium">
+            <TableRow className="font-bold">
               <TableCell>Federal Tax Owed ({(userTaxRate * 100).toFixed(1)}%)</TableCell>
               <TableCell className="text-right bg-[#D3E4FD]">
                 {taxWithTracking === 0 ? (
@@ -161,3 +156,4 @@ export function TaxAnalysisTabs({
     </div>
   );
 }
+
