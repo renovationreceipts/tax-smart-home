@@ -1,3 +1,4 @@
+
 import { FileText, Plus, Wrench, ClipboardList, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -86,7 +87,7 @@ export function ProjectsSection({
     project
   }: {
     project: Project;
-  }) => <div className="border-b last:border-b-0 py-6 first:pt-2 last:pb-2 px-4 space-y-4" onClick={() => onEditProject?.(project)}>
+  }) => <div className="border-b last:border-b-0 py-6 first:pt-2 last:pb-2 px-4 space-y-4" onClick={() => handleViewProject(project)}>
       <h3 className="text-xl font-bold">{project.name}</h3>
       <div className="space-y-1 text-base">
         <div className="flex justify-between">
@@ -100,7 +101,7 @@ export function ProjectsSection({
       </div>
       <Button variant="outline" className="w-full text-primary hover:text-primary" onClick={e => {
       e.stopPropagation();
-      onEditProject?.(project);
+      handleViewProject(project);
     }}>
         View Project
       </Button>
