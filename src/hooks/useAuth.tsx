@@ -14,10 +14,18 @@ export function useAuth() {
 
     // Check for existing session on mount
     const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      console.log("Checking existing session:", { exists: !!session });
-      if (session) {
-        navigate("/account", { replace: true });
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        console.log("Checking existing session:", { exists: !!session });
+        
+        if (session) {
+          // Only redirect if we're not already on the account page
+          if (!window.location.pathname.includes('/account')) {
+            navigate("/account", { replace: true });
+          }
+        }
+      } catch (error) {
+        console.error("Error checking session:", error);
       }
     };
     checkSession();
@@ -35,9 +43,12 @@ export function useAuth() {
             description: "You have successfully signed in.",
           });
         }
-      } else if (event === 'SIGNED_OUT') {
-        console.log("User signed out");
-        navigate("/", { replace: true });
+      } else if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED') {
+        console.log("User signed out or token refreshed");
+        // Only redirect to home if we're not already there
+        if (window.location.pathname !== '/') {
+          navigate("/", { replace: true });
+        }
       }
     });
 
@@ -45,16 +56,23 @@ export function useAuth() {
     const handleHashFragment = async () => {
       if (window.location.hash) {
         console.log("Found hash fragment, attempting to recover session");
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (error) {
-          console.error("Error recovering session:", error);
-          return;
-        }
-        
-        if (session) {
-          console.log("Successfully recovered session from hash");
-          navigate("/account", { replace: true });
+        try {
+          const { data: { session }, error } = await supabase.auth.getSession();
+          
+          if (error) {
+            console.error("Error recovering session:", error);
+            // If there's an error with the session, clear it and redirect to login
+            await supabase.auth.signOut();
+            navigate("/login", { replace: true });
+            return;
+          }
+          
+          if (session) {
+            console.log("Successfully recovered session from hash");
+            navigate("/account", { replace: true });
+          }
+        } catch (error) {
+          console.error("Error handling hash fragment:", error);
         }
       }
     };
