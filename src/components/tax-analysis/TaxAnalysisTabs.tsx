@@ -1,4 +1,3 @@
-
 import { useTaxCalculations } from "@/hooks/useTaxCalculations";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -8,15 +7,12 @@ import type { Project } from "@/hooks/useProjects";
 import type { Property } from "@/hooks/useProperties";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
 interface TaxAnalysisTabsProps {
   projectedTaxSavings: number;
   projects: Project[];
   selectedProperty: Property | undefined;
 }
-
 type TimeFrame = "today" | "3" | "5" | "10" | "15";
-
 export function TaxAnalysisTabs({
   projects,
   selectedProperty
@@ -32,14 +28,11 @@ export function TaxAnalysisTabs({
     property: selectedProperty,
     projects
   });
-
   const calculateProjectedValue = (currentValue: number, years: number, growthRate: number) => {
     return currentValue * Math.pow(1 + growthRate / 100, years);
   };
-
   const yearsToProject = selectedTimeFrame === "today" ? 0 : parseInt(selectedTimeFrame);
   const projectedValue = calculateProjectedValue(selectedProperty?.current_value || 0, yearsToProject, houseValueGrowthRate);
-
   const timeFrameOptions = [{
     value: "today",
     label: "Today"
@@ -56,7 +49,6 @@ export function TaxAnalysisTabs({
     value: "15",
     label: "In 15 years"
   }];
-
   const gainWithoutTracking = projectedValue - (selectedProperty?.purchase_price || 0);
   const gainWithTracking = projectedValue - adjustedCostBasis;
   const taxableAmountWithoutTracking = Math.max(0, gainWithoutTracking - exemptionAmount);
@@ -65,7 +57,6 @@ export function TaxAnalysisTabs({
   const taxWithTracking = taxableAmountWithTracking * userTaxRate;
   const taxSavings = taxWithoutTracking - taxWithTracking;
   const showNoSavingsMessage = taxWithoutTracking === taxWithTracking;
-
   return <div className="space-y-8">
       <div className="flex items-center gap-4">
         <h2 className="text-xl font-bold">If You Sold Your Property...</h2>
@@ -119,18 +110,14 @@ export function TaxAnalysisTabs({
             <TableRow>
               <TableCell><span className="font-medium">= Taxable Gain</span></TableCell>
               <TableCell className="text-right bg-[#D3E4FD]">
-                {taxableAmountWithTracking === 0 && taxableAmountWithoutTracking > 0 
-                  ? <span>Fully Exempt 🎉</span> 
-                  : formatCurrency(taxableAmountWithTracking)}
+                {taxableAmountWithTracking === 0 && taxableAmountWithoutTracking > 0 ? <span>Fully Exempt 🎉</span> : formatCurrency(taxableAmountWithTracking)}
               </TableCell>
               <TableCell className="text-right">{formatCurrency(taxableAmountWithoutTracking)}</TableCell>
             </TableRow>
             <TableRow className="font-bold">
               <TableCell>Federal Tax Owed ({(userTaxRate * 100).toFixed(1)}%)</TableCell>
               <TableCell className="text-right bg-[#D3E4FD]">
-                {taxWithTracking === 0 && taxWithoutTracking > 0 
-                  ? <span>Fully Exempt 🎉</span> 
-                  : formatCurrency(taxWithTracking)}
+                {taxWithTracking === 0 && taxWithoutTracking > 0 ? <span>Fully Exempt 🎉</span> : formatCurrency(taxWithTracking)}
               </TableCell>
               <TableCell className="text-right">{formatCurrency(taxWithoutTracking)}</TableCell>
             </TableRow>
@@ -154,11 +141,7 @@ export function TaxAnalysisTabs({
 
       {showNoSavingsMessage && <Card className="p-6 bg-gray-50 border-gray-200">
           <h3 className="text-lg font-semibold mb-2">No Tax Savings Yet</h3>
-          <p className="text-gray-600">
-            While you're not seeing tax savings yet, tracking your home improvements is still crucial. 
-            As your home appreciates in value, these records could save you thousands in taxes when you sell. 
-            Plus, having organized records helps with insurance claims and future renovations.
-          </p>
+          <p className="text-gray-600">While you're not seeing tax savings yet, tracking your home improvements is still crucial. As your home appreciates in value, these records could save you thousands in taxes when you sell. Plus, having organized records helps with insurance claims and auditability of tax credits and other rebates.</p>
         </Card>}
     </div>;
 }
