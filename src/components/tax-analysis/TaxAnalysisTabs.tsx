@@ -1,12 +1,12 @@
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useTaxCalculations } from "@/hooks/useTaxCalculations";
+import { Card } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { TaxCalculationTable } from "@/components/property/TaxCalculationTable";
-import { AIAnalysisCard } from "./AIAnalysisCard";
-import { ProjectAnalysisModal } from "../project/ProjectAnalysisModal";
-import { useState } from "react";
+import { formatCurrency } from "@/lib/utils";
 import type { Project } from "@/hooks/useProjects";
 import type { Property } from "@/hooks/useProperties";
+import { useState } from "react";
 
 interface TaxAnalysisTabsProps {
   projectedTaxSavings: number;
@@ -14,74 +14,147 @@ interface TaxAnalysisTabsProps {
   selectedProperty: Property | undefined;
 }
 
+type TimeFrame = "today" | "3" | "5" | "10" | "15";
+
 export function TaxAnalysisTabs({
-  projectedTaxSavings,
   projects,
   selectedProperty
 }: TaxAnalysisTabsProps) {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [currentTab, setCurrentTab] = useState("tax-savings");
+  const [selectedTimeFrame, setSelectedTimeFrame] = useState<TimeFrame>("10");
 
-  return <>
-      <Tabs value={currentTab} onValueChange={setCurrentTab} className="mt-6">
-        <div className="block sm:hidden">
-          <Select value={currentTab} onValueChange={setCurrentTab}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select view">
-                {currentTab === "tax-savings" && "Future Tax Savings"}
-                {currentTab === "tax-credits" && "Tax Credits"}
-                {currentTab === "insurance" && "Insurance Savings"}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="tax-savings">Future Tax Savings</SelectItem>
-              <SelectItem value="tax-credits">Tax Credits</SelectItem>
-              <SelectItem value="insurance">Insurance Savings</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+  const {
+    totalProjectCosts,
+    adjustedCostBasis,
+    taxableGainWithBasis,
+    taxableGainWithoutBasis,
+    userTaxRate,
+    exemptionAmount,
+    finalTaxableGain,
+    houseValueGrowthRate
+  } = useTaxCalculations({
+    property: selectedProperty,
+    projects
+  });
 
-        <TabsList className="hidden sm:grid w-full grid-cols-3 h-auto bg-gray-100 p-1 rounded-lg [&>*:not(:last-child)]:border-r [&>*]:border-gray-200">
-          <TabsTrigger value="tax-savings" className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all">
-            <div className="text-center">
-              <h3 className="font-semibold">Future Tax Savings</h3>
-            </div>
-          </TabsTrigger>
-          <TabsTrigger value="tax-credits" className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all">
-            <div className="text-center">
-              <h3 className="font-semibold">Tax Credits</h3>
-            </div>
-          </TabsTrigger>
-          <TabsTrigger value="insurance" className="py-3 px-4 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm transition-all">
-            <div className="text-center">
-              <h3 className="font-semibold">Insurance Savings</h3>
-            </div>
-          </TabsTrigger>
-        </TabsList>
+  const calculateProjectedValue = (currentValue: number, years: number, growthRate: number) => {
+    return currentValue * Math.pow(1 + growthRate / 100, years);
+  };
 
-        <AIAnalysisCard projectedTaxSavings={projectedTaxSavings} projects={projects} onProjectClick={setSelectedProject} />
+  const yearsToProject = selectedTimeFrame === "today" ? 0 : parseInt(selectedTimeFrame);
+  const projectedValue = calculateProjectedValue(
+    selectedProperty?.current_value || 0,
+    yearsToProject,
+    houseValueGrowthRate
+  );
 
-        <TabsContent value="tax-savings" className="mt-6 space-y-6">
-          <div className="bg-white rounded-xl border p-6">
-            {selectedProperty ? <TaxCalculationTable property={selectedProperty} projects={projects} onProjectClick={setSelectedProject} /> : <p className="text-gray-500">No property selected. Please add a property to view tax calculations.</p>}
-          </div>
-        </TabsContent>
+  const timeFrameOptions = [
+    { value: "today", label: "Today" },
+    { value: "3", label: "In 3 years" },
+    { value: "5", label: "In 5 years" },
+    { value: "10", label: "In 10 years" },
+    { value: "15", label: "In 15 years" }
+  ];
 
-        <TabsContent value="tax-credits" className="mt-6">
-          <div className="bg-white rounded-xl p-6 shadow-sm text-center">
-            <h2 className="text-xl font-semibold mb-4">Tax Credits</h2>
-            <p className="text-gray-500">Coming soon! We're working on bringing you valuable tax credit opportunities.</p>
-          </div>
-        </TabsContent>
+  const taxWithoutTracking = Math.max(
+    0,
+    (projectedValue - (selectedProperty?.purchase_price || 0) - exemptionAmount) * userTaxRate
+  );
+  
+  const taxWithTracking = Math.max(
+    0,
+    (projectedValue - adjustedCostBasis - exemptionAmount) * userTaxRate
+  );
 
-        <TabsContent value="insurance" className="mt-6">
-          <div className="bg-white rounded-xl p-6 shadow-sm text-center">
-            <h2 className="text-xl font-semibold mb-4">Insurance Savings</h2>
-            <p className="text-gray-500">Coming soon! We're working on bringing you insurance saving opportunities.</p>
-          </div>
-        </TabsContent>
-      </Tabs>
+  const showNoSavingsMessage = taxWithoutTracking === taxWithTracking;
 
-      <ProjectAnalysisModal project={selectedProject} open={!!selectedProject} onClose={() => setSelectedProject(null)} />
-    </>;
+  return (
+    <div className="space-y-8">
+      <div className="flex items-center gap-4">
+        <h2 className="text-xl font-bold">If You Sold Your Property...</h2>
+        <Select value={selectedTimeFrame} onValueChange={value => setSelectedTimeFrame(value as TimeFrame)}>
+          <SelectTrigger className="w-[200px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {timeFrameOptions.map(option => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="bg-white rounded-xl border p-6">
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="w-1/3">Category</TableHead>
+              <TableHead className="w-1/3 text-right">Without Tracking Projects</TableHead>
+              <TableHead className="w-1/3 text-right">With Renovation Receipts</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>Purchase Price</TableCell>
+              <TableCell className="text-right">{formatCurrency(selectedProperty?.purchase_price || 0)}</TableCell>
+              <TableCell className="text-right">{formatCurrency(selectedProperty?.purchase_price || 0)}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Home Improvements</TableCell>
+              <TableCell className="text-right">Unknown 🤷</TableCell>
+              <TableCell className="text-right">{formatCurrency(totalProjectCosts)} ✅</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Sale Price</TableCell>
+              <TableCell className="text-right">{formatCurrency(projectedValue)}</TableCell>
+              <TableCell className="text-right">{formatCurrency(projectedValue)}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Cost Basis</TableCell>
+              <TableCell className="text-right">{formatCurrency(selectedProperty?.purchase_price || 0)}</TableCell>
+              <TableCell className="text-right">{formatCurrency(adjustedCostBasis)}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Gain on Sale</TableCell>
+              <TableCell className="text-right">{formatCurrency(taxableGainWithoutBasis)}</TableCell>
+              <TableCell className="text-right">{formatCurrency(taxableGainWithBasis)}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Exempt Amount</TableCell>
+              <TableCell className="text-right">{formatCurrency(exemptionAmount)}</TableCell>
+              <TableCell className="text-right">{formatCurrency(exemptionAmount)}</TableCell>
+            </TableRow>
+            <TableRow className="font-medium">
+              <TableCell>Federal Tax Owed</TableCell>
+              <TableCell className="text-right">{formatCurrency(taxWithoutTracking)}</TableCell>
+              <TableCell className="text-right">
+                {taxWithTracking === 0 ? (
+                  <span>Fully Exempt 🎉</span>
+                ) : (
+                  formatCurrency(taxWithTracking)
+                )}
+              </TableCell>
+            </TableRow>
+            <TableRow className="border-t">
+              <TableCell>Federal Tax Rate</TableCell>
+              <TableCell className="text-right">{(userTaxRate * 100).toFixed(1)}%</TableCell>
+              <TableCell className="text-right">{(userTaxRate * 100).toFixed(1)}%</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+
+      {showNoSavingsMessage && (
+        <Card className="p-6 bg-gray-50 border-gray-200">
+          <h3 className="text-lg font-semibold mb-2">No Tax Savings Yet</h3>
+          <p className="text-gray-600">
+            While you're not seeing tax savings yet, tracking your home improvements is still crucial. 
+            As your home appreciates in value, these records could save you thousands in taxes when you sell. 
+            Plus, having organized records helps with insurance claims and future renovations.
+          </p>
+        </Card>
+      )}
+    </div>
+  );
 }
