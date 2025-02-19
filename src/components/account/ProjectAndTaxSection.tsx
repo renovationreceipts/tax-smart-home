@@ -20,17 +20,12 @@ export function ProjectAndTaxSection({
     data: projects = []
   } = useProjects(selectedPropertyId);
 
-  const handleEditProject = (project: Project) => {
-    navigate(`/project/edit/${selectedPropertyId}/${project.id}`);
-  };
-
   return (
     <div className="space-y-4 sm:space-y-6">
       <ProjectsSection 
         propertyId={selectedPropertyId} 
         projects={projects} 
         onAddProject={() => navigate(`/project/edit/${selectedPropertyId}`)} 
-        onEditProject={handleEditProject} 
       />
       <WhySaveRecords />
     </div>
