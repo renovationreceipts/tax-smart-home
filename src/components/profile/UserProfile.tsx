@@ -68,7 +68,7 @@ export function UserProfile() {
   }
 
   return (
-    <div className="container max-w-2xl mx-auto py-8">
+    <div className="mx-auto max-w-4xl py-8 px-4">
       <Button
         variant="ghost"
         className="mb-6"
