@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { NumberTransition } from "@/components/ui/NumberTransition";
 import { formatCurrency } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface TotalSavingsCardProps {
   projectedTaxSavings: number;
@@ -20,9 +20,23 @@ export function TotalSavingsCard({
 }: TotalSavingsCardProps) {
   const navigate = useNavigate();
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
+        setIsTooltipOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const tooltipContent = (
-    <div className="space-y-3 max-w-sm">
+    <div ref={tooltipRef} className="space-y-3 max-w-sm">
       <div>
         <p className="font-semibold text-base text-white">Lifetime Projected Savings</p>
       </div>
@@ -56,7 +70,8 @@ export function TotalSavingsCard({
     </div>
   );
 
-  const handleInfoClick = () => {
+  const handleInfoClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent event from bubbling up
     setIsTooltipOpen(!isTooltipOpen);
   };
 
