@@ -29,7 +29,7 @@ export function ProjectsSection({
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "USD"
+      currency: "USD",
     }).format(amount);
   };
 
@@ -42,6 +42,10 @@ export function ProjectsSection({
   if (!propertyId || properties.length === 0) {
     return null;
   }
+
+  const handleViewProject = (project: Project) => {
+    navigate(`/project/view/${propertyId}/${project.id}`);
+  };
 
   const EmptyState = () => <div className="space-y-8">
       <div className="bg-gray-50 rounded-lg p-4 sm:p-6">
@@ -186,7 +190,7 @@ export function ProjectsSection({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {projects.map(project => <TableRow key={project.id} onClick={() => onEditProject?.(project)} className="cursor-pointer hover:bg-muted/50">
+                {projects.map(project => <TableRow key={project.id} onClick={() => handleViewProject(project)} className="cursor-pointer hover:bg-muted/50">
                     <TableCell className="font-medium text-base">{project.name}</TableCell>
                     <TableCell className="text-right text-base">{formatCurrency(project.cost)}</TableCell>
                     <TableCell className="text-right text-base">{formatDate(project.completion_date)}</TableCell>

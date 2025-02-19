@@ -7,6 +7,7 @@ import './index.css'
 import Account from "@/pages/Account"
 import EditProperty from "@/pages/EditProperty"
 import EditProject from "@/pages/EditProject"
+import ViewProject from "@/pages/ViewProject"
 import Index from "@/pages/Index"
 import Login from "@/pages/Login"
 import Profile from "@/pages/Profile"
@@ -90,6 +91,10 @@ const router = createBrowserRouter([
       {
         path: "project/edit/:propertyId/:id?",
         element: <EditProject />
+      },
+      {
+        path: "project/view/:propertyId/:id",
+        element: <ViewProject />
       },
       {
         path: "disclaimers",
