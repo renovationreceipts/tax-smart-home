@@ -4,7 +4,6 @@ import { PropertyList } from "@/components/property/PropertyList";
 import { EmptyPropertyState } from "@/components/property/EmptyPropertyState";
 import { useProperties } from "@/hooks/useProperties";
 import { useEffect } from "react";
-import { AccountActions } from "@/components/account/AccountActions";
 
 interface PropertySectionProps {
   selectedPropertyId: string | null;
@@ -36,17 +35,12 @@ export function PropertySection({
 
   return (
     <div>
-      <div className="flex justify-end pb-4 border-b">
-        <AccountActions onAddProperty={() => navigate("/property/edit")} />
-      </div>
-      <div className="mt-4">
-        <PropertyList 
-          properties={properties} 
-          selectedPropertyId={selectedPropertyId} 
-          onPropertySelect={setSelectedPropertyId} 
-          onEditProperty={handleEditProperty} 
-        />
-      </div>
+      <PropertyList 
+        properties={properties} 
+        selectedPropertyId={selectedPropertyId} 
+        onPropertySelect={setSelectedPropertyId} 
+        onEditProperty={handleEditProperty} 
+      />
     </div>
   );
 }

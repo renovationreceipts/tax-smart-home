@@ -1,11 +1,10 @@
-
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { ArrowLeft, House } from "lucide-react"
+import { ArrowLeft, Plus, House } from "lucide-react"
 import { ProfileSettingsForm } from "./ProfileSettingsForm"
 import { PasswordChangeForm } from "./PasswordChangeForm"
 import { PropertySection } from "@/components/account/PropertySection"
@@ -82,6 +81,16 @@ export function UserProfile() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>My Properties</CardTitle>
+            <Button 
+              onClick={() => navigate("/property/edit")}
+              size="sm"
+              variant="ghost"
+              className="sm:!variant-default border border-primary text-primary hover:text-primary"
+            >
+              <Plus className="h-4 w-4 mr-2 text-primary" />
+              <span className="hidden sm:inline">Add Property</span>
+              <span className="sm:hidden">Add</span>
+            </Button>
           </CardHeader>
           <CardContent>
             <PropertySection 
