@@ -51,7 +51,7 @@ export function TotalSavingsCard({
                   <TooltipTrigger>
                     <Info className="h-4 w-4 text-gray-400 cursor-pointer" />
                   </TooltipTrigger>
-                  <TooltipContent showArrow>{tooltipContent}</TooltipContent>
+                  <TooltipContent>{tooltipContent}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </div>
@@ -75,7 +75,7 @@ export function TotalSavingsCard({
                   <TooltipTrigger>
                     <Info className="h-4 w-4 text-gray-400 cursor-pointer" />
                   </TooltipTrigger>
-                  <TooltipContent showArrow>{tooltipContent}</TooltipContent>
+                  <TooltipContent>{tooltipContent}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </div>
