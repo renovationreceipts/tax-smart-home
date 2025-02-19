@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import { useProperties } from "@/hooks/useProperties";
 import { useProjects } from "@/hooks/useProjects";
 import { NumberTransition } from "@/components/ui/NumberTransition";
+import { formatCurrency } from "@/lib/utils";
 
 export default function Account() {
   const navigate = useNavigate();
