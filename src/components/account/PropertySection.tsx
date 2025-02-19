@@ -4,7 +4,6 @@ import { PropertyList } from "@/components/property/PropertyList";
 import { EmptyPropertyState } from "@/components/property/EmptyPropertyState";
 import { useProperties } from "@/hooks/useProperties";
 import { useEffect } from "react";
-import { House } from "lucide-react";
 import { AccountActions } from "@/components/account/AccountActions";
 
 interface PropertySectionProps {
@@ -37,11 +36,7 @@ export function PropertySection({
 
   return (
     <div>
-      <div className="flex items-center justify-between pb-4 border-b">
-        <h2 className="font-bold text-gray-900 text-2xl flex items-center gap-2">
-          <House className="h-5 w-5 text-[#0090FF]" />
-          Properties
-        </h2>
+      <div className="flex justify-end pb-4 border-b">
         <AccountActions onAddProperty={() => navigate("/property/edit")} />
       </div>
       <div className="mt-4">
