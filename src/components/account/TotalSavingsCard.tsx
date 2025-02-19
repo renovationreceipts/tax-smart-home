@@ -1,9 +1,10 @@
 
-import { CircleDollarSign, ArrowRight, FileText, Building2, Banknote } from "lucide-react";
+import { CircleDollarSign, ArrowRight, FileText, Building2, Banknote, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { NumberTransition } from "@/components/ui/NumberTransition";
 import { formatCurrency } from "@/lib/utils";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface TotalSavingsCardProps {
   projectedTaxSavings: number;
@@ -17,6 +18,16 @@ export function TotalSavingsCard({
   userTaxRate
 }: TotalSavingsCardProps) {
   const navigate = useNavigate();
+
+  const tooltipContent = (
+    <div className="space-y-1">
+      <p className="font-medium">How We Calculate Your Savings</p>
+      <p className="text-sm text-muted-foreground">
+        This is your projected tax savings based on your eligible home improvements
+        and current tax rate. The actual amount may vary.
+      </p>
+    </div>
+  );
 
   return (
     <div className="bg-white rounded-xl shadow-sm">
@@ -33,7 +44,17 @@ export function TotalSavingsCard({
             <div className="text-3xl font-bold mb-1">
               <NumberTransition value={projectedTaxSavings} />
             </div>
-            <div className="text-gray-600 text-sm">Lifetime projected savings</div>
+            <div className="text-gray-600 text-sm flex items-center gap-1">
+              Lifetime projected savings
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Info className="h-4 w-4 text-gray-400 cursor-pointer" />
+                  </TooltipTrigger>
+                  <TooltipContent showArrow>{tooltipContent}</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </div>
           <Button variant="link" onClick={() => navigate("/tax-analysis")} className="text-[#0090FF] hover:text-[#0090FF]/90 p-0 text-sm">
             View Details
@@ -47,7 +68,17 @@ export function TotalSavingsCard({
             <div className="text-4xl font-semibold leading-none mb-2">
               <NumberTransition value={projectedTaxSavings} />
             </div>
-            <div className="text-gray-500 text-sm">Lifetime projected savings</div>
+            <div className="text-gray-500 text-sm flex items-center justify-center gap-1">
+              Lifetime projected savings
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Info className="h-4 w-4 text-gray-400 cursor-pointer" />
+                  </TooltipTrigger>
+                  <TooltipContent showArrow>{tooltipContent}</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </div>
         </div>
 
