@@ -14,6 +14,8 @@ interface UseProjectSubmitProps {
     name: string
     cost: number
     qualifies_for_basis: boolean
+    tax_credits_eligible: boolean
+    insurance_reduction_eligible: boolean
     description?: string | null
   }) => void
 }
@@ -78,6 +80,8 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
           name: data.name,
           cost: numericCost,
           qualifies_for_basis: analysis.costBasis.qualifies,
+          tax_credits_eligible: analysis.taxCredits.qualifies,
+          insurance_reduction_eligible: analysis.insuranceReduction.qualifies,
           description: data.description
         })
       } else {
@@ -121,6 +125,8 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
           name: data.name,
           cost: numericCost,
           qualifies_for_basis: analysis.costBasis.qualifies,
+          tax_credits_eligible: analysis.taxCredits.qualifies,
+          insurance_reduction_eligible: analysis.insuranceReduction.qualifies,
           description: data.description
         })
       }

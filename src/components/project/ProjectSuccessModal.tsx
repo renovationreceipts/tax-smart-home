@@ -1,7 +1,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Plus, Lock, CheckCircle2 } from "lucide-react"
+import { Plus, CheckCircle2, X } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { formatCurrency } from "@/lib/utils"
 
@@ -13,6 +13,8 @@ interface ProjectSuccessModalProps {
     name: string
     cost: number
     qualifies_for_basis: boolean
+    tax_credits_eligible: boolean
+    insurance_reduction_eligible: boolean
   } | null
 }
 
@@ -55,32 +57,50 @@ export function ProjectSuccessModal({
             </div>
 
             <div className="flex gap-3">
-              <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0" />
+              {project.qualifies_for_basis ? (
+                <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0" />
+              ) : (
+                <X className="h-5 w-5 text-gray-400 shrink-0" />
+              )}
               <div>
-                <p className="font-medium">IRS Cost Basis Qualifies</p>
-                <p className="text-sm text-gray-500">This project can be added to your home's cost basis</p>
+                <p className="font-medium">IRS Cost Basis Status</p>
+                <p className="text-sm text-gray-500">
+                  {project.qualifies_for_basis 
+                    ? "This project can be added to your home's cost basis"
+                    : "This project does not qualify for cost basis adjustment"}
+                </p>
               </div>
             </div>
 
             <div className="flex gap-3">
-              <Lock className="h-5 w-5 text-gray-400 shrink-0" />
+              {project.tax_credits_eligible ? (
+                <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0" />
+              ) : (
+                <X className="h-5 w-5 text-gray-400 shrink-0" />
+              )}
               <div>
-                <div className="flex items-center gap-2">
-                  <p className="font-medium">Tax Credit Analysis</p>
-                  <Badge variant="secondary" className="text-xs">Premium</Badge>
-                </div>
-                <p className="text-sm text-gray-500">Upgrade to see potential tax credits for this project</p>
+                <p className="font-medium">Tax Credit Status</p>
+                <p className="text-sm text-gray-500">
+                  {project.tax_credits_eligible 
+                    ? "This project qualifies for tax credits"
+                    : "This project does not qualify for tax credits"}
+                </p>
               </div>
             </div>
 
             <div className="flex gap-3">
-              <Lock className="h-5 w-5 text-gray-400 shrink-0" />
+              {project.insurance_reduction_eligible ? (
+                <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0" />
+              ) : (
+                <X className="h-5 w-5 text-gray-400 shrink-0" />
+              )}
               <div>
-                <div className="flex items-center gap-2">
-                  <p className="font-medium">Insurance Savings</p>
-                  <Badge variant="secondary" className="text-xs">Premium</Badge>
-                </div>
-                <p className="text-sm text-gray-500">Upgrade to see potential insurance discounts</p>
+                <p className="font-medium">Insurance Savings Status</p>
+                <p className="text-sm text-gray-500">
+                  {project.insurance_reduction_eligible 
+                    ? "This project qualifies for insurance savings"
+                    : "This project does not qualify for insurance savings"}
+                </p>
               </div>
             </div>
           </div>
