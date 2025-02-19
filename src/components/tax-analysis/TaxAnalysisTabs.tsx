@@ -119,14 +119,18 @@ export function TaxAnalysisTabs({
             <TableRow>
               <TableCell><span className="font-medium">= Taxable Gain</span></TableCell>
               <TableCell className="text-right bg-[#D3E4FD]">
-                {taxableAmountWithTracking === 0 ? <span>Fully Exempt 🎉</span> : formatCurrency(taxableAmountWithTracking)}
+                {taxableAmountWithTracking === 0 && taxableAmountWithoutTracking > 0 
+                  ? <span>Fully Exempt 🎉</span> 
+                  : formatCurrency(taxableAmountWithTracking)}
               </TableCell>
               <TableCell className="text-right">{formatCurrency(taxableAmountWithoutTracking)}</TableCell>
             </TableRow>
             <TableRow className="font-bold">
               <TableCell>Federal Tax Owed ({(userTaxRate * 100).toFixed(1)}%)</TableCell>
               <TableCell className="text-right bg-[#D3E4FD]">
-                {taxWithTracking === 0 ? <span>Fully Exempt 🎉</span> : formatCurrency(taxWithTracking)}
+                {taxWithTracking === 0 && taxWithoutTracking > 0 
+                  ? <span>Fully Exempt 🎉</span> 
+                  : formatCurrency(taxWithTracking)}
               </TableCell>
               <TableCell className="text-right">{formatCurrency(taxWithoutTracking)}</TableCell>
             </TableRow>
