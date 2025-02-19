@@ -72,7 +72,7 @@ export function TaxAnalysisTabs({
         </Select>
       </div>
 
-      <div className="bg-white rounded-xl border p-6">
+      <div className="bg-white rounded-xl border p-6 px-[2px]">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
