@@ -1,10 +1,8 @@
-
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowRight, Info, Lock, Building2, Banknote, FileText, CircleDollarSign, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { ProjectAndTaxSection } from "@/components/account/ProjectAndTaxSection";
 import { AccountHeader } from "@/components/account/AccountHeader";
 import { EmptyPropertyState } from "@/components/property/EmptyPropertyState";
@@ -13,7 +11,7 @@ import Footer from "@/components/Footer";
 import { useState, useEffect } from "react";
 import { useProperties } from "@/hooks/useProperties";
 import { useProjects } from "@/hooks/useProjects";
-import { formatCurrency } from "@/lib/utils";
+import { NumberTransition } from "@/components/ui/NumberTransition";
 
 export default function Account() {
   const navigate = useNavigate();
@@ -81,7 +79,9 @@ export default function Account() {
       <div className="sm:hidden py-4 px-6">
         <div className="flex justify-between items-center">
           <div>
-            <div className="text-3xl font-bold mb-1">{formatCurrency(projectedTaxSavings)}</div>
+            <div className="text-3xl font-bold mb-1">
+              <NumberTransition value={projectedTaxSavings} />
+            </div>
             <div className="text-gray-600 text-sm">Lifetime projected savings</div>
           </div>
           <Button variant="link" onClick={() => navigate("/tax-analysis")} className="text-[#0090FF] hover:text-[#0090FF]/90 p-0 text-sm">
@@ -93,7 +93,9 @@ export default function Account() {
       <div className="hidden sm:block px-6">
         <div className="mb-8">
           <div className="text-center">
-            <div className="text-4xl font-semibold leading-none mb-2">{formatCurrency(projectedTaxSavings)}</div>
+            <div className="text-4xl font-semibold leading-none mb-2">
+              <NumberTransition value={projectedTaxSavings} />
+            </div>
             <div className="text-gray-500 text-sm">Lifetime projected savings</div>
           </div>
         </div>
