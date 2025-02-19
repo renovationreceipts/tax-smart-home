@@ -20,12 +20,37 @@ export function TotalSavingsCard({
   const navigate = useNavigate();
 
   const tooltipContent = (
-    <div className="space-y-1">
-      <p className="font-medium">How We Calculate Your Savings</p>
-      <p className="text-sm text-muted-foreground">
-        This is your projected tax savings based on your eligible home improvements
-        and current tax rate. The actual amount may vary.
-      </p>
+    <div className="space-y-3 max-w-sm">
+      <div>
+        <p className="font-semibold text-base">Lifetime Projected Savings</p>
+      </div>
+      <div>
+        <p className="font-medium mb-1">What does this number mean?</p>
+        <p className="text-sm text-muted-foreground">
+          Your Total Lifetime Savings represents how much you could reduce your future tax bill when selling your home by tracking your home improvement projects.
+        </p>
+      </div>
+      <div>
+        <p className="font-medium mb-1">How is it calculated?</p>
+        <p className="text-sm text-muted-foreground">
+          We apply the IRS cost basis adjustment rules to your eligible home projects. The formula is:
+        </p>
+        <p className="text-sm text-muted-foreground italic mt-1">
+          Eligible Home Improvements × Your Capital Gains Tax Rate = Total Lifetime Savings
+        </p>
+      </div>
+      <div>
+        <p className="font-medium mb-1">Why does this matter?</p>
+        <p className="text-sm text-muted-foreground">
+          When you sell your home, the IRS taxes your profit (Sale Price - Purchase Price - Qualifying Improvements). By tracking eligible projects, you lower your taxable profit and reduce the federal capital gain taxes you owe.
+        </p>
+      </div>
+      <div>
+        <p className="font-medium mb-1">What's next?</p>
+        <p className="text-sm text-muted-foreground">
+          Keep adding projects to maximize your savings and ensure you never overpay on taxes when you sell!
+        </p>
+      </div>
     </div>
   );
 
