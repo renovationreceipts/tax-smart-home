@@ -6,9 +6,10 @@ import { cn } from "@/lib/utils";
 interface NumberTransitionProps {
   value: number;
   className?: string;
+  formatter?: (value: number) => string;
 }
 
-export function NumberTransition({ value, className }: NumberTransitionProps) {
+export function NumberTransition({ value, className, formatter = formatCurrency }: NumberTransitionProps) {
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
@@ -24,7 +25,7 @@ export function NumberTransition({ value, className }: NumberTransitionProps) {
         className
       )}
     >
-      {formatCurrency(value)}
+      {formatter(value)}
     </span>
   );
 }

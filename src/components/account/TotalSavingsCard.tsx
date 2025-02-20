@@ -41,7 +41,7 @@ export function TotalSavingsCard({
 
       <div className="pt-2">
         <div className="text-3xl font-bold mb-2">
-          <NumberTransition value={projectedTaxSavings} formatter={formatCurrency} />
+          <NumberTransition value={projectedTaxSavings} />
         </div>
         <div className="text-sm text-gray-500">
           Based on your {(userTaxRate * 100).toFixed(1)}% tax rate and{" "}
