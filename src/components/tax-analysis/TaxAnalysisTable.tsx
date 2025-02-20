@@ -34,8 +34,10 @@ export function TaxAnalysisTable({
 }: TaxAnalysisTableProps) {
   const [isSalePriceTooltipOpen, setIsSalePriceTooltipOpen] = useState(false);
   const [isPurchasePriceTooltipOpen, setIsPurchasePriceTooltipOpen] = useState(false);
+  const [isHomeImprovementsTooltipOpen, setIsHomeImprovementsTooltipOpen] = useState(false);
   const salePriceTooltipRef = useRef<HTMLDivElement>(null);
   const purchasePriceTooltipRef = useRef<HTMLDivElement>(null);
+  const homeImprovementsTooltipRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -44,6 +46,9 @@ export function TaxAnalysisTable({
       }
       if (purchasePriceTooltipRef.current && !purchasePriceTooltipRef.current.contains(event.target as Node)) {
         setIsPurchasePriceTooltipOpen(false);
+      }
+      if (homeImprovementsTooltipRef.current && !homeImprovementsTooltipRef.current.contains(event.target as Node)) {
+        setIsHomeImprovementsTooltipOpen(false);
       }
     };
 
@@ -61,6 +66,11 @@ export function TaxAnalysisTable({
   const handlePurchasePriceInfoClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsPurchasePriceTooltipOpen(!isPurchasePriceTooltipOpen);
+  };
+
+  const handleHomeImprovementsInfoClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsHomeImprovementsTooltipOpen(!isHomeImprovementsTooltipOpen);
   };
 
   return (
@@ -138,7 +148,34 @@ export function TaxAnalysisTable({
           <TableCell className="text-right">{formatCurrency(purchasePrice)}</TableCell>
         </TableRow>
         <TableRow className="hover:bg-transparent border-b-2 border-gray-300">
-          <TableCell>Minus Eligible Home Improvements</TableCell>
+          <TableCell className="flex items-center gap-1">
+            Minus Eligible Home Improvements
+            <TooltipProvider>
+              <Tooltip open={isHomeImprovementsTooltipOpen}>
+                <TooltipTrigger asChild>
+                  <Info 
+                    className="h-4 w-4 text-gray-400 cursor-pointer" 
+                    onClick={handleHomeImprovementsInfoClick}
+                  />
+                </TooltipTrigger>
+                <TooltipContent 
+                  className="max-w-sm" 
+                  ref={homeImprovementsTooltipRef}
+                  sideOffset={5}
+                >
+                  <div className="space-y-2">
+                    <p className="font-semibold">Minus Eligible Home Improvements</p>
+                    <p className="text-sm">
+                      Here, we are further subtracting your eligible projects / home improvement costs from the Sale Price.
+                    </p>
+                    <p className="text-sm">
+                      This is where the magic happens by reducing the gain on your sale.
+                    </p>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </TableCell>
           <TableCell className="text-right bg-[#F7FAFC]">{formatCurrency(totalProjectCosts)} ✅</TableCell>
           <TableCell className="text-right">Unknown 🤷</TableCell>
         </TableRow>
