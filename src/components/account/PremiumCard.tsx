@@ -23,7 +23,7 @@ export function PremiumCard() {
         </div>
         <div className="flex items-center gap-3">
           <Lock className="h-5 w-5 text-gray-400" />
-          <span className="text-gray-700">Homeowners insurance savings check</span>
+          <span className="text-gray-700">Priority email support</span>
         </div>
       </div>
 
