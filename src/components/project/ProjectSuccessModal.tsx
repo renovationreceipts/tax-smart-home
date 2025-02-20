@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Plus, CheckCircle2, X } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { formatCurrency } from "@/lib/utils"
+import { useNavigate } from "react-router-dom"
 
 interface ProjectSuccessModalProps {
   open: boolean
@@ -21,10 +22,19 @@ interface ProjectSuccessModalProps {
 export function ProjectSuccessModal({ 
   open, 
   onClose, 
-  onAddAnother, 
   project 
 }: ProjectSuccessModalProps) {
+  const navigate = useNavigate()
   if (!project) return null
+
+  const handleAddAnother = () => {
+    // Extract propertyId from the current URL
+    const pathSegments = window.location.pathname.split('/')
+    const propertyId = pathSegments[3] // Based on the URL pattern /project/edit/:propertyId/:projectId
+    
+    // Navigate to the new project route for this property
+    navigate(`/project/edit/${propertyId}`)
+  }
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
@@ -107,7 +117,7 @@ export function ProjectSuccessModal({
 
           <div className="flex flex-col gap-3 pt-2">
             <Button 
-              onClick={onAddAnother} 
+              onClick={handleAddAnother} 
               variant="default"
               className="w-full"
             >
