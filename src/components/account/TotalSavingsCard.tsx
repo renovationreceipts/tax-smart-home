@@ -81,7 +81,7 @@ export function TotalSavingsCard({
             <CircleDollarSign className="h-6 w-6 text-[#0090FF]" />
             <h3 className="text-xl font-semibold">Total Savings</h3>
           </div>
-          <div className="bg-gray-50 rounded-lg p-4">
+          <div className="bg-gray-50 rounded-lg p-4 py-[3px]">
             <p className="text-gray-700 text-base">
               Add your first project to start to see your savings add up.
             </p>
