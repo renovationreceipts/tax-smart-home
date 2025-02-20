@@ -1,4 +1,3 @@
-
 import { CircleDollarSign, ArrowRight, FileText, Building2, Banknote, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -6,15 +5,13 @@ import { NumberTransition } from "@/components/ui/NumberTransition";
 import { formatCurrency } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState, useEffect, useRef } from "react";
-
 interface TotalSavingsCardProps {
   projectedTaxSavings: number;
   totalProjectCosts: number;
   userTaxRate: number;
   propertyId?: string;
 }
-
-export function TotalSavingsCard({ 
+export function TotalSavingsCard({
   projectedTaxSavings,
   totalProjectCosts,
   userTaxRate,
@@ -24,27 +21,22 @@ export function TotalSavingsCard({
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const hasProjects = totalProjectCosts > 0;
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
         setIsTooltipOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
   const handleViewAnalysis = () => {
     const path = propertyId ? `/tax-analysis?propertyId=${propertyId}` : '/tax-analysis';
     navigate(path);
   };
-
-  const tooltipContent = (
-    <div ref={tooltipRef} className="space-y-3 max-w-sm">
+  const tooltipContent = <div ref={tooltipRef} className="space-y-3 max-w-sm">
       <div>
         <p className="font-semibold text-base text-white">Lifetime Projected Savings</p>
       </div>
@@ -75,16 +67,12 @@ export function TotalSavingsCard({
           Keep adding projects to maximize your savings and ensure you never overpay on taxes when you sell!
         </p>
       </div>
-    </div>
-  );
-
+    </div>;
   const handleInfoClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsTooltipOpen(!isTooltipOpen);
   };
-
-  const EmptyStateContent = () => (
-    <div className="px-6 py-4">
+  const EmptyStateContent = () => <div className="px-6 py-4">
       <div className="flex items-center gap-2 mb-6">
         <CircleDollarSign className="h-6 w-6 text-[#0090FF]" />
         <h3 className="text-2xl font-semibold">Total Savings</h3>
@@ -105,34 +93,23 @@ export function TotalSavingsCard({
         </div>
 
         <div className="bg-gray-50 rounded-lg p-6 mb-8">
-          <p className="text-lg font-medium text-center">
+          <p className="font-medium text-center text-sm">
             Add your first project to start to see your savings add up.
           </p>
         </div>
 
-        <Button 
-          variant="outline" 
-          onClick={handleViewAnalysis}
-          disabled={true}
-          className="w-full text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal opacity-50 cursor-not-allowed"
-        >
+        <Button variant="outline" onClick={handleViewAnalysis} disabled={true} className="w-full text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal opacity-50 cursor-not-allowed">
           View Full Analysis
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>
-    </div>
-  );
-
+    </div>;
   if (!hasProjects) {
-    return (
-      <div className="bg-white rounded-xl shadow-sm">
+    return <div className="bg-white rounded-xl shadow-sm">
         <EmptyStateContent />
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="bg-white rounded-xl shadow-sm">
+  return <div className="bg-white rounded-xl shadow-sm">
       <div className="hidden sm:flex justify-between items-center p-6">
         <div className="flex items-center gap-2">
           <CircleDollarSign className="h-6 w-6 text-[#0090FF]" />
@@ -210,15 +187,10 @@ export function TotalSavingsCard({
           </div>
         </div>
 
-        <Button 
-          variant="outline" 
-          onClick={handleViewAnalysis}
-          className="w-full mt-8 text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal my-[28px]"
-        >
+        <Button variant="outline" onClick={handleViewAnalysis} className="w-full mt-8 text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal my-[28px]">
           View Full Analysis
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>
-    </div>
-  );
+    </div>;
 }
