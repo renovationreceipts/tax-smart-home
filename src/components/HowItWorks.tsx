@@ -14,7 +14,7 @@ const steps = [
   },
   {
     icon: <FileSpreadsheet className="h-6 w-6 text-blue-600" />,
-    title: "Prepare Tax Documents When Ready to Sell",
+    title: "Find Tax Credits and Insurance Savings",
     description: "Generate tax forms and maintain organized records for potential IRS audits.",
   },
 ];
