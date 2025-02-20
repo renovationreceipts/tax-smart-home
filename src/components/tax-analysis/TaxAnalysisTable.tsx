@@ -71,11 +71,14 @@ export function TaxAnalysisTable({
           valueWithTracking={gainWithTracking}
           valueWithoutTracking={gainWithoutTracking}
         />
-        <TableRow className="hover:bg-transparent border-b-2 border-gray-300">
-          <TableCell>Minus Exempt Amount</TableCell>
-          <TableCell className="text-right bg-[#F7FAFC]">{formatCurrency(exemptionAmount)}</TableCell>
-          <TableCell className="text-right">{formatCurrency(exemptionAmount)}</TableCell>
-        </TableRow>
+        <TableRowWithTooltip
+          label="Minus Exempt Amount"
+          tooltipTitle="Minus Exempt Amount"
+          tooltipContent="The IRS provides homeowners who have lived in their property for at least 2 of the last 5 years with a tax exemption amount. The amount is $250k if you file single and $500k if you file jointly. You can modify your tax filing status in your Profile. You can modify whether you've lived in the property for at least 2 of the last 5 years by editing the property."
+          valueWithTracking={exemptionAmount}
+          valueWithoutTracking={exemptionAmount}
+          className="border-b-2 border-gray-300"
+        />
         <TableRow className="hover:bg-transparent">
           <TableCell><span className="font-medium">= Taxable Gain</span></TableCell>
           <TableCell className="text-right bg-[#F7FAFC]">
