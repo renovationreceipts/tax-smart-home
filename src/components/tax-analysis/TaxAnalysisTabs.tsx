@@ -1,3 +1,4 @@
+
 import { useTaxCalculations } from "@/hooks/useTaxCalculations";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -117,7 +118,7 @@ export function TaxAnalysisTabs({
               <TableCell className="flex items-center gap-1">
                 Sale Price
                 <TooltipProvider>
-                  <Tooltip>
+                  <Tooltip open={isSalePriceTooltipOpen}>
                     <TooltipTrigger asChild>
                       <Info 
                         className="h-4 w-4 text-gray-400 cursor-pointer" 
