@@ -93,6 +93,7 @@ export default function Account() {
                 projectedTaxSavings={projectedTaxSavings}
                 totalProjectCosts={totalProjectCosts}
                 userTaxRate={userTaxRate}
+                propertyId={selectedPropertyId || undefined}
               />
             </div>
             {properties.length === 0 ? (
@@ -114,6 +115,7 @@ export default function Account() {
               projectedTaxSavings={projectedTaxSavings}
               totalProjectCosts={totalProjectCosts}
               userTaxRate={userTaxRate}
+              propertyId={selectedPropertyId || undefined}
             />
             <PremiumCard />
           </div>

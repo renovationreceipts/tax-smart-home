@@ -1,4 +1,3 @@
-
 import { CircleDollarSign, ArrowRight, FileText, Building2, Banknote, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -11,12 +10,14 @@ interface TotalSavingsCardProps {
   projectedTaxSavings: number;
   totalProjectCosts: number;
   userTaxRate: number;
+  propertyId?: string;
 }
 
 export function TotalSavingsCard({ 
   projectedTaxSavings,
   totalProjectCosts,
-  userTaxRate
+  userTaxRate,
+  propertyId
 }: TotalSavingsCardProps) {
   const navigate = useNavigate();
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
@@ -34,6 +35,11 @@ export function TotalSavingsCard({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const handleViewAnalysis = () => {
+    const path = propertyId ? `/tax-analysis?propertyId=${propertyId}` : '/tax-analysis';
+    navigate(path);
+  };
 
   const tooltipContent = (
     <div ref={tooltipRef} className="space-y-3 max-w-sm">
@@ -71,7 +77,7 @@ export function TotalSavingsCard({
   );
 
   const handleInfoClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent event from bubbling up
+    e.stopPropagation();
     setIsTooltipOpen(!isTooltipOpen);
   };
 
@@ -102,7 +108,7 @@ export function TotalSavingsCard({
               </TooltipProvider>
             </div>
           </div>
-          <Button variant="link" onClick={() => navigate("/tax-analysis")} className="text-[#0090FF] hover:text-[#0090FF]/90 p-0 text-sm">
+          <Button variant="link" onClick={handleViewAnalysis} className="text-[#0090FF] hover:text-[#0090FF]/90 p-0 text-sm">
             View Details
           </Button>
         </div>
@@ -156,7 +162,7 @@ export function TotalSavingsCard({
 
         <Button 
           variant="outline" 
-          onClick={() => navigate("/tax-analysis")} 
+          onClick={handleViewAnalysis}
           className="w-full mt-8 text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal my-[28px]"
         >
           View Full Analysis
