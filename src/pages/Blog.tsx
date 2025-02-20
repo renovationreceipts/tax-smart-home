@@ -1,8 +1,11 @@
 
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import Footer from "@/components/Footer";
 import BlogCard, { BlogPost } from "@/components/blog/BlogCard";
+
 const blogPosts: BlogPost[] = [{
   slug: "track-home-improvement-receipts",
   title: "Should I Track My Home Improvement Receipts? Here's Why It Could Save You Thousands",
@@ -22,13 +25,36 @@ const blogPosts: BlogPost[] = [{
   thumbnail: "/lovable-uploads/6509f569-6024-48bb-b69e-73a69de6f023.png",
   date: "February 8, 2025"
 }];
+
 const Blog = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+    };
+    
+    checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
   return <div className="min-h-screen bg-white">
       <div className="container-width py-8 sm:py-12 bg-white px-[15px]">
         <div className="mb-12">
-          <Link to="/" className="text-gray-600 hover:text-gray-900 inline-flex items-center gap-2 mb-6">
+          <Link 
+            to={isAuthenticated ? "/account" : "/"} 
+            className="text-gray-600 hover:text-gray-900 inline-flex items-center gap-2 mb-6"
+          >
             <ArrowLeft className="h-4 w-4" />
-            Back to Home
+            Back to {isAuthenticated ? "Dashboard" : "Home"}
           </Link>
           <h1 className="text-4xl font-bold mb-4">Blog</h1>
           <p className="text-gray-600 text-lg">
@@ -43,4 +69,5 @@ const Blog = () => {
       <Footer />
     </div>;
 };
+
 export default Blog;
