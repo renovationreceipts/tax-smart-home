@@ -19,7 +19,7 @@ export function PremiumCard() {
         </div>
         <div className="flex items-center gap-3">
           <Lock className="h-5 w-5 text-gray-400" />
-          <span className="text-gray-700">Unlimited properties</span>
+          <span className="text-gray-700">Export to tax filing format (XML, PDF, TXF, CSV)</span>
         </div>
         <div className="flex items-center gap-3">
           <Lock className="h-5 w-5 text-gray-400" />
