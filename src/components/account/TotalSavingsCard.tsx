@@ -6,15 +6,13 @@ import { formatCurrency } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState, useEffect, useRef } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
-
 interface TotalSavingsCardProps {
   projectedTaxSavings: number;
   totalProjectCosts: number;
   userTaxRate: number;
   propertyId?: string;
 }
-
-export function TotalSavingsCard({ 
+export function TotalSavingsCard({
   projectedTaxSavings,
   totalProjectCosts,
   userTaxRate,
@@ -25,7 +23,6 @@ export function TotalSavingsCard({
   const tooltipRef = useRef<HTMLDivElement>(null);
   const hasProjects = totalProjectCosts > 0;
   const isMobile = useIsMobile();
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
@@ -37,17 +34,14 @@ export function TotalSavingsCard({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
   const handleViewAnalysis = () => {
     const path = propertyId ? `/tax-analysis?propertyId=${propertyId}` : '/tax-analysis';
     navigate(path);
   };
-
   const handleInfoClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsTooltipOpen(!isTooltipOpen);
   };
-
   const tooltipContent = <div ref={tooltipRef} className="space-y-3 max-w-sm">
       <div>
         <p className="font-semibold text-base text-white">Lifetime Projected Savings</p>
@@ -80,11 +74,9 @@ export function TotalSavingsCard({
         </p>
       </div>
     </div>;
-
   const EmptyStateContent = () => {
     if (isMobile) {
-      return (
-        <div className="px-6 py-4">
+      return <div className="px-6 py-[10px]">
           <div className="flex items-center gap-2 mb-4">
             <CircleDollarSign className="h-6 w-6 text-[#0090FF]" />
             <h3 className="text-xl font-semibold">Total Savings</h3>
@@ -94,12 +86,9 @@ export function TotalSavingsCard({
               Add your first project to start to see your savings add up.
             </p>
           </div>
-        </div>
-      );
+        </div>;
     }
-
-    return (
-      <div className="px-6 py-4">
+    return <div className="px-6 py-4">
         <div className="flex items-center gap-2 mb-6">
           <CircleDollarSign className="h-6 w-6 text-[#0090FF]" />
           <h3 className="text-2xl font-semibold">Total Savings</h3>
@@ -125,30 +114,19 @@ export function TotalSavingsCard({
             </p>
           </div>
 
-          <Button 
-            variant="outline" 
-            onClick={handleViewAnalysis} 
-            disabled={true} 
-            className="w-full text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal opacity-50 cursor-not-allowed"
-          >
+          <Button variant="outline" onClick={handleViewAnalysis} disabled={true} className="w-full text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal opacity-50 cursor-not-allowed">
             View Full Analysis
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
-      </div>
-    );
+      </div>;
   };
-
   if (!hasProjects) {
-    return (
-      <div className="bg-white rounded-xl shadow-sm">
+    return <div className="bg-white rounded-xl shadow-sm">
         <EmptyStateContent />
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="bg-white rounded-xl shadow-sm">
+  return <div className="bg-white rounded-xl shadow-sm">
       <div className="hidden sm:flex justify-between items-center p-6">
         <div className="flex items-center gap-2">
           <CircleDollarSign className="h-6 w-6 text-[#0090FF]" />
@@ -231,6 +209,5 @@ export function TotalSavingsCard({
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>
-    </div>
-  );
+    </div>;
 }
