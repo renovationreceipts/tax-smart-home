@@ -33,12 +33,17 @@ export function TaxAnalysisTable({
   userTaxRate
 }: TaxAnalysisTableProps) {
   const [isSalePriceTooltipOpen, setIsSalePriceTooltipOpen] = useState(false);
-  const tooltipRef = useRef<HTMLDivElement>(null);
+  const [isPurchasePriceTooltipOpen, setIsPurchasePriceTooltipOpen] = useState(false);
+  const salePriceTooltipRef = useRef<HTMLDivElement>(null);
+  const purchasePriceTooltipRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
+      if (salePriceTooltipRef.current && !salePriceTooltipRef.current.contains(event.target as Node)) {
         setIsSalePriceTooltipOpen(false);
+      }
+      if (purchasePriceTooltipRef.current && !purchasePriceTooltipRef.current.contains(event.target as Node)) {
+        setIsPurchasePriceTooltipOpen(false);
       }
     };
 
@@ -48,9 +53,14 @@ export function TaxAnalysisTable({
     };
   }, []);
 
-  const handleInfoClick = (e: React.MouseEvent) => {
+  const handleSalePriceInfoClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsSalePriceTooltipOpen(!isSalePriceTooltipOpen);
+  };
+
+  const handlePurchasePriceInfoClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsPurchasePriceTooltipOpen(!isPurchasePriceTooltipOpen);
   };
 
   return (
@@ -71,12 +81,12 @@ export function TaxAnalysisTable({
                 <TooltipTrigger asChild>
                   <Info 
                     className="h-4 w-4 text-gray-400 cursor-pointer" 
-                    onClick={handleInfoClick}
+                    onClick={handleSalePriceInfoClick}
                   />
                 </TooltipTrigger>
                 <TooltipContent 
                   className="max-w-sm" 
-                  ref={tooltipRef}
+                  ref={salePriceTooltipRef}
                   sideOffset={5}
                 >
                   <div className="space-y-2">
@@ -95,7 +105,35 @@ export function TaxAnalysisTable({
           <TableCell className="text-right">{formatCurrency(projectedValue)}</TableCell>
         </TableRow>
         <TableRow className="hover:bg-transparent">
-          <TableCell>Minus Purchase Price</TableCell>
+          <TableCell className="flex items-center gap-1">
+            Minus Purchase Price
+            <TooltipProvider>
+              <Tooltip open={isPurchasePriceTooltipOpen}>
+                <TooltipTrigger asChild>
+                  <Info 
+                    className="h-4 w-4 text-gray-400 cursor-pointer" 
+                    onClick={handlePurchasePriceInfoClick}
+                  />
+                </TooltipTrigger>
+                <TooltipContent 
+                  className="max-w-sm" 
+                  ref={purchasePriceTooltipRef}
+                  sideOffset={5}
+                >
+                  <div className="space-y-2">
+                    <p className="font-semibold">Minus Purchase Price</p>
+                    <p className="text-sm">
+                      Here, we are subtracting what you paid for your property from the Sale Price.
+                    </p>
+                    <p className="text-sm">
+                      You entered what you paid for your property when you added the property initially. 
+                      This can be modified in your Profile.
+                    </p>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </TableCell>
           <TableCell className="text-right bg-[#F7FAFC]">{formatCurrency(purchasePrice)}</TableCell>
           <TableCell className="text-right">{formatCurrency(purchasePrice)}</TableCell>
         </TableRow>
