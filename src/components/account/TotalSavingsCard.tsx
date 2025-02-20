@@ -5,13 +5,16 @@ import { NumberTransition } from "@/components/ui/NumberTransition";
 import { formatCurrency } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState, useEffect, useRef } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
+
 interface TotalSavingsCardProps {
   projectedTaxSavings: number;
   totalProjectCosts: number;
   userTaxRate: number;
   propertyId?: string;
 }
-export function TotalSavingsCard({
+
+export function TotalSavingsCard({ 
   projectedTaxSavings,
   totalProjectCosts,
   userTaxRate,
@@ -21,6 +24,8 @@ export function TotalSavingsCard({
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const hasProjects = totalProjectCosts > 0;
+  const isMobile = useIsMobile();
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
@@ -32,10 +37,17 @@ export function TotalSavingsCard({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
   const handleViewAnalysis = () => {
     const path = propertyId ? `/tax-analysis?propertyId=${propertyId}` : '/tax-analysis';
     navigate(path);
   };
+
+  const handleInfoClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsTooltipOpen(!isTooltipOpen);
+  };
+
   const tooltipContent = <div ref={tooltipRef} className="space-y-3 max-w-sm">
       <div>
         <p className="font-semibold text-base text-white">Lifetime Projected Savings</p>
@@ -68,48 +80,75 @@ export function TotalSavingsCard({
         </p>
       </div>
     </div>;
-  const handleInfoClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsTooltipOpen(!isTooltipOpen);
+
+  const EmptyStateContent = () => {
+    if (isMobile) {
+      return (
+        <div className="px-6 py-4">
+          <div className="flex items-center gap-2 mb-4">
+            <CircleDollarSign className="h-6 w-6 text-[#0090FF]" />
+            <h3 className="text-xl font-semibold">Total Savings</h3>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <p className="text-gray-700 text-base">
+              Add your first project to start to see your savings add up.
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="px-6 py-4">
+        <div className="flex items-center gap-2 mb-6">
+          <CircleDollarSign className="h-6 w-6 text-[#0090FF]" />
+          <h3 className="text-2xl font-semibold">Total Savings</h3>
+        </div>
+
+        <div className="text-center">
+          <div className="text-5xl font-bold mb-2">$0</div>
+          <div className="text-gray-500 text-sm flex items-center justify-center gap-1 mb-8">
+            Lifetime projected savings
+            <TooltipProvider>
+              <Tooltip open={isTooltipOpen}>
+                <TooltipTrigger asChild onClick={handleInfoClick}>
+                  <Info className="h-4 w-4 text-gray-400 cursor-pointer" />
+                </TooltipTrigger>
+                <TooltipContent side="bottom">{tooltipContent}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6 mb-8">
+            <p className="font-medium text-center text-sm">
+              Add your first project to start to see your savings add up.
+            </p>
+          </div>
+
+          <Button 
+            variant="outline" 
+            onClick={handleViewAnalysis} 
+            disabled={true} 
+            className="w-full text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal opacity-50 cursor-not-allowed"
+          >
+            View Full Analysis
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    );
   };
-  const EmptyStateContent = () => <div className="px-6 py-4">
-      <div className="flex items-center gap-2 mb-6">
-        <CircleDollarSign className="h-6 w-6 text-[#0090FF]" />
-        <h3 className="text-2xl font-semibold">Total Savings</h3>
-      </div>
 
-      <div className="text-center">
-        <div className="text-5xl font-bold mb-2">$0</div>
-        <div className="text-gray-500 text-sm flex items-center justify-center gap-1 mb-8">
-          Lifetime projected savings
-          <TooltipProvider>
-            <Tooltip open={isTooltipOpen}>
-              <TooltipTrigger asChild onClick={handleInfoClick}>
-                <Info className="h-4 w-4 text-gray-400 cursor-pointer" />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">{tooltipContent}</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-
-        <div className="bg-gray-50 rounded-lg p-6 mb-8 py-[2px]">
-          <p className="font-medium text-center text-sm">
-            Add your first project to start to see your savings add up.
-          </p>
-        </div>
-
-        <Button variant="outline" onClick={handleViewAnalysis} disabled={true} className="w-full text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal opacity-50 cursor-not-allowed">
-          View Full Analysis
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
-      </div>
-    </div>;
   if (!hasProjects) {
-    return <div className="bg-white rounded-xl shadow-sm">
+    return (
+      <div className="bg-white rounded-xl shadow-sm">
         <EmptyStateContent />
-      </div>;
+      </div>
+    );
   }
-  return <div className="bg-white rounded-xl shadow-sm">
+
+  return (
+    <div className="bg-white rounded-xl shadow-sm">
       <div className="hidden sm:flex justify-between items-center p-6">
         <div className="flex items-center gap-2">
           <CircleDollarSign className="h-6 w-6 text-[#0090FF]" />
@@ -192,5 +231,6 @@ export function TotalSavingsCard({
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>
-    </div>;
+    </div>
+  );
 }
