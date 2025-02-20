@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
+
 export const Hero = () => {
-  const {
-    trackEvent
-  } = useAnalytics();
+  const { trackEvent } = useAnalytics();
   const isMobile = useIsMobile();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const handleSignUpClick = () => {
     trackEvent({
       eventName: "signup_click",
@@ -20,6 +20,7 @@ export const Hero = () => {
     });
     setIsMenuOpen(false);
   };
+
   const handleLoginClick = () => {
     trackEvent({
       eventName: "login_click",
@@ -30,6 +31,7 @@ export const Hero = () => {
     });
     setIsMenuOpen(false);
   };
+
   const MobileMenu = () => <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border border-gray-200">
       <Link to="/login" className="block px-4 py-2 text-gray-600 hover:bg-gray-50" onClick={handleLoginClick}>
         Login
@@ -38,6 +40,7 @@ export const Hero = () => {
         Sign Up for Free
       </Link>
     </div>;
+
   return <div className="w-full hero-gradient">
       <nav className="w-full max-w-7xl mx-auto py-4 px-4 flex justify-between items-center relative">
         <div>
@@ -61,10 +64,13 @@ export const Hero = () => {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
             <div className="space-y-8">
-              <h1 className="sm:text-4xl md:text-5xl font-bold tracking-tight px-0 text-3xl text-slate-950 lg:text-4xl">Track Home Improvements, Renovations and DIY Projects &amp; Unlock Hidden Savings</h1>
-              <p className="text-lg sm:text-xl text-gray-600">Smart homeowners use RenovationReceipts to track improvements, unlock tax benefits, and discover hidden savings. Join thousands of property owners who've saved an average of $33,200 on taxes.
-
-            </p>
+              <h1 className="sm:text-4xl md:text-5xl font-bold tracking-tight px-0 text-3xl text-slate-950 lg:text-4xl">
+                Track Home Improvements, Renovations and DIY Projects &amp;{' '}
+                <span style={{ color: '#0090FF' }}>Unlock Hidden Savings</span>
+              </h1>
+              <p className="text-lg sm:text-xl text-gray-600">
+                Smart homeowners use RenovationReceipts to track improvements, unlock tax benefits, and discover hidden savings. Join thousands of property owners who've saved an average of $33,200 on taxes.
+              </p>
               <div className="flex justify-center gap-4">
                 <Link to="/signup" onClick={handleSignUpClick}>
                   <Button size="lg" className="text-base sm:text-lg">
