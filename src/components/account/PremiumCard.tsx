@@ -1,10 +1,7 @@
-
 import { Rocket, Lock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 export function PremiumCard() {
-  return (
-    <div className="bg-white rounded-xl shadow-sm p-6">
+  return <div className="bg-white rounded-xl shadow-sm p-6">
       <div className="flex items-center gap-2">
         <Rocket className="h-6 w-6 text-[#0090FF]" />
         <h2 className="font-bold mb-2 text-2xl">Go Premium</h2>
@@ -22,7 +19,7 @@ export function PremiumCard() {
         </div>
         <div className="flex items-center gap-3">
           <Lock className="h-5 w-5 text-gray-400" />
-          <span className="text-gray-700">Tax credit and rebates check</span>
+          <span className="text-gray-700">Unlimited properties</span>
         </div>
         <div className="flex items-center gap-3">
           <Lock className="h-5 w-5 text-gray-400" />
@@ -41,6 +38,5 @@ export function PremiumCard() {
         Premium Plan Coming Soon
         <ArrowRight className="ml-2 h-4 w-4" />
       </Button>
-    </div>
-  );
+    </div>;
 }
