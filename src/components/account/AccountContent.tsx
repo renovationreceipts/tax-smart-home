@@ -39,6 +39,7 @@ export function AccountContent() {
       <ProjectAndTaxSection 
         selectedPropertyId={selectedPropertyId}
         selectedProperty={selectedProperty}
+        onPropertySelect={handlePropertySelect}
       />
     </>
   )
