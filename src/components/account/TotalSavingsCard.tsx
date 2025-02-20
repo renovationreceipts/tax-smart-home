@@ -1,3 +1,4 @@
+
 import { CircleDollarSign, ArrowRight, FileText, Building2, Banknote, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +23,7 @@ export function TotalSavingsCard({
   const navigate = useNavigate();
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
+  const hasProjects = totalProjectCosts > 0;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -80,6 +82,54 @@ export function TotalSavingsCard({
     e.stopPropagation();
     setIsTooltipOpen(!isTooltipOpen);
   };
+
+  const EmptyStateContent = () => (
+    <div className="px-6 py-4">
+      <div className="flex items-center gap-2 mb-6">
+        <CircleDollarSign className="h-6 w-6 text-[#0090FF]" />
+        <h3 className="text-2xl font-semibold">Total Savings</h3>
+      </div>
+
+      <div className="text-center">
+        <div className="text-5xl font-bold mb-2">$0</div>
+        <div className="text-gray-500 text-sm flex items-center justify-center gap-1 mb-8">
+          Lifetime projected savings
+          <TooltipProvider>
+            <Tooltip open={isTooltipOpen}>
+              <TooltipTrigger asChild onClick={handleInfoClick}>
+                <Info className="h-4 w-4 text-gray-400 cursor-pointer" />
+              </TooltipTrigger>
+              <TooltipContent side="bottom">{tooltipContent}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+
+        <div className="bg-gray-50 rounded-lg p-6 mb-8">
+          <p className="text-lg font-medium text-center">
+            Add your first project to start to see your savings add up.
+          </p>
+        </div>
+
+        <Button 
+          variant="outline" 
+          onClick={handleViewAnalysis}
+          disabled={true}
+          className="w-full text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal opacity-50 cursor-not-allowed"
+        >
+          View Full Analysis
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
+      </div>
+    </div>
+  );
+
+  if (!hasProjects) {
+    return (
+      <div className="bg-white rounded-xl shadow-sm">
+        <EmptyStateContent />
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-xl shadow-sm">
