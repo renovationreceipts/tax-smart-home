@@ -1,4 +1,3 @@
-
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
@@ -35,9 +34,11 @@ export function TaxAnalysisTable({
   const [isSalePriceTooltipOpen, setIsSalePriceTooltipOpen] = useState(false);
   const [isPurchasePriceTooltipOpen, setIsPurchasePriceTooltipOpen] = useState(false);
   const [isHomeImprovementsTooltipOpen, setIsHomeImprovementsTooltipOpen] = useState(false);
+  const [isGainOnSaleTooltipOpen, setIsGainOnSaleTooltipOpen] = useState(false);
   const salePriceTooltipRef = useRef<HTMLDivElement>(null);
   const purchasePriceTooltipRef = useRef<HTMLDivElement>(null);
   const homeImprovementsTooltipRef = useRef<HTMLDivElement>(null);
+  const gainOnSaleTooltipRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -49,6 +50,9 @@ export function TaxAnalysisTable({
       }
       if (homeImprovementsTooltipRef.current && !homeImprovementsTooltipRef.current.contains(event.target as Node)) {
         setIsHomeImprovementsTooltipOpen(false);
+      }
+      if (gainOnSaleTooltipRef.current && !gainOnSaleTooltipRef.current.contains(event.target as Node)) {
+        setIsGainOnSaleTooltipOpen(false);
       }
     };
 
@@ -71,6 +75,11 @@ export function TaxAnalysisTable({
   const handleHomeImprovementsInfoClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsHomeImprovementsTooltipOpen(!isHomeImprovementsTooltipOpen);
+  };
+
+  const handleGainOnSaleInfoClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsGainOnSaleTooltipOpen(!isGainOnSaleTooltipOpen);
   };
 
   return (
@@ -180,7 +189,31 @@ export function TaxAnalysisTable({
           <TableCell className="text-right">Unknown 🤷</TableCell>
         </TableRow>
         <TableRow className="hover:bg-transparent">
-          <TableCell><span className="font-medium">= Gain on Sale</span></TableCell>
+          <TableCell className="flex items-center gap-1">
+            <span className="font-medium">= Gain on Sale</span>
+            <TooltipProvider>
+              <Tooltip open={isGainOnSaleTooltipOpen}>
+                <TooltipTrigger asChild>
+                  <Info 
+                    className="h-4 w-4 text-gray-400 cursor-pointer" 
+                    onClick={handleGainOnSaleInfoClick}
+                  />
+                </TooltipTrigger>
+                <TooltipContent 
+                  className="max-w-sm" 
+                  ref={gainOnSaleTooltipRef}
+                  sideOffset={5}
+                >
+                  <div className="space-y-2">
+                    <p className="font-semibold">Gain on Sale</p>
+                    <p className="text-sm">
+                      This is the gain or how much you earned from selling your property which is calculated by subtracting what you paid for the property initially and your eligible improvements from the sale price.
+                    </p>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </TableCell>
           <TableCell className="text-right bg-[#F7FAFC]">{formatCurrency(gainWithTracking)}</TableCell>
           <TableCell className="text-right">{formatCurrency(gainWithoutTracking)}</TableCell>
         </TableRow>
