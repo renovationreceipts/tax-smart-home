@@ -15,7 +15,7 @@ const steps = [
   {
     icon: <FileSpreadsheet className="h-6 w-6 text-blue-600" />,
     title: "Find Tax Credits and Insurance Savings",
-    description: "Generate tax forms and maintain organized records for potential IRS audits.",
+    description: "Add projects to discover state rebates and incentives and ways to reduce insurance premiums.",
   },
 ];
 
