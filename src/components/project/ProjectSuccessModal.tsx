@@ -1,13 +1,14 @@
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Plus, CheckCircle2, X } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { formatCurrency } from "@/lib/utils"
-import { useNavigate } from "react-router-dom"
 
 interface ProjectSuccessModalProps {
   open: boolean
   onClose: () => void
+  onAddAnother: () => void
   project: {
     name: string
     cost: number
@@ -19,29 +20,11 @@ interface ProjectSuccessModalProps {
 
 export function ProjectSuccessModal({ 
   open, 
-  onClose, 
+  onClose,
+  onAddAnother,
   project 
 }: ProjectSuccessModalProps) {
-  const navigate = useNavigate()
   if (!project) return null
-
-  const handleAddAnother = () => {
-    console.log("Add Another clicked")
-    // Get the current URL path
-    const currentPath = window.location.pathname
-    // Extract propertyId using regex to be more reliable
-    const propertyIdMatch = currentPath.match(/\/project\/edit\/([^/]+)/)
-    const propertyId = propertyIdMatch ? propertyIdMatch[1] : null
-
-    console.log("PropertyId extracted:", propertyId)
-    
-    if (propertyId) {
-      // Navigate to the new project route for this property
-      navigate(`/project/edit/${propertyId}`)
-    } else {
-      console.error("Could not extract propertyId from URL")
-    }
-  }
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
@@ -124,7 +107,7 @@ export function ProjectSuccessModal({
 
           <div className="flex flex-col gap-3 pt-2">
             <Button 
-              onClick={() => handleAddAnother()} 
+              onClick={onAddAnother}
               variant="default"
               className="w-full"
             >
