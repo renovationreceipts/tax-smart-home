@@ -1,5 +1,4 @@
 
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProjectsSection } from "@/components/account/ProjectsSection";
 import { WhySaveRecords } from "@/components/account/WhySaveRecords";
@@ -9,11 +8,13 @@ import type { Project } from "@/hooks/useProjects";
 interface ProjectAndTaxSectionProps {
   selectedPropertyId: string | null;
   selectedProperty: any;
+  onPropertySelect: (propertyId: string) => void;
 }
 
 export function ProjectAndTaxSection({
   selectedPropertyId,
-  selectedProperty
+  selectedProperty,
+  onPropertySelect
 }: ProjectAndTaxSectionProps) {
   const navigate = useNavigate();
   const {
@@ -25,7 +26,8 @@ export function ProjectAndTaxSection({
       <ProjectsSection 
         propertyId={selectedPropertyId} 
         projects={projects} 
-        onAddProject={() => navigate(`/project/edit/${selectedPropertyId}`)} 
+        onAddProject={() => navigate(`/project/edit/${selectedPropertyId}`)}
+        onPropertySelect={onPropertySelect}
       />
       <WhySaveRecords />
     </div>

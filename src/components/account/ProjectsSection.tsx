@@ -13,12 +13,14 @@ interface ProjectsSectionProps {
   propertyId: string | null;
   projects: Project[];
   onAddProject: () => void;
+  onPropertySelect: (propertyId: string) => void;
 }
 
 export function ProjectsSection({
   propertyId,
   projects,
   onAddProject,
+  onPropertySelect
 }: ProjectsSectionProps) {
   const navigate = useNavigate();
   const { data: properties = [] } = useProperties();
@@ -33,10 +35,6 @@ export function ProjectsSection({
     navigate(`/project/view/${propertyId}/${project.id}`);
   };
 
-  const handlePropertySelect = (propertyId: string) => {
-    navigate(`/account?propertyId=${propertyId}`);
-  };
-
   const handleAddProperty = () => {
     navigate("/property/edit");
   };
@@ -49,7 +47,7 @@ export function ProjectsSection({
           properties={properties}
           hasProjects={projects.length > 0}
           onAddProject={onAddProject}
-          onPropertySelect={handlePropertySelect}
+          onPropertySelect={onPropertySelect}
           onAddProperty={handleAddProperty}
         />
       </div>

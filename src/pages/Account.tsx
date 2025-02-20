@@ -1,5 +1,5 @@
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { ProjectAndTaxSection } from "@/components/account/ProjectAndTaxSection";
@@ -16,17 +16,31 @@ import { useProjects } from "@/hooks/useProjects";
 export default function Account() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
   const [userTaxRate, setUserTaxRate] = useState(0);
   const { data: properties = [] } = useProperties();
   const { data: projects = [] } = useProjects(selectedPropertyId);
   const selectedProperty = properties.find(p => p.id === selectedPropertyId);
+  
+  const propertyIdFromUrl = searchParams.get('propertyId');
 
   useEffect(() => {
-    if (properties.length > 0 && !selectedPropertyId) {
+    if (propertyIdFromUrl) {
+      // If there's a property ID in the URL, use it
+      setSelectedPropertyId(propertyIdFromUrl);
+    } else if (properties.length > 0 && !selectedPropertyId) {
+      // If no property ID in URL and we have properties, use the first one
       setSelectedPropertyId(properties[0].id);
+      setSearchParams({ propertyId: properties[0].id });
     }
-  }, [properties, selectedPropertyId]);
+  }, [properties, propertyIdFromUrl, selectedPropertyId, setSearchParams]);
+
+  // Handle property selection from dropdown
+  const handlePropertySelect = (propertyId: string) => {
+    setSelectedPropertyId(propertyId);
+    setSearchParams({ propertyId });
+  };
 
   useEffect(() => {
     const fetchUserTaxRate = async () => {
@@ -90,6 +104,7 @@ export default function Account() {
               <ProjectAndTaxSection 
                 selectedPropertyId={selectedPropertyId} 
                 selectedProperty={selectedProperty}
+                onPropertySelect={handlePropertySelect}
               />
             )}
           </div>
