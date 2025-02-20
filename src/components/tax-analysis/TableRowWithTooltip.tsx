@@ -2,9 +2,10 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { InfoTooltip } from "./InfoTooltip";
 import { formatCurrency } from "@/lib/utils";
+import { ReactNode } from "react";
 
 interface TableRowWithTooltipProps {
-  label: string;
+  label: ReactNode;  // Changed from string to ReactNode to accept both strings and JSX elements
   tooltipTitle: string;
   tooltipContent: string;
   valueWithTracking: number;
