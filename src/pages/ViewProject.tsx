@@ -1,3 +1,4 @@
+
 import { useNavigate, useParams } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -6,6 +7,8 @@ import { ArrowLeft, Edit, Lock, CheckCircle2, XCircle } from "lucide-react"
 import { format } from "date-fns"
 import { useToast } from "@/hooks/use-toast"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { useProjectFiles } from "@/components/project/form/storage-vault/useProjectFiles"
+import { getFileUrl, getFileName } from "@/components/project/form/file-fields/utils/fileListUtils"
 
 export default function ViewProject() {
   const navigate = useNavigate()
@@ -13,6 +16,7 @@ export default function ViewProject() {
   const { propertyId, id } = useParams()
   const { data: projects = [] } = useProjects(propertyId || null)
   const project = id ? projects.find(p => p.id === id) : null
+  const { existingFiles } = useProjectFiles(id)
 
   if (!project || !propertyId) {
     return null
@@ -50,6 +54,46 @@ export default function ViewProject() {
       </div>
     );
   };
+
+  const renderFilePreview = (files: typeof existingFiles, category: string) => {
+    const categoryFiles = files.filter(f => f.file_category === category)
+    if (categoryFiles.length === 0) {
+      return (
+        <div className="min-h-[100px] p-4 border rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
+          No files uploaded
+        </div>
+      )
+    }
+
+    return categoryFiles.map(file => (
+      <div key={file.id} className="min-h-[100px] p-4 border rounded-lg bg-white">
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16 flex-shrink-0 rounded overflow-hidden bg-gray-100">
+            {file.file_type.startsWith('image/') ? (
+              <img 
+                src={getFileUrl(file)}
+                alt={getFileName(file)}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  const imgElement = e.currentTarget
+                  imgElement.onerror = null
+                  imgElement.src = '/placeholder.svg'
+                }}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="text-2xl">📄</div>
+              </div>
+            )}
+          </div>
+          <div>
+            <p className="font-medium text-sm text-gray-900">{getFileName(file)}</p>
+            <p className="text-sm text-gray-500">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
+          </div>
+        </div>
+      </div>
+    ))
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -209,14 +253,17 @@ export default function ViewProject() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="min-h-[100px] p-4 border rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
-                  No before photos uploaded
+                <div>
+                  <h3 className="font-medium mb-4">Before Photos</h3>
+                  {renderFilePreview(existingFiles, 'before_photo')}
                 </div>
-                <div className="min-h-[100px] p-4 border rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
-                  No after photos uploaded
+                <div>
+                  <h3 className="font-medium mb-4">After Photos</h3>
+                  {renderFilePreview(existingFiles, 'after_photo')}
                 </div>
-                <div className="min-h-[100px] p-4 border rounded-lg bg-gray-50 flex items-center justify-center text-gray-500">
-                  No receipts uploaded
+                <div>
+                  <h3 className="font-medium mb-4">Receipts</h3>
+                  {renderFilePreview(existingFiles, 'receipt')}
                 </div>
               </div>
             </CardContent>
