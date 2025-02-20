@@ -38,7 +38,7 @@ export default function EditProperty() {
           onClick={() => navigate("/account")}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Account
+          Back to Dashboard
         </Button>
       </div>
       <PropertyForm
