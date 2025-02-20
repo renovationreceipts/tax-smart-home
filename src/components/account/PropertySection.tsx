@@ -37,8 +37,6 @@ export function PropertySection({
     <div>
       <PropertyList 
         properties={properties} 
-        selectedPropertyId={selectedPropertyId} 
-        onPropertySelect={setSelectedPropertyId} 
         onEditProperty={handleEditProperty} 
       />
     </div>
