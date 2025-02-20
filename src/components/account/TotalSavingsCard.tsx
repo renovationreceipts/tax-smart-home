@@ -92,7 +92,7 @@ export function TotalSavingsCard({
           </TooltipProvider>
         </div>
 
-        <div className="bg-gray-50 rounded-lg p-6 mb-8">
+        <div className="bg-gray-50 rounded-lg p-6 mb-8 py-[2px]">
           <p className="font-medium text-center text-sm">
             Add your first project to start to see your savings add up.
           </p>
