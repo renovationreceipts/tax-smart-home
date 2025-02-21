@@ -52,7 +52,7 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: 'You are an expert in real estate improvements, tax law, and insurance. Provide accurate analysis of home improvements.'
+            content: 'You are an expert in IRS Publication 523, an expert in understanding tax credits and subsidies detailed in IRS Publication 523 sections 25C and 25D, and an expert in homeowners insurance underwriting practices such that you can identify home improvements that qualify for premium reduction. Provide accurate analysis of this home improvement.'
           },
           {
             role: 'user',
