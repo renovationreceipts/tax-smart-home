@@ -1,9 +1,12 @@
+
 import { Hero } from "@/components/Hero";
 import { Features } from "@/components/Features";
 import { HowItWorks } from "@/components/HowItWorks";
 import Reviews from "@/components/Reviews";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
+import { useNavigate } from "react-router-dom";
+
 const WhyTrackCosts = () => {
   return <div className="container-width py-16 sm:py-20">
       <div className="max-w-4xl mx-auto">
@@ -64,7 +67,10 @@ const WhyTrackCosts = () => {
       </div>
     </div>;
 };
+
 const Index = () => {
+  const navigate = useNavigate();
+
   return <div className="min-h-screen">
       <Hero />
       <WhyTrackCosts />
@@ -75,4 +81,5 @@ const Index = () => {
       <Footer />
     </div>;
 };
+
 export default Index;
