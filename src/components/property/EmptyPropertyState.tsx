@@ -2,12 +2,23 @@
 import { Home } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { useNavigate } from "react-router-dom"
 
 interface EmptyPropertyStateProps {
-  onAddProperty: () => void
+  onAddProperty?: () => void
 }
 
 export function EmptyPropertyState({ onAddProperty }: EmptyPropertyStateProps) {
+  const navigate = useNavigate()
+
+  const handleAddProperty = () => {
+    if (onAddProperty) {
+      onAddProperty()
+    } else {
+      navigate("/property/edit")
+    }
+  }
+
   return (
     <Card className="border rounded-lg">
       <CardContent className="flex flex-col items-center justify-center py-8 px-4 sm:py-12 sm:px-6 space-y-6 sm:space-y-8">
@@ -40,7 +51,7 @@ export function EmptyPropertyState({ onAddProperty }: EmptyPropertyStateProps) {
                 </div>
               </div>
               <Button 
-                onClick={onAddProperty}
+                onClick={handleAddProperty}
                 className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white"
               >
                 Add Property
@@ -96,7 +107,7 @@ export function EmptyPropertyState({ onAddProperty }: EmptyPropertyStateProps) {
         </div>
 
         <Button 
-          onClick={onAddProperty}
+          onClick={handleAddProperty}
           size="lg"
           className="hidden sm:inline-flex bg-primary hover:bg-primary/90 text-white px-6 py-3 text-base sm:text-lg"
         >
