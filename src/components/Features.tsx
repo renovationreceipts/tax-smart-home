@@ -34,7 +34,7 @@ export const Features = () => {
             Features & Benefits
           </h2>
           <Link 
-            to={`${window.location.origin}/features`}
+            to="/features"
             className="text-primary hover:text-primary/90 inline-flex items-center gap-1"
           >
             See all features →
