@@ -33,7 +33,10 @@ export const Features = () => {
           <h2 className="text-3xl font-bold sm:text-4xl mb-4">
             Features & Benefits
           </h2>
-          <Link to="/features" className="text-primary hover:text-primary/90 inline-flex items-center gap-1">
+          <Link 
+            to="/features"
+            className="text-primary hover:text-primary/90 inline-flex items-center gap-1"
+          >
             See all features →
           </Link>
         </div>
