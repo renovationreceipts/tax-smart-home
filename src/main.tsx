@@ -52,7 +52,7 @@ const router = createBrowserRouter([
       },
       {
         path: "tax-analysis",
-        element: <TaxAnalysis />
+        element: <ProtectedRoute><TaxAnalysis /></ProtectedRoute>
       },
       {
         path: "blog",
