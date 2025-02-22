@@ -48,7 +48,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'ft:gpt-3.5-turbo-0125:personal:2-20-25:B3AHYUv9',
+        model: 'gpt-4-turbo-preview',
         messages: [
           {
             role: 'system',
