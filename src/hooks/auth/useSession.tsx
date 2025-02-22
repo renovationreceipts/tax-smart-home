@@ -30,6 +30,7 @@ export const useSession = () => {
           if (authRoutes.some(route => window.location.pathname === route)) {
             navigate("/account", { replace: true });
           }
+          return; // Exit early if session is valid
         } else {
           console.log("Session exists but user verification failed");
           // Only navigate if not on public routes and not on property edit
