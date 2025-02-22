@@ -45,14 +45,14 @@ export function useAuth() {
           toast({
             variant: "destructive",
             title: "Authentication Error",
-            description: "Failed to initialize authentication. Please refresh the page.",
+            description: "Failed to initialize authentication. Please try again.",
           });
         }
       }
     };
 
     // Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event: AuthChangeEvent, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session) => {
       console.log("Auth state changed:", { 
         event, 
         sessionExists: !!session, 
@@ -60,27 +60,34 @@ export function useAuth() {
         provider: session?.user?.app_metadata?.provider
       });
 
-      if (event === 'SIGNED_IN') {
+      if (event === 'SIGNED_IN' || event === 'SIGNED_UP') {
         if (session) {
-          console.log("Sign in confirmed with session, redirecting to account");
-          navigate("/account", { replace: true });
-          toast({
-            title: "Success!",
-            description: "You have successfully signed in.",
-          });
-        } else {
-          console.error("SIGNED_IN event without session");
-          toast({
-            variant: "destructive",
-            title: "Authentication Error",
-            description: "Session not found after sign in. Please try again.",
-          });
+          // Verify the session is still valid after a short delay
+          await new Promise(resolve => setTimeout(resolve, 500));
+          const { data: { user }, error } = await supabase.auth.getUser();
+          
+          if (user) {
+            console.log("Sign in/up confirmed with session, redirecting to account");
+            navigate("/account", { replace: true });
+            toast({
+              title: "Success!",
+              description: event === 'SIGNED_UP' ? 
+                "Your account has been created successfully." :
+                "You have successfully signed in.",
+            });
+          } else {
+            console.error(`${event} event without valid user`);
+            toast({
+              variant: "destructive",
+              title: "Authentication Error",
+              description: "Session not found after authentication. Please try again.",
+            });
+            navigate("/login", { replace: true });
+          }
         }
       } else if (event === 'SIGNED_OUT') {
         console.log("User signed out, redirecting to home");
         navigate("/", { replace: true });
-      } else if (event === 'TOKEN_REFRESHED') {
-        console.log("Auth token refreshed successfully");
       }
     });
 

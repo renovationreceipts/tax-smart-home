@@ -37,29 +37,38 @@ export default function SignUp() {
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: window.location.origin,
+          data: {
+            email_verified: false
+          }
+        }
       });
 
-      if (error) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: error.message,
-        });
-      } else {
-        toast({
-          title: "Success!",
-          description: "Please check your email to confirm your account.",
-        });
+      if (error) throw error;
+
+      if (data?.user) {
+        // Check if the user was actually created
+        const { data: checkUser } = await supabase.auth.getUser();
+        
+        if (checkUser?.user) {
+          toast({
+            title: "Success!",
+            description: "Your account has been created. Please check your email to confirm your account.",
+          });
+        } else {
+          throw new Error("Failed to create account. Please try again.");
+        }
       }
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (error: any) {
+      console.error("Signup error:", error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "An unexpected error occurred. Please try again.",
+        description: error.message || "Failed to create account. Please try again.",
       });
     } finally {
       setIsLoading(false);
