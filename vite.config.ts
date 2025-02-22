@@ -24,6 +24,9 @@ export default defineConfig(({ mode }) => ({
         assetFileNames: 'assets/[name]-[hash].[ext]',
       },
     },
+    commonjsOptions: {
+      include: [/node_modules/],
+    },
     // Ensure source maps are generated for better debugging
     sourcemap: true,
   },
@@ -39,6 +42,14 @@ export default defineConfig(({ mode }) => ({
   },
   // Add optimizeDeps to ensure proper module pre-bundling
   optimizeDeps: {
-    include: ['react', 'react-dom'],
+    include: [
+      'react', 
+      'react-dom',
+      'zod',
+      '@hookform/resolvers/zod'
+    ],
+    esbuildOptions: {
+      target: 'es2020',
+    },
   },
 }));
