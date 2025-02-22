@@ -20,18 +20,19 @@ export function useAuth() {
         
         if (session) {
           // Only redirect if we're not already on the account page
-          if (window.location.pathname !== '/account') {
-            navigate("/account");
+          if (!window.location.pathname.includes('/account')) {
+            navigate("/account", { replace: true });
           }
         } else {
           // If no session and not on public routes, redirect to login
-          const publicRoutes = ['/', '/login', '/signup', '/features', '/blog'];
+          const publicRoutes = ['/', '/login', '/signup'];
           if (!publicRoutes.some(route => window.location.pathname.startsWith(route))) {
-            navigate("/login");
+            navigate("/login", { replace: true });
           }
         }
       } catch (error) {
         console.error("Error checking session:", error);
+        navigate("/login", { replace: true });
       }
     };
     checkSession();
@@ -42,7 +43,7 @@ export function useAuth() {
 
       if (event === 'SIGNED_IN') {
         console.log("Valid session detected");
-        navigate("/account");
+        navigate("/account", { replace: true });
         toast({
           title: "Success!",
           description: "You have successfully signed in.",
@@ -51,10 +52,39 @@ export function useAuth() {
         console.log("User signed out");
         // Only redirect to home if we're not already there
         if (window.location.pathname !== '/') {
-          navigate("/");
+          navigate("/", { replace: true });
         }
+      } else if (event === 'TOKEN_REFRESHED') {
+        console.log("Token refreshed successfully");
+      } else if (event === 'USER_UPDATED') {
+        console.log("User data updated");
       }
     });
+
+    // Handle URL hash fragment if present (for OAuth redirects)
+    const handleHashFragment = async () => {
+      if (window.location.hash) {
+        console.log("Found hash fragment, attempting to recover session");
+        try {
+          const { data: { session }, error } = await supabase.auth.getSession();
+          
+          if (error) {
+            console.error("Error recovering session:", error);
+            await supabase.auth.signOut();
+            navigate("/login", { replace: true });
+            return;
+          }
+          
+          if (session) {
+            console.log("Successfully recovered session from hash");
+            navigate("/account", { replace: true });
+          }
+        } catch (error) {
+          console.error("Error handling hash fragment:", error);
+        }
+      }
+    };
+    handleHashFragment();
 
     return () => {
       console.log("Cleaning up auth state listener");
