@@ -20,13 +20,13 @@ export function useAuth() {
         
         if (session) {
           // Only redirect if we're not already on the account page
-          if (!window.location.pathname.includes('/account')) {
+          if (!window.location.hash.includes('/account')) {
             navigate("/account", { replace: true });
           }
         } else {
           // If no session and not on public routes, redirect to login
           const publicRoutes = ['/', '/login', '/signup'];
-          if (!publicRoutes.some(route => window.location.pathname.startsWith(route))) {
+          if (!publicRoutes.some(route => window.location.hash.includes(route))) {
             navigate("/login", { replace: true });
           }
         }
@@ -51,7 +51,7 @@ export function useAuth() {
       } else if (event === 'SIGNED_OUT') {
         console.log("User signed out");
         // Only redirect to home if we're not already there
-        if (window.location.pathname !== '/') {
+        if (window.location.hash !== '#/') {
           navigate("/", { replace: true });
         }
       } else if (event === 'TOKEN_REFRESHED') {
@@ -63,7 +63,7 @@ export function useAuth() {
 
     // Handle URL hash fragment if present (for OAuth redirects)
     const handleHashFragment = async () => {
-      if (window.location.hash) {
+      if (window.location.hash && !window.location.hash.startsWith('#/')) {
         console.log("Found hash fragment, attempting to recover session");
         try {
           const { data: { session }, error } = await supabase.auth.getSession();
@@ -95,7 +95,8 @@ export function useAuth() {
   const handleGoogleAuth = async () => {
     try {
       console.log("Initiating Google auth");
-      const redirectUrl = new URL("/account", window.location.origin).toString();
+      // Use hash-based redirect URL for proper routing
+      const redirectUrl = `${window.location.origin}/#/account`;
       console.log("Redirect URL:", redirectUrl);
       
       const { error } = await supabase.auth.signInWithOAuth({
