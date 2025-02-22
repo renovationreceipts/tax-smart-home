@@ -24,14 +24,20 @@ export function useAuth() {
         setLoading(true);
         console.log("Initializing auth state...");
 
-        // Handle OAuth callback if present
-        await handleCallback();
-        
-        // Get initial session
-        const { data: { session } } = await supabase.auth.getSession();
+        // Get initial session first
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError) {
+          throw sessionError;
+        }
+
         if (mounted) {
           setSession(session);
           setUser(session?.user ?? null);
+        }
+
+        // Handle OAuth callback after session check
+        if (window.location.search.includes('code=')) {
+          await handleCallback();
         }
 
         // Set up auth state listener
@@ -66,13 +72,22 @@ export function useAuth() {
       } catch (error) {
         console.error("Auth initialization error:", error);
         if (mounted) {
+          // Reset state on error
+          setSession(null);
+          setUser(null);
           setInitialized(true);
           setLoading(false);
-          toast({
-            variant: "destructive",
-            title: "Authentication Error",
-            description: "Failed to initialize authentication. Please try again.",
-          });
+          
+          // Only show error toast if we're not on a public route
+          const publicRoutes = ['/', '/login', '/signup'];
+          if (!publicRoutes.includes(window.location.pathname)) {
+            toast({
+              variant: "destructive",
+              title: "Authentication Error",
+              description: "Failed to initialize authentication. Please try logging in again.",
+            });
+            navigate('/login', { replace: true });
+          }
         }
       }
     };
