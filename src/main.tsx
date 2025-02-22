@@ -28,12 +28,15 @@ import GenerateOGImage from './pages/GenerateOGImage'
 import { ProtectedRoute } from "./components/auth/ProtectedRoute"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
-// Create a client
+// Create a client with configurations to handle development mode double-mounting
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 2,
       staleTime: 1000 * 60 * 5, // 5 minutes
+      gcTime: 1000 * 60 * 10, // 10 minutes
+      refetchOnWindowFocus: false, // Prevent refetches on window focus
+      refetchOnMount: false, // Prevent refetches on component mount
     },
   },
 })
@@ -123,6 +126,8 @@ const router = createBrowserRouter([
   }
 ]);
 
+// In development, React.StrictMode causes components to mount, unmount, and remount
+// We'll still use StrictMode but with more resilient configuration
 const root = createRoot(document.getElementById("root")!)
 root.render(
   <React.StrictMode>
