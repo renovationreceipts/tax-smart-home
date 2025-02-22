@@ -23,7 +23,7 @@ interface PropertyFormProps {
 
 export function PropertyForm({ property, propertyId, onCancel, onSuccess }: PropertyFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const submitProperty = usePropertySubmit({ onSuccess })
+  const submitProperty = usePropertySubmit({ onSuccess, propertyId })
 
   const form = useForm<PropertyFormValues>({
     resolver: zodResolver(propertyFormSchema),

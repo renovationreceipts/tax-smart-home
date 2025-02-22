@@ -3,9 +3,14 @@ import { useToast } from "@/hooks/use-toast"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
 import { format } from "date-fns"
-import { PropertyFormValues } from "./PropertyFormTypes"
+import { PropertyFormValues } from "./form/types"
 
-export function usePropertySubmit(onSuccess?: () => void, propertyId?: string) {
+interface UsePropertySubmitOptions {
+  onSuccess?: () => void
+  propertyId?: string
+}
+
+export function usePropertySubmit({ onSuccess, propertyId }: UsePropertySubmitOptions) {
   const { toast } = useToast()
   const navigate = useNavigate()
 
