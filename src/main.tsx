@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { createHashRouter, RouterProvider } from "react-router-dom"
 import App from './App.tsx'
 import './index.css'
 import Account from "@/pages/Account"
@@ -24,7 +24,7 @@ import Terms from './pages/Terms.tsx'
 import Privacy from './pages/Privacy.tsx'
 import GenerateOGImage from './pages/GenerateOGImage.tsx'
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <App />,
