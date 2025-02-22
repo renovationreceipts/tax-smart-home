@@ -30,7 +30,7 @@ export function PropertySection({
   };
 
   if (properties.length === 0) {
-    return <EmptyPropertyState />;
+    return <EmptyPropertyState onAddProperty={() => navigate("/property/edit")} />;
   }
 
   return (
