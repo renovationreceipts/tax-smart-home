@@ -74,27 +74,30 @@ export function usePropertySubmit({ onSuccess, propertyId }: UsePropertySubmitOp
         lived_in_property_2_of_5_years: data.livedInProperty2of5Years
       }
 
-      let error
+      let response
       
       if (propertyId) {
         // Update existing property
-        const { error: updateError } = await supabase
+        response = await supabase
           .from("properties")
           .update(propertyData)
           .eq("id", propertyId)
-        error = updateError
+          .select()
       } else {
         // Insert new property
-        const { error: insertError } = await supabase
+        response = await supabase
           .from("properties")
           .insert(propertyData)
-        error = insertError
+          .select()
       }
 
-      if (error) {
-        console.error("Database error:", error)
-        throw error
+      if (response.error) {
+        console.error("Database error:", response.error)
+        throw response.error
       }
+
+      // Get the property ID from the response
+      const newPropertyId = response.data[0]?.id
 
       // Invalidate properties query to trigger a refetch
       queryClient.invalidateQueries({ queryKey: ['properties'] })
@@ -110,7 +113,13 @@ export function usePropertySubmit({ onSuccess, propertyId }: UsePropertySubmitOp
           : "Your property has been successfully added.",
       })
       
-      navigate("/account")
+      // If this is a new property, navigate to add project page
+      // If editing an existing property, go back to account
+      if (!propertyId && newPropertyId) {
+        navigate(`/project/edit/${newPropertyId}`)
+      } else {
+        navigate("/account")
+      }
     } catch (error) {
       console.error("Error saving property:", error)
       toast({
