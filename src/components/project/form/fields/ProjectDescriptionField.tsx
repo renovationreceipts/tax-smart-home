@@ -24,7 +24,7 @@ export function ProjectDescriptionField({ form }: ProjectDescriptionFieldProps) 
             />
           </FormControl>
           <FormDescription>
-            Provide a meaningful description of your project. Include what was done, materials used, or any other relevant details.
+            For AI Analysis to work properly, description must be at least 15 characters long.
           </FormDescription>
           <FormMessage />
         </FormItem>
