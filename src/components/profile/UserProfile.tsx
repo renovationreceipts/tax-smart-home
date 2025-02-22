@@ -15,10 +15,11 @@ export function UserProfile() {
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(true)
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null)
-
-  console.log("UserProfile component rendered")
+  const [hasLoadedProfile, setHasLoadedProfile] = useState(false)
 
   const loadUserProfile = async () => {
+    if (hasLoadedProfile) return; // Prevent multiple loads
+
     console.log("Loading user profile...")
     try {
       const { data: { session } } = await supabase.auth.getSession()
@@ -35,12 +36,11 @@ export function UserProfile() {
         .eq("id", session.user.id)
         .single()
 
-      console.log("Profile data:", profile)
-      console.log("Profile fetch error:", error)
-
       if (error) {
         throw error
       }
+
+      setHasLoadedProfile(true)
     } catch (error) {
       console.error("Error in loadUserProfile:", error)
       toast({
@@ -54,9 +54,10 @@ export function UserProfile() {
   }
 
   useEffect(() => {
-    console.log("UserProfile useEffect triggered")
-    loadUserProfile()
-  }, [])
+    if (!hasLoadedProfile) {
+      loadUserProfile()
+    }
+  }, [hasLoadedProfile]) // Only depend on hasLoadedProfile
 
   const handleBackClick = () => {
     console.log("Back button clicked, navigating to /account")
