@@ -67,9 +67,7 @@ export const Hero = () => {
                 color: '#0090FF'
               }}>Unlock Hidden Savings</span>
               </h1>
-              <p className="text-lg sm:text-xl text-gray-600">
-                Smart homeowners use RenovationReceipts to track improvements, unlock tax benefits, and discover hidden savings. Join thousands of property owners who've saved an average of $33,200 on taxes.
-              </p>
+              <p className="text-lg sm:text-xl text-gray-600">Join 50,000 property owners who've saved an average of $33,200 on taxes.</p>
               <div className="flex justify-center gap-4">
                 <Link to="/signup" onClick={handleSignUpClick}>
                   <Button size="lg" className="text-base sm:text-lg">
