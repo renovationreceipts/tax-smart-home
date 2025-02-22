@@ -10,6 +10,9 @@ import { PropertyFinancialFields } from "@/components/property/form/PropertyFina
 import { PropertyEligibilityFields } from "@/components/property/form/PropertyEligibilityFields"
 import { Property } from "@/hooks/useProperties"
 import { propertyFormSchema, PropertyFormValues } from "@/components/property/form/types"
+import { usePropertySubmit } from "@/components/property/usePropertySubmit"
+import { useState } from "react"
+import { Loader2 } from "lucide-react"
 
 interface PropertyFormProps {
   property?: Property
@@ -19,6 +22,9 @@ interface PropertyFormProps {
 }
 
 export function PropertyForm({ property, propertyId, onCancel, onSuccess }: PropertyFormProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { onSubmit: submitProperty } = usePropertySubmit({ property, onSuccess })
+
   const form = useForm<PropertyFormValues>({
     resolver: zodResolver(propertyFormSchema),
     defaultValues: {
@@ -35,9 +41,15 @@ export function PropertyForm({ property, propertyId, onCancel, onSuccess }: Prop
     },
   })
 
-  function onSubmit(values: PropertyFormValues) {
-    onSuccess()
-    console.log(values)
+  async function onSubmit(values: PropertyFormValues) {
+    setIsSubmitting(true)
+    try {
+      await submitProperty(values)
+    } catch (error) {
+      console.error('Error submitting property:', error)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -60,6 +72,7 @@ export function PropertyForm({ property, propertyId, onCancel, onSuccess }: Prop
               isEditing={!!property}
               propertyId={propertyId}
               onCancel={onCancel}
+              isSubmitting={isSubmitting}
             />
           </div>
         </div>

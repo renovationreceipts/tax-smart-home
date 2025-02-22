@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button"
-import { Trash2 } from "lucide-react"
+import { Trash2, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
@@ -20,9 +20,10 @@ interface PropertyFormActionsProps {
   isEditing: boolean
   propertyId?: string
   onCancel: () => void
+  isSubmitting: boolean
 }
 
-export function PropertyFormActions({ isEditing, propertyId, onCancel }: PropertyFormActionsProps) {
+export function PropertyFormActions({ isEditing, propertyId, onCancel, isSubmitting }: PropertyFormActionsProps) {
   const { toast } = useToast()
   const navigate = useNavigate()
   const [isDeleting, setIsDeleting] = useState(false)
@@ -126,11 +127,18 @@ export function PropertyFormActions({ isEditing, propertyId, onCancel }: Propert
         </div>
       )}
       <div className="flex gap-4 order-1 sm:order-none sm:ml-auto">
-        <Button variant="outline" type="button" onClick={onCancel} className="flex-1 sm:flex-none">
+        <Button variant="outline" type="button" onClick={onCancel} className="flex-1 sm:flex-none" disabled={isSubmitting}>
           Cancel
         </Button>
-        <Button type="submit" className="flex-1 sm:flex-none">
-          {isEditing ? "Update Property" : "Add Property"}
+        <Button type="submit" className="flex-1 sm:flex-none" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              {isEditing ? "Updating..." : "Saving..."}
+            </>
+          ) : (
+            isEditing ? "Update Property" : "Add Property"
+          )}
         </Button>
       </div>
     </div>
