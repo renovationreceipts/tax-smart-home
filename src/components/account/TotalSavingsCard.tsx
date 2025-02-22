@@ -109,9 +109,7 @@ export function TotalSavingsCard({
           </div>
 
           <div className="bg-gray-50 rounded-lg p-6 mb-8">
-            <p className="font-medium text-center text-sm">
-              Add your first project to start to see your savings add up.
-            </p>
+            <p className="font-medium text-center text-sm">Add your first eligible home project and watch your savings add up.</p>
           </div>
 
           <Button variant="outline" onClick={handleViewAnalysis} disabled={true} className="w-full text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal opacity-50 cursor-not-allowed">
