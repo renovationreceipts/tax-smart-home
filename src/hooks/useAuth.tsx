@@ -17,9 +17,7 @@ export function useAuth() {
   const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
-    let retryCount = 0;
-    const maxRetries = 3;
-    const retryDelay = 1000; // 1 second
+    let mounted = true;
 
     const initializeAuth = async () => {
       try {
@@ -31,16 +29,12 @@ export function useAuth() {
         // Then check session if needed
         await checkSession();
         
-        setIsInitializing(false);
-        retryCount = 0; // Reset retry count on success
+        if (mounted) {
+          setIsInitializing(false);
+        }
       } catch (error) {
         console.error("Auth initialization error:", error);
-        
-        if (retryCount < maxRetries) {
-          retryCount++;
-          console.log(`Retrying auth initialization (${retryCount}/${maxRetries})...`);
-          setTimeout(initializeAuth, retryDelay * retryCount);
-        } else {
+        if (mounted) {
           setIsInitializing(false);
           toast({
             variant: "destructive",
@@ -85,6 +79,7 @@ export function useAuth() {
     initializeAuth();
 
     return () => {
+      mounted = false;
       console.log("Cleaning up auth state listener");
       subscription.unsubscribe();
     };

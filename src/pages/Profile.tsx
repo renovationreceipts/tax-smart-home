@@ -9,6 +9,8 @@ export default function Profile() {
   const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
+
     const checkAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -17,15 +19,25 @@ export default function Profile() {
         if (!session) {
           console.log("Profile - No active session found, redirecting to login");
           navigate("/login", { replace: true });
+          return;
         }
-        setIsChecking(false);
+
+        if (mounted) {
+          setIsChecking(false);
+        }
       } catch (error) {
         console.error("Profile - Error checking session:", error);
-        navigate("/login", { replace: true });
+        if (mounted) {
+          navigate("/login", { replace: true });
+        }
       }
     };
 
     checkAuth();
+
+    return () => {
+      mounted = false;
+    };
   }, []); // Only run on mount
 
   if (isChecking) {

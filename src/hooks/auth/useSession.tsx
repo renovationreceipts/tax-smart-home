@@ -34,11 +34,7 @@ export const useSession = () => {
       // If we reach here, either no session or invalid session
       console.log("No valid session found");
       const publicRoutes = ['/', '/login', '/signup'];
-      const propertyRoutes = ['/property/edit', '/property/edit/'];
-      const isPublicRoute = publicRoutes.some(route => window.location.pathname === route);
-      const isPropertyRoute = propertyRoutes.some(route => window.location.pathname.startsWith(route));
-      
-      if (!isPublicRoute && !isPropertyRoute) {
+      if (!publicRoutes.includes(window.location.pathname)) {
         navigate("/login", { replace: true });
       }
       
