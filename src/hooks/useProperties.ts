@@ -46,8 +46,11 @@ export function useProperties() {
     queryFn: fetchProperties,
     refetchOnMount: true,
     refetchOnWindowFocus: true,
-    staleTime: 0, // Always fetch fresh data
-    cacheTime: 0, // Don't cache the data
-    retry: 3 // Retry failed requests up to 3 times
+    staleTime: 1000, // Consider data stale after 1 second
+    gcTime: 1000 * 60, // Keep unused data in cache for 1 minute
+    retry: (failureCount, error) => {
+      console.log(`Retry attempt ${failureCount}:`, error)
+      return failureCount < 3
+    }
   })
 }
