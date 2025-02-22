@@ -15,70 +15,51 @@ export function useAuth() {
     // Check for existing session on mount
     const checkSession = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session }, error } = await supabase.auth.getSession();
         console.log("Checking existing session:", { exists: !!session, user: session?.user });
         
+        if (error) {
+          console.error("Error checking session:", error);
+          throw error;
+        }
+        
         if (session) {
-          // Only redirect if we're not in OAuth flow
-          const isOAuthFlow = window.location.hash.includes('access_token=') || 
-                            window.location.search.includes('code=');
-          if (!isOAuthFlow) {
+          // Wait to ensure session is fully established
+          await new Promise(resolve => setTimeout(resolve, 100));
+          
+          // Verify the session is still valid
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            console.log("Session verified with user:", user.id);
             navigate("/account", { replace: true });
+          } else {
+            console.log("Session exists but user verification failed");
+            navigate("/login", { replace: true });
           }
         } else {
           // If no session and not on public routes, redirect to login
           const publicRoutes = ['/', '/login', '/signup'];
-          if (!publicRoutes.some(route => window.location.hash.includes(route))) {
+          if (!publicRoutes.some(route => window.location.pathname.includes(route))) {
             navigate("/login", { replace: true });
           }
         }
       } catch (error) {
-        console.error("Error checking session:", error);
+        console.error("Error in checkSession:", error);
         navigate("/login", { replace: true });
       }
     };
 
-    // Process hash fragments and extract tokens
-    const processHashParams = () => {
-      const hash = window.location.hash;
-      const hashParts = hash.split('#');
-      
-      // Check if we have multiple hash fragments
-      if (hashParts.length > 2) {
-        console.log("Found multiple hash fragments, processing...");
-        // Get the access token part (last fragment)
-        const tokenPart = hashParts[hashParts.length - 1];
-        if (tokenPart.includes('access_token=')) {
-          // Clean up URL immediately
-          const basePath = hashParts[1] || '';
-          window.history.replaceState(
-            {},
-            document.title,
-            `${window.location.pathname}#${basePath}`
-          );
-          return true;
-        }
-      }
-      return false;
-    };
-
     // Handle OAuth callback
     const handleCallback = async () => {
-      const hasHashParams = processHashParams();
-      const hasSearchParams = window.location.search.includes('code=');
+      // Look for code in URL (authorization code flow)
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');
       
-      console.log("Checking OAuth params:", { 
-        hasHashParams,
-        hasSearchParams,
-        hash: window.location.hash,
-        search: window.location.search
-      });
-
-      if (hasHashParams || hasSearchParams) {
-        console.log("Processing OAuth callback");
+      if (code) {
+        console.log("Found authorization code, processing OAuth callback");
         try {
-          // Wait for Supabase to process the token
-          await new Promise(resolve => setTimeout(resolve, 500));
+          // Wait briefly for Supabase to process the code
+          await new Promise(resolve => setTimeout(resolve, 100));
           
           const { data: { session }, error } = await supabase.auth.getSession();
           
@@ -99,9 +80,13 @@ export function useAuth() {
               email: session.user.email
             });
             
-            // Ensure URL is clean
-            if (hasSearchParams) {
-              window.history.replaceState({}, document.title, window.location.pathname);
+            // Clean up URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+            
+            // Verify session is working
+            const { data: { user }, error: userError } = await supabase.auth.getUser();
+            if (userError || !user) {
+              throw new Error("Failed to verify user after OAuth");
             }
             
             navigate("/account", { replace: true });
@@ -126,26 +111,22 @@ export function useAuth() {
         event, 
         sessionExists: !!session, 
         userId: session?.user?.id,
-        provider: session?.user?.app_metadata?.provider,
-        currentPath: window.location.hash
+        provider: session?.user?.app_metadata?.provider
       });
 
       if (event === 'SIGNED_IN') {
-        // Skip redirect if we're in OAuth flow
-        const isOAuthFlow = window.location.hash.includes('access_token=') || 
-                          window.location.search.includes('code=');
-        if (!isOAuthFlow) {
-          console.log("Standard sign-in detected, redirecting to account");
+        if (session) {
+          console.log("Sign in confirmed with session, redirecting to account");
           navigate("/account", { replace: true });
           toast({
             title: "Success!",
             description: "You have successfully signed in.",
           });
         } else {
-          console.log("OAuth sign-in detected, letting callback handler manage redirect");
+          console.error("SIGNED_IN event without session");
         }
       } else if (event === 'SIGNED_OUT') {
-        console.log("User signed out");
+        console.log("User signed out, redirecting to home");
         navigate("/", { replace: true });
       }
     });
@@ -172,7 +153,6 @@ export function useAuth() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}`, // Redirect to root instead of /account
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
