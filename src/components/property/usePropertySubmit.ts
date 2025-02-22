@@ -96,11 +96,8 @@ export function usePropertySubmit({ onSuccess, propertyId }: UsePropertySubmitOp
         throw response.error
       }
 
-      // Get the property ID from the response
-      const newPropertyId = response.data[0]?.id
-
       // Invalidate properties query to trigger a refetch
-      queryClient.invalidateQueries({ queryKey: ['properties'] })
+      await queryClient.invalidateQueries({ queryKey: ['properties'] })
 
       if (onSuccess) {
         onSuccess()
@@ -110,16 +107,11 @@ export function usePropertySubmit({ onSuccess, propertyId }: UsePropertySubmitOp
         title: propertyId ? "Property Updated" : "Property Added",
         description: propertyId 
           ? "Your property has been successfully updated."
-          : "Your property has been successfully added.",
+          : "Your property has been successfully added. You can now add projects to this property from your dashboard.",
       })
       
-      // If this is a new property, navigate to add project page
-      // If editing an existing property, go back to account
-      if (!propertyId && newPropertyId) {
-        navigate(`/project/edit/${newPropertyId}`)
-      } else {
-        navigate("/account")
-      }
+      // Always navigate back to the account page
+      navigate("/account", { replace: true })
     } catch (error) {
       console.error("Error saving property:", error)
       toast({
