@@ -1,6 +1,6 @@
 
 import { BarChart2, Calculator, FileText, BrainCog } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const features = [
   {
@@ -26,6 +26,8 @@ const features = [
 ];
 
 export const Features = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="section-padding bg-white">
       <div className="container-width">
@@ -33,9 +35,12 @@ export const Features = () => {
           <h2 className="text-3xl font-bold sm:text-4xl mb-4">
             Features & Benefits
           </h2>
-          <Link to="/features" className="text-primary hover:text-primary/90 inline-flex items-center gap-1">
+          <button 
+            onClick={() => navigate("/features")}
+            className="text-primary hover:text-primary/90 inline-flex items-center gap-1"
+          >
             See all features →
-          </Link>
+          </button>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
