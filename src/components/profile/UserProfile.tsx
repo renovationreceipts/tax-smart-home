@@ -15,53 +15,42 @@ export function UserProfile() {
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(true)
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null)
-  const [hasLoadedProfile, setHasLoadedProfile] = useState(false)
-
-  const loadUserProfile = async () => {
-    if (hasLoadedProfile) return; // Prevent multiple loads
-
-    console.log("Loading user profile...")
-    try {
-      const { data: { session } } = await supabase.auth.getSession()
-      
-      if (!session) {
-        console.error("No active session found")
-        navigate("/login")
-        return
-      }
-
-      const { data: profile, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", session.user.id)
-        .single()
-
-      if (error) {
-        throw error
-      }
-
-      setHasLoadedProfile(true)
-    } catch (error) {
-      console.error("Error in loadUserProfile:", error)
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to load profile",
-      })
-    } finally {
-      setIsLoading(false)
-    }
-  }
 
   useEffect(() => {
-    if (!hasLoadedProfile) {
-      loadUserProfile()
+    const loadUserProfile = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        
+        if (!session) {
+          navigate("/login", { replace: true })
+          return
+        }
+
+        const { error } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
+          .single()
+
+        if (error) throw error
+
+      } catch (error) {
+        console.error("Error in loadUserProfile:", error)
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to load profile",
+        })
+      } finally {
+        setIsLoading(false)
+      }
     }
-  }, [hasLoadedProfile]) // Only depend on hasLoadedProfile
+
+    loadUserProfile()
+  }, [navigate, toast])
 
   const handleBackClick = () => {
-    console.log("Back button clicked, navigating to /account")
-    navigate("/account")
+    navigate("/account", { replace: true })
   }
 
   if (isLoading) {
