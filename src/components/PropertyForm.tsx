@@ -1,3 +1,4 @@
+
 import {
   Form,
   FormControl,
@@ -8,7 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
@@ -30,8 +31,8 @@ import { CalendarIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { PropertyFormHeader } from "./PropertyFormHeader"
-import { PropertyFormActions } from "./PropertyFormActions"
+import { PropertyFormHeader } from "@/components/property/PropertyFormHeader"
+import { PropertyFormActions } from "@/components/property/PropertyFormActions"
 import { Property } from "@/hooks/useProperties"
 
 const formSchema = z.object({
