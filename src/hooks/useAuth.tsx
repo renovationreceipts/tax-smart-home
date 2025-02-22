@@ -16,7 +16,7 @@ export function useAuth() {
     const checkSession = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        console.log("Checking existing session:", { exists: !!session });
+        console.log("Checking existing session:", { exists: !!session, user: session?.user });
         
         if (session) {
           // Only redirect if we're not already on the account page
@@ -39,7 +39,12 @@ export function useAuth() {
 
     // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session) => {
-      console.log("Auth state changed:", { event, sessionExists: !!session, userId: session?.user?.id });
+      console.log("Auth state changed:", { 
+        event, 
+        sessionExists: !!session, 
+        userId: session?.user?.id,
+        provider: session?.user?.app_metadata?.provider
+      });
 
       if (event === 'SIGNED_IN') {
         console.log("Valid session detected");
@@ -61,30 +66,40 @@ export function useAuth() {
       }
     });
 
-    // Handle URL hash fragment if present (for OAuth redirects)
-    const handleHashFragment = async () => {
-      if (window.location.hash && !window.location.hash.startsWith('#/')) {
-        console.log("Found hash fragment, attempting to recover session");
+    // Handle OAuth callback
+    const handleCallback = async () => {
+      // Check if we're in an OAuth callback
+      const hasCallbackParams = window.location.hash.includes('access_token') || 
+                              window.location.hash.includes('error') ||
+                              window.location.search.includes('code=');
+
+      if (hasCallbackParams) {
+        console.log("Detected OAuth callback, attempting to process");
         try {
           const { data: { session }, error } = await supabase.auth.getSession();
           
           if (error) {
-            console.error("Error recovering session:", error);
-            await supabase.auth.signOut();
+            console.error("Error processing OAuth callback:", error);
+            toast({
+              variant: "destructive",
+              title: "Authentication Error",
+              description: "There was an error signing in. Please try again.",
+            });
             navigate("/login", { replace: true });
             return;
           }
           
           if (session) {
-            console.log("Successfully recovered session from hash");
+            console.log("Successfully processed OAuth callback");
             navigate("/account", { replace: true });
           }
         } catch (error) {
-          console.error("Error handling hash fragment:", error);
+          console.error("Error handling OAuth callback:", error);
+          navigate("/login", { replace: true });
         }
       }
     };
-    handleHashFragment();
+    handleCallback();
 
     return () => {
       console.log("Cleaning up auth state listener");
@@ -95,14 +110,10 @@ export function useAuth() {
   const handleGoogleAuth = async () => {
     try {
       console.log("Initiating Google auth");
-      // Use hash-based redirect URL for proper routing
-      const redirectUrl = `${window.location.origin}/#/account`;
-      console.log("Redirect URL:", redirectUrl);
-      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: redirectUrl,
+          redirectTo: `${window.location.origin}`,
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
