@@ -1,6 +1,5 @@
 
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
@@ -9,6 +8,7 @@ import { CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { UseFormReturn } from "react-hook-form"
 import { PropertyFormValues } from "./types"
+import { MoneyField } from "@/components/property/MoneyField"
 
 interface PropertyFinancialFieldsProps {
   form: UseFormReturn<PropertyFormValues>
@@ -17,18 +17,10 @@ interface PropertyFinancialFieldsProps {
 export function PropertyFinancialFields({ form }: PropertyFinancialFieldsProps) {
   return (
     <div className="space-y-6">
-      <FormField
-        control={form.control}
+      <MoneyField
+        form={form}
         name="purchasePrice"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Purchase Price</FormLabel>
-            <FormControl>
-              <Input placeholder="$100,000" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
+        label="Purchase Price"
       />
 
       <FormField
@@ -73,18 +65,10 @@ export function PropertyFinancialFields({ form }: PropertyFinancialFieldsProps) 
         )}
       />
 
-      <FormField
-        control={form.control}
+      <MoneyField
+        form={form}
         name="currentValue"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Current Value</FormLabel>
-            <FormControl>
-              <Input placeholder="$150,000" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
+        label="Current Value"
       />
     </div>
   )
