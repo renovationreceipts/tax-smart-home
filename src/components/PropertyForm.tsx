@@ -2,11 +2,11 @@
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -17,7 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import {
   Popover,
@@ -119,9 +118,6 @@ export function PropertyForm({ property, propertyId, onCancel, onSuccess }: Prop
                     <SelectItem value="RENTAL">Rental</SelectItem>
                   </SelectContent>
                 </Select>
-                <FormDescription>
-                  This is the type of property you are adding.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -135,9 +131,6 @@ export function PropertyForm({ property, propertyId, onCancel, onSuccess }: Prop
                 <FormControl>
                   <Input placeholder="e.g. Main House" {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is the name of the property.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -151,9 +144,6 @@ export function PropertyForm({ property, propertyId, onCancel, onSuccess }: Prop
                 <FormControl>
                   <Input placeholder="123 Main St" {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is the street address of the property.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -167,9 +157,6 @@ export function PropertyForm({ property, propertyId, onCancel, onSuccess }: Prop
                 <FormControl>
                   <Input placeholder="New York" {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is the city of the property.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -183,9 +170,6 @@ export function PropertyForm({ property, propertyId, onCancel, onSuccess }: Prop
                 <FormControl>
                   <Input placeholder="NY" {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is the state of the property.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -199,9 +183,6 @@ export function PropertyForm({ property, propertyId, onCancel, onSuccess }: Prop
                 <FormControl>
                   <Input placeholder="10001" {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is the zip code of the property.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -215,9 +196,6 @@ export function PropertyForm({ property, propertyId, onCancel, onSuccess }: Prop
                 <FormControl>
                   <Input placeholder="$100,000" {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is the price you paid for the property.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -259,9 +237,6 @@ export function PropertyForm({ property, propertyId, onCancel, onSuccess }: Prop
                     />
                   </PopoverContent>
                 </Popover>
-                <FormDescription>
-                  This is the date you purchased the property.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -275,9 +250,6 @@ export function PropertyForm({ property, propertyId, onCancel, onSuccess }: Prop
                 <FormControl>
                   <Input placeholder="$150,000" {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is the current value of the property.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
