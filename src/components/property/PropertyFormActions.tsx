@@ -14,20 +14,32 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog"
+import { useState } from "react"
 
 interface PropertyFormActionsProps {
   isEditing: boolean
+  propertyId?: string
   onCancel: () => void
 }
 
-export function PropertyFormActions({ isEditing, onCancel }: PropertyFormActionsProps) {
+export function PropertyFormActions({ isEditing, propertyId, onCancel }: PropertyFormActionsProps) {
   const { toast } = useToast()
   const navigate = useNavigate()
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const handleDeleteProperty = async () => {
+    // Validate that we have a propertyId before proceeding
+    if (!propertyId) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Unable to delete property. Invalid property ID.",
+      })
+      return
+    }
+
     try {
-      const pathSegments = window.location.pathname.split('/')
-      const propertyId = pathSegments[pathSegments.length - 1]
+      setIsDeleting(true)
       
       const { error } = await supabase
         .from('properties')
@@ -49,12 +61,14 @@ export function PropertyFormActions({ isEditing, onCancel }: PropertyFormActions
         title: "Error",
         description: "Failed to delete property. Please try again.",
       })
+    } finally {
+      setIsDeleting(false)
     }
   }
 
   return (
     <div className="flex flex-col sm:flex-row sm:justify-between gap-8 pt-4">
-      {isEditing && (
+      {isEditing && propertyId && (
         <div className="order-2 sm:order-none">
           <Dialog>
             <DialogTrigger asChild>
@@ -82,9 +96,10 @@ export function PropertyFormActions({ isEditing, onCancel }: PropertyFormActions
                   variant="destructive"
                   type="button"
                   onClick={handleDeleteProperty}
+                  disabled={isDeleting}
                   className="w-full sm:w-auto"
                 >
-                  Delete
+                  {isDeleting ? "Deleting..." : "Delete"}
                 </Button>
                 <DialogClose asChild>
                   <Button variant="outline" type="button" className="w-full sm:w-auto">

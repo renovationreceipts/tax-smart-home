@@ -1,14 +1,14 @@
-
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
 import {
   Form,
+  FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
@@ -16,146 +16,300 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { PropertyTypeSelect } from "./property/PropertyTypeSelect"
-import { PurchaseDateField } from "./property/PurchaseDateField"
-import { MoneyField } from "./property/MoneyField"
-import { PropertyNameField } from "./property/PropertyNameField"
-import { StreetAddressField } from "./property/address/StreetAddressField"
-import { CityField } from "./property/address/CityField"
-import { StateField } from "./property/address/StateField"
-import { ZipCodeField } from "./property/address/ZipCodeField"
-import { PropertyFormHeader } from "./property/PropertyFormHeader"
-import { PropertyFormActions } from "./property/PropertyFormActions"
-import { propertyFormSchema, type PropertyFormValues } from "./property/PropertyFormTypes"
-import { usePropertySubmit } from "./property/usePropertySubmit"
+import { Textarea } from "@/components/ui/textarea"
+import { Switch } from "@/components/ui/switch"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
+import { cn } from "@/lib/utils"
+import { format } from "date-fns"
+import { CalendarIcon } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import { PropertyFormHeader } from "./PropertyFormHeader"
+import { PropertyFormActions } from "./PropertyFormActions"
+import { Property } from "@/hooks/useProperties"
+
+const formSchema = z.object({
+  propertyType: z.enum(["PRIMARY_HOME", "SECOND_HOME", "RENTAL"]),
+  name: z.string().min(2, {
+    message: "Property name must be at least 2 characters.",
+  }),
+  streetAddress: z.string().min(2, {
+    message: "Street address must be at least 2 characters.",
+  }),
+  city: z.string().min(2, {
+    message: "City must be at least 2 characters.",
+  }),
+  state: z.string().min(2, {
+    message: "State must be at least 2 characters.",
+  }),
+  zipCode: z.string().min(5, {
+    message: "Zip code must be at least 5 characters.",
+  }),
+  purchasePrice: z.string().min(1, {
+    message: "Purchase price is required.",
+  }),
+  purchaseDate: z.date(),
+  currentValue: z.string().min(1, {
+    message: "Current value is required.",
+  }),
+  livedInProperty2of5Years: z.boolean().default(true).optional(),
+})
+
+export type PropertyFormValues = z.infer<typeof formSchema>
 
 interface PropertyFormProps {
-  property?: {
-    id: string
-    property_type: "PRIMARY_HOME" | "SECOND_HOME" | "RENTAL"
-    name: string
-    street_address: string
-    city: string
-    state: string
-    zip_code: string
-    purchase_price: number
-    purchase_date: string | null
-    current_value: number
-    lived_in_property_2_of_5_years: boolean
-  }
+  property?: Property
+  propertyId?: string
   onCancel: () => void
-  onSuccess?: () => void
+  onSuccess: () => void
 }
 
-export function PropertyForm({ property, onCancel, onSuccess }: PropertyFormProps) {
-  const submitProperty = usePropertySubmit(onSuccess, property?.id)
-  console.log("Property data received:", property)
-
-  const defaultPurchaseDate = property?.purchase_date 
-    ? new Date(property.purchase_date) 
-    : new Date()
-
-  console.log("Default purchase date:", defaultPurchaseDate)
-
+export function PropertyForm({ property, propertyId, onCancel, onSuccess }: PropertyFormProps) {
   const form = useForm<PropertyFormValues>({
-    resolver: zodResolver(propertyFormSchema),
-    defaultValues: property ? {
-      propertyType: property.property_type,
-      name: property.name,
-      streetAddress: property.street_address,
-      city: property.city,
-      state: property.state,
-      zipCode: property.zip_code,
-      purchasePrice: new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).format(property.purchase_price),
-      purchaseDate: defaultPurchaseDate,
-      currentValue: new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).format(property.current_value),
-      livedInProperty2of5Years: property.lived_in_property_2_of_5_years ?? true
-    } : {
-      propertyType: "PRIMARY_HOME",
-      name: "",
-      streetAddress: "",
-      city: "",
-      state: "",
-      zipCode: "",
-      purchasePrice: "",
-      purchaseDate: new Date(),
-      currentValue: "",
-      livedInProperty2of5Years: true
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      propertyType: property?.property_type || "PRIMARY_HOME",
+      name: property?.name || "",
+      streetAddress: property?.street_address || "",
+      city: property?.city || "",
+      state: property?.state || "",
+      zipCode: property?.zip_code || "",
+      purchasePrice: property?.purchase_price?.toString() || "",
+      purchaseDate: property?.purchase_date ? new Date(property.purchase_date) : new Date(),
+      currentValue: property?.current_value?.toString() || "",
+      livedInProperty2of5Years: property?.lived_in_property_2_of_5_years ?? true,
     },
   })
 
-  console.log("Form default values:", form.getValues())
+  function onSubmit(values: PropertyFormValues) {
+    onSuccess()
+    console.log(values)
+  }
 
   return (
-    <div className="space-y-6 p-6 bg-white rounded-lg shadow-sm border max-w-2xl mx-auto">
-      <PropertyFormHeader isEditing={!!property} />
-
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(submitProperty)} className="space-y-4">
-          <PropertyTypeSelect form={form} />
-          <PropertyNameField form={form} />
-          
-          <div className="space-y-4">
-            <StreetAddressField form={form} />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <CityField form={form} />
-              <StateField form={form} />
-              <ZipCodeField form={form} />
-            </div>
-          </div>
-          
-          <MoneyField 
-            form={form}
-            name="purchasePrice"
-            label="Purchase Price"
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <div className="max-w-2xl mx-auto px-4">
+          <PropertyFormHeader 
+            isEditing={!!property}
           />
-
-          <PurchaseDateField form={form} />
-
-          <MoneyField 
-            form={form}
-            name="currentValue"
-            label="Current Property Value"
-          />
-
+          
           <FormField
             control={form.control}
-            name="livedInProperty2of5Years"
+            name="propertyType"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Lived in property for at least 2 of the last 5 years</FormLabel>
-                <FormControl>
-                  <Select onValueChange={(value) => field.onChange(value === 'true')} value={field.value.toString()}>
+                <FormLabel>Property Type</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select yes or no" />
+                      <SelectValue placeholder="Select a property type" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="true">Yes</SelectItem>
-                      <SelectItem value="false">No</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="PRIMARY_HOME">Primary Home</SelectItem>
+                    <SelectItem value="SECOND_HOME">Second Home</SelectItem>
+                    <SelectItem value="RENTAL">Rental</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  This is the type of property you are adding.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Property Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="e.g. Main House" {...field} />
+                </FormControl>
+                <FormDescription>
+                  This is the name of the property.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="streetAddress"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Street Address</FormLabel>
+                <FormControl>
+                  <Input placeholder="123 Main St" {...field} />
+                </FormControl>
+                <FormDescription>
+                  This is the street address of the property.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>City</FormLabel>
+                <FormControl>
+                  <Input placeholder="New York" {...field} />
+                </FormControl>
+                <FormDescription>
+                  This is the city of the property.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="state"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>State</FormLabel>
+                <FormControl>
+                  <Input placeholder="NY" {...field} />
+                </FormControl>
+                <FormDescription>
+                  This is the state of the property.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="zipCode"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Zip Code</FormLabel>
+                <FormControl>
+                  <Input placeholder="10001" {...field} />
+                </FormControl>
+                <FormDescription>
+                  This is the zip code of the property.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="purchasePrice"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Purchase Price</FormLabel>
+                <FormControl>
+                  <Input placeholder="$100,000" {...field} />
+                </FormControl>
+                <FormDescription>
+                  This is the price you paid for the property.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="purchaseDate"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Purchase Date</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-[240px] pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={(date) =>
+                        date > new Date() || date < new Date("1900-01-01")
+                      }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormDescription>
+                  This is the date you purchased the property.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="currentValue"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Current Value</FormLabel>
+                <FormControl>
+                  <Input placeholder="$150,000" {...field} />
+                </FormControl>
+                <FormDescription>
+                  This is the current value of the property.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="livedInProperty2of5Years"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <FormLabel>Lived in property 2 of 5 years</FormLabel>
+                  <FormDescription>
+                    Have you lived in this property for at least 2 of the last 5
+                    years?
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          
           <PropertyFormActions 
-            isEditing={!!property} 
+            isEditing={!!property}
+            propertyId={propertyId}
             onCancel={onCancel}
           />
-        </form>
-      </Form>
-    </div>
+        </div>
+      </form>
+    </Form>
   )
 }

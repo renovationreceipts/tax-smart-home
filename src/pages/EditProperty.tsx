@@ -43,6 +43,7 @@ export default function EditProperty() {
       </div>
       <PropertyForm
         property={transformedProperty}
+        propertyId={id !== 'edit' ? id : undefined}
         onCancel={() => handleSuccess()}
         onSuccess={() => handleSuccess()}
       />
