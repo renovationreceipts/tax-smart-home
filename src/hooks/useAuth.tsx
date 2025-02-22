@@ -19,8 +19,8 @@ export function useAuth() {
         console.log("Checking existing session:", { exists: !!session, user: session?.user });
         
         if (session) {
-          // Only redirect if we're not already on the account page
-          if (!window.location.hash.includes('/account')) {
+          // If we have a session but not in OAuth flow, redirect to account
+          if (!window.location.search.includes('code=')) {
             navigate("/account", { replace: true });
           }
         } else {
@@ -38,7 +38,6 @@ export function useAuth() {
 
     // Handle OAuth callback parameters
     const handleCallback = async () => {
-      // For hash router, we need to check if we're at the root with OAuth params
       const hasOAuthParams = window.location.search.includes('code=') || 
                            window.location.search.includes('access_token=') ||
                            window.location.search.includes('error=');
@@ -52,8 +51,8 @@ export function useAuth() {
       if (hasOAuthParams) {
         console.log("Processing OAuth callback");
         try {
-          // Wait for session to be established
-          await new Promise(resolve => setTimeout(resolve, 500));
+          // Add a delay to ensure auth state is updated
+          await new Promise(resolve => setTimeout(resolve, 1000));
           
           const { data: { session }, error } = await supabase.auth.getSession();
           
@@ -73,11 +72,18 @@ export function useAuth() {
               user: session.user.id,
               email: session.user.email
             });
+            
+            // Clear URL parameters after successful login
+            window.history.replaceState({}, document.title, window.location.pathname);
+            
             navigate("/account", { replace: true });
             toast({
               title: "Success!",
               description: "You have successfully signed in with Google.",
             });
+          } else {
+            console.error("No session found after OAuth callback");
+            navigate("/login", { replace: true });
           }
         } catch (error) {
           console.error("Error handling OAuth callback:", error);
@@ -92,34 +98,40 @@ export function useAuth() {
         event, 
         sessionExists: !!session, 
         userId: session?.user?.id,
-        provider: session?.user?.app_metadata?.provider
+        provider: session?.user?.app_metadata?.provider,
+        currentPath: window.location.hash
       });
 
       if (event === 'SIGNED_IN') {
-        console.log("Valid session detected, checking OAuth status");
-        // Only handle non-OAuth sign-ins here
+        // Skip redirect if we're in OAuth flow
         if (!window.location.search.includes('code=')) {
+          console.log("Standard sign-in detected, redirecting to account");
           navigate("/account", { replace: true });
           toast({
             title: "Success!",
             description: "You have successfully signed in.",
           });
+        } else {
+          console.log("OAuth sign-in detected, letting callback handler manage redirect");
         }
       } else if (event === 'SIGNED_OUT') {
         console.log("User signed out");
         if (window.location.hash !== '#/') {
           navigate("/", { replace: true });
         }
-      } else if (event === 'TOKEN_REFRESHED') {
-        console.log("Token refreshed successfully");
-      } else if (event === 'USER_UPDATED') {
-        console.log("User data updated");
       }
     });
 
-    // First check for OAuth callback, then check session
-    handleCallback();
-    checkSession();
+    // Handle OAuth callback first, then check session if no OAuth params
+    const init = async () => {
+      if (window.location.search.includes('code=')) {
+        await handleCallback();
+      } else {
+        await checkSession();
+      }
+    };
+
+    init();
 
     return () => {
       console.log("Cleaning up auth state listener");
