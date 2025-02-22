@@ -6,23 +6,28 @@ import { formatCurrency } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState, useEffect, useRef } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
+
 interface TotalSavingsCardProps {
   projectedTaxSavings: number;
   totalProjectCosts: number;
   userTaxRate: number;
   propertyId?: string;
+  onViewAnalysis?: () => void;
 }
+
 export function TotalSavingsCard({
   projectedTaxSavings,
   totalProjectCosts,
   userTaxRate,
-  propertyId
+  propertyId,
+  onViewAnalysis
 }: TotalSavingsCardProps) {
   const navigate = useNavigate();
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const hasProjects = totalProjectCosts > 0;
   const isMobile = useIsMobile();
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
@@ -34,14 +39,21 @@ export function TotalSavingsCard({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-  const handleViewAnalysis = () => {
-    const path = propertyId ? `/tax-analysis?propertyId=${propertyId}` : '/tax-analysis';
-    navigate(path);
+
+  const handleViewClick = () => {
+    if (onViewAnalysis) {
+      onViewAnalysis();
+    } else {
+      const path = propertyId ? `/tax-analysis?propertyId=${propertyId}` : '/tax-analysis';
+      navigate(path);
+    }
   };
+
   const handleInfoClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsTooltipOpen(!isTooltipOpen);
   };
+
   const tooltipContent = <div ref={tooltipRef} className="space-y-3 max-w-sm">
       <div>
         <p className="font-semibold text-base text-white">Lifetime Projected Savings</p>
@@ -74,6 +86,7 @@ export function TotalSavingsCard({
         </p>
       </div>
     </div>;
+
   const EmptyStateContent = () => {
     if (isMobile) {
       return <div className="px-6 py-[10px]">
@@ -112,18 +125,20 @@ export function TotalSavingsCard({
             <p className="font-medium text-center text-sm">Add your first eligible home project and watch your savings add up.</p>
           </div>
 
-          <Button variant="outline" onClick={handleViewAnalysis} disabled={true} className="w-full text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal opacity-50 cursor-not-allowed">
+          <Button variant="outline" onClick={handleViewClick} disabled={true} className="w-full text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal opacity-50 cursor-not-allowed">
             View Full Analysis
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
       </div>;
   };
+
   if (!hasProjects) {
     return <div className="bg-white rounded-xl shadow-sm">
         <EmptyStateContent />
       </div>;
   }
+
   return <div className="bg-white rounded-xl shadow-sm">
       <div className="hidden sm:flex justify-between items-center p-6">
         <div className="flex items-center gap-2">
@@ -150,7 +165,7 @@ export function TotalSavingsCard({
               </TooltipProvider>
             </div>
           </div>
-          <Button variant="link" onClick={handleViewAnalysis} className="text-[#0090FF] hover:text-[#0090FF]/90 p-0 text-sm">
+          <Button variant="link" onClick={handleViewClick} className="text-[#0090FF] hover:text-[#0090FF]/90 p-0 text-sm">
             View Details
           </Button>
         </div>
@@ -202,7 +217,7 @@ export function TotalSavingsCard({
           </div>
         </div>
 
-        <Button variant="outline" onClick={handleViewAnalysis} className="w-full mt-8 text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal my-[28px]">
+        <Button variant="outline" onClick={handleViewClick} className="w-full mt-8 text-[#0090FF] border-[#0090FF] hover:bg-[#0090FF]/5 font-normal my-[28px]">
           View Full Analysis
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>

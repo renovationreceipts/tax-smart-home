@@ -22,16 +22,46 @@ export function useAuth() {
     const initializeAuth = async () => {
       try {
         console.log("Setting up auth state change listener");
-        setIsInitializing(true);
-
+        if (!mounted) return;
+        
         // Handle OAuth callback first
         await handleCallback();
-        // Then check session if needed
-        await checkSession();
         
+        // Get initial session
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        // Set up auth state listener
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, newSession) => {
+          console.log("Auth state changed:", { event, hasSession: !!newSession });
+          
+          if (!mounted) return;
+
+          if (newSession?.user) {
+            // Don't navigate if we're already on a protected route
+            const protectedRoutes = ['/account', '/profile', '/tax-analysis'];
+            const currentPath = window.location.pathname;
+            const isProtectedRoute = protectedRoutes.some(route => currentPath.startsWith(route));
+            
+            if (event === 'SIGNED_IN' && !isProtectedRoute) {
+              navigate("/account", { replace: true });
+              toast({
+                title: "Success!",
+                description: "You have successfully signed in.",
+              });
+            }
+          } else if (event === 'SIGNED_OUT') {
+            navigate("/", { replace: true });
+          }
+        });
+
         if (mounted) {
           setIsInitializing(false);
         }
+
+        return () => {
+          subscription.unsubscribe();
+          mounted = false;
+        };
       } catch (error) {
         console.error("Auth initialization error:", error);
         if (mounted) {
@@ -45,45 +75,12 @@ export function useAuth() {
       }
     };
 
-    // Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log("Auth state changed:", { 
-        event, 
-        sessionExists: !!session, 
-        userId: session?.user?.id,
-        provider: session?.user?.app_metadata?.provider
-      });
-
-      if (session?.user) {
-        if (event === 'SIGNED_IN') {
-          console.log("Sign in confirmed with session, redirecting to account");
-          navigate("/account", { replace: true });
-          toast({
-            title: "Success!",
-            description: "You have successfully signed in.",
-          });
-        } else if (event === 'USER_UPDATED') {
-          console.log("User created successfully, redirecting to account");
-          navigate("/account", { replace: true });
-          toast({
-            title: "Success!",
-            description: "Your account has been created successfully.",
-          });
-        }
-      } else if (event === 'SIGNED_OUT') {
-        console.log("User signed out, redirecting to home");
-        navigate("/", { replace: true });
-      }
-    });
-
     initializeAuth();
 
     return () => {
       mounted = false;
-      console.log("Cleaning up auth state listener");
-      subscription.unsubscribe();
     };
-  }, [navigate, toast, handleCallback, checkSession]);
+  }, [navigate, toast, handleCallback]);
 
   return { 
     handleGoogleAuth,

@@ -82,6 +82,14 @@ export default function Account() {
     }
   };
 
+  const handleViewAnalysis = () => {
+    if (selectedPropertyId) {
+      navigate(`/tax-analysis?propertyId=${selectedPropertyId}`);
+    } else {
+      navigate('/tax-analysis');
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <AccountHeader onSignOut={handleSignOut} />
@@ -93,7 +101,8 @@ export default function Account() {
                 projectedTaxSavings={projectedTaxSavings}
                 totalProjectCosts={totalProjectCosts}
                 userTaxRate={userTaxRate}
-                propertyId={selectedPropertyId || undefined}
+                propertyId={selectedPropertyId}
+                onViewAnalysis={handleViewAnalysis}
               />
             </div>
             {properties.length === 0 ? (
@@ -115,7 +124,8 @@ export default function Account() {
               projectedTaxSavings={projectedTaxSavings}
               totalProjectCosts={totalProjectCosts}
               userTaxRate={userTaxRate}
-              propertyId={selectedPropertyId || undefined}
+              propertyId={selectedPropertyId}
+              onViewAnalysis={handleViewAnalysis}
             />
             <PremiumCard />
           </div>
