@@ -26,6 +26,17 @@ import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
 import GenerateOGImage from './pages/GenerateOGImage'
 import { ProtectedRoute } from "./components/auth/ProtectedRoute"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 2,
+      staleTime: 1000 * 60 * 5, // 5 minutes
+    },
+  },
+})
 
 const router = createHashRouter([
   {
@@ -115,6 +126,8 @@ const router = createHashRouter([
 const root = createRoot(document.getElementById("root")!)
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </React.StrictMode>
 );

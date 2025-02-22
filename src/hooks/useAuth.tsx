@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { AuthChangeEvent } from "@supabase/supabase-js";
+import { AuthError, AuthResponse } from "@supabase/supabase-js";
 import { useSession } from "./auth/useSession";
 import { useOAuthCallback } from "./auth/useOAuthCallback";
 import { useGoogleAuth } from "./auth/useGoogleAuth";
@@ -52,7 +52,7 @@ export function useAuth() {
     };
 
     // Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log("Auth state changed:", { 
         event, 
         sessionExists: !!session, 
@@ -60,30 +60,21 @@ export function useAuth() {
         provider: session?.user?.app_metadata?.provider
       });
 
-      if (event === 'SIGNED_IN' || event === 'SIGNED_UP') {
-        if (session) {
-          // Verify the session is still valid after a short delay
-          await new Promise(resolve => setTimeout(resolve, 500));
-          const { data: { user }, error } = await supabase.auth.getUser();
-          
-          if (user) {
-            console.log("Sign in/up confirmed with session, redirecting to account");
-            navigate("/account", { replace: true });
-            toast({
-              title: "Success!",
-              description: event === 'SIGNED_UP' ? 
-                "Your account has been created successfully." :
-                "You have successfully signed in.",
-            });
-          } else {
-            console.error(`${event} event without valid user`);
-            toast({
-              variant: "destructive",
-              title: "Authentication Error",
-              description: "Session not found after authentication. Please try again.",
-            });
-            navigate("/login", { replace: true });
-          }
+      if (session?.user) {
+        if (event === 'SIGNED_IN') {
+          console.log("Sign in confirmed with session, redirecting to account");
+          navigate("/account", { replace: true });
+          toast({
+            title: "Success!",
+            description: "You have successfully signed in.",
+          });
+        } else if (event === 'USER_UPDATED') {
+          console.log("User created successfully, redirecting to account");
+          navigate("/account", { replace: true });
+          toast({
+            title: "Success!",
+            description: "Your account has been created successfully.",
+          });
         }
       } else if (event === 'SIGNED_OUT') {
         console.log("User signed out, redirecting to home");
