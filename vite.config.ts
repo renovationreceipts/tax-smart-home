@@ -56,4 +56,9 @@ export default defineConfig(({ mode }) => ({
       target: 'es2020',
     },
   },
+  define: {
+    // Add polyfills for global and process
+    global: 'globalThis',
+    'process.env': {},
+  },
 }));
