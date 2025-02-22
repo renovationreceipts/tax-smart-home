@@ -52,7 +52,8 @@ export function StorageVaultCategory({
       file_path: file,
       file_type: file.type,
       file_category: fieldName.replace('Photos', '_photo').replace('receipts', 'receipt'),
-      size: file.size
+      size: file.size,
+      project_id: projectId || 'temp' // Add project_id with a fallback value
     }
     
     // Update the cache by replacing any existing files in this category with the new temp file

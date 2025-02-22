@@ -2,6 +2,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import type { Project } from "@/hooks/useProjects"
+import type { ProjectFile } from "@/components/project/form/file-fields/types"
 import { formatCurrency, formatDate } from "@/lib/formatters"
 import { Download } from "lucide-react"
 import { generateProjectsPDF } from "@/utils/pdfExport"
