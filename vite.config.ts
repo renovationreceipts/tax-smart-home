@@ -38,6 +38,6 @@ export default defineConfig(({ mode }) => ({
   },
   // Add optimizeDeps to ensure proper module pre-bundling
   optimizeDeps: {
-    include: ['react', 'react-dom'],
+    include: ['react', 'react-dom', 'zod', '@hookform/resolvers/zod'],
   },
 }));
