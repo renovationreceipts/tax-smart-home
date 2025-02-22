@@ -40,11 +40,15 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "stream": "stream-browserify",
+      "util": "util",
+      "process": "process/browser",
+      "buffer": "buffer",
+      "crypto": "crypto-browserify"
     },
     mainFields: ['browser', 'module', 'main'],
     extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
-  // Add optimizeDeps to ensure proper module pre-bundling
   optimizeDeps: {
     include: [
       'react', 
@@ -55,15 +59,18 @@ export default defineConfig(({ mode }) => ({
       '@supabase/postgrest-js',
       '@supabase/realtime-js',
       '@supabase/storage-js',
-      '@supabase/functions-js'
+      '@supabase/functions-js',
+      'cross-fetch',
+      'buffer',
+      'events'
     ],
     esbuildOptions: {
       target: 'es2020',
     },
   },
   define: {
-    // Add polyfills for global and process
     global: 'globalThis',
     'process.env': {},
+    'Buffer.prototype': 'Buffer.prototype',
   },
 }));
