@@ -1,18 +1,35 @@
+
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { PropertyForm } from "@/components/PropertyForm"
 import { useProperties } from "@/hooks/useProperties"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
+import { useEffect, useState } from "react"
+import { supabase } from "@/integrations/supabase/client"
 
 export default function EditProperty() {
   const navigate = useNavigate()
   const { id } = useParams()
   const [searchParams] = useSearchParams()
+  const [isLoading, setIsLoading] = useState(true)
   const { data: properties = [] } = useProperties()
   
   // Only consider id if it's a valid UUID and not 'edit'
   const isValidId = id && id !== 'edit' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)
   const property = isValidId ? properties.find(p => p.id === id) : undefined
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        navigate("/login", { replace: true })
+        return
+      }
+      setIsLoading(false)
+    }
+    
+    checkSession()
+  }, [navigate])
 
   const handleSuccess = () => {
     // If we're editing an existing property, use that ID
@@ -22,7 +39,7 @@ export default function EditProperty() {
     // Scroll to top before navigation
     window.scrollTo(0, 0)
     
-    navigate(`/account${propertyId ? `?propertyId=${propertyId}` : ''}`)
+    navigate(`/account${propertyId ? `?propertyId=${propertyId}` : ''}`, { replace: true })
   }
 
   // Transform the property data to ensure lived_in_property_2_of_5_years has a boolean value
@@ -31,13 +48,17 @@ export default function EditProperty() {
     lived_in_property_2_of_5_years: property.lived_in_property_2_of_5_years ?? true
   } : undefined
 
+  if (isLoading) {
+    return <div className="flex justify-center items-center min-h-screen">Loading...</div>
+  }
+
   return (
     <div className="min-h-screen bg-white py-8">
       <div className="max-w-2xl mx-auto px-4">
         <Button
           variant="ghost"
           className="mb-6"
-          onClick={() => navigate("/account")}
+          onClick={() => navigate("/account", { replace: true })}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Dashboard

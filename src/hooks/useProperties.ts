@@ -44,13 +44,7 @@ export function useProperties() {
   return useQuery({
     queryKey: ['properties'],
     queryFn: fetchProperties,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    staleTime: 1000, // Consider data stale after 1 second
-    gcTime: 1000 * 60, // Keep unused data in cache for 1 minute
-    retry: (failureCount, error) => {
-      console.log(`Retry attempt ${failureCount}:`, error)
-      return failureCount < 3
-    }
+    staleTime: 1000 * 60, // Consider data stale after 1 minute
+    gcTime: 1000 * 60 * 5, // Keep unused data in cache for 5 minutes
   })
 }
