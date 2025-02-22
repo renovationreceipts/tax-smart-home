@@ -21,7 +21,7 @@ const features = [
   {
     icon: <FileText className="h-6 w-6" />,
     title: "Proof When You Need it Most",
-    description: "Automatically export the values you need for IRS Form 8949 for easy tax reporting.",
+    description: "Export records for audit-proof and insurance claims.",
   },
 ];
 
