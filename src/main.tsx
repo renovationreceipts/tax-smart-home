@@ -5,7 +5,7 @@ import ReactDOM from "react-dom/client"
 import "./index.css"
 import App from "./App"
 import { createRoot } from 'react-dom/client'
-import { createHashRouter, RouterProvider } from "react-router-dom"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import Account from "@/pages/Account"
 import EditProperty from "@/pages/EditProperty"
 import EditProject from "@/pages/EditProject"
@@ -38,7 +38,7 @@ const queryClient = new QueryClient({
   },
 })
 
-const router = createHashRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
@@ -131,4 +131,3 @@ root.render(
     </QueryClientProvider>
   </React.StrictMode>
 );
-
