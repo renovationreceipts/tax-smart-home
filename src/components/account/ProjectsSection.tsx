@@ -1,4 +1,3 @@
-
 import { FileText } from "lucide-react";
 import type { Project } from "@/hooks/useProjects";
 import { useProperties } from "@/hooks/useProperties";
@@ -58,21 +57,11 @@ export function ProjectsSection({
         </div>
       ) : (
         <div className="mt-4">
-          <div className="block sm:hidden -mx-6">
-            {projects.map(project => (
-              <MobileProjectCard
-                key={project.id}
-                project={project}
-                onViewProject={handleViewProject}
-              />
-            ))}
-            <div className="px-4 py-4 border-t">
-              <div className="flex justify-between items-center">
-                <span className="text-base font-semibold">Total Projects Cost</span>
-                <span className="text-base font-semibold">{formatCurrency(totalProjectCosts)}</span>
-              </div>
-            </div>
-          </div>
+          <MobileProjectCard
+            projects={projects}
+            totalProjectCosts={totalProjectCosts}
+            onViewProject={handleViewProject}
+          />
           
           <ProjectsTable
             projects={projects}

@@ -21,9 +21,9 @@ export function ProjectsTable({ projects, totalProjectCosts, onViewProject }: Pr
 
   const handleExport = () => {
     try {
-      const projectFilesMap: { [key: string]: any[] } = {}
+      const projectFilesMap: { [key: string]: ProjectFile[] } = {}
       projectIds.forEach(id => {
-        projectFilesMap[id] = existingFiles.filter(f => f.project_id === id)
+        projectFilesMap[id] = existingFiles?.filter(f => f.project_id === id) || []
       })
       
       const doc = generateProjectsPDF(projects, projectFilesMap)

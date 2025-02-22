@@ -13,16 +13,16 @@ interface MobileProjectCardProps {
   onViewProject: (project: Project) => void
 }
 
-export function MobileProjectCard({ projects, totalProjectCosts, onViewProject }: MobileProjectCardProps) {
+export function MobileProjectCard({ projects = [], totalProjectCosts, onViewProject }: MobileProjectCardProps) {
   const { toast } = useToast()
   const projectIds = projects.map(p => p.id)
   const { existingFiles } = useProjectFiles(projectIds[0]) // This hook needs to be updated to handle multiple projects
 
   const handleExport = () => {
     try {
-      const projectFilesMap: { [key: string]: any[] } = {}
+      const projectFilesMap: { [key: string]: ProjectFile[] } = {}
       projectIds.forEach(id => {
-        projectFilesMap[id] = existingFiles.filter(f => f.project_id === id)
+        projectFilesMap[id] = existingFiles?.filter(f => f.project_id === id) || []
       })
       
       const doc = generateProjectsPDF(projects, projectFilesMap)
@@ -44,7 +44,7 @@ export function MobileProjectCard({ projects, totalProjectCosts, onViewProject }
 
   return (
     <div className="block sm:hidden -mx-6">
-      {projects.map(project => (
+      {projects?.map(project => (
         <div 
           key={project.id}
           className="border-b last:border-b-0 py-6 first:pt-2 last:pb-2 px-4"
