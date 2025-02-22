@@ -25,6 +25,7 @@ import Disclaimers from './pages/Disclaimers'
 import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
 import GenerateOGImage from './pages/GenerateOGImage'
+import { ProtectedRoute } from "./components/auth/ProtectedRoute"
 
 const router = createHashRouter([
   {
@@ -57,7 +58,7 @@ const router = createHashRouter([
       },
       {
         path: "account",
-        element: <Account />
+        element: <ProtectedRoute><Account /></ProtectedRoute>
       },
       {
         path: "login",
@@ -69,7 +70,7 @@ const router = createHashRouter([
       },
       {
         path: "profile",
-        element: <Profile />
+        element: <ProtectedRoute><Profile /></ProtectedRoute>
       },
       {
         path: "community",
@@ -81,15 +82,15 @@ const router = createHashRouter([
       },
       {
         path: "property/edit/:id?",
-        element: <EditProperty />
+        element: <ProtectedRoute><EditProperty /></ProtectedRoute>
       },
       {
         path: "project/edit/:propertyId/:id?",
-        element: <EditProject />
+        element: <ProtectedRoute><EditProject /></ProtectedRoute>
       },
       {
         path: "project/view/:propertyId/:id",
-        element: <ViewProject />
+        element: <ProtectedRoute><ViewProject /></ProtectedRoute>
       },
       {
         path: "disclaimers",

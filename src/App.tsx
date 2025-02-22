@@ -1,12 +1,8 @@
 
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { Suspense } from "react";
-import SignUp from "@/pages/SignUp";
-import Login from "@/pages/Login";
-import Profile from "@/pages/Profile";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { Toaster } from "./components/ui/toaster";
-import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { LoadingSpinner } from "./components/ui/LoadingSpinner";
 import { useNetworkStatus } from "./hooks/useNetworkStatus";
 
@@ -35,19 +31,7 @@ function App() {
           </div>
         }
       >
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<Login />} />
-          <Route 
-            path="/account" 
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            } 
-          />
-        </Routes>
+        <Outlet />
       </Suspense>
       <Toaster />
     </ErrorBoundary>
