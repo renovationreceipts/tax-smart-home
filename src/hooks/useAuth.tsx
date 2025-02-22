@@ -39,16 +39,22 @@ export function useAuth() {
     // Handle OAuth callback parameters
     const handleCallback = async () => {
       // For hash router, we need to check if we're at the root with OAuth params
-      const isAtRoot = window.location.hash === '#' || window.location.hash === '';
       const hasOAuthParams = window.location.search.includes('code=') || 
                            window.location.search.includes('access_token=') ||
                            window.location.search.includes('error=');
 
-      console.log("Checking OAuth callback:", { isAtRoot, hasOAuthParams });
+      console.log("Checking OAuth callback params:", { 
+        hasOAuthParams,
+        search: window.location.search,
+        hash: window.location.hash
+      });
 
-      if (isAtRoot && hasOAuthParams) {
+      if (hasOAuthParams) {
         console.log("Processing OAuth callback");
         try {
+          // Wait for session to be established
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
           const { data: { session }, error } = await supabase.auth.getSession();
           
           if (error) {
@@ -63,7 +69,10 @@ export function useAuth() {
           }
           
           if (session) {
-            console.log("OAuth callback successful, redirecting to account");
+            console.log("OAuth callback successful, session established:", {
+              user: session.user.id,
+              email: session.user.email
+            });
             navigate("/account", { replace: true });
             toast({
               title: "Success!",
@@ -87,8 +96,8 @@ export function useAuth() {
       });
 
       if (event === 'SIGNED_IN') {
-        console.log("Valid session detected");
-        // Don't redirect here - let the callback handler manage it for OAuth
+        console.log("Valid session detected, checking OAuth status");
+        // Only handle non-OAuth sign-ins here
         if (!window.location.search.includes('code=')) {
           navigate("/account", { replace: true });
           toast({
@@ -98,7 +107,6 @@ export function useAuth() {
         }
       } else if (event === 'SIGNED_OUT') {
         console.log("User signed out");
-        // Only redirect to home if we're not already there
         if (window.location.hash !== '#/') {
           navigate("/", { replace: true });
         }
@@ -109,9 +117,9 @@ export function useAuth() {
       }
     });
 
-    // Initial session check and callback handling
-    checkSession();
+    // First check for OAuth callback, then check session
     handleCallback();
+    checkSession();
 
     return () => {
       console.log("Cleaning up auth state listener");
