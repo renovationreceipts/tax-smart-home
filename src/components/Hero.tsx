@@ -92,9 +92,7 @@ export const Hero = () => {
                     <DollarSign className="h-6 w-6 text-[#22C55E]" />
                   </div>
                   <h3 className="text-xl font-semibold mb-2">Hidden Credits Finder</h3>
-                  <p className="text-gray-600">
-                    Discover tax credits and rebates you didn't know about. Our database is updated with the latest federal and state incentives.
-                  </p>
+                  <p className="text-gray-600">Discover tax credits and rebates. We use AI to help find the latest federal and state incentives.</p>
                 </div>
 
                 <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-sm">
