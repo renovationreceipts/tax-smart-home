@@ -16,28 +16,23 @@ export function useAuth() {
 
   useEffect(() => {
     let mounted = true;
+    let hasInitialized = false; // Prevent multiple initialization attempts
 
     const initializeAuth = async () => {
+      if (hasInitialized || !mounted) return;
+      
       try {
-        if (!mounted) return;
-        
         setLoading(true);
+        hasInitialized = true;
         console.log("Initializing auth state...");
 
-        // Get initial session first
+        // Get initial session
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        if (sessionError) {
-          throw sessionError;
-        }
+        if (sessionError) throw sessionError;
 
         if (mounted) {
           setSession(session);
           setUser(session?.user ?? null);
-        }
-
-        // Handle OAuth callback after session check
-        if (window.location.search.includes('code=')) {
-          await handleCallback();
         }
 
         // Set up auth state listener
@@ -67,27 +62,14 @@ export function useAuth() {
 
         return () => {
           subscription.unsubscribe();
-          mounted = false;
         };
       } catch (error) {
         console.error("Auth initialization error:", error);
         if (mounted) {
-          // Reset state on error
           setSession(null);
           setUser(null);
           setInitialized(true);
           setLoading(false);
-          
-          // Only show error toast if we're not on a public route
-          const publicRoutes = ['/', '/login', '/signup'];
-          if (!publicRoutes.includes(window.location.pathname)) {
-            toast({
-              variant: "destructive",
-              title: "Authentication Error",
-              description: "Failed to initialize authentication. Please try logging in again.",
-            });
-            navigate('/login', { replace: true });
-          }
         }
       }
     };
@@ -96,8 +78,9 @@ export function useAuth() {
 
     return () => {
       mounted = false;
+      hasInitialized = false;
     };
-  }, [navigate, toast, setSession, setUser, setLoading, setInitialized, handleCallback]);
+  }, [navigate, toast, setSession, setUser, setLoading, setInitialized]);
 
   return { 
     handleGoogleAuth
