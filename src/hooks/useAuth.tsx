@@ -35,46 +35,19 @@ export function useAuth() {
         navigate("/login", { replace: true });
       }
     };
-    checkSession();
 
-    // Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session) => {
-      console.log("Auth state changed:", { 
-        event, 
-        sessionExists: !!session, 
-        userId: session?.user?.id,
-        provider: session?.user?.app_metadata?.provider
-      });
-
-      if (event === 'SIGNED_IN') {
-        console.log("Valid session detected");
-        navigate("/account", { replace: true });
-        toast({
-          title: "Success!",
-          description: "You have successfully signed in.",
-        });
-      } else if (event === 'SIGNED_OUT') {
-        console.log("User signed out");
-        // Only redirect to home if we're not already there
-        if (window.location.hash !== '#/') {
-          navigate("/", { replace: true });
-        }
-      } else if (event === 'TOKEN_REFRESHED') {
-        console.log("Token refreshed successfully");
-      } else if (event === 'USER_UPDATED') {
-        console.log("User data updated");
-      }
-    });
-
-    // Handle OAuth callback
+    // Handle OAuth callback parameters
     const handleCallback = async () => {
-      // Check if we're in an OAuth callback
-      const hasCallbackParams = window.location.hash.includes('access_token') || 
-                              window.location.hash.includes('error') ||
-                              window.location.search.includes('code=');
+      // For hash router, we need to check if we're at the root with OAuth params
+      const isAtRoot = window.location.hash === '#' || window.location.hash === '';
+      const hasOAuthParams = window.location.search.includes('code=') || 
+                           window.location.search.includes('access_token=') ||
+                           window.location.search.includes('error=');
 
-      if (hasCallbackParams) {
-        console.log("Detected OAuth callback, attempting to process");
+      console.log("Checking OAuth callback:", { isAtRoot, hasOAuthParams });
+
+      if (isAtRoot && hasOAuthParams) {
+        console.log("Processing OAuth callback");
         try {
           const { data: { session }, error } = await supabase.auth.getSession();
           
@@ -90,8 +63,12 @@ export function useAuth() {
           }
           
           if (session) {
-            console.log("Successfully processed OAuth callback");
+            console.log("OAuth callback successful, redirecting to account");
             navigate("/account", { replace: true });
+            toast({
+              title: "Success!",
+              description: "You have successfully signed in with Google.",
+            });
           }
         } catch (error) {
           console.error("Error handling OAuth callback:", error);
@@ -99,6 +76,41 @@ export function useAuth() {
         }
       }
     };
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session) => {
+      console.log("Auth state changed:", { 
+        event, 
+        sessionExists: !!session, 
+        userId: session?.user?.id,
+        provider: session?.user?.app_metadata?.provider
+      });
+
+      if (event === 'SIGNED_IN') {
+        console.log("Valid session detected");
+        // Don't redirect here - let the callback handler manage it for OAuth
+        if (!window.location.search.includes('code=')) {
+          navigate("/account", { replace: true });
+          toast({
+            title: "Success!",
+            description: "You have successfully signed in.",
+          });
+        }
+      } else if (event === 'SIGNED_OUT') {
+        console.log("User signed out");
+        // Only redirect to home if we're not already there
+        if (window.location.hash !== '#/') {
+          navigate("/", { replace: true });
+        }
+      } else if (event === 'TOKEN_REFRESHED') {
+        console.log("Token refreshed successfully");
+      } else if (event === 'USER_UPDATED') {
+        console.log("User data updated");
+      }
+    });
+
+    // Initial session check and callback handling
+    checkSession();
     handleCallback();
 
     return () => {
@@ -113,7 +125,7 @@ export function useAuth() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}`,
+          redirectTo: `${window.location.origin}/#/account`,
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
