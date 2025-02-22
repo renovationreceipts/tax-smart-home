@@ -19,8 +19,10 @@ export function useAuth() {
         console.log("Checking existing session:", { exists: !!session, user: session?.user });
         
         if (session) {
-          // If we have a session but not in OAuth flow, redirect to account
-          if (!window.location.search.includes('code=')) {
+          // Only redirect if we're not in OAuth flow
+          const isOAuthFlow = window.location.hash.includes('access_token=') || 
+                            window.location.search.includes('code=');
+          if (!isOAuthFlow) {
             navigate("/account", { replace: true });
           }
         } else {
@@ -36,23 +38,47 @@ export function useAuth() {
       }
     };
 
-    // Handle OAuth callback parameters
-    const handleCallback = async () => {
-      const hasOAuthParams = window.location.search.includes('code=') || 
-                           window.location.search.includes('access_token=') ||
-                           window.location.search.includes('error=');
+    // Process hash fragments and extract tokens
+    const processHashParams = () => {
+      const hash = window.location.hash;
+      const hashParts = hash.split('#');
+      
+      // Check if we have multiple hash fragments
+      if (hashParts.length > 2) {
+        console.log("Found multiple hash fragments, processing...");
+        // Get the access token part (last fragment)
+        const tokenPart = hashParts[hashParts.length - 1];
+        if (tokenPart.includes('access_token=')) {
+          // Clean up URL immediately
+          const basePath = hashParts[1] || '';
+          window.history.replaceState(
+            {},
+            document.title,
+            `${window.location.pathname}#${basePath}`
+          );
+          return true;
+        }
+      }
+      return false;
+    };
 
-      console.log("Checking OAuth callback params:", { 
-        hasOAuthParams,
-        search: window.location.search,
-        hash: window.location.hash
+    // Handle OAuth callback
+    const handleCallback = async () => {
+      const hasHashParams = processHashParams();
+      const hasSearchParams = window.location.search.includes('code=');
+      
+      console.log("Checking OAuth params:", { 
+        hasHashParams,
+        hasSearchParams,
+        hash: window.location.hash,
+        search: window.location.search
       });
 
-      if (hasOAuthParams) {
+      if (hasHashParams || hasSearchParams) {
         console.log("Processing OAuth callback");
         try {
-          // Add a delay to ensure auth state is updated
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          // Wait for Supabase to process the token
+          await new Promise(resolve => setTimeout(resolve, 500));
           
           const { data: { session }, error } = await supabase.auth.getSession();
           
@@ -73,8 +99,10 @@ export function useAuth() {
               email: session.user.email
             });
             
-            // Clear URL parameters after successful login
-            window.history.replaceState({}, document.title, window.location.pathname);
+            // Ensure URL is clean
+            if (hasSearchParams) {
+              window.history.replaceState({}, document.title, window.location.pathname);
+            }
             
             navigate("/account", { replace: true });
             toast({
@@ -93,7 +121,7 @@ export function useAuth() {
     };
 
     // Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event: AuthChangeEvent, session) => {
       console.log("Auth state changed:", { 
         event, 
         sessionExists: !!session, 
@@ -104,7 +132,9 @@ export function useAuth() {
 
       if (event === 'SIGNED_IN') {
         // Skip redirect if we're in OAuth flow
-        if (!window.location.search.includes('code=')) {
+        const isOAuthFlow = window.location.hash.includes('access_token=') || 
+                          window.location.search.includes('code=');
+        if (!isOAuthFlow) {
           console.log("Standard sign-in detected, redirecting to account");
           navigate("/account", { replace: true });
           toast({
@@ -116,19 +146,16 @@ export function useAuth() {
         }
       } else if (event === 'SIGNED_OUT') {
         console.log("User signed out");
-        if (window.location.hash !== '#/') {
-          navigate("/", { replace: true });
-        }
+        navigate("/", { replace: true });
       }
     });
 
-    // Handle OAuth callback first, then check session if no OAuth params
+    // Initialize auth flow
     const init = async () => {
-      if (window.location.search.includes('code=')) {
-        await handleCallback();
-      } else {
-        await checkSession();
-      }
+      // Handle OAuth callback first
+      await handleCallback();
+      // Then check session if needed
+      await checkSession();
     };
 
     init();
@@ -145,7 +172,7 @@ export function useAuth() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/#/account`,
+          redirectTo: `${window.location.origin}`, // Redirect to root instead of /account
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
