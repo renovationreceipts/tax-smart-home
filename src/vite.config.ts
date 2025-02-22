@@ -4,24 +4,28 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  base: "",
   server: {
     host: "::",
     port: 8080,
     headers: {
       'Cache-Control': 'no-store',
+      'Pragma': 'no-cache',
+      'Expires': '0',
     },
   },
   build: {
     rollupOptions: {
       output: {
-        // Add content hash to file names for cache busting
+        // Enhanced cache busting with valid pattern
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
       },
     },
+    // Ensure source maps are generated for better debugging
+    sourcemap: true,
   },
   plugins: [
     react(),
@@ -32,5 +36,9 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  // Add optimizeDeps to ensure proper module pre-bundling
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
   },
 }));
