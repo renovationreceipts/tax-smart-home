@@ -1,19 +1,29 @@
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import SignUp from "@/pages/SignUp";
+import Login from "@/pages/Login";
+import Profile from "@/pages/Profile";
+import ProjectForm from "@/pages/ProjectForm";
+import Projects from "@/pages/Projects";
+import { ErrorBoundary } from "./components/ErrorBoundary";
+import { Toaster } from "./components/ui/toaster";
 
-import React from "react"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { Toaster } from "@/components/ui/toaster"
-import { ThemeProvider } from "@/components/theme-provider"
-import { Outlet } from "react-router-dom"
-
-const queryClient = new QueryClient()
-
-export default function App() {
+function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-        <Outlet />
-        <Toaster />
-      </ThemeProvider>
-    </QueryClientProvider>
-  )
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/account" element={<Profile />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/new" element={<ProjectForm />} />
+          <Route path="/projects/:id/edit" element={<ProjectForm />} />
+        </Routes>
+      </BrowserRouter>
+      <Toaster />
+    </ErrorBoundary>
+  );
 }
+
+export default App;
