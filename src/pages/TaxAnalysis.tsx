@@ -23,7 +23,7 @@ export default function TaxAnalysis() {
   useEffect(() => {
     // If no property is selected and we have properties, redirect to the first one
     if (!propertyId && properties.length > 0) {
-      navigate(`/tax-analysis?propertyId=${properties[0].id}`);
+      navigate(`/tax-analysis?propertyId=${properties[0].id}`, { replace: true });
     }
     // If no properties exist, redirect to account page
     if (properties.length === 0) {
