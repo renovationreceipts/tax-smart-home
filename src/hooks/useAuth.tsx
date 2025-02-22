@@ -81,12 +81,6 @@ export function useAuth() {
         navigate("/", { replace: true });
       } else if (event === 'TOKEN_REFRESHED') {
         console.log("Auth token refreshed successfully");
-      } else if (event === 'USER_DELETED') {
-        navigate("/", { replace: true });
-        toast({
-          title: "Account Deleted",
-          description: "Your account has been successfully deleted.",
-        });
       }
     });
 
