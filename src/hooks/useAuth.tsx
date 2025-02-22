@@ -1,61 +1,62 @@
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { AuthError, AuthResponse } from "@supabase/supabase-js";
-import { useSession } from "./auth/useSession";
+import { useAuthStore } from "./auth/useAuthStore";
 import { useOAuthCallback } from "./auth/useOAuthCallback";
 import { useGoogleAuth } from "./auth/useGoogleAuth";
 
 export function useAuth() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { checkSession } = useSession();
+  const { setSession, setUser, setLoading, setInitialized } = useAuthStore();
   const { handleCallback } = useOAuthCallback();
   const { handleGoogleAuth } = useGoogleAuth();
-  const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
     let mounted = true;
 
     const initializeAuth = async () => {
       try {
-        console.log("Setting up auth state change listener");
         if (!mounted) return;
         
-        // Handle OAuth callback first
+        setLoading(true);
+        console.log("Initializing auth state...");
+
+        // Handle OAuth callback if present
         await handleCallback();
         
         // Get initial session
         const { data: { session } } = await supabase.auth.getSession();
-        
+        if (mounted) {
+          setSession(session);
+          setUser(session?.user ?? null);
+        }
+
         // Set up auth state listener
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, newSession) => {
           console.log("Auth state changed:", { event, hasSession: !!newSession });
           
           if (!mounted) return;
 
-          if (newSession?.user) {
-            // Don't navigate if we're already on a protected route
-            const protectedRoutes = ['/account', '/profile', '/tax-analysis'];
-            const currentPath = window.location.pathname;
-            const isProtectedRoute = protectedRoutes.some(route => currentPath.startsWith(route));
-            
-            if (event === 'SIGNED_IN' && !isProtectedRoute) {
-              navigate("/account", { replace: true });
-              toast({
-                title: "Success!",
-                description: "You have successfully signed in.",
-              });
-            }
+          setSession(newSession);
+          setUser(newSession?.user ?? null);
+
+          if (event === 'SIGNED_IN') {
+            navigate("/account", { replace: true });
+            toast({
+              title: "Success!",
+              description: "You have successfully signed in.",
+            });
           } else if (event === 'SIGNED_OUT') {
             navigate("/", { replace: true });
           }
         });
 
         if (mounted) {
-          setIsInitializing(false);
+          setInitialized(true);
+          setLoading(false);
         }
 
         return () => {
@@ -65,7 +66,8 @@ export function useAuth() {
       } catch (error) {
         console.error("Auth initialization error:", error);
         if (mounted) {
-          setIsInitializing(false);
+          setInitialized(true);
+          setLoading(false);
           toast({
             variant: "destructive",
             title: "Authentication Error",
@@ -80,10 +82,9 @@ export function useAuth() {
     return () => {
       mounted = false;
     };
-  }, [navigate, toast, handleCallback]);
+  }, [navigate, toast, setSession, setUser, setLoading, setInitialized, handleCallback]);
 
   return { 
-    handleGoogleAuth,
-    isInitializing
+    handleGoogleAuth
   };
 }
