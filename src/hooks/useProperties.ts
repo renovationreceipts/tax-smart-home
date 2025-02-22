@@ -36,5 +36,8 @@ export function useProperties() {
   return useQuery({
     queryKey: ['properties'],
     queryFn: fetchProperties,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    initialData: []
   })
 }

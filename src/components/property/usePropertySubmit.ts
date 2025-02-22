@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client"
 import { format } from "date-fns"
 import { PropertyFormValues } from "./form/types"
+import { useQueryClient } from "@tanstack/react-query"
 
 interface UsePropertySubmitOptions {
   onSuccess?: () => void
@@ -13,6 +14,7 @@ interface UsePropertySubmitOptions {
 export function usePropertySubmit({ onSuccess, propertyId }: UsePropertySubmitOptions) {
   const { toast } = useToast()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const submitProperty = async (data: PropertyFormValues) => {
     try {
@@ -93,6 +95,9 @@ export function usePropertySubmit({ onSuccess, propertyId }: UsePropertySubmitOp
         console.error("Database error:", error)
         throw error
       }
+
+      // Invalidate properties query to trigger a refetch
+      queryClient.invalidateQueries({ queryKey: ['properties'] })
 
       if (onSuccess) {
         onSuccess()
