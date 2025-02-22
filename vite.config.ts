@@ -50,7 +50,12 @@ export default defineConfig(({ mode }) => ({
       'react', 
       'react-dom',
       'zod',
-      '@hookform/resolvers/zod'
+      '@hookform/resolvers/zod',
+      '@supabase/supabase-js',
+      '@supabase/postgrest-js',
+      '@supabase/realtime-js',
+      '@supabase/storage-js',
+      '@supabase/functions-js'
     ],
     esbuildOptions: {
       target: 'es2020',
