@@ -32,23 +32,34 @@ export const useSession = () => {
           }
         } else {
           console.log("Session exists but user verification failed");
-          // Only navigate if not on public routes
+          // Only navigate if not on public routes and not on property edit
           const publicRoutes = ['/', '/login', '/signup'];
-          if (!publicRoutes.some(route => window.location.pathname === route)) {
+          const propertyRoutes = ['/property/edit', '/property/edit/'];
+          const isPublicRoute = publicRoutes.some(route => window.location.pathname === route);
+          const isPropertyRoute = propertyRoutes.some(route => window.location.pathname.startsWith(route));
+          
+          if (!isPublicRoute && !isPropertyRoute) {
             navigate("/login", { replace: true });
           }
         }
       } else {
         // If no session and not on public routes, redirect to login
         const publicRoutes = ['/', '/login', '/signup'];
-        if (!publicRoutes.some(route => window.location.pathname === route)) {
+        const propertyRoutes = ['/property/edit', '/property/edit/'];
+        const isPublicRoute = publicRoutes.some(route => window.location.pathname === route);
+        const isPropertyRoute = propertyRoutes.some(route => window.location.pathname.startsWith(route));
+        
+        if (!isPublicRoute && !isPropertyRoute) {
           navigate("/login", { replace: true });
         }
       }
     } catch (error) {
       console.error("Error in checkSession:", error);
-      // Only navigate on error if not already on login
-      if (window.location.pathname !== '/login') {
+      // Only navigate on error if not already on login and not on property edit
+      const propertyRoutes = ['/property/edit', '/property/edit/'];
+      const isPropertyRoute = propertyRoutes.some(route => window.location.pathname.startsWith(route));
+      
+      if (window.location.pathname !== '/login' && !isPropertyRoute) {
         navigate("/login", { replace: true });
       }
     }
