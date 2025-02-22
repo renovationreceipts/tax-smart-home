@@ -16,13 +16,40 @@ export function usePropertySubmit({ onSuccess, propertyId }: UsePropertySubmitOp
 
   const submitProperty = async (data: PropertyFormValues) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      // First check session
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
       
-      if (!user) {
+      if (sessionError) {
+        console.error("Error checking session:", sessionError)
+        toast({
+          variant: "destructive",
+          title: "Session Error",
+          description: "There was an error verifying your session. Please try logging in again.",
+        })
+        navigate("/login", { replace: true })
+        return
+      }
+
+      if (!session) {
+        console.error("No active session found")
+        toast({
+          variant: "destructive",
+          title: "Authentication Required",
+          description: "Please log in to add or edit properties.",
+        })
+        navigate("/login", { replace: true })
+        return
+      }
+
+      // Now we know we have a valid session, get the user
+      const { data: { user }, error: userError } = await supabase.auth.getUser()
+      
+      if (userError || !user) {
+        console.error("Error getting user:", userError)
         toast({
           variant: "destructive",
           title: "Error",
-          description: "You must be logged in to add a property.",
+          description: "Could not verify user information. Please try logging in again.",
         })
         return
       }
@@ -62,7 +89,10 @@ export function usePropertySubmit({ onSuccess, propertyId }: UsePropertySubmitOp
         error = insertError
       }
 
-      if (error) throw error
+      if (error) {
+        console.error("Database error:", error)
+        throw error
+      }
 
       if (onSuccess) {
         onSuccess()

@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,10 +9,17 @@ export default function Profile() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        console.log("No active session found, redirecting to login");
-        navigate("/login");
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        console.log("Profile - Checking auth session:", { exists: !!session });
+        
+        if (!session) {
+          console.log("Profile - No active session found, redirecting to login");
+          navigate("/login", { replace: true });
+        }
+      } catch (error) {
+        console.error("Profile - Error checking session:", error);
+        navigate("/login", { replace: true });
       }
     };
 
