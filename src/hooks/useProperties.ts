@@ -18,9 +18,17 @@ export interface Property {
 
 async function fetchProperties() {
   console.log("Fetching properties...")
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  if (!user) {
+    console.error("No authenticated user found")
+    return []
+  }
+
   const { data, error } = await supabase
     .from("properties")
     .select("id, property_type, name, street_address, city, state, zip_code, purchase_price, purchase_date, current_value, lived_in_property_2_of_5_years")
+    .eq('user_id', user.id)
     .returns<Property[]>()
   
   if (error) {
@@ -29,7 +37,7 @@ async function fetchProperties() {
   }
   
   console.log("Properties fetched:", data)
-  return data
+  return data || []
 }
 
 export function useProperties() {
@@ -38,6 +46,8 @@ export function useProperties() {
     queryFn: fetchProperties,
     refetchOnMount: true,
     refetchOnWindowFocus: true,
-    initialData: []
+    staleTime: 0, // Always fetch fresh data
+    cacheTime: 0, // Don't cache the data
+    retry: 3 // Retry failed requests up to 3 times
   })
 }
