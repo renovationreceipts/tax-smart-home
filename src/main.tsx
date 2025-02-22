@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider, ScrollRestoration } from "react-router-dom"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import App from './App.tsx'
 import './index.css'
 import Account from "@/pages/Account"
@@ -27,12 +27,10 @@ import GenerateOGImage from './pages/GenerateOGImage.tsx'
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <App />
-    ),
+    element: <App />,
     children: [
       {
-        index: true,
+        path: "",
         element: <Index />
       },
       {
