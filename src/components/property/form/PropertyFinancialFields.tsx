@@ -8,7 +8,7 @@ import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { UseFormReturn } from "react-hook-form"
-import { PropertyFormValues } from "../PropertyForm"
+import { PropertyFormValues } from "./types"
 
 interface PropertyFinancialFieldsProps {
   form: UseFormReturn<PropertyFormValues>

@@ -2,7 +2,7 @@
 import { FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form"
 import { Switch } from "@/components/ui/switch"
 import { UseFormReturn } from "react-hook-form"
-import { PropertyFormValues } from "../PropertyForm"
+import { PropertyFormValues } from "./types"
 
 interface PropertyEligibilityFieldsProps {
   form: UseFormReturn<PropertyFormValues>
