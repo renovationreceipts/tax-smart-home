@@ -49,7 +49,7 @@ export default function ViewProject() {
           <XCircle className="h-5 w-5 text-red-500" />
         )}
         <span className={qualifies ? "text-green-700" : "text-red-700"}>
-          {qualifies ? "Eligible" : "Not Eligible"}
+          {qualifies ? "Likely Eligible" : "Likely Not Eligible"}
         </span>
       </div>
     );
