@@ -1,4 +1,3 @@
-
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { PropertyForm } from "@/components/PropertyForm"
 import { useProperties } from "@/hooks/useProperties"
@@ -10,12 +9,15 @@ export default function EditProperty() {
   const { id } = useParams()
   const [searchParams] = useSearchParams()
   const { data: properties = [] } = useProperties()
-  const property = id && id !== 'edit' ? properties.find(p => p.id === id) : undefined
+  
+  // Only consider id if it's a valid UUID and not 'edit'
+  const isValidId = id && id !== 'edit' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)
+  const property = isValidId ? properties.find(p => p.id === id) : undefined
 
   const handleSuccess = () => {
     // If we're editing an existing property, use that ID
     // Otherwise use the current selected property from the query params
-    const propertyId = id && id !== 'edit' ? id : searchParams.get("propertyId")
+    const propertyId = isValidId ? id : searchParams.get("propertyId")
     
     // Scroll to top before navigation
     window.scrollTo(0, 0)
@@ -43,7 +45,7 @@ export default function EditProperty() {
       </div>
       <PropertyForm
         property={transformedProperty}
-        propertyId={id !== 'edit' ? id : undefined}
+        propertyId={isValidId ? id : undefined}
         onCancel={() => handleSuccess()}
         onSuccess={() => handleSuccess()}
       />

@@ -27,39 +27,53 @@ export function PropertyFormActions({ isEditing, propertyId, onCancel }: Propert
   const navigate = useNavigate()
   const [isDeleting, setIsDeleting] = useState(false)
 
-  const handleDeleteProperty = async () => {
-    // Validate that we have a propertyId before proceeding
-    if (!propertyId) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Unable to delete property. Invalid property ID.",
-      })
-      return
-    }
+  // Only show delete button if we're editing and have a valid UUID
+  const showDeleteButton = isEditing && propertyId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(propertyId)
 
+  const handleDeleteProperty = async () => {
     try {
+      // Validate propertyId is a valid UUID
+      if (!propertyId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(propertyId)) {
+        throw new Error("Invalid property ID format")
+      }
+
       setIsDeleting(true)
+      console.log('Deleting property:', propertyId)
       
-      const { error } = await supabase
+      // First delete associated projects
+      const { error: projectsError } = await supabase
+        .from('projects')
+        .delete()
+        .eq('property_id', propertyId)
+
+      if (projectsError) {
+        console.error('Error deleting projects:', projectsError)
+        throw projectsError
+      }
+
+      // Then delete the property
+      const { error: propertyError } = await supabase
         .from('properties')
         .delete()
         .eq('id', propertyId)
 
-      if (error) throw error
+      if (propertyError) {
+        console.error('Error deleting property:', propertyError)
+        throw propertyError
+      }
 
       toast({
         title: "Property Deleted",
-        description: "The property and all associated projects have been successfully removed from your account.",
+        description: "The property and all associated projects have been successfully removed.",
       })
 
       navigate('/account')
     } catch (error) {
-      console.error('Error deleting property:', error)
+      console.error('Error in handleDeleteProperty:', error)
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to delete property. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to delete property. Please try again.",
       })
     } finally {
       setIsDeleting(false)
@@ -68,7 +82,7 @@ export function PropertyFormActions({ isEditing, propertyId, onCancel }: Propert
 
   return (
     <div className="flex flex-col sm:flex-row sm:justify-between gap-8 pt-4">
-      {isEditing && propertyId && (
+      {showDeleteButton && (
         <div className="order-2 sm:order-none">
           <Dialog>
             <DialogTrigger asChild>
