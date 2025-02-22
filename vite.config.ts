@@ -17,11 +17,7 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     rollupOptions: {
-      external: ['zod'],
       output: {
-        globals: {
-          zod: 'Zod'
-        },
         // Enhanced cache busting with valid pattern
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
