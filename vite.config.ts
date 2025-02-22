@@ -28,6 +28,7 @@ export default defineConfig(({ mode }) => ({
       include: [/node_modules/],
       transformMixedEsModules: true
     },
+    target: 'esnext',
     // Ensure source maps are generated for better debugging
     sourcemap: true,
   },
@@ -40,6 +41,8 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+    mainFields: ['module', 'main'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
   // Add optimizeDeps to ensure proper module pre-bundling
   optimizeDeps: {
