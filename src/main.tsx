@@ -3,7 +3,6 @@ import './polyfills'
 import React from "react"
 import { createRoot } from "react-dom/client"
 import "./index.css"
-import App from "./App"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { AuthProvider } from "@/providers/AuthProvider"
@@ -44,41 +43,52 @@ const queryClient = new QueryClient({
   },
 });
 
+// Create the root component that provides auth context
+function Root() {
+  return (
+    <AuthProvider>
+      <div className="app">
+        <Outlet />
+      </div>
+    </AuthProvider>
+  );
+}
+
 // Create router with layouts
 const router = createBrowserRouter([
   {
     path: "/",
-    Component: App,
+    element: <Root />,
     children: [
       // Public routes
       {
-        Component: PublicLayout,
+        element: <PublicLayout />,
         children: [
-          { index: true, Component: Index },
-          { path: "login", Component: Login },
-          { path: "signup", Component: SignUp },
-          { path: "blog", Component: Blog },
-          { path: "blog/track-home-improvement-receipts", Component: TrackHomeImprovements },
-          { path: "blog/homeowners-guide-tax-savings", Component: HomeownersGuideTaxSavings },
-          { path: "blog/capital-gains-101", Component: CapitalGains101 },
-          { path: "community", Component: Community },
-          { path: "about", Component: About },
-          { path: "disclaimers", Component: Disclaimers },
-          { path: "terms", Component: Terms },
-          { path: "privacy-policy", Component: Privacy },
+          { index: true, element: <Index /> },
+          { path: "login", element: <Login /> },
+          { path: "signup", element: <SignUp /> },
+          { path: "blog", element: <Blog /> },
+          { path: "blog/track-home-improvement-receipts", element: <TrackHomeImprovements /> },
+          { path: "blog/homeowners-guide-tax-savings", element: <HomeownersGuideTaxSavings /> },
+          { path: "blog/capital-gains-101", element: <CapitalGains101 /> },
+          { path: "community", element: <Community /> },
+          { path: "about", element: <About /> },
+          { path: "disclaimers", element: <Disclaimers /> },
+          { path: "terms", element: <Terms /> },
+          { path: "privacy-policy", element: <Privacy /> },
         ],
       },
       // Protected routes
       {
-        Component: ProtectedLayout,
+        element: <ProtectedLayout />,
         children: [
-          { path: "account", Component: Account },
-          { path: "profile", Component: Profile },
-          { path: "tax-analysis", Component: TaxAnalysis },
-          { path: "property/edit/:id?", Component: EditProperty },
-          { path: "project/edit/:propertyId/:id?", Component: EditProject },
-          { path: "project/view/:propertyId/:id", Component: ViewProject },
-          { path: "generate-og-image", Component: GenerateOGImage },
+          { path: "account", element: <Account /> },
+          { path: "profile", element: <Profile /> },
+          { path: "tax-analysis", element: <TaxAnalysis /> },
+          { path: "property/edit/:id?", element: <EditProperty /> },
+          { path: "project/edit/:propertyId/:id?", element: <EditProject /> },
+          { path: "project/view/:propertyId/:id", element: <ViewProject /> },
+          { path: "generate-og-image", element: <GenerateOGImage /> },
         ],
       },
     ],

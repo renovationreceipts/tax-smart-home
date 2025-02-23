@@ -1,14 +1,9 @@
 
-import { AuthProvider } from "@/providers/AuthProvider"
-import { Outlet } from "react-router-dom"
 import "./App.css"
+import { Outlet } from "react-router-dom"
 
 function App() {
-  return (
-    <AuthProvider>
-      <Outlet />
-    </AuthProvider>
-  )
+  return <Outlet />
 }
 
 export default App
