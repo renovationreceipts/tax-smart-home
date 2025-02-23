@@ -7,7 +7,7 @@ import { AccountHeader } from "@/components/account/AccountHeader";
 import { EmptyPropertyState } from "@/components/property/EmptyPropertyState";
 import { WhySaveRecords } from "@/components/account/WhySaveRecords";
 import { TotalSavingsCard } from "@/components/account/TotalSavingsCard";
-import { PremiumCard } from "@/components/account/PremiumCard";
+// import { PremiumCard } from "@/components/account/PremiumCard";
 import Footer from "@/components/Footer";
 import { useState, useEffect } from "react";
 import { useProperties } from "@/hooks/useProperties";
@@ -127,11 +127,11 @@ export default function Account() {
               propertyId={selectedPropertyId}
               onViewAnalysis={handleViewAnalysis}
             />
-            <PremiumCard />
+            {/* <PremiumCard /> */}
           </div>
 
           <div className="lg:hidden">
-            <PremiumCard />
+            {/* <PremiumCard /> */}
           </div>
         </div>
       </main>
