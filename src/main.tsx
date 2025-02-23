@@ -3,7 +3,7 @@ import './polyfills'
 import React from "react"
 import { createRoot } from "react-dom/client"
 import "./index.css"
-import { createBrowserRouter, RouterProvider, Outlet, BrowserRouter } from "react-router-dom"
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { AuthProvider } from "@/providers/AuthProvider"
 import { PublicLayout } from "@/layouts/PublicLayout"
@@ -30,12 +30,11 @@ import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
 import GenerateOGImage from './pages/GenerateOGImage'
 
-// Configure React Query with more robust error handling and retry logic
+// Configure React Query
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: (failureCount, error) => {
-        // Don't retry on 404s or auth errors
         if (error instanceof Error && 
            (error.message.includes('not found') || 
             error.message.includes('unauthorized'))) {
@@ -43,13 +42,28 @@ const queryClient = new QueryClient({
         }
         return failureCount < 2;
       },
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      gcTime: 1000 * 60 * 10, // 10 minutes - renamed from cacheTime
+      staleTime: 1000 * 60 * 5,
+      gcTime: 1000 * 60 * 10,
       refetchOnWindowFocus: true,
       refetchOnMount: true,
     },
   },
 });
+
+// Create the root component that provides all contexts
+function Root() {
+  return (
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <div className="app">
+            <Outlet />
+          </div>
+        </AuthProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
+}
 
 // Create router with layouts
 const router = createBrowserRouter([
@@ -91,15 +105,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-// Create the root component that provides auth context
-function Root() {
-  return (
-    <div className="app">
-      <Outlet />
-    </div>
-  );
-}
-
 // Create root element and render app
 const container = document.getElementById("root");
 if (!container) throw new Error("Root element not found");
@@ -107,14 +112,6 @@ const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <ErrorBoundary>
-      <BrowserRouter>
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <RouterProvider router={router} />
-          </AuthProvider>
-        </QueryClientProvider>
-      </BrowserRouter>
-    </ErrorBoundary>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
