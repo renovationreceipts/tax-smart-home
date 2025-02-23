@@ -12,7 +12,6 @@ import { Property } from "@/hooks/useProperties"
 import { propertyFormSchema, PropertyFormValues } from "@/components/property/form/types"
 import { usePropertySubmit } from "@/components/property/usePropertySubmit"
 import { useState } from "react"
-import { Loader2 } from "lucide-react"
 
 interface PropertyFormProps {
   property?: Property
@@ -34,9 +33,23 @@ export function PropertyForm({ property, propertyId, onCancel, onSuccess }: Prop
       city: property?.city || "",
       state: property?.state || "",
       zipCode: property?.zip_code || "",
-      purchasePrice: property?.purchase_price?.toString() || "",
+      purchasePrice: property?.purchase_price ? 
+        new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).format(Number(property.purchase_price)) 
+        : "",
       purchaseDate: property?.purchase_date ? new Date(property.purchase_date) : new Date(),
-      currentValue: property?.current_value?.toString() || "",
+      currentValue: property?.current_value ? 
+        new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).format(Number(property.current_value))
+        : "",
       livedInProperty2of5Years: property?.lived_in_property_2_of_5_years ?? true,
     },
   })

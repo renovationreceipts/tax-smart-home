@@ -12,7 +12,7 @@ export default function EditProperty() {
   const { id } = useParams()
   const [searchParams] = useSearchParams()
   const [isLoading, setIsLoading] = useState(true)
-  const { data: properties = [] } = useProperties()
+  const { data: properties = [], isLoading: propertiesLoading } = useProperties()
   
   // Only consider id if it's a valid UUID and not 'edit'
   const isValidId = id && id !== 'edit' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)
@@ -42,14 +42,30 @@ export default function EditProperty() {
     navigate(`/account${propertyId ? `?propertyId=${propertyId}` : ''}`, { replace: true })
   }
 
-  // Transform the property data to ensure lived_in_property_2_of_5_years has a boolean value
-  const transformedProperty = property ? {
-    ...property,
-    lived_in_property_2_of_5_years: property.lived_in_property_2_of_5_years ?? true
-  } : undefined
-
-  if (isLoading) {
+  if (isLoading || propertiesLoading) {
     return <div className="flex justify-center items-center min-h-screen">Loading...</div>
+  }
+
+  // If we have a valid ID but no property was found, show an error
+  if (isValidId && !property) {
+    return (
+      <div className="min-h-screen bg-white py-8">
+        <div className="max-w-2xl mx-auto px-4">
+          <Button
+            variant="ghost"
+            className="mb-6"
+            onClick={() => navigate("/account", { replace: true })}
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Dashboard
+          </Button>
+          <div className="text-center">
+            <h2 className="text-xl font-semibold text-gray-900">Property Not Found</h2>
+            <p className="mt-2 text-gray-600">The property you're trying to edit could not be found.</p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -65,7 +81,7 @@ export default function EditProperty() {
         </Button>
       </div>
       <PropertyForm
-        property={transformedProperty}
+        property={property}
         propertyId={isValidId ? id : undefined}
         onCancel={() => handleSuccess()}
         onSuccess={() => handleSuccess()}
