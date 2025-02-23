@@ -4,7 +4,7 @@ import React from "react"
 import { createRoot } from "react-dom/client"
 import "./index.css"
 import App from "./App"
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { createBrowserRouter, RouterProvider, BrowserRouter } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { AuthProvider } from "@/providers/AuthProvider"
 import { PublicLayout } from "@/layouts/PublicLayout"
@@ -93,10 +93,12 @@ const root = createRoot(container);
 // Render app with correct provider nesting
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
-    </QueryClientProvider>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
