@@ -50,18 +50,12 @@ const queryClient = new QueryClient({
   },
 });
 
-// Create the root component that provides all contexts
+// Create the root layout component
 function Root() {
   return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <div className="app">
-            <Outlet />
-          </div>
-        </AuthProvider>
-      </QueryClientProvider>
-    </ErrorBoundary>
+    <div className="app">
+      <Outlet />
+    </div>
   );
 }
 
@@ -110,8 +104,17 @@ const container = document.getElementById("root");
 if (!container) throw new Error("Root element not found");
 const root = createRoot(container);
 
-root.render(
+// Create app with providers wrapping router
+const App = () => (
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
+
+root.render(<App />);
