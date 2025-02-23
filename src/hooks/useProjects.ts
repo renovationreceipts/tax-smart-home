@@ -72,7 +72,7 @@ export function useProjects(propertyId: string | null) {
   return useQuery({
     queryKey: ['projects', propertyId, user?.id],
     queryFn: () => propertyId ? fetchProjects(propertyId, user?.id) : Promise.resolve([]),
-    enabled: isAuthenticated && isInitialized && !!propertyId,
+    enabled: isAuthenticated && isInitialized && !!propertyId && !!user?.id,
     staleTime: 0, // Consider data immediately stale
     refetchOnMount: true, // Refetch when component mounts
     refetchOnWindowFocus: true, // Refetch when window regains focus
@@ -94,3 +94,4 @@ export function invalidateProjectsCache(queryClient: any, propertyId: string) {
     queryKey: ['projects', propertyId]
   })
 }
+

@@ -12,7 +12,7 @@ import { useProjectSubmit } from "@/hooks/useProjectSubmit"
 import type { Project } from "@/hooks/useProjects"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 interface ProjectFormProps {
   propertyId: string
@@ -55,6 +55,28 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
       receipts: null,
     },
   })
+
+  // Reset form when project data changes
+  useEffect(() => {
+    if (project) {
+      form.reset({
+        name: project.name,
+        description: project.description || "",
+        cost: new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).format(project.cost),
+        completion_date: new Date(project.completion_date),
+        builder_name: project.builder_name || "",
+        builder_url: project.builder_url || "",
+        beforePhotos: null,
+        afterPhotos: null,
+        receipts: null,
+      })
+    }
+  }, [project, form])
 
   const { onSubmit: submitProject } = useProjectSubmit({ propertyId, project, onSuccess: (data) => {
     // Since data.cost is already a number from useProjectSubmit, we don't need to parse it
@@ -106,3 +128,4 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
     </>
   )
 }
+
