@@ -94,15 +94,9 @@ const router = createBrowserRouter([
 // Create the root component that provides auth context
 function Root() {
   return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <div className="app">
-            <Outlet />
-          </div>
-        </AuthProvider>
-      </QueryClientProvider>
-    </ErrorBoundary>
+    <div className="app">
+      <Outlet />
+    </div>
   );
 }
 
@@ -113,6 +107,12 @@ const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
