@@ -10,14 +10,29 @@ interface PercentageFieldProps {
 
 export function PercentageField({ form, name, label }: PercentageFieldProps) {
   function formatPercentage(value: string) {
-    // Remove all non-numeric characters
+    // Remove all non-numeric characters except decimal point
     const numericValue = value.replace(/[^0-9.]/g, "")
     if (!numericValue) return ""
     
-    // Format as percentage with up to 2 decimal places
+    // Ensure only one decimal point
+    const parts = numericValue.split('.')
+    if (parts.length > 2) {
+      // If multiple decimal points, keep only first one
+      const beforeDecimal = parts[0]
+      const afterDecimal = parts.slice(1).join('')
+      return `${beforeDecimal}.${afterDecimal}`
+    }
+    
+    // Parse and format number with up to 2 decimal places
     const number = parseFloat(numericValue)
     if (isNaN(number)) return ""
-    return `${number}%`
+    
+    // Format with exactly 2 decimal places if there's any decimal
+    const formatted = numericValue.includes('.') 
+      ? Number(number.toFixed(2)) 
+      : number
+    
+    return `${formatted}%`
   }
 
   return (
