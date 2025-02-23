@@ -58,6 +58,23 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
     },
   })
 
+  // Reset form when component mounts with no project
+  useEffect(() => {
+    if (!project) {
+      form.reset({
+        name: "",
+        description: "",
+        cost: "",
+        completion_date: new Date(),
+        builder_name: "",
+        builder_url: "",
+        beforePhotos: null,
+        afterPhotos: null,
+        receipts: null,
+      })
+    }
+  }, [form])
+
   // Reset form when project data changes
   useEffect(() => {
     if (project) {

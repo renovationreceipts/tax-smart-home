@@ -18,6 +18,8 @@ export default function EditProject() {
     tax_credits_eligible: boolean
     insurance_reduction_eligible: boolean
   } | null>(null)
+  // Add formKey state to force form remount
+  const [formKey, setFormKey] = useState(Date.now())
 
   if (!propertyId) {
     navigate("/account")
@@ -49,15 +51,14 @@ export default function EditProject() {
   }
 
   const handleNavigateBack = () => {
-    // Scroll to top before navigation
     window.scrollTo(0, 0)
     navigate(`/account?propertyId=${propertyId}`)
   }
 
   const handleAddAnother = () => {
     setSuccessProject(null)
-    // Reset form by navigating to new project route
-    navigate(`/project/edit/${propertyId}`)
+    setFormKey(Date.now()) // Generate new key to force form remount
+    navigate(`/project/edit/${propertyId}?new=${Date.now()}`) // Add timestamp to force fresh route
   }
 
   const handleSuccess = (project: { 
@@ -73,6 +74,7 @@ export default function EditProject() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <ProjectForm
+        key={formKey}
         propertyId={propertyId}
         project={project}
         onCancel={handleNavigateBack}
@@ -87,4 +89,3 @@ export default function EditProject() {
     </div>
   )
 }
-
