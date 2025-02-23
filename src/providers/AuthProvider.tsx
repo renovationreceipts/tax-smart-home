@@ -1,6 +1,6 @@
 
 import { createContext, useContext, ReactNode, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AuthSession, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -23,6 +23,7 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   const [state, setState] = useState<AuthState>({
     session: null,
@@ -60,6 +61,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           
           if (!mounted) return;
 
+          // Update the auth state
           setState(prev => ({
             ...prev,
             session: newSession,
@@ -67,14 +69,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
             isAuthenticated: !!newSession,
           }));
 
+          // Handle specific auth events
           if (event === 'SIGNED_IN') {
-            navigate("/account");
-            toast({
-              title: "Success!",
-              description: "You have successfully signed in.",
-            });
+            // Only navigate to account if we're on login or signup pages
+            const isAuthPage = ['/login', '/signup'].includes(location.pathname);
+            if (isAuthPage) {
+              navigate("/account");
+              toast({
+                title: "Success!",
+                description: "You have successfully signed in.",
+              });
+            }
           } else if (event === 'SIGNED_OUT') {
             navigate("/");
+            toast({
+              title: "Signed out successfully",
+              description: "You have been logged out.",
+            });
           }
         });
 
@@ -101,7 +112,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return () => {
       mounted = false;
     };
-  }, [navigate, toast]);
+  }, [navigate, toast, location.pathname]);
 
   const signOut = async () => {
     try {
