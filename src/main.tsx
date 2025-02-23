@@ -50,12 +50,14 @@ const queryClient = new QueryClient({
   },
 });
 
-// Create the root layout component
+// Create the root layout component that includes AuthProvider
 function Root() {
   return (
-    <div className="app">
-      <Outlet />
-    </div>
+    <AuthProvider>
+      <div className="app">
+        <Outlet />
+      </div>
+    </AuthProvider>
   );
 }
 
@@ -109,9 +111,7 @@ const App = () => (
   <React.StrictMode>
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <RouterProvider router={router} />
-        </AuthProvider>
+        <RouterProvider router={router} />
       </QueryClientProvider>
     </ErrorBoundary>
   </React.StrictMode>
