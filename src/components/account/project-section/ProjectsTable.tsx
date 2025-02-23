@@ -80,7 +80,7 @@ export function ProjectsTable({ projects, totalProjectCosts, onViewProject }: Pr
                 className="ml-4"
               >
                 <Download className="h-4 w-4 mr-2" />
-                Export All
+                Download
               </Button>
             </TableCell>
           </TableRow>
