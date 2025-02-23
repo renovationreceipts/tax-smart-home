@@ -3,7 +3,7 @@ import './polyfills'
 import React from "react"
 import { createRoot } from "react-dom/client"
 import "./index.css"
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { AuthProvider } from "@/providers/AuthProvider"
 import { PublicLayout } from "@/layouts/PublicLayout"
@@ -62,7 +62,7 @@ const router = createBrowserRouter([
     children: [
       // Public routes
       {
-        element: <PublicLayout />,
+        element: <PublicLayout><Outlet /></PublicLayout>,
         children: [
           { index: true, element: <Index /> },
           { path: "login", element: <Login /> },
@@ -80,7 +80,7 @@ const router = createBrowserRouter([
       },
       // Protected routes
       {
-        element: <ProtectedLayout />,
+        element: <ProtectedLayout><Outlet /></ProtectedLayout>,
         children: [
           { path: "account", element: <Account /> },
           { path: "profile", element: <Profile /> },
