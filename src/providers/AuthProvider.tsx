@@ -11,6 +11,7 @@ interface AuthState {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
+  isInitialized: boolean;
   signOut: () => Promise<void>;
 }
 
@@ -23,16 +24,14 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [state, setState] = useState<{
-    session: AuthSession | null;
-    user: User | null;
-    isLoading: boolean;
-    isInitialized: boolean;
-  }>({
+  const [state, setState] = useState<AuthState>({
     session: null,
     user: null,
     isLoading: true,
+    isAuthenticated: false,
     isInitialized: false,
+    // We'll properly implement this below
+    signOut: async () => {},
   });
 
   useEffect(() => {
@@ -50,6 +49,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             session,
             user: session?.user ?? null,
             isLoading: false,
+            isAuthenticated: !!session,
             isInitialized: true,
           }));
         }
@@ -64,6 +64,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             ...prev,
             session: newSession,
             user: newSession?.user ?? null,
+            isAuthenticated: !!newSession,
           }));
 
           if (event === 'SIGNED_IN') {
@@ -89,6 +90,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             user: null,
             isLoading: false,
             isInitialized: true,
+            isAuthenticated: false,
           }));
         }
       }
@@ -120,6 +122,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  // Update state with the actual signOut function
+  useEffect(() => {
+    setState(prev => ({
+      ...prev,
+      signOut,
+    }));
+  }, []);
+
   // Don't render anything until we've initialized auth
   if (!state.isInitialized) {
     return (
@@ -130,15 +140,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider
-      value={{
-        session: state.session,
-        user: state.user,
-        isLoading: state.isLoading,
-        isAuthenticated: !!state.session,
-        signOut,
-      }}
-    >
+    <AuthContext.Provider value={state}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,5 +1,7 @@
+
 import { useQuery } from "@tanstack/react-query"
 import { supabase } from "@/integrations/supabase/client"
+import { useAuth } from "./useAuth"
 
 export interface Project {
   id: string
@@ -19,19 +21,39 @@ export interface Project {
   insurance_reduction_analysis: string | null
 }
 
-async function fetchProjects(propertyId: string) {
+async function fetchProjects(propertyId: string, userId: string | undefined) {
   // Validate that propertyId is a valid UUID using a regex
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
   if (!uuidRegex.test(propertyId)) {
-    console.log("Invalid property ID format:", propertyId)
-    return []
+    console.error("Invalid property ID format:", propertyId)
+    throw new Error("Invalid property ID format")
+  }
+
+  if (!userId) {
+    console.error("No authenticated user found")
+    throw new Error("Authentication required")
   }
 
   console.log("Fetching projects for property:", propertyId)
+  
+  // First verify the user owns this property
+  const { data: property, error: propertyError } = await supabase
+    .from("properties")
+    .select("id")
+    .eq("id", propertyId)
+    .eq("user_id", userId)
+    .single()
+
+  if (propertyError || !property) {
+    console.error("Property not found or access denied")
+    throw new Error("Property not found or access denied")
+  }
+
   const { data, error } = await supabase
     .from("projects")
     .select("*")
     .eq("property_id", propertyId)
+    .eq("user_id", userId)
     .order("completion_date", { ascending: false })
   
   if (error) {
@@ -44,9 +66,20 @@ async function fetchProjects(propertyId: string) {
 }
 
 export function useProjects(propertyId: string | null) {
+  const { user, isAuthenticated, isInitialized } = useAuth()
+
   return useQuery({
-    queryKey: ['projects', propertyId],
-    queryFn: () => propertyId ? fetchProjects(propertyId) : Promise.resolve([]),
-    enabled: !!propertyId,
+    queryKey: ['projects', propertyId, user?.id],
+    queryFn: () => propertyId ? fetchProjects(propertyId, user?.id) : Promise.resolve([]),
+    enabled: isAuthenticated && isInitialized && !!propertyId,
+    retry: (failureCount, error) => {
+      // Don't retry on authentication or access denied errors
+      if (error instanceof Error && 
+         (error.message === "Authentication required" || 
+          error.message === "Property not found or access denied")) {
+        return false
+      }
+      return failureCount < 3
+    }
   })
 }

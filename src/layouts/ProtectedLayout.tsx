@@ -6,9 +6,10 @@ import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 export function ProtectedLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, isInitialized } = useAuth();
 
-  if (isLoading) {
+  // Don't show anything until auth is initialized
+  if (!isInitialized || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <LoadingSpinner size="lg" />
@@ -17,6 +18,7 @@ export function ProtectedLayout({ children }: { children: ReactNode }) {
   }
 
   if (!isAuthenticated) {
+    // Save the attempted URL for redirecting after login
     return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
 

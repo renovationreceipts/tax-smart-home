@@ -7,6 +7,8 @@ import { useOAuthCallback } from "./auth/useOAuthCallback";
 import { useGoogleAuth } from "./auth/useGoogleAuth";
 import { useAuth as useAuthContext } from "@/providers/AuthProvider";
 
+export type AuthState = ReturnType<typeof useAuthContext>;
+
 export function useAuth() {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -14,9 +16,18 @@ export function useAuth() {
   const { handleGoogleAuth } = useGoogleAuth();
   const authContext = useAuthContext();
 
-  return { 
+  useEffect(() => {
+    if (!authContext.isInitialized) return;
+
+    // Redirect unauthenticated users to login
+    if (!authContext.isAuthenticated && !authContext.isLoading) {
+      navigate('/login');
+    }
+  }, [authContext.isAuthenticated, authContext.isLoading, authContext.isInitialized, navigate]);
+
+  return {
     ...authContext,
     handleGoogleAuth,
-    handleCallback
+    handleCallback,
   };
 }
