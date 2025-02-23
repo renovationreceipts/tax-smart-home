@@ -1,5 +1,5 @@
 
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "./useAuth"
 
@@ -67,11 +67,15 @@ async function fetchProjects(propertyId: string, userId: string | undefined) {
 
 export function useProjects(propertyId: string | null) {
   const { user, isAuthenticated, isInitialized } = useAuth()
+  const queryClient = useQueryClient()
 
   return useQuery({
     queryKey: ['projects', propertyId, user?.id],
     queryFn: () => propertyId ? fetchProjects(propertyId, user?.id) : Promise.resolve([]),
     enabled: isAuthenticated && isInitialized && !!propertyId,
+    staleTime: 0, // Consider data immediately stale
+    refetchOnMount: true, // Refetch when component mounts
+    refetchOnWindowFocus: true, // Refetch when window regains focus
     retry: (failureCount, error) => {
       // Don't retry on authentication or access denied errors
       if (error instanceof Error && 
@@ -81,5 +85,12 @@ export function useProjects(propertyId: string | null) {
       }
       return failureCount < 3
     }
+  })
+}
+
+// Export a function to invalidate projects cache
+export function invalidateProjectsCache(queryClient: any, propertyId: string) {
+  queryClient.invalidateQueries({
+    queryKey: ['projects', propertyId]
   })
 }

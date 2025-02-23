@@ -6,6 +6,8 @@ import type { ProjectFormValues } from "@/components/project/form/ProjectFormTyp
 import type { Project } from "@/hooks/useProjects"
 import { useFileUpload } from "./project/useFileUpload"
 import { analyzeProject } from "./project/useProjectAnalysis"
+import { useQueryClient } from "@tanstack/react-query"
+import { invalidateProjectsCache } from "./useProjects"
 
 interface UseProjectSubmitProps {
   propertyId: string
@@ -23,6 +25,7 @@ interface UseProjectSubmitProps {
 export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectSubmitProps) {
   const { toast } = useToast()
   const { handleFileUpload } = useFileUpload()
+  const queryClient = useQueryClient()
 
   const onSubmit = async (data: ProjectFormValues) => {
     try {
@@ -76,6 +79,9 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
 
         await Promise.all(uploadPromises)
 
+        // Invalidate projects cache after successful update
+        invalidateProjectsCache(queryClient, propertyId)
+
         onSuccess({
           name: data.name,
           cost: numericCost,
@@ -120,6 +126,9 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
         }
 
         await Promise.all(uploadPromises)
+
+        // Invalidate projects cache after successful creation
+        invalidateProjectsCache(queryClient, propertyId)
 
         onSuccess({
           name: data.name,
