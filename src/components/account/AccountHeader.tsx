@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { LogOut, Menu, User, Users, X } from "lucide-react";
+import { LogOut, Menu, User, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -29,15 +29,6 @@ export function AccountHeader({
   const MobileMenu = () => (
     <div className="fixed inset-x-0 top-[76px] z-50 bg-white border-b shadow-lg">
       <div className="flex flex-col p-4 space-y-2">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="w-full justify-start text-gray-600"
-          onClick={() => handleNavigate("/community")}
-        >
-          <Users className="h-4 w-4 mr-2" />
-          Community
-        </Button>
         <Button
           variant="ghost"
           size="sm"
@@ -92,15 +83,6 @@ export function AccountHeader({
                 variant="ghost"
                 size="sm"
                 className="text-gray-600"
-                onClick={() => handleNavigate("/community")}
-              >
-                <Users className="h-4 w-4 mr-2" />
-                Community
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-gray-600"
                 onClick={() => handleNavigate("/profile")}
               >
                 <User className="h-4 w-4 mr-2" />
@@ -122,3 +104,4 @@ export function AccountHeader({
     </nav>
   );
 }
+
