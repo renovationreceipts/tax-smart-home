@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client"
 
 export const getFileUrl = (filePath: string | File) => {
@@ -22,10 +23,15 @@ export const downloadFile = async (fileUrl: string, fileName: string) => {
     const link = document.createElement('a')
     link.href = blobUrl
     link.download = fileName
-    document.body.appendChild(link)
+    
+    // Instead of appending to document.body, we'll use click() directly
+    link.style.display = 'none'
     link.click()
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(blobUrl)
+
+    // Cleanup the blob URL after a short delay to ensure the download has started
+    setTimeout(() => {
+      window.URL.revokeObjectURL(blobUrl)
+    }, 100)
   } catch (error) {
     console.error('Error downloading file:', error)
     throw error
