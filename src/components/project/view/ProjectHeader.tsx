@@ -1,24 +1,39 @@
 
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Edit, Lock } from "lucide-react"
+import { ArrowLeft, Download, Edit } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { generateSingleProjectPDF } from "@/utils/pdfExport"
+import { useProjectFiles } from "@/components/project/form/storage-vault/useProjectFiles"
 
 interface ProjectHeaderProps {
   projectName: string
   propertyId: string
   projectId: string
   onBack: () => void
+  project: any // Using any temporarily as we'll get the full project type from the parent
 }
 
-export function ProjectHeader({ projectName, propertyId, projectId, onBack }: ProjectHeaderProps) {
+export function ProjectHeader({ projectName, propertyId, projectId, onBack, project }: ProjectHeaderProps) {
   const { toast } = useToast()
+  const { existingFiles } = useProjectFiles(projectId)
 
-  const handleExportClick = () => {
-    toast({
-      title: "Premium Feature",
-      description: "Upgrade to premium to export your project records.",
-      variant: "default",
-    })
+  const handleDownload = () => {
+    try {
+      const doc = generateSingleProjectPDF(project, existingFiles || [])
+      doc.save(`${projectName.toLowerCase().replace(/\s+/g, '-')}-records.pdf`)
+      
+      toast({
+        title: "Download Successful",
+        description: "Your project records have been downloaded successfully.",
+      })
+    } catch (error) {
+      console.error("Download failed:", error)
+      toast({
+        title: "Download Failed",
+        description: "There was an error downloading your project records. Please try again.",
+        variant: "destructive",
+      })
+    }
   }
 
   const handleEditProject = () => {
@@ -40,11 +55,12 @@ export function ProjectHeader({ projectName, propertyId, projectId, onBack }: Pr
         <div className="flex gap-4">
           <Button
             variant="outline"
-            onClick={handleExportClick}
+            size="sm"
+            onClick={handleDownload}
             className="flex-1 sm:flex-none border-gray-300"
           >
-            <Lock className="h-4 w-4 mr-2" />
-            Export
+            <Download className="h-4 w-4 mr-2" />
+            Download
           </Button>
           <Button 
             onClick={handleEditProject}

@@ -30,6 +30,7 @@ export default function ViewProject() {
           propertyId={propertyId}
           projectId={project.id}
           onBack={handleBack}
+          project={project}
         />
 
         <div className="space-y-6">

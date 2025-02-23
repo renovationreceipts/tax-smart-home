@@ -97,3 +97,94 @@ export const generateProjectsPDF = (projects: Project[], projectFiles: { [key: s
 
   return doc
 }
+
+export const generateSingleProjectPDF = (project: Project, files: ProjectFile[]) => {
+  const doc = new jsPDF()
+  let yPos = 20
+  const margin = 20
+  const pageWidth = doc.internal.pageSize.getWidth()
+  
+  // Title
+  doc.setFontSize(20)
+  doc.text(project.name, margin, yPos)
+  yPos += 15
+
+  // Project Cost
+  doc.setFontSize(12)
+  doc.text(`Cost: ${formatCurrency(project.cost)}`, margin, yPos)
+  yPos += 7
+
+  // Completion Date
+  doc.text(`Completion Date: ${format(new Date(project.completion_date), "MMMM d, yyyy")}`, margin, yPos)
+  yPos += 7
+
+  // Builder Information
+  if (project.builder_name) {
+    doc.text(`Builder: ${project.builder_name}`, margin, yPos)
+    yPos += 7
+  }
+  if (project.builder_url) {
+    doc.text(`Builder Website: ${project.builder_url}`, margin, yPos)
+    yPos += 7
+  }
+
+  // Description
+  if (project.description) {
+    doc.text("Description:", margin, yPos)
+    yPos += 7
+    const splitDescription = doc.splitTextToSize(project.description, pageWidth - (2 * margin))
+    doc.text(splitDescription, margin, yPos)
+    yPos += (splitDescription.length * 7)
+  }
+
+  // Assessment Results
+  yPos += 10
+  doc.text("Assessment Results:", margin, yPos)
+  yPos += 7
+
+  const assessments = [
+    { title: "Cost Basis Assessment", result: project.qualifies_for_basis, analysis: project.ai_analysis_result },
+    { title: "Tax Credits Assessment", result: project.tax_credits_eligible, analysis: project.tax_credits_analysis },
+    { title: "Insurance Premium Assessment", result: project.insurance_reduction_eligible, analysis: project.insurance_reduction_analysis }
+  ]
+
+  assessments.forEach(assessment => {
+    if (assessment.analysis) {
+      doc.text(`${assessment.title}: ${assessment.result ? "Qualifies" : "Does Not Qualify"}`, margin, yPos)
+      yPos += 7
+      const splitAnalysis = doc.splitTextToSize(assessment.analysis, pageWidth - (2 * margin))
+      doc.text(splitAnalysis, margin, yPos)
+      yPos += (splitAnalysis.length * 7) + 3
+    }
+  })
+
+  // Files Section
+  if (files.length > 0) {
+    yPos += 5
+    doc.text("Attached Files:", margin, yPos)
+    yPos += 7
+
+    const fileCategories = {
+      before_photo: "Before Photos",
+      after_photo: "After Photos",
+      receipt: "Receipts"
+    }
+
+    Object.entries(fileCategories).forEach(([category, title]) => {
+      const categoryFiles = files.filter(f => f.file_category === category)
+      if (categoryFiles.length > 0) {
+        doc.text(`${title}:`, margin + 5, yPos)
+        yPos += 7
+        categoryFiles.forEach(file => {
+          const fileName = typeof file.file_path === "string" 
+            ? file.file_path.split("/").pop() 
+            : file.file_path.name
+          doc.text(`• ${fileName}`, margin + 10, yPos)
+          yPos += 7
+        })
+      }
+    })
+  }
+
+  return doc
+}
