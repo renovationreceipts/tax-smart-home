@@ -1,7 +1,7 @@
 
 import './polyfills'
 import React from "react"
-import ReactDOM from "react-dom/client"
+import { createRoot } from "react-dom/client"
 import "./index.css"
 import App from "./App"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
@@ -85,16 +85,18 @@ const router = createBrowserRouter([
   },
 ]);
 
-// Render app with providers
-const root = createRoot(document.getElementById("root")!);
+// Create root element
+const container = document.getElementById("root");
+if (!container) throw new Error("Root element not found");
+const root = createRoot(container);
+
+// Render app with correct provider nesting
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router}>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </RouterProvider>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );

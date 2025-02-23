@@ -1,5 +1,5 @@
 
-import { createContext, useContext, ReactNode, useEffect } from "react";
+import { createContext, useContext, ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthSession, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
