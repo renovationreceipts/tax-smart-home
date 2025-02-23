@@ -3,14 +3,14 @@ import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/providers/AuthProvider";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { AuthStatus } from "@/types/auth";
 
 export function PublicLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
-  const { isAuthenticated, isLoading, isInitialized } = useAuth();
+  const { status } = useAuth();
   const from = location.state?.from || "/account";
 
-  // Don't show anything until auth is initialized
-  if (!isInitialized || isLoading) {
+  if (status === AuthStatus.INITIALIZING) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <LoadingSpinner size="lg" />
@@ -18,8 +18,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
     );
   }
 
-  // If authenticated, redirect to the intended page or account
-  if (isAuthenticated) {
+  if (status === AuthStatus.AUTHENTICATED) {
     return <Navigate to={from} replace />;
   }
 

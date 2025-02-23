@@ -5,15 +5,7 @@ import { AuthSession, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-
-interface AuthState {
-  session: AuthSession | null;
-  user: User | null;
-  isLoading: boolean;
-  isAuthenticated: boolean;
-  isInitialized: boolean;
-  signOut: () => Promise<void>;
-}
+import { AuthStatus, AuthState } from "@/types/auth";
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
 
@@ -26,12 +18,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const location = useLocation();
   const { toast } = useToast();
   const [state, setState] = useState<AuthState>({
+    status: AuthStatus.INITIALIZING,
     session: null,
     user: null,
-    isLoading: true,
-    isAuthenticated: false,
-    isInitialized: false,
-    // We'll properly implement this below
     signOut: async () => {},
   });
 
@@ -47,11 +36,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         if (mounted) {
           setState(prev => ({
             ...prev,
+            status: session ? AuthStatus.AUTHENTICATED : AuthStatus.UNAUTHENTICATED,
             session,
             user: session?.user ?? null,
-            isLoading: false,
-            isAuthenticated: !!session,
-            isInitialized: true,
           }));
         }
 
@@ -64,9 +51,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
           // Update the auth state
           setState(prev => ({
             ...prev,
+            status: newSession ? AuthStatus.AUTHENTICATED : AuthStatus.UNAUTHENTICATED,
             session: newSession,
             user: newSession?.user ?? null,
-            isAuthenticated: !!newSession,
           }));
 
           // Handle specific auth events
@@ -97,11 +84,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         if (mounted) {
           setState(prev => ({
             ...prev,
+            status: AuthStatus.UNAUTHENTICATED,
             session: null,
             user: null,
-            isLoading: false,
-            isInitialized: true,
-            isAuthenticated: false,
           }));
         }
       }
@@ -118,6 +103,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
+      
+      setState(prev => ({
+        ...prev,
+        status: AuthStatus.UNAUTHENTICATED,
+        session: null,
+        user: null,
+      }));
+
       navigate("/");
       toast({
         title: "Signed out successfully",
@@ -142,7 +135,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   // Don't render anything until we've initialized auth
-  if (!state.isInitialized) {
+  if (state.status === AuthStatus.INITIALIZING) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <LoadingSpinner size="lg" />
@@ -162,5 +155,10 @@ export const useAuth = () => {
   if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
-  return context;
+  return {
+    ...context,
+    isAuthenticated: context.status === AuthStatus.AUTHENTICATED,
+    isInitialized: context.status !== AuthStatus.INITIALIZING,
+    isLoading: context.status === AuthStatus.INITIALIZING,
+  };
 };

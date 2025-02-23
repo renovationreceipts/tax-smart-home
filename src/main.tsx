@@ -1,3 +1,4 @@
+
 import './polyfills'
 import React from "react"
 import { createRoot } from "react-dom/client"
@@ -7,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { AuthProvider } from "@/providers/AuthProvider"
 import { PublicLayout } from "@/layouts/PublicLayout"
 import { ProtectedLayout } from "@/layouts/ProtectedLayout"
+import { ErrorBoundary } from "@/components/common/ErrorBoundary"
 
 // Import your components
 import Account from "@/pages/Account"
@@ -28,15 +30,23 @@ import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
 import GenerateOGImage from './pages/GenerateOGImage'
 
-// Configure React Query
+// Configure React Query with more robust error handling and retry logic
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 2,
+      retry: (failureCount, error) => {
+        // Don't retry on 404s or auth errors
+        if (error instanceof Error && 
+           (error.message.includes('not found') || 
+            error.message.includes('unauthorized'))) {
+          return false;
+        }
+        return failureCount < 2;
+      },
       staleTime: 1000 * 60 * 5, // 5 minutes
-      gcTime: 1000 * 60 * 10, // 10 minutes
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
+      cacheTime: 1000 * 60 * 10, // 10 minutes
+      refetchOnWindowFocus: true,
+      refetchOnMount: true,
     },
   },
 });
@@ -44,11 +54,13 @@ const queryClient = new QueryClient({
 // Create the root component that provides auth context
 function Root() {
   return (
-    <AuthProvider>
-      <div className="app">
-        <Outlet />
-      </div>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <div className="app">
+          <Outlet />
+        </div>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 
@@ -100,8 +112,10 @@ const root = createRoot(container);
 // Render app with correct provider nesting
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
