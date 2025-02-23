@@ -3,7 +3,7 @@ import './polyfills'
 import React from "react"
 import { createRoot } from "react-dom/client"
 import "./index.css"
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom"
+import { createBrowserRouter, RouterProvider, Outlet, BrowserRouter } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { AuthProvider } from "@/providers/AuthProvider"
 import { PublicLayout } from "@/layouts/PublicLayout"
@@ -99,19 +99,28 @@ const router = createBrowserRouter([
   },
 ]);
 
+// Wrapper component to provide router context
+function RouterWrapper() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </BrowserRouter>
+  );
+}
+
 // Create root element and render app
 const container = document.getElementById("root");
 if (!container) throw new Error("Root element not found");
 const root = createRoot(container);
 
-// Create app with providers wrapping router
+// Create app with providers
 const App = () => (
   <React.StrictMode>
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <RouterProvider router={router} />
-        </AuthProvider>
+        <RouterWrapper />
       </QueryClientProvider>
     </ErrorBoundary>
   </React.StrictMode>
