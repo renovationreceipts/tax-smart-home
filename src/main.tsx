@@ -3,7 +3,7 @@ import './polyfills'
 import React from "react"
 import { createRoot } from "react-dom/client"
 import "./index.css"
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom"
+import { createBrowserRouter, RouterProvider, Outlet, BrowserRouter } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { AuthProvider } from "@/providers/AuthProvider"
 import { PublicLayout } from "@/layouts/PublicLayout"
@@ -108,11 +108,13 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <RouterProvider router={router} />
-        </AuthProvider>
-      </QueryClientProvider>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <RouterProvider router={router} />
+          </AuthProvider>
+        </QueryClientProvider>
+      </BrowserRouter>
     </ErrorBoundary>
   </React.StrictMode>
 );
