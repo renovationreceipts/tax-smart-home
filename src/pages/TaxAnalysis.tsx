@@ -10,31 +10,35 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { TaxAnalysisTabs } from "@/components/tax-analysis/TaxAnalysisTabs";
 import { useEffect } from "react";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 export default function TaxAnalysis() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
   const propertyId = searchParams.get('propertyId');
-  const { data: properties = [] } = useProperties();
+  const { data: properties = [], isLoading: propertiesLoading } = useProperties();
   const selectedProperty = propertyId ? properties.find(p => p.id === propertyId) : properties[0];
   const { data: projects = [] } = useProjects(selectedProperty?.id);
 
   useEffect(() => {
-    // If no property is selected and we have properties, redirect to the first one
-    if (!propertyId && properties.length > 0) {
-      navigate(`/tax-analysis?propertyId=${properties[0].id}`, { replace: true });
+    // Only make navigation decisions if properties have finished loading
+    if (!propertiesLoading) {
+      // If no property is selected and we have properties, redirect to the first one
+      if (!propertyId && properties.length > 0) {
+        navigate(`/tax-analysis?propertyId=${properties[0].id}`, { replace: true });
+      }
+      // Only redirect to account if we're certain there are no properties after loading
+      if (properties.length === 0) {
+        navigate('/account');
+        toast({
+          title: "No properties found",
+          description: "Please add a property first.",
+          variant: "destructive"
+        });
+      }
     }
-    // If no properties exist, redirect to account page
-    if (properties.length === 0) {
-      navigate('/account');
-      toast({
-        title: "No properties found",
-        description: "Please add a property first.",
-        variant: "destructive"
-      });
-    }
-  }, [propertyId, properties, navigate, toast]);
+  }, [propertyId, properties, propertiesLoading, navigate, toast]);
 
   const handleSignOut = async () => {
     try {
@@ -55,13 +59,26 @@ export default function TaxAnalysis() {
     }
   };
 
-  // If no property is selected or found, show a loading state
+  // Show loading state while properties are being fetched
+  if (propertiesLoading) {
+    return (
+      <div className="min-h-screen flex flex-col bg-gray-50">
+        <AccountHeader onSignOut={handleSignOut} />
+        <div className="flex-grow flex items-center justify-center">
+          <LoadingSpinner size="lg" />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // If no property is selected or found after loading, show a message
   if (!selectedProperty) {
     return (
       <div className="min-h-screen flex flex-col bg-gray-50">
         <AccountHeader onSignOut={handleSignOut} />
         <div className="flex-grow flex items-center justify-center">
-          <p className="text-gray-500">Loading...</p>
+          <p className="text-gray-500">No property selected</p>
         </div>
         <Footer />
       </div>
