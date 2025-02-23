@@ -10,29 +10,45 @@ interface PercentageFieldProps {
 
 export function PercentageField({ form, name, label }: PercentageFieldProps) {
   function formatPercentage(value: string) {
-    // Remove all non-numeric characters except decimal point
-    const numericValue = value.replace(/[^0-9.]/g, "")
-    if (!numericValue) return ""
+    // Remove any existing % symbol first
+    value = value.replace(/%/g, '')
     
-    // Ensure only one decimal point
-    const parts = numericValue.split('.')
+    // If empty after removing %, return empty string
+    if (!value) return ""
+    
+    // Only allow one decimal point
+    const parts = value.split('.')
     if (parts.length > 2) {
-      // If multiple decimal points, keep only first one
-      const beforeDecimal = parts[0]
-      const afterDecimal = parts.slice(1).join('')
-      return `${beforeDecimal}.${afterDecimal}`
+      value = parts[0] + '.' + parts.slice(1).join('')
     }
     
-    // Parse and format number with up to 2 decimal places
-    const number = parseFloat(numericValue)
+    // Remove any non-numeric characters except decimal point
+    value = value.replace(/[^0-9.]/g, '')
+    
+    // If it's just a decimal point, allow it
+    if (value === '.') return '0.'
+    
+    // If it ends with a decimal point, preserve it
+    if (value.endsWith('.')) {
+      return `${value}%`
+    }
+    
+    // If we have a valid number
+    const number = parseFloat(value)
     if (isNaN(number)) return ""
     
-    // Format with exactly 2 decimal places if there's any decimal
-    const formatted = numericValue.includes('.') 
-      ? Number(number.toFixed(2)) 
-      : number
+    // If there's a decimal point, ensure we show decimal places
+    if (value.includes('.')) {
+      const [whole, decimal] = value.split('.')
+      // If decimal part exists, limit to 2 places
+      if (decimal) {
+        return `${whole}.${decimal.slice(0, 2)}%`
+      }
+      // If just ended with decimal point, keep it
+      return `${whole}.%`
+    }
     
-    return `${formatted}%`
+    return `${number}%`
   }
 
   return (
@@ -49,7 +65,9 @@ export function PercentageField({ form, name, label }: PercentageFieldProps) {
               value={value ? `${value}%` : ""}
               onChange={(e) => {
                 const formatted = formatPercentage(e.target.value)
-                const numericValue = parseFloat(formatted)
+                // Only convert to number if we have a complete decimal number
+                const shouldParseNumber = !formatted.endsWith('.%')
+                const numericValue = shouldParseNumber ? parseFloat(formatted) : value
                 onChange(isNaN(numericValue) ? "" : numericValue)
               }}
             />
