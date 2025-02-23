@@ -1,4 +1,6 @@
 
+import type { User, AuthSession } from "@supabase/supabase-js";
+
 export enum AuthStatus {
   INITIALIZING = 'initializing',
   AUTHENTICATED = 'authenticated',

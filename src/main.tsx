@@ -44,25 +44,12 @@ const queryClient = new QueryClient({
         return failureCount < 2;
       },
       staleTime: 1000 * 60 * 5, // 5 minutes
-      cacheTime: 1000 * 60 * 10, // 10 minutes
+      gcTime: 1000 * 60 * 10, // 10 minutes - renamed from cacheTime
       refetchOnWindowFocus: true,
       refetchOnMount: true,
     },
   },
 });
-
-// Create the root component that provides auth context
-function Root() {
-  return (
-    <ErrorBoundary>
-      <AuthProvider>
-        <div className="app">
-          <Outlet />
-        </div>
-      </AuthProvider>
-    </ErrorBoundary>
-  );
-}
 
 // Create router with layouts
 const router = createBrowserRouter([
@@ -104,18 +91,28 @@ const router = createBrowserRouter([
   },
 ]);
 
-// Create root element
+// Create the root component that provides auth context
+function Root() {
+  return (
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <div className="app">
+            <Outlet />
+          </div>
+        </AuthProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
+}
+
+// Create root element and render app
 const container = document.getElementById("root");
 if (!container) throw new Error("Root element not found");
 const root = createRoot(container);
 
-// Render app with correct provider nesting
 root.render(
   <React.StrictMode>
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </ErrorBoundary>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
