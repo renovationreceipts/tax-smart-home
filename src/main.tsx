@@ -4,7 +4,7 @@ import React from "react"
 import { createRoot } from "react-dom/client"
 import "./index.css"
 import App from "./App"
-import { createBrowserRouter, RouterProvider, BrowserRouter } from "react-router-dom"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { AuthProvider } from "@/providers/AuthProvider"
 import { PublicLayout } from "@/layouts/PublicLayout"
@@ -48,37 +48,37 @@ const queryClient = new QueryClient({
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    Component: App,
     children: [
       // Public routes
       {
-        element: <PublicLayout />,
+        Component: PublicLayout,
         children: [
-          { index: true, element: <Index /> },
-          { path: "login", element: <Login /> },
-          { path: "signup", element: <SignUp /> },
-          { path: "blog", element: <Blog /> },
-          { path: "blog/track-home-improvement-receipts", element: <TrackHomeImprovements /> },
-          { path: "blog/homeowners-guide-tax-savings", element: <HomeownersGuideTaxSavings /> },
-          { path: "blog/capital-gains-101", element: <CapitalGains101 /> },
-          { path: "community", element: <Community /> },
-          { path: "about", element: <About /> },
-          { path: "disclaimers", element: <Disclaimers /> },
-          { path: "terms", element: <Terms /> },
-          { path: "privacy-policy", element: <Privacy /> },
+          { index: true, Component: Index },
+          { path: "login", Component: Login },
+          { path: "signup", Component: SignUp },
+          { path: "blog", Component: Blog },
+          { path: "blog/track-home-improvement-receipts", Component: TrackHomeImprovements },
+          { path: "blog/homeowners-guide-tax-savings", Component: HomeownersGuideTaxSavings },
+          { path: "blog/capital-gains-101", Component: CapitalGains101 },
+          { path: "community", Component: Community },
+          { path: "about", Component: About },
+          { path: "disclaimers", Component: Disclaimers },
+          { path: "terms", Component: Terms },
+          { path: "privacy-policy", Component: Privacy },
         ],
       },
       // Protected routes
       {
-        element: <ProtectedLayout />,
+        Component: ProtectedLayout,
         children: [
-          { path: "account", element: <Account /> },
-          { path: "profile", element: <Profile /> },
-          { path: "tax-analysis", element: <TaxAnalysis /> },
-          { path: "property/edit/:id?", element: <EditProperty /> },
-          { path: "project/edit/:propertyId/:id?", element: <EditProject /> },
-          { path: "project/view/:propertyId/:id", element: <ViewProject /> },
-          { path: "generate-og-image", element: <GenerateOGImage /> },
+          { path: "account", Component: Account },
+          { path: "profile", Component: Profile },
+          { path: "tax-analysis", Component: TaxAnalysis },
+          { path: "property/edit/:id?", Component: EditProperty },
+          { path: "project/edit/:propertyId/:id?", Component: EditProject },
+          { path: "project/view/:propertyId/:id", Component: ViewProject },
+          { path: "generate-og-image", Component: GenerateOGImage },
         ],
       },
     ],
@@ -93,12 +93,8 @@ const root = createRoot(container);
 // Render app with correct provider nesting
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <RouterProvider router={router} />
-        </AuthProvider>
-      </QueryClientProvider>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </React.StrictMode>
 );
