@@ -13,16 +13,29 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 interface ProjectFormActionsProps {
   isEditing: boolean
   onCancel: () => void
   isSubmitting: boolean
   projectId?: string
+  submissionPhase?: 'adding' | 'analyzing' | 'saving'
 }
 
-export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectId }: ProjectFormActionsProps) {
+const loadingMessages = {
+  adding: "Adding Project...",
+  analyzing: "Analyzing for Savings...",
+  saving: "Adding to Project Vault..."
+}
+
+export function ProjectFormActions({ 
+  isEditing, 
+  onCancel, 
+  isSubmitting, 
+  projectId,
+  submissionPhase = 'adding'
+}: ProjectFormActionsProps) {
   const { toast } = useToast()
   const navigate = useNavigate()
   const location = useLocation()
@@ -31,9 +44,6 @@ export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectI
   
   // Extract propertyId from the URL path
   const propertyId = location.pathname.split('/')[3]
-  
-  console.log("ProjectFormActions - Project ID received:", projectId)
-  console.log("ProjectFormActions - Property ID from URL:", propertyId)
 
   const handleDeleteProject = async () => {
     if (isDeleting) return
@@ -66,7 +76,6 @@ export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectI
         description: "The project has been successfully removed from your account.",
       })
 
-      // Navigate back to the property page with the correct propertyId
       navigate(`/account?propertyId=${propertyId}`)
     } catch (error) {
       console.error('Error deleting project:', error)
@@ -149,7 +158,7 @@ export function ProjectFormActions({ isEditing, onCancel, isSubmitting, projectI
           {isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Updating...
+              {loadingMessages[submissionPhase]}
             </>
           ) : (
             isEditing ? "Update Project" : "Add Project"

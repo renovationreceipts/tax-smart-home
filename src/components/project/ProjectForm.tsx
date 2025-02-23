@@ -23,6 +23,8 @@ interface ProjectFormProps {
 
 export function ProjectForm({ propertyId, project, onSuccess, onCancel }: ProjectFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submissionPhase, setSubmissionPhase] = useState<'adding' | 'analyzing' | 'saving'>('adding')
+  
   console.log("ProjectForm - Project data:", project)
   console.log("ProjectForm - Project ID:", project?.id)
 
@@ -78,18 +80,23 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
     }
   }, [project, form])
 
-  const { onSubmit: submitProject } = useProjectSubmit({ propertyId, project, onSuccess: (data) => {
-    // Since data.cost is already a number from useProjectSubmit, we don't need to parse it
-    const successData = {
-      name: data.name,
-      cost: data.cost,
-      qualifies_for_basis: data.qualifies_for_basis || false
-    }
-    onSuccess(successData)
-  }})
+  const { onSubmit: submitProject } = useProjectSubmit({ 
+    propertyId, 
+    project, 
+    onSuccess: (data) => {
+      const successData = {
+        name: data.name,
+        cost: data.cost,
+        qualifies_for_basis: data.qualifies_for_basis || false
+      }
+      onSuccess(successData)
+    },
+    onPhaseChange: setSubmissionPhase
+  })
 
   const handleSubmit = async (data: ProjectFormValues) => {
     setIsSubmitting(true)
+    setSubmissionPhase('adding')
     try {
       await submitProject(data)
     } finally {
@@ -121,6 +128,7 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
               onCancel={onCancel}
               isSubmitting={isSubmitting}
               projectId={project?.id}
+              submissionPhase={submissionPhase}
             />
           </form>
         </Form>
@@ -128,4 +136,3 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
     </>
   )
 }
-

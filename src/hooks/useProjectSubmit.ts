@@ -20,9 +20,10 @@ interface UseProjectSubmitProps {
     insurance_reduction_eligible: boolean
     description?: string | null
   }) => void
+  onPhaseChange?: (phase: 'adding' | 'analyzing' | 'saving') => void
 }
 
-export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectSubmitProps) {
+export function useProjectSubmit({ propertyId, project, onSuccess, onPhaseChange }: UseProjectSubmitProps) {
   const { toast } = useToast()
   const { handleFileUpload } = useFileUpload()
   const queryClient = useQueryClient()
@@ -42,8 +43,12 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
 
       const numericCost = Number(data.cost.replace(/[^0-9.-]/g, ""))
       
-      // Analyze the project description
+      // Start analysis phase
+      onPhaseChange?.('analyzing')
       const analysis = await analyzeProject(data.description || data.name)
+      
+      // Start saving phase
+      onPhaseChange?.('saving')
       
       if (project) {
         const { error } = await supabase
@@ -79,7 +84,6 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
 
         await Promise.all(uploadPromises)
 
-        // Invalidate projects cache after successful update
         invalidateProjectsCache(queryClient, propertyId)
 
         onSuccess({
@@ -127,7 +131,6 @@ export function useProjectSubmit({ propertyId, project, onSuccess }: UseProjectS
 
         await Promise.all(uploadPromises)
 
-        // Invalidate projects cache after successful creation
         invalidateProjectsCache(queryClient, propertyId)
 
         onSuccess({
