@@ -17,8 +17,8 @@ const FAQ = () => {
       answer: "You can track any capital improvements that add value to your property, including renovations, additions, new systems (HVAC, plumbing, electric), and major upgrades. The app helps distinguish between deductible repairs and capital improvements."
     },
     {
-      question: "How does the IRS Form 8949 export work?",
-      answer: "When you're ready to file taxes, our app automatically compiles your cost basis data and generates the information you need to fill our Form 8949. You can download it as a PDF or print it directly for your records."
+      question: "How do you find savings?",
+      answer: "Once you enter a home project, we use a fine-tuned GPT 4o model to analyze the description and find you hidden savings."
     },
     {
       question: "Why is this free?",
