@@ -4,6 +4,12 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/providers/AuthProvider';
 import { useToast } from '@/hooks/use-toast';
 
+// Define limits for free tier users
+export const FREE_TIER_LIMITS = {
+  PROPERTY_LIMIT: 1,
+  PROJECT_LIMIT: 3
+};
+
 export function usePremiumStatus() {
   const [isPremium, setIsPremium] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
