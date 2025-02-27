@@ -8,7 +8,6 @@ import { EmptyPropertyState } from "@/components/property/EmptyPropertyState";
 import { WhySaveRecords } from "@/components/account/WhySaveRecords";
 import { TotalSavingsCard } from "@/components/account/TotalSavingsCard";
 import { ShareCard } from "@/components/account/ShareCard";
-import Footer from "@/components/Footer";
 import { useState, useEffect } from "react";
 import { useProperties } from "@/hooks/useProperties";
 import { useProjects } from "@/hooks/useProjects";
@@ -135,7 +134,6 @@ export default function Account() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }
