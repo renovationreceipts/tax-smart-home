@@ -1,14 +1,12 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { UseFormReturn } from "react-hook-form"
 
 interface PercentageFieldProps {
-  form: UseFormReturn<any>
-  name: string
-  label: string
+  value: number;
+  onChange: (value: number) => void;
 }
 
-export function PercentageField({ form, name, label }: PercentageFieldProps) {
+export function PercentageField({ value, onChange }: PercentageFieldProps) {
   function formatPercentage(value: string) {
     // Remove any existing % symbol first
     value = value.replace(/%/g, '')
@@ -52,29 +50,22 @@ export function PercentageField({ form, name, label }: PercentageFieldProps) {
   }
 
   return (
-    <FormField
-      control={form.control}
-      name={name}
-      render={({ field: { onChange, value, ...field } }) => (
-        <FormItem>
-          <FormLabel>{label}</FormLabel>
-          <FormControl>
-            <Input
-              placeholder="0%"
-              {...field}
-              value={value ? `${value}%` : ""}
-              onChange={(e) => {
-                const formatted = formatPercentage(e.target.value)
-                // Only convert to number if we have a complete decimal number
-                const shouldParseNumber = !formatted.endsWith('.%')
-                const numericValue = shouldParseNumber ? parseFloat(formatted) : value
-                onChange(isNaN(numericValue) ? "" : numericValue)
-              }}
-            />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+    <FormItem>
+      <FormLabel>Tax Rate</FormLabel>
+      <FormControl>
+        <Input
+          placeholder="0%"
+          value={value ? `${value}%` : ""}
+          onChange={(e) => {
+            const formatted = formatPercentage(e.target.value)
+            // Only convert to number if we have a complete decimal number
+            const shouldParseNumber = !formatted.endsWith('.%')
+            const numericValue = shouldParseNumber ? parseFloat(formatted) : value
+            onChange(isNaN(numericValue) ? 0 : numericValue)
+          }}
+        />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
   )
 }

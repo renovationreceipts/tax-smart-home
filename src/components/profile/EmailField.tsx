@@ -1,16 +1,16 @@
 
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { UseFormReturn } from "react-hook-form"
+import { Control } from "react-hook-form"
 
 interface EmailFieldProps {
-  form: UseFormReturn<any>
+  control: Control<any>
 }
 
-export function EmailField({ form }: EmailFieldProps) {
+export function EmailField({ control }: EmailFieldProps) {
   return (
     <FormField
-      control={form.control}
+      control={control}
       name="email"
       render={({ field }) => (
         <FormItem>
