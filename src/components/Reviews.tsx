@@ -1,3 +1,4 @@
+
 import { Star } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 
@@ -17,9 +18,9 @@ const Reviews = () => {
     },
     {
       rating: 5,
-      text: "The IRS form export feature alone is worth the investment. No more manual calculations!",
+      text: "This app found me over $10,000 in tax credits I would have missed out on. Thank you!",
       author: "Emily Rodriguez",
-      role: "Real Estate Agent"
+      role: "Homeowner"
     }
   ];
 
