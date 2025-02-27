@@ -15,6 +15,7 @@ const stripe = new Stripe(stripeSecretKey, {
   httpClient: Stripe.createFetchHttpClient(),
 })
 
+// CORS headers for browser requests
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -27,9 +28,12 @@ serve(async (req) => {
   }
 
   try {
+    console.log("Processing checkout request")
+    
     // Get userId from the JWT
     const authHeader = req.headers.get("Authorization")
     if (!authHeader) {
+      console.error("Missing Authorization header")
       return new Response(
         JSON.stringify({ error: "Missing Authorization header" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -51,6 +55,7 @@ serve(async (req) => {
     const { success_url, cancel_url } = await req.json()
     
     if (!success_url || !cancel_url) {
+      console.error("Missing success_url or cancel_url")
       return new Response(
         JSON.stringify({ error: "Missing success_url or cancel_url" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -74,6 +79,7 @@ serve(async (req) => {
     }
 
     if (subscriptions) {
+      console.log("User already has an active subscription")
       return new Response(
         JSON.stringify({ 
           error: "You already have an active subscription",
@@ -98,22 +104,16 @@ serve(async (req) => {
       )
     }
 
-    // Create a Stripe checkout session
+    // Create a Stripe checkout session using the fixed price ID
+    // Replace "price_YOUR_PRICE_ID" with your actual Stripe price ID
+    const priceId = "price_YOUR_PRICE_ID" // ⚠️ REPLACE WITH YOUR ACTUAL PRICE ID ⚠️
+    
+    console.log("Creating checkout session with price:", priceId)
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
         {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: "Premium Subscription",
-              description: "Unlock unlimited properties and projects, plus premium features",
-            },
-            unit_amount: 2000, // $20.00
-            recurring: {
-              interval: "year",
-            },
-          },
+          price: priceId,
           quantity: 1,
         },
       ],
@@ -127,6 +127,7 @@ serve(async (req) => {
       },
     })
 
+    console.log("Checkout session created successfully")
     return new Response(
       JSON.stringify({ url: session.url }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
