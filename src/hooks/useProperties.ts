@@ -2,6 +2,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "./useAuth"
+import { FREE_TIER_LIMITS } from "./usePremiumStatus"
 
 export interface Property {
   id: string
@@ -57,4 +58,18 @@ export function useProperties() {
       return failureCount < 3
     }
   })
+}
+
+export function usePropertyLimitCheck() {
+  const { data: properties = [], isLoading } = useProperties();
+  
+  const hasReachedLimit = properties.length >= FREE_TIER_LIMITS.PROPERTY_LIMIT;
+  const propertiesCount = properties.length;
+  
+  return {
+    hasReachedLimit,
+    propertiesCount,
+    isLoading,
+    maxProperties: FREE_TIER_LIMITS.PROPERTY_LIMIT
+  };
 }

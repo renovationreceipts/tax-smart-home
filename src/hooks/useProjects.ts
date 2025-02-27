@@ -2,6 +2,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "./useAuth"
+import { FREE_TIER_LIMITS } from "./usePremiumStatus"
 
 export interface Project {
   id: string
@@ -65,6 +66,25 @@ async function fetchProjects(propertyId: string, userId: string | undefined) {
   return data
 }
 
+async function fetchAllUserProjects(userId: string | undefined) {
+  if (!userId) {
+    console.error("No authenticated user found")
+    throw new Error("Authentication required")
+  }
+
+  const { data, error } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("user_id", userId)
+  
+  if (error) {
+    console.error("Error fetching all user projects:", error)
+    throw error
+  }
+  
+  return data || []
+}
+
 export function useProjects(propertyId: string | null) {
   const { user, isAuthenticated, isInitialized } = useAuth()
   const queryClient = useQueryClient()
@@ -88,10 +108,38 @@ export function useProjects(propertyId: string | null) {
   })
 }
 
+export function useAllUserProjects() {
+  const { user, isAuthenticated, isInitialized } = useAuth()
+
+  return useQuery({
+    queryKey: ['all-user-projects', user?.id],
+    queryFn: () => fetchAllUserProjects(user?.id),
+    enabled: isAuthenticated && isInitialized && !!user?.id,
+    staleTime: 1000 * 60, // Consider data stale after 1 minute
+    refetchOnMount: true,
+  });
+}
+
+export function useProjectLimitCheck() {
+  const { data: allProjects = [], isLoading } = useAllUserProjects();
+  
+  const hasReachedLimit = allProjects.length >= FREE_TIER_LIMITS.PROJECT_LIMIT;
+  const projectsCount = allProjects.length;
+  
+  return {
+    hasReachedLimit,
+    projectsCount,
+    isLoading,
+    maxProjects: FREE_TIER_LIMITS.PROJECT_LIMIT
+  };
+}
+
 // Export a function to invalidate projects cache
 export function invalidateProjectsCache(queryClient: any, propertyId: string) {
   queryClient.invalidateQueries({
     queryKey: ['projects', propertyId]
   })
+  queryClient.invalidateQueries({
+    queryKey: ['all-user-projects']
+  })
 }
-

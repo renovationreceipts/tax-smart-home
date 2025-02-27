@@ -1,28 +1,37 @@
+
 import { FileText } from "lucide-react";
 import type { Project } from "@/hooks/useProjects";
 import { useProperties } from "@/hooks/useProperties";
+import { useProjectLimitCheck } from "@/hooks/useProjects";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { EmptyState } from "./project-section/EmptyState";
 import { MobileProjectCard } from "./project-section/MobileProjectCard";
 import { ProjectsTable } from "./project-section/ProjectsTable";
 import { ProjectsHeader } from "./project-section/ProjectsHeader";
 import { formatCurrency } from "@/lib/formatters";
+import { PremiumModal } from "@/components/premium/PremiumModal";
 
 interface ProjectsSectionProps {
   propertyId: string | null;
   projects: Project[];
   onAddProject: () => void;
   onPropertySelect: (propertyId: string) => void;
+  isPremium?: boolean;
 }
 
 export function ProjectsSection({
   propertyId,
   projects,
   onAddProject,
-  onPropertySelect
+  onPropertySelect,
+  isPremium = false
 }: ProjectsSectionProps) {
   const navigate = useNavigate();
   const { data: properties = [] } = useProperties();
+  const { hasReachedLimit, projectsCount } = useProjectLimitCheck();
+  const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
+  
   const selectedProperty = properties.find(p => p.id === propertyId);
   const totalProjectCosts = projects.reduce((sum, project) => sum + (project.cost || 0), 0);
 
@@ -37,6 +46,14 @@ export function ProjectsSection({
   const handleAddProperty = () => {
     navigate("/property/edit");
   };
+  
+  const handleAddProject = () => {
+    if (!isPremium && hasReachedLimit) {
+      setIsPremiumModalOpen(true);
+    } else {
+      onAddProject();
+    }
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-sm border p-6">
@@ -45,7 +62,7 @@ export function ProjectsSection({
           selectedProperty={selectedProperty}
           properties={properties}
           hasProjects={projects.length > 0}
-          onAddProject={onAddProject}
+          onAddProject={handleAddProject}
           onPropertySelect={onPropertySelect}
           onAddProperty={handleAddProperty}
         />
@@ -53,7 +70,7 @@ export function ProjectsSection({
 
       {projects.length === 0 ? (
         <div className="mt-4">
-          <EmptyState onAddProject={onAddProject} />
+          <EmptyState onAddProject={handleAddProject} />
         </div>
       ) : (
         <div className="mt-4">
@@ -79,6 +96,13 @@ export function ProjectsSection({
           </div>
         </div>
       )}
+      
+      <PremiumModal
+        open={isPremiumModalOpen}
+        onClose={() => setIsPremiumModalOpen(false)}
+        propertyCount={properties.length}
+        projectCount={projectsCount}
+      />
     </div>
   );
 }

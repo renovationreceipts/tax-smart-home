@@ -48,6 +48,7 @@ export type Database = {
           email: string
           house_value_growth_rate: number | null
           id: string
+          is_premium: boolean | null
           tax_filing_status: string
           tax_rate: number | null
         }
@@ -56,6 +57,7 @@ export type Database = {
           email: string
           house_value_growth_rate?: number | null
           id: string
+          is_premium?: boolean | null
           tax_filing_status?: string
           tax_rate?: number | null
         }
@@ -64,6 +66,7 @@ export type Database = {
           email?: string
           house_value_growth_rate?: number | null
           id?: string
+          is_premium?: boolean | null
           tax_filing_status?: string
           tax_rate?: number | null
         }

@@ -11,6 +11,8 @@ import { ShareCard } from "@/components/account/ShareCard";
 import { useState, useEffect } from "react";
 import { useProperties } from "@/hooks/useProperties";
 import { useProjects } from "@/hooks/useProjects";
+import { usePremiumStatus } from "@/hooks/usePremiumStatus";
+import { PremiumModal } from "@/components/premium/PremiumModal";
 
 export default function Account() {
   const navigate = useNavigate();
@@ -18,8 +20,10 @@ export default function Account() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
   const [userTaxRate, setUserTaxRate] = useState(0);
+  const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
   const { data: properties = [] } = useProperties();
   const { data: projects = [] } = useProjects(selectedPropertyId);
+  const { isPremium } = usePremiumStatus();
   const selectedProperty = properties.find(p => p.id === selectedPropertyId);
   
   const propertyIdFromUrl = searchParams.get('propertyId');
@@ -89,6 +93,14 @@ export default function Account() {
     }
   };
 
+  const handleAddProperty = () => {
+    if (!isPremium && properties.length >= 1) {
+      setIsPremiumModalOpen(true);
+    } else {
+      navigate("/property/edit");
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <AccountHeader onSignOut={handleSignOut} />
@@ -106,7 +118,7 @@ export default function Account() {
             </div>
             {properties.length === 0 ? (
               <>
-                <EmptyPropertyState onAddProperty={() => navigate("/property/edit")} />
+                <EmptyPropertyState onAddProperty={handleAddProperty} />
                 <WhySaveRecords />
               </>
             ) : (
@@ -114,6 +126,7 @@ export default function Account() {
                 selectedPropertyId={selectedPropertyId} 
                 selectedProperty={selectedProperty}
                 onPropertySelect={handlePropertySelect}
+                isPremium={isPremium}
               />
             )}
           </div>
@@ -134,6 +147,13 @@ export default function Account() {
           </div>
         </div>
       </main>
+      
+      <PremiumModal
+        open={isPremiumModalOpen}
+        onClose={() => setIsPremiumModalOpen(false)}
+        propertyCount={properties.length}
+        projectCount={projects.length}
+      />
     </div>
   );
 }

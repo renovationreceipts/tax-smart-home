@@ -9,12 +9,14 @@ interface ProjectAndTaxSectionProps {
   selectedPropertyId: string | null;
   selectedProperty: any;
   onPropertySelect: (propertyId: string) => void;
+  isPremium?: boolean;
 }
 
 export function ProjectAndTaxSection({
   selectedPropertyId,
   selectedProperty,
-  onPropertySelect
+  onPropertySelect,
+  isPremium = false
 }: ProjectAndTaxSectionProps) {
   const navigate = useNavigate();
   const {
@@ -28,6 +30,7 @@ export function ProjectAndTaxSection({
         projects={projects} 
         onAddProject={() => navigate(`/project/edit/${selectedPropertyId}`)}
         onPropertySelect={onPropertySelect}
+        isPremium={isPremium}
       />
       <WhySaveRecords />
     </div>
