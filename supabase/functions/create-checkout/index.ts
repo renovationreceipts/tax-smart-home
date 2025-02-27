@@ -104,9 +104,8 @@ serve(async (req) => {
       )
     }
 
-    // Create a Stripe checkout session using the fixed price ID
-    // Replace "price_YOUR_PRICE_ID" with your actual Stripe price ID
-    const priceId = "price_YOUR_PRICE_ID" // ⚠️ REPLACE WITH YOUR ACTUAL PRICE ID ⚠️
+    // Create a Stripe checkout session using a fixed price ID
+    const priceId = "price_1OpHAbDNvDeFVB06vIWmJoxP" // Actual Stripe price ID for $20/year subscription
     
     console.log("Creating checkout session with price:", priceId)
     const session = await stripe.checkout.sessions.create({
