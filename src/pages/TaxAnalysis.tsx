@@ -2,7 +2,6 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Footer from "@/components/Footer";
 import { useProperties } from "@/hooks/useProperties";
 import { useProjects } from "@/hooks/useProjects";
 import { AccountHeader } from "@/components/account/AccountHeader";
@@ -67,7 +66,6 @@ export default function TaxAnalysis() {
         <div className="flex-grow flex items-center justify-center">
           <LoadingSpinner size="lg" />
         </div>
-        <Footer />
       </div>
     );
   }
@@ -80,7 +78,6 @@ export default function TaxAnalysis() {
         <div className="flex-grow flex items-center justify-center">
           <p className="text-gray-500">No property selected</p>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -109,7 +106,6 @@ export default function TaxAnalysis() {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

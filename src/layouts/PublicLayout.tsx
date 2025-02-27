@@ -4,6 +4,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/providers/AuthProvider";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { AuthStatus } from "@/types/auth";
+import Footer from "@/components/Footer";
 
 export function PublicLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
@@ -22,5 +23,12 @@ export function PublicLayout({ children }: { children: ReactNode }) {
     return <Navigate to={from} replace />;
   }
 
-  return <>{children}</>;
+  return (
+    <div className="flex flex-col min-h-screen">
+      <div className="flex-grow">
+        {children}
+      </div>
+      <Footer />
+    </div>
+  );
 }

@@ -22,5 +22,6 @@ export function ProtectedLayout({ children }: { children: ReactNode }) {
     return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
 
+  // No Footer component in protected routes
   return <>{children}</>;
 }
