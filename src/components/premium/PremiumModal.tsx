@@ -1,7 +1,10 @@
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Check, Star } from "lucide-react";
+import { Check, Star, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface PremiumModalProps {
   open: boolean;
@@ -11,6 +14,62 @@ interface PremiumModalProps {
 }
 
 export function PremiumModal({ open, onClose, propertyCount = 0, projectCount = 0 }: PremiumModalProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleUpgradeClick = async () => {
+    setIsLoading(true);
+    try {
+      // Get the current URL for success and cancel URLs
+      const origin = window.location.origin;
+      const success_url = `${origin}/account?checkout_success=true`;
+      const cancel_url = `${origin}/account?checkout_cancelled=true`;
+
+      // Call our Edge Function to create a checkout session
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { success_url, cancel_url },
+      });
+
+      if (error) {
+        console.error("Error creating checkout session:", error);
+        toast({
+          variant: "destructive",
+          title: "Something went wrong",
+          description: "Failed to create checkout session. Please try again."
+        });
+        return;
+      }
+
+      // If we have a URL, redirect to Stripe checkout
+      if (data?.url) {
+        window.location.href = data.url;
+      } else if (data?.error) {
+        // Show any errors from the edge function
+        toast({
+          variant: "destructive",
+          title: "Checkout Error",
+          description: data.error
+        });
+      } else {
+        // Fallback error
+        toast({
+          variant: "destructive",
+          title: "Something went wrong",
+          description: "Unable to process checkout. Please try again."
+        });
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+      toast({
+        variant: "destructive",
+        title: "Something went wrong",
+        description: "An unexpected error occurred. Please try again."
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={() => onClose()}>
       <DialogContent className="sm:max-w-md">
@@ -62,14 +121,23 @@ export function PremiumModal({ open, onClose, propertyCount = 0, projectCount = 
           <div className="flex flex-col gap-3 pt-2">
             <Button 
               className="w-full bg-amber-500 hover:bg-amber-600 font-medium"
-              onClick={onClose} // In real implementation, this would trigger Stripe
+              onClick={handleUpgradeClick}
+              disabled={isLoading}
             >
-              Upgrade Now - $20/year
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                "Upgrade Now - $20/year"
+              )}
             </Button>
             <Button 
               variant="outline" 
               className="w-full"
               onClick={onClose}
+              disabled={isLoading}
             >
               Maybe Later
             </Button>

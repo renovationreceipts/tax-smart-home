@@ -16,7 +16,7 @@ export function EmailField({ control }: EmailFieldProps) {
         <FormItem>
           <FormLabel>Email</FormLabel>
           <FormControl>
-            <Input {...field} />
+            <Input {...field} readOnly className="bg-gray-100" />
           </FormControl>
           <FormMessage />
         </FormItem>
