@@ -41,6 +41,7 @@ export default function EditProperty() {
   
   useEffect(() => {
     // If not editing and free tier limit reached, show premium modal
+    // Only show for non-premium users
     if (!isLoading && !propertiesLoading && !isEditing && !isPremium && hasReachedLimit) {
       setIsPremiumModalOpen(true)
     }
