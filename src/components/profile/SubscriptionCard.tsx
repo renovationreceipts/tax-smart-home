@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { CreditCard, AlertTriangle, Check, Loader2 } from "lucide-react";
-import { format } from "date-fns";
+import { format, isValid } from "date-fns";
 
 interface SubscriptionCardProps {
   subscription: any;
@@ -20,9 +20,41 @@ export function SubscriptionCard({ subscription, onUpdate }: SubscriptionCardPro
   
   const isPremiumActive = subscription?.status === "active";
   const isCancelled = subscription?.cancel_at_period_end;
-  const nextBillingDate = subscription?.current_period_end 
-    ? new Date(subscription.current_period_end * 1000) 
-    : null;
+  
+  // Handle the date parsing more carefully
+  const nextBillingDate = (() => {
+    if (!subscription?.current_period_end) return null;
+    
+    // Check if it's already a Date object
+    if (subscription.current_period_end instanceof Date) {
+      return isValid(subscription.current_period_end) ? subscription.current_period_end : null;
+    }
+    
+    // Handle Unix timestamp (number or numeric string)
+    if (typeof subscription.current_period_end === 'number' || 
+        (typeof subscription.current_period_end === 'string' && /^\d+$/.test(subscription.current_period_end))) {
+      const date = new Date(Number(subscription.current_period_end) * 1000);
+      return isValid(date) ? date : null;
+    }
+    
+    // Handle ISO string
+    if (typeof subscription.current_period_end === 'string') {
+      const date = new Date(subscription.current_period_end);
+      return isValid(date) ? date : null;
+    }
+    
+    return null;
+  })();
+
+  const formatDate = (date: Date | null) => {
+    if (!date || !isValid(date)) return "Unknown date";
+    try {
+      return format(date, "MMMM d, yyyy");
+    } catch (error) {
+      console.error("Error formatting date:", error, date);
+      return "Invalid date";
+    }
+  };
 
   const handleCancelSubscription = async () => {
     try {
@@ -131,11 +163,11 @@ export function SubscriptionCard({ subscription, onUpdate }: SubscriptionCardPro
             <div className="pt-2">
               {isCancelled ? (
                 <p className="text-sm text-amber-600">
-                  Premium until {format(nextBillingDate, "MMMM d, yyyy")}
+                  Premium until {formatDate(nextBillingDate)}
                 </p>
               ) : (
                 <p className="text-sm">
-                  Next billing date: {format(nextBillingDate, "MMMM d, yyyy")}
+                  Next billing date: {formatDate(nextBillingDate)}
                 </p>
               )}
             </div>
@@ -177,7 +209,7 @@ export function SubscriptionCard({ subscription, onUpdate }: SubscriptionCardPro
                   </DialogTitle>
                   <DialogDescription>
                     Your subscription will remain active until the end of your current billing period on 
-                    {nextBillingDate ? ` ${format(nextBillingDate, "MMMM d, yyyy")}` : ""}. 
+                    {nextBillingDate ? ` ${formatDate(nextBillingDate)}` : ""}. 
                     After that date, your account will revert to the free plan.
                   </DialogDescription>
                 </DialogHeader>
