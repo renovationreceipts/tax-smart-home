@@ -1,43 +1,51 @@
-
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Check, Star, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-
 interface PremiumModalProps {
   open: boolean;
   onClose: () => void;
   propertyCount?: number;
   projectCount?: number;
 }
-
-export function PremiumModal({ open, onClose, propertyCount = 0, projectCount = 0 }: PremiumModalProps) {
+export function PremiumModal({
+  open,
+  onClose,
+  propertyCount = 0,
+  projectCount = 0
+}: PremiumModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   const handleUpgradeClick = async () => {
     setIsLoading(true);
     setError(null);
-    
     try {
       console.log("Starting checkout process...");
-      
+
       // Get the current URL for success and cancel URLs
       const origin = window.location.origin;
       const success_url = `${origin}/account?checkout_success=true`;
       const cancel_url = `${origin}/account?checkout_cancelled=true`;
-
       console.log("Calling create-checkout function...");
       // Call our Edge Function to create a checkout session
-      const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { success_url, cancel_url },
+      const {
+        data,
+        error
+      } = await supabase.functions.invoke("create-checkout", {
+        body: {
+          success_url,
+          cancel_url
+        }
       });
-
-      console.log("Edge function response:", { data, error });
-
+      console.log("Edge function response:", {
+        data,
+        error
+      });
       if (error) {
         console.error("Error creating checkout session:", error);
         setError("Server error: " + error.message);
@@ -84,9 +92,7 @@ export function PremiumModal({ open, onClose, propertyCount = 0, projectCount = 
       setIsLoading(false);
     }
   };
-
-  return (
-    <Dialog open={open} onOpenChange={() => onClose()}>
+  return <Dialog open={open} onOpenChange={() => onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader className="text-center sm:text-left">
           <DialogTitle className="text-2xl font-bold flex items-center justify-center sm:justify-start gap-2">
@@ -133,38 +139,22 @@ export function PremiumModal({ open, onClose, propertyCount = 0, projectCount = 
             </ul>
           </div>
           
-          {error && (
-            <div className="text-red-500 bg-red-50 p-3 rounded-md border border-red-200 text-sm">
+          {error && <div className="text-red-500 bg-red-50 p-3 rounded-md border border-red-200 text-sm">
               {error}
-            </div>
-          )}
+            </div>}
           
           <div className="flex flex-col gap-3 pt-2">
-            <Button 
-              className="w-full bg-amber-500 hover:bg-amber-600 font-medium"
-              onClick={handleUpgradeClick}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
+            <Button onClick={handleUpgradeClick} disabled={isLoading} className="w-full font-medium bg-emerald-500 hover:bg-emerald-400">
+              {isLoading ? <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Processing...
-                </>
-              ) : (
-                "Upgrade Now - $20/year"
-              )}
+                </> : "Upgrade Now - $20/year"}
             </Button>
-            <Button 
-              variant="outline" 
-              className="w-full"
-              onClick={onClose}
-              disabled={isLoading}
-            >
+            <Button variant="outline" className="w-full" onClick={onClose} disabled={isLoading}>
               Maybe Later
             </Button>
           </div>
         </div>
       </DialogContent>
-    </Dialog>
-  );
+    </Dialog>;
 }
