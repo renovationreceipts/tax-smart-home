@@ -9,12 +9,20 @@ import { ArrowLeft, Plus } from "lucide-react"
 import { ProfileSettingsForm } from "./ProfileSettingsForm"
 import { PasswordChangeForm } from "./PasswordChangeForm"
 import { PropertySection } from "@/components/account/PropertySection"
+import { SubscriptionCard } from "./SubscriptionCard"
+import { usePremiumStatus } from "@/hooks/usePremiumStatus"
 
 export function UserProfile() {
   const navigate = useNavigate()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(true)
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null)
+  const { isPremium, subscription, isLoading: isPremiumLoading } = usePremiumStatus()
+  const [refreshKey, setRefreshKey] = useState(0)
+
+  const refreshSubscription = () => {
+    setRefreshKey(prev => prev + 1)
+  }
 
   useEffect(() => {
     const loadUserProfile = async () => {
@@ -47,13 +55,13 @@ export function UserProfile() {
     }
 
     loadUserProfile()
-  }, [navigate, toast])
+  }, [navigate, toast, refreshKey])
 
   const handleBackClick = () => {
     navigate("/account", { replace: true })
   }
 
-  if (isLoading) {
+  if (isLoading || isPremiumLoading) {
     return <div className="flex justify-center items-center min-h-screen">Loading...</div>
   }
 
@@ -90,6 +98,13 @@ export function UserProfile() {
             />
           </CardContent>
         </Card>
+
+        {isPremium && subscription && (
+          <SubscriptionCard
+            subscription={subscription}
+            onUpdate={refreshSubscription}
+          />
+        )}
 
         <Card>
           <CardHeader>

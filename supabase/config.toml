@@ -2,51 +2,38 @@
 project_id = "gbztiauhydgyzvskqtrk"
 
 [api]
-enabled = true
+# Port to use for the API URL
 port = 54321
-schemas = ["public", "storage", "graphql_public"]
+# Set an API hostname, either CNAME or part of Fly.io or Render
+hostname = "localhost"
 
-[db]
-port = 54322
-shadow_port = 54320
-major_version = 15
+[dev]
+url = "postgres://postgres:postgres@localhost:54322/postgres"
 
-[studio]
-enabled = true
-port = 54323
-api_url = "http://localhost"
-
-[inbucket]
-enabled = true
-port = 54324
-
-[storage]
-enabled = true
-file_size_limit = "50MiB"
-
-[auth]
-enabled = true
-site_url = "http://localhost:3000"
-additional_redirect_urls = ["https://localhost:3000"]
-jwt_expiry = 604800
-enable_refresh_token_rotation = true
-refresh_token_reuse_interval = 10
-enable_signup = true
-
-[realtime]
-enabled = true
-
-[analytics]
-enabled = false
-port = 54327
-vector_port = 54328
-backend = "postgres"
-
-[functions.create-checkout]
-verify_jwt = true
-
-[functions.stripe-webhook]
+[[functions]]
+name = "send-email"
 verify_jwt = false
 
-[functions.check-subscription]
-verify_jwt = true
+[[functions]]
+name = "check-subscription"
+verify_jwt = false
+
+[[functions]]
+name = "analyze-project"
+verify_jwt = false
+
+[[functions]]
+name = "create-checkout"
+verify_jwt = false
+
+[[functions]]
+name = "stripe-webhook"
+verify_jwt = false
+
+[[functions]]
+name = "cancel-subscription"
+verify_jwt = false
+
+[[functions]]
+name = "create-portal-session"
+verify_jwt = false
