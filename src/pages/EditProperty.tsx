@@ -18,7 +18,7 @@ export default function EditProperty() {
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false)
   const { data: properties = [], isLoading: propertiesLoading } = useProperties()
   const { data: allProjects = [] } = useAllUserProjects()
-  const { isPremium } = usePremiumStatus()
+  const { isPremium, isLoading: isPremiumLoading } = usePremiumStatus()
   const { hasReachedLimit, propertiesCount } = usePropertyLimitCheck()
   
   // Only consider id if it's a valid UUID and not 'edit'
@@ -40,12 +40,25 @@ export default function EditProperty() {
   }, [navigate])
   
   useEffect(() => {
+    console.log("Premium status check:", { 
+      isPremium, 
+      isPremiumLoading,
+      isEditing,
+      hasReachedLimit,
+      propertiesCount
+    })
+    
+    // Only make decision when all data is loaded and premium status is confirmed
     // If not editing and free tier limit reached, show premium modal
     // Only show for non-premium users
-    if (!isLoading && !propertiesLoading && !isEditing && !isPremium && hasReachedLimit) {
+    if (!isLoading && !propertiesLoading && !isPremiumLoading && !isEditing && !isPremium && hasReachedLimit) {
+      console.log("Showing premium modal")
       setIsPremiumModalOpen(true)
+    } else if (!isLoading && !propertiesLoading && !isPremiumLoading) {
+      console.log("Not showing premium modal")
+      setIsPremiumModalOpen(false)
     }
-  }, [isLoading, propertiesLoading, isEditing, isPremium, hasReachedLimit])
+  }, [isLoading, propertiesLoading, isPremiumLoading, isEditing, isPremium, hasReachedLimit, propertiesCount])
 
   const handleSuccess = () => {
     // If we're editing an existing property, use that ID
@@ -62,7 +75,8 @@ export default function EditProperty() {
     navigate("/account", { replace: true })
   }
 
-  if (isLoading || propertiesLoading) {
+  // Show a loading indicator while any important state is loading
+  if (isLoading || propertiesLoading || isPremiumLoading) {
     return <div className="flex justify-center items-center min-h-screen">Loading...</div>
   }
   

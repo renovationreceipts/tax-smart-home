@@ -62,17 +62,25 @@ export function useProperties() {
 }
 
 export function usePropertyLimitCheck() {
-  const { data: properties = [], isLoading } = useProperties();
-  const { isPremium } = usePremiumStatus();
+  const { data: properties = [], isLoading: propertiesLoading } = useProperties();
+  const { isPremium, isLoading: isPremiumLoading } = usePremiumStatus();
   
-  // Premium users have no property limit
-  const hasReachedLimit = !isPremium && properties.length >= FREE_TIER_LIMITS.PROPERTY_LIMIT;
+  console.log("Property limit check:", { 
+    propertiesCount: properties.length, 
+    isPremium, 
+    isPremiumLoading,
+    limit: FREE_TIER_LIMITS.PROPERTY_LIMIT 
+  });
+  
+  // Only apply limit for non-premium users
+  // BUT ONLY after premium status has finished loading
+  const hasReachedLimit = !isPremiumLoading && !isPremium && properties.length >= FREE_TIER_LIMITS.PROPERTY_LIMIT;
   const propertiesCount = properties.length;
   
   return {
     hasReachedLimit,
     propertiesCount,
-    isLoading,
+    isLoading: propertiesLoading || isPremiumLoading,
     maxProperties: FREE_TIER_LIMITS.PROPERTY_LIMIT
   };
 }
