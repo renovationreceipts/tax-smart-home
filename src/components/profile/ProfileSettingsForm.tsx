@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { Check, Loader2, Star } from "lucide-react";
 import { usePropertyLimitCheck } from "@/hooks/useProperties";
 import { useProjectLimitCheck } from "@/hooks/useProjects";
+import { PremiumModal } from "@/components/premium/PremiumModal";
 
 const profileFormSchema = z.object({
   email: z.string().email({
@@ -34,6 +35,7 @@ export function ProfileSettingsForm() {
   const { isPremium } = usePremiumStatus();
   const { propertiesCount, maxProperties } = usePropertyLimitCheck();
   const { projectsCount, maxProjects } = useProjectLimitCheck();
+  const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
   
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -131,95 +133,104 @@ export function ProfileSettingsForm() {
   }
   
   return (
-    <Form {...form}>
-      <form 
-        onSubmit={form.handleSubmit(onSubmit)} 
-        className={`space-y-8 transition-all duration-300 ${isSuccess ? 'bg-green-50 rounded-lg p-6 -mx-6' : ''}`}
-      >
-        <div className="space-y-6">
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium">Account Information</h3>
-            
-            <div className="bg-gray-50 border rounded-lg p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="font-medium">Subscription Status</h4>
-                  <p className="text-sm text-gray-500 mt-1">Your current plan and usage limits</p>
-                </div>
-                {isPremium ? (
-                  <Badge className="text-white flex items-center gap-1 bg-teal-500">
-                    <Star className="h-3 w-3 fill-white" />
-                    Premium
-                  </Badge>
-                ) : (
-                  <Badge variant="outline">Free</Badge>
-                )}
-              </div>
+    <>
+      <PremiumModal 
+        open={isPremiumModalOpen} 
+        onClose={() => setIsPremiumModalOpen(false)} 
+        propertyCount={propertiesCount}
+        projectCount={projectsCount}
+      />
+      
+      <Form {...form}>
+        <form 
+          onSubmit={form.handleSubmit(onSubmit)} 
+          className={`space-y-8 transition-all duration-300 ${isSuccess ? 'bg-green-50 rounded-lg p-6 -mx-6' : ''}`}
+        >
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium">Account Information</h3>
               
-              <div className="mt-4 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>Properties</span>
-                  <span className={isPremium ? "" : propertiesCount >= maxProperties ? "text-amber-600 font-medium" : ""}>
-                    {propertiesCount}/{isPremium ? "∞" : maxProperties}
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span>Projects</span>
-                  <span className={isPremium ? "" : projectsCount >= maxProjects ? "text-amber-600 font-medium" : ""}>
-                    {projectsCount}/{isPremium ? "∞" : maxProjects}
-                  </span>
+              <div className="bg-gray-50 border rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium">Subscription Status</h4>
+                    <p className="text-sm text-gray-500 mt-1">Your current plan and usage limits</p>
+                  </div>
+                  {isPremium ? (
+                    <Badge className="text-white flex items-center gap-1 bg-teal-500">
+                      <Star className="h-3 w-3 fill-white" />
+                      Premium
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline">Free</Badge>
+                  )}
                 </div>
                 
-                {!isPremium && (
-                  <div className="mt-4">
-                    <Button 
-                      type="button" 
-                      onClick={() => {}} // In real implementation this would trigger Stripe
-                      className="w-full text-sm mt-2 bg-emerald-500 hover:bg-emerald-400"
-                    >
-                      Upgrade to Premium - $20/year
-                    </Button>
+                <div className="mt-4 space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Properties</span>
+                    <span className={isPremium ? "" : propertiesCount >= maxProperties ? "text-amber-600 font-medium" : ""}>
+                      {propertiesCount}/{isPremium ? "∞" : maxProperties}
+                    </span>
                   </div>
-                )}
+                  <div className="flex justify-between text-sm">
+                    <span>Projects</span>
+                    <span className={isPremium ? "" : projectsCount >= maxProjects ? "text-amber-600 font-medium" : ""}>
+                      {projectsCount}/{isPremium ? "∞" : maxProjects}
+                    </span>
+                  </div>
+                  
+                  {!isPremium && (
+                    <div className="mt-4">
+                      <Button 
+                        type="button" 
+                        onClick={() => setIsPremiumModalOpen(true)}
+                        className="w-full text-sm mt-2 bg-emerald-500 hover:bg-emerald-400"
+                      >
+                        Upgrade to Premium - $20/year
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
+            
+            <EmailField control={form.control} />
+            
+            <FormField
+              control={form.control}
+              name="taxFilingStatus"
+              render={({ field }) => (
+                <TaxFilingStatusField value={field.value} onChange={field.onChange} />
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="taxRate"
+              render={({ field }) => (
+                <PercentageField value={field.value} onChange={field.onChange} />
+              )}
+            />
           </div>
           
-          <EmailField control={form.control} />
-          
-          <FormField
-            control={form.control}
-            name="taxFilingStatus"
-            render={({ field }) => (
-              <TaxFilingStatusField value={field.value} onChange={field.onChange} />
+          <Button type="submit" disabled={isLoading} className="relative">
+            {isLoading ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Saving...
+              </>
+            ) : isSuccess ? (
+              <>
+                <Check className="h-4 w-4 mr-2 text-white" />
+                Saved!
+              </>
+            ) : (
+              "Save changes"
             )}
-          />
-          
-          <FormField
-            control={form.control}
-            name="taxRate"
-            render={({ field }) => (
-              <PercentageField value={field.value} onChange={field.onChange} />
-            )}
-          />
-        </div>
-        
-        <Button type="submit" disabled={isLoading} className="relative">
-          {isLoading ? (
-            <>
-              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Saving...
-            </>
-          ) : isSuccess ? (
-            <>
-              <Check className="h-4 w-4 mr-2 text-white" />
-              Saved!
-            </>
-          ) : (
-            "Save changes"
-          )}
-        </Button>
-      </form>
-    </Form>
+          </Button>
+        </form>
+      </Form>
+    </>
   );
 }
