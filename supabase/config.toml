@@ -1,39 +1,23 @@
 
 project_id = "gbztiauhydgyzvskqtrk"
 
-[api]
-# Port to use for the API URL
-port = 54321
-# Set an API hostname, either CNAME or part of Fly.io or Render
-hostname = "localhost"
-
-[dev]
-url = "postgres://postgres:postgres@localhost:54322/postgres"
-
-[[functions]]
-name = "send-email"
+[functions.send-email]
 verify_jwt = false
 
-[[functions]]
-name = "check-subscription"
+[functions.check-subscription]
 verify_jwt = false
 
-[[functions]]
-name = "analyze-project"
+[functions.analyze-project]
 verify_jwt = false
 
-[[functions]]
-name = "create-checkout"
+[functions.create-checkout]
 verify_jwt = false
 
-[[functions]]
-name = "stripe-webhook"
+[functions.stripe-webhook]
 verify_jwt = false
 
-[[functions]]
-name = "cancel-subscription"
+[functions.cancel-subscription]
 verify_jwt = false
 
-[[functions]]
-name = "create-portal-session"
+[functions.create-portal-session]
 verify_jwt = false
