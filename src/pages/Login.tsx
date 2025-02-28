@@ -15,6 +15,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isResetMode, setIsResetMode] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
   const { toast } = useToast();
   const { handleGoogleAuth } = useAuth();
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setAuthError(null);
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -30,18 +32,31 @@ export default function Login() {
       });
 
       if (error) {
-        let errorMessage = error.message;
-        if (error.message.includes("Invalid login credentials")) {
-          errorMessage = "The email or password you entered is incorrect. Please try again.";
-        }
+        console.log("Login error:", error.message); // For debugging
         
-        toast({
-          variant: "destructive",
-          title: "Login failed",
-          description: errorMessage,
-        });
+        // Check for different types of auth errors
+        if (error.message === "400: Invalid login credentials" || 
+            error.message.includes("Invalid login credentials")) {
+          setAuthError("The email or password you entered is incorrect. Please try again.");
+          
+          toast({
+            variant: "destructive",
+            title: "Login failed",
+            description: "The email or password you entered is incorrect. Please try again.",
+          });
+        } else {
+          setAuthError(error.message);
+          
+          toast({
+            variant: "destructive",
+            title: "Login failed",
+            description: error.message,
+          });
+        }
       } else if (data.user) {
         // Successful login
+        setAuthError(null);
+        
         toast({
           title: "Login successful",
           description: "You have successfully signed in.",
@@ -52,6 +67,8 @@ export default function Login() {
       }
     } catch (error) {
       console.error("Login error:", error);
+      setAuthError("An unexpected error occurred. Please try again.");
+      
       toast({
         variant: "destructive",
         title: "Error",
@@ -65,6 +82,7 @@ export default function Login() {
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setAuthError(null);
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -72,6 +90,7 @@ export default function Login() {
       });
 
       if (error) {
+        setAuthError(error.message);
         toast({
           variant: "destructive",
           title: "Error",
@@ -86,6 +105,7 @@ export default function Login() {
       }
     } catch (error) {
       console.error("Reset password error:", error);
+      setAuthError("An unexpected error occurred. Please try again.");
       toast({
         variant: "destructive",
         title: "Error",
@@ -116,6 +136,12 @@ export default function Login() {
         />
 
         <form className="mt-8 space-y-6" onSubmit={isResetMode ? handleResetPassword : handleLogin}>
+          {authError && (
+            <div className="bg-red-50 border border-red-200 text-red-800 rounded-md p-3 text-sm">
+              {authError}
+            </div>
+          )}
+          
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="sr-only">
@@ -130,12 +156,14 @@ export default function Login() {
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className={authError ? "border-red-300 focus-visible:ring-red-400" : ""}
               />
             </div>
             {!isResetMode && (
               <PasswordInput
                 value={password}
                 onChange={setPassword}
+                className={authError ? "border-red-300 focus-visible:ring-red-400" : ""}
               />
             )}
           </div>
