@@ -148,8 +148,8 @@ export function ProfileSettingsForm() {
                 </div>
                 
                 {!isPremium && <div className="mt-4">
-                    <Button type="button" className="w-full text-sm mt-2 bg-amber-500 hover:bg-amber-600" onClick={() => {}} // In real implementation this would trigger Stripe
-                >
+                    <Button type="button" onClick={() => {}} // In real implementation this would trigger Stripe
+                className="w-full text-sm mt-2 bg-emerald-500 hover:bg-emerald-400">
                       Upgrade to Premium - $20/year
                     </Button>
                   </div>}
