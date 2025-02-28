@@ -15,23 +15,32 @@ interface PremiumModalProps {
 
 export function PremiumModal({ open, onClose, propertyCount = 0, projectCount = 0 }: PremiumModalProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
   const handleUpgradeClick = async () => {
     setIsLoading(true);
+    setError(null);
+    
     try {
+      console.log("Starting checkout process...");
+      
       // Get the current URL for success and cancel URLs
       const origin = window.location.origin;
       const success_url = `${origin}/account?checkout_success=true`;
       const cancel_url = `${origin}/account?checkout_cancelled=true`;
 
+      console.log("Calling create-checkout function...");
       // Call our Edge Function to create a checkout session
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: { success_url, cancel_url },
       });
 
+      console.log("Edge function response:", { data, error });
+
       if (error) {
         console.error("Error creating checkout session:", error);
+        setError("Server error: " + error.message);
         toast({
           variant: "destructive",
           title: "Something went wrong",
@@ -42,9 +51,12 @@ export function PremiumModal({ open, onClose, propertyCount = 0, projectCount = 
 
       // If we have a URL, redirect to Stripe checkout
       if (data?.url) {
+        console.log("Redirecting to Stripe checkout...");
         window.location.href = data.url;
       } else if (data?.error) {
         // Show any errors from the edge function
+        console.error("Error from edge function:", data.error);
+        setError("Checkout error: " + data.error);
         toast({
           variant: "destructive",
           title: "Checkout Error",
@@ -52,6 +64,8 @@ export function PremiumModal({ open, onClose, propertyCount = 0, projectCount = 
         });
       } else {
         // Fallback error
+        console.error("No URL returned from checkout function");
+        setError("No checkout URL returned from server");
         toast({
           variant: "destructive",
           title: "Something went wrong",
@@ -60,6 +74,7 @@ export function PremiumModal({ open, onClose, propertyCount = 0, projectCount = 
       }
     } catch (err) {
       console.error("Checkout error:", err);
+      setError("Unexpected error: " + (err instanceof Error ? err.message : String(err)));
       toast({
         variant: "destructive",
         title: "Something went wrong",
@@ -117,6 +132,12 @@ export function PremiumModal({ open, onClose, propertyCount = 0, projectCount = 
               </li>
             </ul>
           </div>
+          
+          {error && (
+            <div className="text-red-500 bg-red-50 p-3 rounded-md border border-red-200 text-sm">
+              {error}
+            </div>
+          )}
           
           <div className="flex flex-col gap-3 pt-2">
             <Button 

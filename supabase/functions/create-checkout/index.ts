@@ -8,9 +8,16 @@ const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? ""
 const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
 const supabase = createClient(supabaseUrl, supabaseKey)
 
-// Stripe setup
+// Stripe setup - attempt to use the restricted key first, then fall back to secret key
+const stripeCheckoutKey = Deno.env.get("STRIPE_CHECKOUT_KEY") ?? ""
 const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY") ?? ""
-const stripe = new Stripe(stripeSecretKey, {
+const stripeKey = stripeCheckoutKey || stripeSecretKey
+
+if (!stripeKey) {
+  console.error("No Stripe key available. Please set STRIPE_CHECKOUT_KEY or STRIPE_SECRET_KEY")
+}
+
+const stripe = new Stripe(stripeKey, {
   apiVersion: "2023-10-16",
   httpClient: Stripe.createFetchHttpClient(),
 })
@@ -24,11 +31,12 @@ const corsHeaders = {
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
+    console.log("Handling OPTIONS request")
     return new Response(null, { headers: corsHeaders })
   }
 
   try {
-    console.log("Processing checkout request")
+    console.log("Processing checkout request with Stripe key type:", stripeCheckoutKey ? "CHECKOUT_KEY" : "SECRET_KEY")
     
     // Get userId from the JWT
     const authHeader = req.headers.get("Authorization")
@@ -52,7 +60,18 @@ serve(async (req) => {
     }
 
     // Get website URL from request
-    const { success_url, cancel_url } = await req.json()
+    let requestBody
+    try {
+      requestBody = await req.json()
+    } catch (e) {
+      console.error("Failed to parse request body:", e)
+      return new Response(
+        JSON.stringify({ error: "Invalid request body" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      )
+    }
+    
+    const { success_url, cancel_url } = requestBody
     
     if (!success_url || !cancel_url) {
       console.error("Missing success_url or cancel_url")
@@ -108,30 +127,40 @@ serve(async (req) => {
     const priceId = "price_1QxDfhKGEKCGMor2R32CtdhQ" // Your specific Stripe price ID
     
     console.log("Creating checkout session with price:", priceId)
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1,
+    try {
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [
+          {
+            price: priceId,
+            quantity: 1,
+          },
+        ],
+        mode: "subscription",
+        success_url: success_url,
+        cancel_url: cancel_url,
+        customer_email: profile.email,
+        client_reference_id: user.id,
+        metadata: {
+          user_id: user.id,
         },
-      ],
-      mode: "subscription",
-      success_url: success_url,
-      cancel_url: cancel_url,
-      customer_email: profile.email,
-      client_reference_id: user.id,
-      metadata: {
-        user_id: user.id,
-      },
-    })
+      })
 
-    console.log("Checkout session created successfully")
-    return new Response(
-      JSON.stringify({ url: session.url }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    )
-
+      console.log("Checkout session created successfully, URL:", session.url ? "Generated" : "Missing")
+      return new Response(
+        JSON.stringify({ url: session.url }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      )
+    } catch (stripeError) {
+      console.error("Stripe error:", JSON.stringify(stripeError))
+      return new Response(
+        JSON.stringify({ 
+          error: "Error creating Stripe checkout session", 
+          details: stripeError.message 
+        }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      )
+    }
   } catch (error) {
     console.error("Error creating checkout session:", error)
     return new Response(
