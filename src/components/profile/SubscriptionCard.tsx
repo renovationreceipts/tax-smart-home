@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { CreditCard, AlertTriangle, Check, Loader2 } from "lucide-react";
+import { CreditCard, AlertTriangle, Check, Loader2, Info } from "lucide-react";
 import { format, isValid } from "date-fns";
 
 interface SubscriptionCardProps {
@@ -17,6 +17,7 @@ export function SubscriptionCard({ subscription, onUpdate }: SubscriptionCardPro
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [errorDetails, setErrorDetails] = useState<string | null>(null);
   
   const isPremiumActive = subscription?.status === "active";
   const isCancelled = subscription?.cancel_at_period_end;
@@ -116,22 +117,48 @@ export function SubscriptionCard({ subscription, onUpdate }: SubscriptionCardPro
   const handleUpdatePayment = async () => {
     try {
       setIsLoading(true);
+      setErrorDetails(null);
       
+      console.log("Invoking create-portal-session function...");
       const { data, error } = await supabase.functions.invoke('create-portal-session');
       
-      if (error) throw error;
+      if (error) {
+        console.error("Function invoke error:", error);
+        throw new Error(`Function error: ${error.message}`);
+      }
       
-      if (data?.url) {
-        window.location.href = data.url;
-      } else {
+      if (!data) {
+        console.error("No data returned from function");
+        throw new Error("No data returned from billing portal");
+      }
+      
+      console.log("Portal session response:", data);
+      
+      if (data.error) {
+        console.error("Portal session error:", data.error, data.details);
+        throw new Error(data.details || data.error);
+      }
+      
+      if (!data.url) {
+        console.error("No portal URL returned");
         throw new Error("No portal URL returned");
       }
+      
+      console.log("Redirecting to portal URL:", data.url);
+      window.location.href = data.url;
     } catch (error) {
       console.error("Error opening billing portal:", error);
+      
+      let errorMessage = "Failed to open billing portal. Please try again.";
+      if (error instanceof Error) {
+        setErrorDetails(error.message);
+        errorMessage = "Failed to open billing portal. See details for more information.";
+      }
+      
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to open billing portal. Please try again."
+        description: errorMessage
       });
     } finally {
       setIsLoading(false);
@@ -252,6 +279,16 @@ export function SubscriptionCard({ subscription, onUpdate }: SubscriptionCardPro
             )}
             Update Payment Method
           </Button>
+          
+          {errorDetails && (
+            <div className="mt-2 p-3 bg-red-50 text-red-800 text-sm rounded-md flex items-start gap-2">
+              <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="font-semibold">Error details:</p>
+                <p className="text-xs">{errorDetails}</p>
+              </div>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
