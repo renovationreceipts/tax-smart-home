@@ -3,8 +3,10 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import Stripe from "https://esm.sh/stripe@13.2.0";
 
+// Updated CORS headers to allow multiple origins
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": "*", // Allow all origins - will be restricted by Supabase
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
@@ -22,9 +24,13 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 const origin = Deno.env.get("FRONTEND_URL") || "http://localhost:3000";
 
 serve(async (req) => {
+  console.log("Portal session request received:", req.method);
+  
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
+    console.log("Handling OPTIONS preflight request");
     return new Response(null, {
+      status: 204,
       headers: corsHeaders,
     });
   }
@@ -33,6 +39,7 @@ serve(async (req) => {
     // Get the current user's JWT
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
+      console.error("Missing authorization header");
       return new Response(JSON.stringify({ error: "No authorization header" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -45,6 +52,7 @@ serve(async (req) => {
     // Verify the JWT and get the user
     const { data: { user }, error: userError } = await supabase.auth.getUser(token);
     if (userError || !user) {
+      console.error("Invalid user token:", userError);
       return new Response(JSON.stringify({ error: "Invalid user token" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
