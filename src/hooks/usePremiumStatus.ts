@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 // Define limits for free tier users
 export const FREE_TIER_LIMITS = {
   PROPERTY_LIMIT: 1,
-  PROJECT_LIMIT: 3
+  PROJECT_LIMIT: 4
 };
 
 export function usePremiumStatus() {
