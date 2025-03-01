@@ -20,6 +20,7 @@ export function AuthHeader({ title, subtitle }: AuthHeaderProps) {
   );
 }
 
+// AuthBackButton is kept but will no longer be used in Login.tsx
 export function AuthBackButton() {
   return (
     <Link

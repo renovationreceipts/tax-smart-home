@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -6,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
-import { AuthHeader, AuthBackButton } from "@/components/auth/AuthHeader";
+import { AuthHeader } from "@/components/auth/AuthHeader";
 import { PasswordInput } from "@/components/auth/PasswordInput";
 import { GoogleButton } from "@/components/auth/GoogleButton";
 
@@ -118,7 +117,6 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
-      <AuthBackButton />
       <div className="max-w-md w-full space-y-8">
         <AuthHeader 
           title={isResetMode ? "Reset Password" : "Sign in to your account"}
