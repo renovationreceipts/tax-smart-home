@@ -21,8 +21,8 @@ const FAQ = () => {
       answer: "Once you enter a home project, we use a fine-tuned GPT 4o model to analyze the description and find you hidden savings."
     },
     {
-      question: "Why is this free?",
-      answer: "Renovation Receipts is currently in beta, which means we're actively building, improving, and refining the platform. We want to make sure we create the best possible tool for homeowners to track their home improvement expenses and maximize their tax savings.\n\nBy signing up now, you get free access to the app and the opportunity to shape its future. Your feedback helps us fine-tune features, improve the user experience, and add new tools that truly make a difference.\n\nThis is our way of thanking early users for trying it out and sharing their insights. Down the road, we may introduce paid plans, but everyone who joins during the beta will continue to enjoy their access for free."
+      question: "How much does this cost?",
+      answer: "Renovation Receipts is free up to 4 home improvement projects and up to 1 property. After that, if you have more projects or properties to manage it's just $20 per year."
     }
   ];
 
