@@ -1,10 +1,8 @@
-
 import { Hero } from "@/components/Hero";
 import { Features } from "@/components/Features";
 import { HowItWorks } from "@/components/HowItWorks";
 import Reviews from "@/components/Reviews";
 import FAQ from "@/components/FAQ";
-import Footer from "@/components/Footer";
 import { useNavigate } from "react-router-dom";
 
 const WhyTrackCosts = () => {
@@ -78,7 +76,6 @@ const Index = () => {
       <Features />
       <Reviews />
       <FAQ />
-      <Footer />
     </div>;
 };
 
