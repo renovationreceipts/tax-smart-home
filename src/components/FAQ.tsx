@@ -1,3 +1,4 @@
+
 import {
   Accordion,
   AccordionContent,
@@ -13,7 +14,7 @@ const FAQ = () => {
     },
     {
       question: "Which home improvement expenses can I track?",
-      answer: "You can track any capital improvements that add value to your property, including renovations, additions, new systems (HVAC, plumbing, electric), and major upgrades. The app helps distinguish between deductible repairs and capital improvements."
+      answer: "You can track any and all home improvements, renovations, and DIY projects. Our AI will automatically determine if your project qualifies for cost basis adjustment, tax credits and insurance savings. The more you enter, the more savings you can find."
     },
     {
       question: "How do you find savings?",
