@@ -1,4 +1,3 @@
-
 import {
   Accordion,
   AccordionContent,
@@ -10,7 +9,7 @@ const FAQ = () => {
   const faqs = [
     {
       question: "How does the app calculate cost basis for different property types?",
-      answer: "Our app uses specific algorithms tailored to each property type (primary residence, second home, or rental property) to calculate the cost basis according to IRS guidelines. It factors in the purchase price, closing costs, and all qualifying improvements while accounting for depreciation where applicable."
+      answer: "Renovation Receipts uses AI trained on IRS rules and regulations, specifically IRS Publication 523, to determine if each project you enter meets the qualifications for basis adjustment. The app will clearly highlight if your project is likely to qualify and only use qualifying projects in the cost basis calculation."
     },
     {
       question: "Which home improvement expenses can I track?",
