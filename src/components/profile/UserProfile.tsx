@@ -21,7 +21,7 @@ export function UserProfile() {
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null)
   const { isPremium, subscription, isLoading: isPremiumLoading } = usePremiumStatus()
   const { data: properties = [] } = useProperties()
-  const { data: projects = [] } = useProjects()
+  const { data: projects = [] } = useProjects(selectedPropertyId)
   const [refreshKey, setRefreshKey] = useState(0)
 
   const refreshSubscription = () => {
