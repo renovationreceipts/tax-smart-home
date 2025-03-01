@@ -18,7 +18,7 @@ const FAQ = () => {
     },
     {
       question: "How do you find savings?",
-      answer: "Once you enter a home project, we use a fine-tuned GPT 4o model to analyze the description and find you hidden savings."
+      answer: "Once you enter a home project, we use a fine-tuned GPT 4o model to analyze the description to find you hidden savings. Our model is trained to be an expert on IRS rules and guidance around basis adjustment, tax credits and major homeowners insurance discount programs."
     },
     {
       question: "How much does this cost?",
