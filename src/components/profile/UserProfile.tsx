@@ -9,8 +9,10 @@ import { ArrowLeft, Plus } from "lucide-react"
 import { ProfileSettingsForm } from "./ProfileSettingsForm"
 import { PasswordChangeForm } from "./PasswordChangeForm"
 import { PropertySection } from "@/components/account/PropertySection"
-import { SubscriptionCard } from "./SubscriptionCard"
+import { ManageSubscriptionCard } from "./ManageSubscriptionCard"
 import { usePremiumStatus } from "@/hooks/usePremiumStatus"
+import { useProperties } from "@/hooks/useProperties"
+import { useProjects } from "@/hooks/useProjects"
 
 export function UserProfile() {
   const navigate = useNavigate()
@@ -18,6 +20,8 @@ export function UserProfile() {
   const [isLoading, setIsLoading] = useState(true)
   const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null)
   const { isPremium, subscription, isLoading: isPremiumLoading } = usePremiumStatus()
+  const { data: properties = [] } = useProperties()
+  const { data: projects = [] } = useProjects()
   const [refreshKey, setRefreshKey] = useState(0)
 
   const refreshSubscription = () => {
@@ -99,12 +103,13 @@ export function UserProfile() {
           </CardContent>
         </Card>
 
-        {isPremium && subscription && (
-          <SubscriptionCard
-            subscription={subscription}
-            onUpdate={refreshSubscription}
-          />
-        )}
+        <ManageSubscriptionCard
+          subscription={subscription}
+          isPremium={isPremium}
+          onUpdate={refreshSubscription}
+          propertyCount={properties.length}
+          projectCount={projects.length}
+        />
 
         <Card>
           <CardHeader>
