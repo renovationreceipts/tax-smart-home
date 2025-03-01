@@ -6,6 +6,12 @@ import { supabase } from "@/integrations/supabase/client";
 import BlogCard, { BlogPost } from "@/components/blog/BlogCard";
 
 const blogPosts: BlogPost[] = [{
+  slug: "eliminate-pmi-sooner",
+  title: "How Home Improvements Can Help You Eliminate PMI Sooner",
+  description: "Save money by increasing your home's value and lowering your loan-to-value ratio (LTV). Learn how smart home improvements can help remove PMI years earlier.",
+  thumbnail: "/lovable-uploads/769139b0-d5c2-4b13-9946-033d705281ce.png",
+  date: "March 1, 2025"
+}, {
   slug: "track-home-improvement-receipts",
   title: "Should I Track My Home Improvement Receipts? Here's Why It Could Save You Thousands",
   description: "Learn how tracking your home improvement expenses can save you thousands in taxes when you sell your home. Get started with digital receipt tracking today.",

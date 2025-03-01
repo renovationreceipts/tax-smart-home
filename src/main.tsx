@@ -25,6 +25,7 @@ import TaxAnalysis from "@/pages/TaxAnalysis"
 import TrackHomeImprovements from "@/pages/blog/TrackHomeImprovements"
 import HomeownersGuideTaxSavings from "@/pages/blog/HomeownersGuideTaxSavings"
 import CapitalGains101 from "@/pages/blog/CapitalGains101"
+import EliminatePMISooner from "@/pages/blog/EliminatePMISooner"
 import Disclaimers from './pages/Disclaimers'
 import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
@@ -78,6 +79,7 @@ const router = createBrowserRouter([
           { path: "blog/track-home-improvement-receipts", element: <TrackHomeImprovements /> },
           { path: "blog/homeowners-guide-tax-savings", element: <HomeownersGuideTaxSavings /> },
           { path: "blog/capital-gains-101", element: <CapitalGains101 /> },
+          { path: "blog/eliminate-pmi-sooner", element: <EliminatePMISooner /> },
           { path: "about", element: <About /> },
           { path: "disclaimers", element: <Disclaimers /> },
           { path: "terms", element: <Terms /> },
