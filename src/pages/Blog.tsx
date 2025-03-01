@@ -3,7 +3,6 @@ import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import Footer from "@/components/Footer";
 import BlogCard, { BlogPost } from "@/components/blog/BlogCard";
 
 const blogPosts: BlogPost[] = [{
@@ -66,7 +65,6 @@ const Blog = () => {
           {blogPosts.map(post => <BlogCard key={post.slug} post={post} />)}
         </div>
       </div>
-      <Footer />
     </div>;
 };
 
