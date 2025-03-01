@@ -1,14 +1,13 @@
-
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calculator, DollarSign, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useIsMobile } from "@/hooks/use-mobile";
-
 export const Hero = () => {
-  const { trackEvent } = useAnalytics();
+  const {
+    trackEvent
+  } = useAnalytics();
   const isMobile = useIsMobile();
-
   const handleSignUpClick = () => {
     trackEvent({
       eventName: "signup_click",
@@ -18,16 +17,16 @@ export const Hero = () => {
       }
     });
   };
-
-  return (
-    <div className="w-full hero-gradient">
+  return <div className="w-full hero-gradient">
       <div className="w-full sm:py-20 px-4 py-[22px] lg:py-[47px]">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
             <div className="space-y-8">
               <h1 className="sm:text-4xl md:text-5xl font-bold tracking-tight px-0 text-3xl text-slate-950 lg:text-4xl">
                 Track Home Improvements, Renovations and DIY Projects &amp;{' '}
-                <span style={{ color: '#0090FF' }}>Unlock Hidden Savings</span>
+                <span style={{
+                color: '#0090FF'
+              }}>Unlock Hidden Savings</span>
               </h1>
               <p className="text-lg sm:text-xl text-gray-600">
                 Join 50,000 property owners who've saved an average of $33,200 on taxes.
@@ -45,10 +44,8 @@ export const Hero = () => {
                   <div className="bg-[#D3E4FD] w-12 h-12 rounded-full flex items-center justify-center mb-4">
                     <Calculator className="h-6 w-6 text-[#0090FF]" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Tax-Smart Tracking</h3>
-                  <p className="text-gray-600">
-                    Automatically calculate cost basis and potential tax savings. Our smart system helps you never miss a deductible expense.
-                  </p>
+                  <h3 className="text-xl font-semibold mb-2">Tax-Smart Home Project Tracking</h3>
+                  <p className="text-gray-600">Track your home projects, save invoices and receipts, before &amp; after photos and we'll automatically calculate your cost basis.</p>
                 </div>
 
                 <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-sm">
@@ -75,6 +72,5 @@ export const Hero = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
