@@ -52,7 +52,7 @@ export const Hero = () => {
                   <div className="bg-[#DCFCE7] w-12 h-12 rounded-full flex items-center justify-center mb-4">
                     <DollarSign className="h-6 w-6 text-[#22C55E]" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Hidden Credits Finder</h3>
+                  <h3 className="text-xl font-semibold mb-2">Hidden Tax Credits Finder</h3>
                   <p className="text-gray-600">
                     Discover tax credits and rebates you didn't know about. Our database is updated with the latest federal and state incentives.
                   </p>
