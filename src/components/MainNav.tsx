@@ -54,7 +54,7 @@ const MainNav = () => {
             <img 
               src="/lovable-uploads/69bafa75-cbb8-49f9-a552-21142b9fa060.png" 
               alt="RenovationReceipts.com" 
-              className="h-12 w-auto" 
+              className="h-14 w-auto" 
             />
           </Link>
         </div>
