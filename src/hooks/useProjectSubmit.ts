@@ -13,6 +13,7 @@ interface UseProjectSubmitProps {
   propertyId: string
   project?: Project | null
   onSuccess: (data: { 
+    id: string
     name: string
     cost: number
     qualifies_for_basis: boolean
@@ -87,6 +88,7 @@ export function useProjectSubmit({ propertyId, project, onSuccess, onPhaseChange
         invalidateProjectsCache(queryClient, propertyId)
 
         onSuccess({
+          id: project.id,
           name: data.name,
           cost: numericCost,
           qualifies_for_basis: analysis.costBasis.qualifies,
@@ -134,6 +136,7 @@ export function useProjectSubmit({ propertyId, project, onSuccess, onPhaseChange
         invalidateProjectsCache(queryClient, propertyId)
 
         onSuccess({
+          id: projectData.id,
           name: data.name,
           cost: numericCost,
           qualifies_for_basis: analysis.costBasis.qualifies,

@@ -17,7 +17,14 @@ import { useState, useEffect } from "react"
 interface ProjectFormProps {
   propertyId: string
   project?: Project | null
-  onSuccess: (project: { name: string; cost: number; qualifies_for_basis: boolean }) => void
+  onSuccess: (project: { 
+    id: string
+    name: string
+    cost: number
+    qualifies_for_basis: boolean
+    tax_credits_eligible: boolean
+    insurance_reduction_eligible: boolean
+  }) => void
   onCancel: () => void
 }
 
@@ -102,9 +109,12 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
     project, 
     onSuccess: (data) => {
       const successData = {
+        id: data.id,
         name: data.name,
         cost: data.cost,
-        qualifies_for_basis: data.qualifies_for_basis || false
+        qualifies_for_basis: data.qualifies_for_basis || false,
+        tax_credits_eligible: data.tax_credits_eligible || false,
+        insurance_reduction_eligible: data.insurance_reduction_eligible || false
       }
       onSuccess(successData)
     },

@@ -1,30 +1,38 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Plus, CheckCircle2, X } from "lucide-react"
+import { CheckCircle2, X, ExternalLink } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { formatCurrency } from "@/lib/utils"
 
 interface ProjectSuccessModalProps {
   open: boolean
   onClose: () => void
-  onAddAnother: () => void
   project: {
+    id: string
     name: string
     cost: number
     qualifies_for_basis: boolean
     tax_credits_eligible: boolean
     insurance_reduction_eligible: boolean
   } | null
+  propertyId?: string
 }
 
 export function ProjectSuccessModal({ 
   open, 
   onClose,
-  onAddAnother,
-  project 
+  project,
+  propertyId
 }: ProjectSuccessModalProps) {
   if (!project) return null
+
+  const handleViewDetails = () => {
+    if (project.id && propertyId) {
+      window.location.href = `/project/${propertyId}/${project.id}`
+    }
+    onClose()
+  }
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
@@ -107,12 +115,12 @@ export function ProjectSuccessModal({
 
           <div className="flex flex-col gap-3 pt-2">
             <Button 
-              onClick={onAddAnother}
+              onClick={handleViewDetails}
               variant="default"
               className="w-full"
             >
-              <Plus className="h-4 w-4 mr-2" />
-              Add Another Project
+              <ExternalLink className="h-4 w-4 mr-2" />
+              View Project Details
             </Button>
             <Button 
               onClick={onClose}

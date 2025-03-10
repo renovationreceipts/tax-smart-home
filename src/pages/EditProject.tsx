@@ -10,6 +10,7 @@ import { usePremiumStatus } from "@/hooks/usePremiumStatus"
 import { PremiumModal } from "@/components/premium/PremiumModal"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
+import { useScrollToTop } from "@/hooks/useScrollToTop"
 
 export default function EditProject() {
   const navigate = useNavigate()
@@ -18,6 +19,7 @@ export default function EditProject() {
   const { data: properties = [] } = useProperties()
   const project = id ? projects.find(p => p.id === id) : null
   const [successProject, setSuccessProject] = useState<{
+    id: string
     name: string
     cost: number
     qualifies_for_basis: boolean
@@ -28,6 +30,7 @@ export default function EditProject() {
   const { hasReachedLimit, projectsCount } = useProjectLimitCheck()
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false)
   const isEditing = !!project
+  const scrollToTop = useScrollToTop()
   
   // Add formKey state to force form remount
   const [formKey, setFormKey] = useState(Date.now())
@@ -108,17 +111,12 @@ export default function EditProject() {
   }
 
   const handleNavigateBack = () => {
-    window.scrollTo(0, 0)
+    scrollToTop()
     navigate(`/account?propertyId=${propertyId}`)
   }
 
-  const handleAddAnother = () => {
-    setSuccessProject(null)
-    setFormKey(Date.now()) // Generate new key to force form remount
-    navigate(`/project/edit/${propertyId}?new=${Date.now()}`) // Add timestamp to force fresh route
-  }
-
   const handleSuccess = (project: { 
+    id: string
     name: string
     cost: number
     qualifies_for_basis: boolean 
@@ -141,7 +139,7 @@ export default function EditProject() {
         open={!!successProject}
         project={successProject}
         onClose={handleNavigateBack}
-        onAddAnother={handleAddAnother}
+        propertyId={propertyId}
       />
     </div>
   )
