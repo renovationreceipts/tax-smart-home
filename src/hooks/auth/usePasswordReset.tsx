@@ -52,11 +52,14 @@ export function usePasswordReset() {
       const origin = window.location.origin;
       const redirectTo = `${origin}/reset-password`; // Redirect to our new reset-password page
       
+      console.log(`Sending password reset email to ${email} with redirect to ${redirectTo}`);
+      
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo,
       });
 
       if (error) {
+        console.error("Reset password error from Supabase:", error);
         setAuthError(error.message);
         toast({
           variant: "destructive",
@@ -64,10 +67,11 @@ export function usePasswordReset() {
           description: error.message,
         });
       } else {
+        console.log("Password reset email sent successfully");
         setIsResetSuccess(true);
         toast({
           title: "Success",
-          description: "Password reset instructions have been sent to your email",
+          description: "Password reset instructions have been sent to your email. Please check both your inbox and spam/junk folders.",
         });
       }
     } catch (error) {
