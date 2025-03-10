@@ -26,8 +26,8 @@ export default function EditProject() {
     tax_credits_eligible: boolean
     insurance_reduction_eligible: boolean
   } | null>(null)
-  const { isPremium } = usePremiumStatus()
-  const { hasReachedLimit, projectsCount } = useProjectLimitCheck()
+  const { isPremium, isLoading: isPremiumLoading } = usePremiumStatus()
+  const { hasReachedLimit, projectsCount } = useProjectLimitCheck(isPremium)
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false)
   const isEditing = !!project
   const scrollToTop = useScrollToTop()
@@ -36,18 +36,31 @@ export default function EditProject() {
   const [formKey, setFormKey] = useState(Date.now())
 
   useEffect(() => {
-    // If not editing and free tier limit reached, show premium modal
-    if (!isLoading && !isEditing && !isPremium && hasReachedLimit) {
+    console.log("Premium status check in EditProject:", { 
+      isPremium, 
+      isPremiumLoading,
+      isEditing,
+      hasReachedLimit,
+      projectsCount
+    });
+    
+    // Only make decision when all data is loaded and premium status is confirmed
+    // Don't show premium modal for premium users or if user is editing an existing project
+    if (!isLoading && !isPremiumLoading && !isEditing && !isPremium && hasReachedLimit) {
+      console.log("Showing premium modal")
       setIsPremiumModalOpen(true)
+    } else {
+      console.log("Not showing premium modal")
+      setIsPremiumModalOpen(false)
     }
-  }, [isLoading, isEditing, isPremium, hasReachedLimit])
+  }, [isLoading, isPremiumLoading, isEditing, isPremium, hasReachedLimit, projectsCount])
 
   if (!propertyId) {
     navigate("/account")
     return null
   }
 
-  if (isLoading) {
+  if (isLoading || isPremiumLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <LoadingSpinner size="lg" />
