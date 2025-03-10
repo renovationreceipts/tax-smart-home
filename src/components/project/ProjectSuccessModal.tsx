@@ -29,7 +29,8 @@ export function ProjectSuccessModal({
 
   const handleViewDetails = () => {
     if (project.id && propertyId) {
-      window.location.href = `/project/${propertyId}/${project.id}`
+      // Update the URL to match the route defined in main.tsx for ViewProject
+      window.location.href = `/project/view/${propertyId}/${project.id}`
     }
     onClose()
   }
