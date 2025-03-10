@@ -13,11 +13,16 @@ export function usePasswordReset() {
 
   const handleResetPasswordCallback = async (hash: string) => {
     try {
-      if (hash.includes('error=')) {
+      // Log the hash to help with debugging
+      console.log("Processing hash in reset password callback:", hash);
+      
+      if (hash.includes('error=') || hash.includes('error_description=')) {
         // Extract error message from hash
-        const errorParam = new URLSearchParams(hash.substring(1)).get('error_description');
+        const errorParam = new URLSearchParams(hash.substring(1)).get('error_description') || 
+                          new URLSearchParams(hash.substring(1)).get('error');
         const errorMessage = decodeURIComponent(errorParam || 'Unknown error');
         
+        console.error("Error detected in password reset URL:", errorMessage);
         setAuthError(`Password reset failed: ${errorMessage}`);
         toast({
           variant: "destructive",
@@ -27,8 +32,9 @@ export function usePasswordReset() {
         return;
       }
 
-      // Instead of automatically logging in the user, we'll redirect to the reset-password page
-      // This allows the user to create a new password
+      // Redirect to the reset-password page with the hash intact
+      // This allows the reset-password page to process the token
+      console.log("Redirecting to reset-password page with hash");
       navigate("/reset-password" + hash);
       
     } catch (error) {
@@ -50,7 +56,7 @@ export function usePasswordReset() {
     try {
       // Make sure to create a fully qualified URL for the redirect
       const origin = window.location.origin;
-      const redirectTo = `${origin}/reset-password`; // Redirect to our new reset-password page
+      const redirectTo = `${origin}/reset-password`; // Redirect to our reset-password page
       
       console.log(`Sending password reset email to ${email} with redirect to ${redirectTo}`);
       

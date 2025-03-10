@@ -6,7 +6,7 @@ import { AuthHeader } from "@/components/auth/AuthHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Check } from "lucide-react";
+import { Loader2, Check, AlertTriangle } from "lucide-react";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -16,6 +16,7 @@ export default function ResetPassword() {
   const [error, setError] = useState<string | null>(null);
   const [tokenError, setTokenError] = useState<string | null>(null);
   const [isVerifyingToken, setIsVerifyingToken] = useState(true);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
@@ -27,8 +28,12 @@ export default function ResetPassword() {
         setIsVerifyingToken(true);
         const hash = location.hash;
         
-        // Check if we have a hash with a token
+        // Debug the received hash to help troubleshoot
+        console.log("Received URL hash:", hash);
+        
+        // Check if we have a hash with a token or if we're in a recovery flow
         if (!hash || !(hash.includes('access_token=') || hash.includes('type=recovery'))) {
+          console.error("No valid token found in URL hash");
           setTokenError("Invalid or missing reset token. Please request a new password reset link.");
           return;
         }
@@ -42,6 +47,9 @@ export default function ResetPassword() {
           return;
         }
 
+        // Store the user email for display purposes
+        setUserEmail(data.user.email);
+        
         // Token is valid, user can proceed with password reset
         console.log("Token verification successful, user can reset password");
       } catch (err) {
@@ -110,6 +118,18 @@ export default function ResetPassword() {
     }
   };
 
+  const handleRequestNewLink = async () => {
+    try {
+      navigate("/login", { state: { showResetForm: true } });
+      toast({
+        title: "Request new link",
+        description: "You'll be redirected to request a new password reset link."
+      });
+    } catch (error) {
+      console.error("Navigation error:", error);
+    }
+  };
+
   const handleBackToLogin = () => {
     navigate("/login");
   };
@@ -134,11 +154,24 @@ export default function ResetPassword() {
         <div className="max-w-md w-full space-y-8">
           <AuthHeader title="Reset link invalid" />
           <div className="bg-red-50 border border-red-200 text-red-800 rounded-md p-4 mb-6">
-            {tokenError}
+            <div className="flex items-center mb-2">
+              <AlertTriangle className="h-5 w-5 mr-2 text-red-600" />
+              <span className="font-medium">Error with reset link</span>
+            </div>
+            <p>{tokenError}</p>
+            <p className="mt-2 text-sm">
+              If you're using Outlook or another email service with link protection, 
+              try copying the link directly and pasting it into your browser instead of clicking it.
+            </p>
           </div>
-          <Button onClick={handleBackToLogin} className="w-full">
-            Back to Login
-          </Button>
+          <div className="space-y-4">
+            <Button onClick={handleRequestNewLink} className="w-full">
+              Request New Reset Link
+            </Button>
+            <Button onClick={handleBackToLogin} variant="outline" className="w-full">
+              Back to Login
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -147,7 +180,7 @@ export default function ResetPassword() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <AuthHeader title="Create New Password" subtitle="Please enter your new password below" />
+        <AuthHeader title="Create New Password" subtitle={userEmail ? `For account: ${userEmail}` : "Please enter your new password below"} />
         
         <form className="mt-8 space-y-6" onSubmit={handleResetPassword}>
           {error && (

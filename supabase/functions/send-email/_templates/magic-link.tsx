@@ -44,6 +44,9 @@ export const MagicLinkEmail = ({
     ? 'Click the button below to reset your password and create a new one.'
     : 'Click the button below to log in to your account and start tracking your renovation expenses.';
 
+  // Create the full reset URL for manual copying
+  const fullResetUrl = `${supabase_url}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${redirect_to}`;
+
   return (
     <Html>
       <Head />
@@ -55,7 +58,7 @@ export const MagicLinkEmail = ({
             {instructionText}
           </Text>
           <Link
-            href={`${supabase_url}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${redirect_to}`}
+            href={fullResetUrl}
             target="_blank"
             style={{
               ...button,
@@ -65,15 +68,30 @@ export const MagicLinkEmail = ({
           >
             {buttonText}
           </Link>
-          <Text style={{ ...text, marginBottom: '14px' }}>
-            Or, if the button doesn't work, copy and paste this temporary {isPasswordReset ? 'reset' : 'login'} code:
+          <Text style={{ ...text, marginBottom: '8px' }}>
+            Or, if the button doesn't work, copy and paste this URL into your browser:
+          </Text>
+          <Text style={linkBox}>
+            {fullResetUrl}
+          </Text>
+          
+          <Text style={{ ...text, marginBottom: '14px', marginTop: '20px' }}>
+            Alternatively, use this temporary {isPasswordReset ? 'reset' : 'login'} code:
           </Text>
           <code style={code}>{token}</code>
+          
+          {isPasswordReset && (
+            <Text style={{...text, marginTop: '20px', backgroundColor: '#f9f9f9', padding: '12px', borderRadius: '5px', fontSize: '14px'}}>
+              <strong>Note for Outlook users:</strong> If you're using Outlook or another email service with link protection, 
+              try copying the link above and pasting it directly into your browser instead of clicking it.
+            </Text>
+          )}
+          
           <Text
             style={{
               ...text,
               color: '#ababab',
-              marginTop: '14px',
+              marginTop: '20px',
               marginBottom: '16px',
             }}
           >
@@ -163,4 +181,17 @@ const code = {
   color: '#333',
   fontSize: '15px',
   textAlign: 'center' as const,
+}
+
+const linkBox = {
+  display: 'block',
+  padding: '10px',
+  backgroundColor: '#f4f4f4',
+  borderRadius: '5px',
+  border: '1px solid #eee',
+  color: '#2563eb',
+  fontSize: '14px',
+  wordBreak: 'break-all',
+  overflowWrap: 'break-word',
+  textAlign: 'left' as const,
 }
