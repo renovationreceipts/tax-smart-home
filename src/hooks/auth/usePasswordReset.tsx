@@ -60,33 +60,59 @@ export function usePasswordReset() {
       
       console.log(`Sending password reset email to ${email} with redirect to ${redirectTo}`);
       
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo,
-      });
-
-      if (error) {
-        console.error("Reset password error from Supabase:", error);
-        setAuthError(error.message);
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: error.message,
-        });
-      } else {
-        console.log("Password reset email sent successfully");
-        setIsResetSuccess(true);
-        toast({
-          title: "Success",
-          description: "Password reset instructions have been sent to your email. Please check both your inbox and spam/junk folders.",
-        });
+      // Add a retry mechanism for password reset
+      let retryCount = 0;
+      const maxRetries = 2;
+      let success = false;
+      let lastError = null;
+      
+      while (retryCount <= maxRetries && !success) {
+        try {
+          const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo,
+          });
+          
+          if (error) {
+            lastError = error;
+            console.error(`Reset password attempt ${retryCount + 1} failed:`, error);
+            retryCount++;
+            
+            if (retryCount <= maxRetries) {
+              // Wait before retrying (exponential backoff)
+              await new Promise(r => setTimeout(r, 1000 * retryCount));
+            }
+          } else {
+            success = true;
+          }
+        } catch (err) {
+          lastError = err;
+          console.error(`Reset password attempt ${retryCount + 1} threw an exception:`, err);
+          retryCount++;
+          
+          if (retryCount <= maxRetries) {
+            // Wait before retrying
+            await new Promise(r => setTimeout(r, 1000 * retryCount));
+          }
+        }
       }
+      
+      if (!success && lastError) {
+        throw lastError;
+      }
+      
+      console.log("Password reset email sent successfully");
+      setIsResetSuccess(true);
+      toast({
+        title: "Success",
+        description: "Password reset instructions have been sent to your email. Please check both your inbox and spam/junk folders.",
+      });
     } catch (error) {
       console.error("Reset password error:", error);
-      setAuthError("An unexpected error occurred. Please try again.");
+      setAuthError("An unexpected error occurred. Please try again in a few minutes.");
       toast({
         variant: "destructive",
         title: "Error",
-        description: "An unexpected error occurred while trying to reset your password",
+        description: "An unexpected error occurred while trying to reset your password. Please try again in a few minutes.",
       });
     } finally {
       setIsLoading(false);

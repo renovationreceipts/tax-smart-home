@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { usePasswordReset } from "@/hooks/auth/usePasswordReset";
-import { Loader2, Check } from "lucide-react";
+import { Loader2, Check, RefreshCw } from "lucide-react";
 
 interface RequestPasswordResetFormProps {
   onSwitchToLogin: () => void;
@@ -12,10 +12,24 @@ interface RequestPasswordResetFormProps {
 export function RequestPasswordResetForm({ onSwitchToLogin }: RequestPasswordResetFormProps) {
   const [email, setEmail] = useState("");
   const { isLoading, authError, isResetSuccess, handleResetPassword } = usePasswordReset();
+  const [networkError, setNetworkError] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await handleResetPassword(email);
+    setNetworkError(false);
+    
+    try {
+      await handleResetPassword(email);
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('network')) {
+        setNetworkError(true);
+      }
+    }
+  };
+
+  const handleRetry = () => {
+    setNetworkError(false);
+    handleSubmit(new Event('submit') as any);
   };
 
   return (
@@ -23,6 +37,19 @@ export function RequestPasswordResetForm({ onSwitchToLogin }: RequestPasswordRes
       {authError && (
         <div className="bg-red-50 border border-red-200 text-red-800 rounded-md p-3 text-sm">
           {authError}
+          {networkError && (
+            <div className="mt-2">
+              <Button 
+                type="button" 
+                variant="outline" 
+                size="sm" 
+                onClick={handleRetry}
+                className="text-red-800 border-red-300 hover:bg-red-100 flex items-center"
+              >
+                <RefreshCw className="h-3 w-3 mr-1" /> Retry
+              </Button>
+            </div>
+          )}
         </div>
       )}
 

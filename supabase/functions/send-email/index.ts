@@ -9,30 +9,72 @@ const resend = new Resend(Deno.env.get('RESEND_API_KEY') as string)
 const hookSecret = Deno.env.get('SEND_EMAIL_HOOK_SECRET') as string
 
 Deno.serve(async (req) => {
+  // Set CORS headers for preflight requests
+  if (req.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Max-Age': '86400',
+      },
+    })
+  }
+
   if (req.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 })
   }
 
-  const payload = await req.text()
+  let payload;
+  try {
+    payload = await req.text();
+  } catch (error) {
+    console.error("Failed to read request body:", error);
+    return new Response(JSON.stringify({ error: "Failed to read request body" }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  if (!payload) {
+    console.error("Empty request payload");
+    return new Response(JSON.stringify({ error: "Empty request payload" }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   const headers = Object.fromEntries(req.headers)
   const wh = new Webhook(hookSecret)
   
   try {
+    let verifiedPayload;
+    try {
+      verifiedPayload = wh.verify(payload, headers) as {
+        user: {
+          email: string
+        }
+        email_data: {
+          token: string
+          token_hash: string
+          redirect_to: string
+          email_action_type: string
+          site_url: string
+        }
+      };
+    } catch (verifyError) {
+      console.error("Webhook verification failed:", verifyError);
+      return new Response(JSON.stringify({ error: "Webhook verification failed" }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     const {
       user,
       email_data: { token, token_hash, redirect_to, email_action_type },
-    } = wh.verify(payload, headers) as {
-      user: {
-        email: string
-      }
-      email_data: {
-        token: string
-        token_hash: string
-        redirect_to: string
-        email_action_type: string
-        site_url: string
-      }
-    }
+    } = verifiedPayload;
 
     // Validate redirect_to URL to ensure it's properly formatted
     let safeRedirectTo = redirect_to;
@@ -65,27 +107,69 @@ Deno.serve(async (req) => {
     console.log(`Processing ${email_action_type} email for user: ${user.email}`);
     console.log(`Redirect URL: ${safeRedirectTo}`);
     
-    const html = await renderAsync(
-      React.createElement(MagicLinkEmail, {
-        supabase_url: Deno.env.get('SUPABASE_URL') ?? '',
-        token,
-        token_hash,
-        redirect_to: safeRedirectTo,
-        email_action_type,
-      })
-    )
+    let html;
+    try {
+      html = await renderAsync(
+        React.createElement(MagicLinkEmail, {
+          supabase_url: Deno.env.get('SUPABASE_URL') ?? '',
+          token,
+          token_hash,
+          redirect_to: safeRedirectTo,
+          email_action_type,
+        })
+      );
+    } catch (renderError) {
+      console.error("Failed to render email template:", renderError);
+      return new Response(JSON.stringify({ error: "Failed to render email template" }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
-    const { error } = await resend.emails.send({
-      from: 'Renovation Receipts <no-reply@renovationreceipts.com>',
-      to: [user.email],
-      subject: email_action_type === 'recovery' 
-        ? 'Reset Your Renovation Receipts Password' 
-        : 'Login to Renovation Receipts',
-      html,
-    })
+    // Add retry mechanism for sending emails
+    let maxRetries = 2;
+    let retryCount = 0;
+    let emailError = null;
+
+    while (retryCount <= maxRetries) {
+      try {
+        const { error } = await resend.emails.send({
+          from: 'Renovation Receipts <no-reply@renovationreceipts.com>',
+          to: [user.email],
+          subject: email_action_type === 'recovery' 
+            ? 'Reset Your Renovation Receipts Password' 
+            : 'Login to Renovation Receipts',
+          html,
+        });
+        
+        if (error) {
+          emailError = error;
+          console.error(`Attempt ${retryCount + 1} failed:`, error);
+          retryCount++;
+          
+          if (retryCount <= maxRetries) {
+            // Wait before retrying (exponential backoff)
+            await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+          }
+        } else {
+          // Success - break out of retry loop
+          emailError = null;
+          break;
+        }
+      } catch (err) {
+        emailError = err;
+        console.error(`Attempt ${retryCount + 1} threw an exception:`, err);
+        retryCount++;
+        
+        if (retryCount <= maxRetries) {
+          // Wait before retrying
+          await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+        }
+      }
+    }
     
-    if (error) {
-      throw error
+    if (emailError) {
+      throw emailError;
     }
 
     return new Response(JSON.stringify({ success: true }), {
@@ -97,7 +181,8 @@ Deno.serve(async (req) => {
     return new Response(
       JSON.stringify({
         error: {
-          message: error.message,
+          message: error.message || 'Unknown error occurred',
+          code: error.code || 500
         },
       }),
       {
