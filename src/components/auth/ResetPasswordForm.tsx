@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -45,11 +44,22 @@ export function ResetPasswordForm({ accessToken }: ResetPasswordFormProps) {
       
       console.log("Updating password with token...");
       
-      // Update user's password using the access token
+      // First set the session with the access token
+      const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: '',
+      });
+      
+      if (sessionError) {
+        console.error("Session error:", sessionError);
+        throw sessionError;
+      }
+      
+      console.log("Session set successfully, updating password...");
+      
+      // Then update the user's password
       const { error } = await supabase.auth.updateUser({ 
         password: password 
-      }, {
-        accessToken: accessToken // Use the access token from the URL
       });
 
       if (error) {
