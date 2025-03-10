@@ -25,55 +25,78 @@ export const MagicLinkEmail = ({
   email_action_type,
   redirect_to,
   token_hash,
-}: MagicLinkEmailProps) => (
-  <Html>
-    <Head />
-    <Preview>Your Renovation Receipts Login Link</Preview>
-    <Body style={main}>
-      <Container style={container}>
-        <Heading style={h1}>Welcome to Renovation Receipts</Heading>
-        <Text style={text}>
-          Click the button below to log in to your account and start tracking your renovation expenses.
-        </Text>
-        <Link
-          href={`${supabase_url}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${redirect_to}`}
-          target="_blank"
-          style={{
-            ...button,
-            display: 'block',
-            marginBottom: '16px',
-          }}
-        >
-          Log In to Renovation Receipts
-        </Link>
-        <Text style={{ ...text, marginBottom: '14px' }}>
-          Or, if the button doesn't work, copy and paste this temporary login code:
-        </Text>
-        <code style={code}>{token}</code>
-        <Text
-          style={{
-            ...text,
-            color: '#ababab',
-            marginTop: '14px',
-            marginBottom: '16px',
-          }}
-        >
-          If you didn't request this login link, you can safely ignore this email.
-        </Text>
-        <Text style={footer}>
+}: MagicLinkEmailProps) => {
+  const isPasswordReset = email_action_type === 'recovery';
+  
+  const title = isPasswordReset 
+    ? 'Reset Your Password'
+    : 'Welcome to Renovation Receipts';
+    
+  const previewText = isPasswordReset
+    ? 'Reset your Renovation Receipts password'
+    : 'Your Renovation Receipts Login Link';
+    
+  const buttonText = isPasswordReset
+    ? 'Reset Your Password'
+    : 'Log In to Renovation Receipts';
+    
+  const instructionText = isPasswordReset
+    ? 'Click the button below to reset your password and create a new one.'
+    : 'Click the button below to log in to your account and start tracking your renovation expenses.';
+
+  return (
+    <Html>
+      <Head />
+      <Preview>{previewText}</Preview>
+      <Body style={main}>
+        <Container style={container}>
+          <Heading style={h1}>{title}</Heading>
+          <Text style={text}>
+            {instructionText}
+          </Text>
           <Link
-            href="https://renovationreceipts.com"
+            href={`${supabase_url}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${redirect_to}`}
             target="_blank"
-            style={{ ...link, color: '#898989' }}
+            style={{
+              ...button,
+              display: 'block',
+              marginBottom: '16px',
+            }}
           >
-            Renovation Receipts
+            {buttonText}
           </Link>
-          {' '}- Track home improvement expenses & maximize tax savings
-        </Text>
-      </Container>
-    </Body>
-  </Html>
-)
+          <Text style={{ ...text, marginBottom: '14px' }}>
+            Or, if the button doesn't work, copy and paste this temporary {isPasswordReset ? 'reset' : 'login'} code:
+          </Text>
+          <code style={code}>{token}</code>
+          <Text
+            style={{
+              ...text,
+              color: '#ababab',
+              marginTop: '14px',
+              marginBottom: '16px',
+            }}
+          >
+            {isPasswordReset 
+              ? "If you didn't request this password reset, you can safely ignore this email."
+              : "If you didn't request this login link, you can safely ignore this email."
+            }
+          </Text>
+          <Text style={footer}>
+            <Link
+              href="https://renovationreceipts.com"
+              target="_blank"
+              style={{ ...link, color: '#898989' }}
+            >
+              Renovation Receipts
+            </Link>
+            {' '}- Track home improvement expenses & maximize tax savings
+          </Text>
+        </Container>
+      </Body>
+    </Html>
+  )
+}
 
 export default MagicLinkEmail
 

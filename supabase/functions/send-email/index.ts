@@ -34,12 +34,43 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Validate redirect_to URL to ensure it's properly formatted
+    let safeRedirectTo = redirect_to;
+    try {
+      // Ensure it's a valid URL
+      new URL(safeRedirectTo);
+      
+      // Simple validation - ensure it's a renovationreceipts.com URL
+      if (!safeRedirectTo.includes('renovationreceipts.com') && 
+          !safeRedirectTo.includes('localhost')) {
+        console.warn(`Suspicious redirect URL detected: ${safeRedirectTo}`);
+        // Fall back to site root if redirect looks suspicious
+        safeRedirectTo = Deno.env.get('SUPABASE_URL') ?? '';
+      }
+      
+      // Make sure there's no # fragment which can break the auth flow
+      const url = new URL(safeRedirectTo);
+      if (url.hash) {
+        console.warn(`Removing hash fragment from redirect URL: ${url.hash}`);
+        url.hash = '';
+        safeRedirectTo = url.toString();
+      }
+      
+    } catch (e) {
+      console.error(`Invalid redirect URL: ${safeRedirectTo}`, e);
+      // Fall back to the supabase URL if the redirect_to is invalid
+      safeRedirectTo = Deno.env.get('SUPABASE_URL') ?? '';
+    }
+
+    console.log(`Processing ${email_action_type} email for user: ${user.email}`);
+    console.log(`Redirect URL: ${safeRedirectTo}`);
+    
     const html = await renderAsync(
       React.createElement(MagicLinkEmail, {
         supabase_url: Deno.env.get('SUPABASE_URL') ?? '',
         token,
         token_hash,
-        redirect_to,
+        redirect_to: safeRedirectTo,
         email_action_type,
       })
     )
@@ -47,7 +78,9 @@ Deno.serve(async (req) => {
     const { error } = await resend.emails.send({
       from: 'Renovation Receipts <no-reply@renovationreceipts.com>',
       to: [user.email],
-      subject: 'Login to Renovation Receipts',
+      subject: email_action_type === 'recovery' 
+        ? 'Reset Your Renovation Receipts Password' 
+        : 'Login to Renovation Receipts',
       html,
     })
     

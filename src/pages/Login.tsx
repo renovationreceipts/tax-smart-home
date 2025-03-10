@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,9 +16,71 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [isResetMode, setIsResetMode] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [isResetSuccess, setIsResetSuccess] = useState(false);
   const { toast } = useToast();
   const { handleGoogleAuth } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check for hash fragment in URL that indicates a reset password attempt
+  useEffect(() => {
+    const hash = location.hash;
+    // If URL contains #access_token=... or #error=... it's a password reset callback
+    if (hash && (hash.includes('access_token=') || hash.includes('error='))) {
+      handleResetPasswordCallback(hash);
+    }
+  }, [location]);
+
+  const handleResetPasswordCallback = async (hash: string) => {
+    try {
+      if (hash.includes('error=')) {
+        // Extract error message from hash
+        const errorParam = new URLSearchParams(hash.substring(1)).get('error_description');
+        const errorMessage = decodeURIComponent(errorParam || 'Unknown error');
+        
+        setAuthError(`Password reset failed: ${errorMessage}`);
+        toast({
+          variant: "destructive",
+          title: "Password reset failed",
+          description: errorMessage,
+        });
+        return;
+      }
+
+      // Process the token
+      const { data, error } = await supabase.auth.refreshSession();
+      
+      if (error) {
+        console.error("Error processing reset token:", error);
+        setAuthError("Invalid or expired reset link. Please request a new one.");
+        toast({
+          variant: "destructive",
+          title: "Password reset failed",
+          description: "Invalid or expired reset link. Please request a new one.",
+        });
+      } else if (data?.user) {
+        // User is now signed in after using reset link - prompt to set a new password
+        toast({
+          title: "Set a new password",
+          description: "Please enter your new password to complete the reset process.",
+        });
+        
+        // Clear the hash from the URL to prevent confusion if page is refreshed
+        window.history.replaceState(null, '', location.pathname);
+        
+        // Redirect to profile page to set new password
+        navigate("/profile");
+      }
+    } catch (error) {
+      console.error("Reset token processing error:", error);
+      setAuthError("Failed to process password reset. Please try again.");
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to process password reset. Please try again.",
+      });
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,10 +145,15 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
     setAuthError(null);
+    setIsResetSuccess(false);
 
     try {
+      // Make sure to create a fully qualified URL for the redirect
+      const origin = window.location.origin;
+      const redirectTo = `${origin}/login`; // Redirect back to login page after reset
+      
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo,
       });
 
       if (error) {
@@ -96,11 +164,11 @@ export default function Login() {
           description: error.message,
         });
       } else {
+        setIsResetSuccess(true);
         toast({
           title: "Success",
           description: "Password reset instructions have been sent to your email",
         });
-        setIsResetMode(false);
       }
     } catch (error) {
       console.error("Reset password error:", error);
@@ -137,6 +205,12 @@ export default function Login() {
           {authError && (
             <div className="bg-red-50 border border-red-200 text-red-800 rounded-md p-3 text-sm">
               {authError}
+            </div>
+          )}
+          
+          {isResetSuccess && (
+            <div className="bg-green-50 border border-green-200 text-green-800 rounded-md p-3 text-sm">
+              Password reset instructions have been sent to your email. Please check your inbox.
             </div>
           )}
           
@@ -201,7 +275,11 @@ export default function Login() {
               type="button"
               variant="ghost"
               className="text-sm text-gray-600 hover:text-gray-900"
-              onClick={() => setIsResetMode(!isResetMode)}
+              onClick={() => {
+                setIsResetMode(!isResetMode);
+                setAuthError(null);
+                setIsResetSuccess(false);
+              }}
             >
               {isResetMode 
                 ? "Back to sign in" 
