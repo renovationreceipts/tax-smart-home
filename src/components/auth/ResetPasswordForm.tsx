@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -8,10 +7,11 @@ import { Loader2, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface ResetPasswordFormProps {
-  userEmail: string | null;
+  userEmail?: string | null;
+  onSwitchToLogin?: () => void;
 }
 
-export function ResetPasswordForm({ userEmail }: ResetPasswordFormProps) {
+export function ResetPasswordForm({ userEmail, onSwitchToLogin }: ResetPasswordFormProps) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +59,13 @@ export function ResetPasswordForm({ userEmail }: ResetPasswordFormProps) {
       
       // Redirect to login page after a short delay
       setTimeout(() => {
-        navigate("/login");
+        // Use onSwitchToLogin if provided (for the Login page form toggle)
+        // otherwise navigate to the login page (for the dedicated reset page)
+        if (onSwitchToLogin) {
+          onSwitchToLogin();
+        } else {
+          navigate("/login");
+        }
       }, 2000);
       
     } catch (error: any) {
@@ -151,7 +157,7 @@ export function ResetPasswordForm({ userEmail }: ResetPasswordFormProps) {
           type="button"
           variant="ghost"
           className="text-sm text-gray-600 hover:text-gray-900"
-          onClick={() => navigate("/login")}
+          onClick={onSwitchToLogin || (() => navigate("/login"))}
           disabled={isLoading || isSuccess}
         >
           Back to login
