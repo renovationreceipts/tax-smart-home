@@ -116,23 +116,34 @@ export function useAllUserProjects() {
   });
 }
 
+/**
+ * Hook to check if a user has reached their project limit based on their subscription status
+ * Free tier users are limited to 3 projects as defined in FREE_TIER_LIMITS.PROJECT_LIMIT
+ * Premium users have unlimited projects
+ * 
+ * @param isPremium - Boolean indicating if the user has a premium subscription
+ * @returns Object with limit check results
+ */
 export function useProjectLimitCheck(isPremium: boolean) {
   const { data: allProjects = [], isLoading } = useAllUserProjects();
+  
+  const projectLimit = FREE_TIER_LIMITS.PROJECT_LIMIT;
   
   console.log("Project limit check:", { 
     projectsCount: allProjects.length, 
     isPremium, 
-    limit: FREE_TIER_LIMITS.PROJECT_LIMIT 
+    limit: projectLimit,
+    hasReachedLimit: !isPremium && allProjects.length >= projectLimit
   });
   
-  const hasReachedLimit = !isPremium && allProjects.length >= FREE_TIER_LIMITS.PROJECT_LIMIT;
+  const hasReachedLimit = !isPremium && allProjects.length >= projectLimit;
   const projectsCount = allProjects.length;
   
   return {
     hasReachedLimit,
     projectsCount,
     isLoading,
-    maxProjects: FREE_TIER_LIMITS.PROJECT_LIMIT
+    maxProjects: projectLimit
   };
 }
 

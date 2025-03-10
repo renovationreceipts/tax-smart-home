@@ -1,9 +1,11 @@
+
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Check, Star, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { FREE_TIER_LIMITS } from "@/hooks/usePremiumStatus";
 
 interface PremiumModalProps {
   open: boolean;
@@ -112,8 +114,8 @@ export function PremiumModal({
           <div className="border rounded-lg p-4 bg-amber-50 border-amber-200">
             <div className="space-y-1">
               <p className="text-sm font-medium">Your current usage:</p>
-              <p className="text-sm">Properties: {propertyCount}/1</p>
-              <p className="text-sm">Projects: {projectCount}/3</p>
+              <p className="text-sm">Properties: {propertyCount}/{FREE_TIER_LIMITS.PROPERTY_LIMIT}</p>
+              <p className="text-sm">Projects: {projectCount}/{FREE_TIER_LIMITS.PROJECT_LIMIT}</p>
             </div>
           </div>
           
