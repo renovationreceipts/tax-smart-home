@@ -29,7 +29,7 @@ export function ProjectsSection({
 }: ProjectsSectionProps) {
   const navigate = useNavigate();
   const { data: properties = [] } = useProperties();
-  const { hasReachedLimit, projectsCount } = useProjectLimitCheck();
+  const { hasReachedLimit, projectsCount } = useProjectLimitCheck(isPremium);
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
   
   const selectedProperty = properties.find(p => p.id === propertyId);

@@ -22,7 +22,6 @@ export interface Project {
 }
 
 async function fetchProjects(propertyId: string, userId: string | undefined) {
-  // Validate that propertyId is a valid UUID using a regex
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
   if (!uuidRegex.test(propertyId)) {
     console.error("Invalid property ID format:", propertyId)
@@ -36,7 +35,6 @@ async function fetchProjects(propertyId: string, userId: string | undefined) {
 
   console.log("Fetching projects for property:", propertyId)
   
-  // First verify the user owns this property
   const { data: property, error: propertyError } = await supabase
     .from("properties")
     .select("id")
@@ -92,11 +90,10 @@ export function useProjects(propertyId: string | null) {
     queryKey: ['projects', propertyId, user?.id],
     queryFn: () => propertyId ? fetchProjects(propertyId, user?.id) : Promise.resolve([]),
     enabled: isAuthenticated && isInitialized && !!propertyId && !!user?.id,
-    staleTime: 0, // Consider data immediately stale
-    refetchOnMount: true, // Refetch when component mounts
-    refetchOnWindowFocus: true, // Refetch when window regains focus
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
     retry: (failureCount, error) => {
-      // Don't retry on authentication or access denied errors
       if (error instanceof Error && 
          (error.message === "Authentication required" || 
           error.message === "Property not found or access denied")) {
@@ -114,7 +111,7 @@ export function useAllUserProjects() {
     queryKey: ['all-user-projects', user?.id],
     queryFn: () => fetchAllUserProjects(user?.id),
     enabled: isAuthenticated && isInitialized && !!user?.id,
-    staleTime: 1000 * 60, // Consider data stale after 1 minute
+    staleTime: 1000 * 60,
     refetchOnMount: true,
   });
 }
@@ -128,7 +125,6 @@ export function useProjectLimitCheck(isPremium: boolean) {
     limit: FREE_TIER_LIMITS.PROJECT_LIMIT 
   });
   
-  // For premium users, they should never reach the limit
   const hasReachedLimit = !isPremium && allProjects.length >= FREE_TIER_LIMITS.PROJECT_LIMIT;
   const projectsCount = allProjects.length;
   
@@ -140,7 +136,6 @@ export function useProjectLimitCheck(isPremium: boolean) {
   };
 }
 
-// Export a function to invalidate projects cache
 export function invalidateProjectsCache(queryClient: any, propertyId: string) {
   queryClient.invalidateQueries({
     queryKey: ['projects', propertyId]
