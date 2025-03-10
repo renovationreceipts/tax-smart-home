@@ -11,6 +11,9 @@ export function PublicLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
   const { status } = useAuth();
   const from = location.state?.from || "/account";
+  
+  // Don't redirect if on reset-password page, even if authenticated
+  const isResetPasswordPage = location.pathname === '/reset-password';
 
   if (status === AuthStatus.INITIALIZING) {
     return (
@@ -20,7 +23,8 @@ export function PublicLayout({ children }: { children: ReactNode }) {
     );
   }
 
-  if (status === AuthStatus.AUTHENTICATED) {
+  // Only redirect to authenticated routes if user is logged in AND not on reset-password page
+  if (status === AuthStatus.AUTHENTICATED && !isResetPasswordPage) {
     return <Navigate to={from} replace />;
   }
 

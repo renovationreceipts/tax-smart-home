@@ -56,11 +56,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
             user: newSession?.user ?? null,
           }));
 
+          // Check if we're on the reset-password page - if so, don't redirect
+          const isResetPasswordPage = location.pathname === '/reset-password';
+          
           // Handle specific auth events
           if (event === 'SIGNED_IN') {
             // Only navigate to account if we're on login or signup pages
+            // AND we're not in a password reset flow
             const isAuthPage = ['/login', '/signup'].includes(location.pathname);
-            if (isAuthPage) {
+            
+            if (isAuthPage && !isResetPasswordPage) {
               navigate("/account");
               toast({
                 title: "Success!",
@@ -73,6 +78,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
               title: "Signed out successfully",
               description: "You have been logged out.",
             });
+          } else if (event === 'PASSWORD_RECOVERY') {
+            // This event indicates we're in a password reset flow
+            // Make sure not to redirect away from reset-password page
+            console.log("Password recovery event detected, staying on reset-password page");
+            
+            // If we're not already on the reset-password page, go there
+            if (!isResetPasswordPage) {
+              navigate("/reset-password");
+            }
           }
         });
 
