@@ -103,14 +103,6 @@ export function UserProfile() {
           </CardContent>
         </Card>
 
-        <ManageSubscriptionCard
-          subscription={subscription}
-          isPremium={isPremium}
-          onUpdate={refreshSubscription}
-          propertyCount={properties.length}
-          projectCount={projects.length}
-        />
-
         <Card>
           <CardHeader>
             <CardTitle>Profile Settings</CardTitle>
@@ -119,6 +111,14 @@ export function UserProfile() {
             <ProfileSettingsForm />
           </CardContent>
         </Card>
+
+        <ManageSubscriptionCard
+          subscription={subscription}
+          isPremium={isPremium}
+          onUpdate={refreshSubscription}
+          propertyCount={properties.length}
+          projectCount={projects.length}
+        />
 
         <Card>
           <CardHeader>
