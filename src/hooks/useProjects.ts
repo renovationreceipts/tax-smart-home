@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "./useAuth"
 import { FREE_TIER_LIMITS } from "./usePremiumStatus"
+import { usePremiumStatus } from "./usePremiumStatus"
 
 export interface Project {
   id: string
@@ -122,8 +123,10 @@ export function useAllUserProjects() {
 
 export function useProjectLimitCheck() {
   const { data: allProjects = [], isLoading } = useAllUserProjects();
+  const { isPremium } = usePremiumStatus();
   
-  const hasReachedLimit = allProjects.length >= FREE_TIER_LIMITS.PROJECT_LIMIT;
+  // For premium users, they should never reach the limit
+  const hasReachedLimit = !isPremium && allProjects.length >= FREE_TIER_LIMITS.PROJECT_LIMIT;
   const projectsCount = allProjects.length;
   
   return {
