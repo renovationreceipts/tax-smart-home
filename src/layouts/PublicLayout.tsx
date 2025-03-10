@@ -12,8 +12,10 @@ export function PublicLayout({ children }: { children: ReactNode }) {
   const { status } = useAuth();
   const from = location.state?.from || "/account";
   
-  // CRITICAL: Don't redirect if on reset-password page, even if authenticated
+  // Allow users on reset-password page regardless of authentication status,
+  // and check if the URL has a recovery token in the hash
   const isResetPasswordPage = location.pathname === '/reset-password';
+  const hasRecoveryToken = location.hash.includes('type=recovery');
 
   if (status === AuthStatus.INITIALIZING) {
     return (
@@ -23,8 +25,11 @@ export function PublicLayout({ children }: { children: ReactNode }) {
     );
   }
 
-  // Only redirect to authenticated routes if user is logged in AND not on reset-password page
-  if (status === AuthStatus.AUTHENTICATED && !isResetPasswordPage) {
+  // Only redirect to authenticated routes if:
+  // 1. User is logged in, AND
+  // 2. Not on reset-password page OR is on reset-password page but doesn't have a recovery token
+  if (status === AuthStatus.AUTHENTICATED && 
+      (!isResetPasswordPage || (isResetPasswordPage && !hasRecoveryToken))) {
     return <Navigate to={from} replace />;
   }
 

@@ -16,7 +16,7 @@ export function usePasswordReset() {
       // Log the hash to help with debugging
       console.log("Processing hash in reset password callback:", hash);
       
-      if (hash.includes('error=') || hash.includes('error_description=')) {
+      if (!hash || hash.includes('error=') || hash.includes('error_description=')) {
         // Extract error message from hash
         const errorParam = new URLSearchParams(hash.substring(1)).get('error_description') || 
                           new URLSearchParams(hash.substring(1)).get('error');
@@ -32,8 +32,8 @@ export function usePasswordReset() {
         return;
       }
 
-      // Redirect to the reset-password page with the hash intact
-      // This allows the reset-password page to process the token
+      // For password reset, Supabase sends a hash that includes type=recovery and access_token
+      // We don't need to process it here, just redirect to the reset-password page with the hash intact
       console.log("Redirecting to reset-password page with hash");
       navigate("/reset-password" + hash);
       
@@ -56,7 +56,7 @@ export function usePasswordReset() {
     try {
       // Make sure to create a fully qualified URL for the redirect
       const origin = window.location.origin;
-      const redirectTo = `${origin}/reset-password`; // Redirect to our reset-password page
+      const redirectTo = `${origin}/auth/callback`; // Use our auth callback route
       
       console.log(`Sending password reset email to ${email} with redirect to ${redirectTo}`);
       

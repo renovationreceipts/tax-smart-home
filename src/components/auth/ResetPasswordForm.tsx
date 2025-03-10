@@ -4,10 +4,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Check } from "lucide-react";
+import { Loader2, Check, AlertTriangle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export function ResetPasswordForm() {
+interface ResetPasswordFormProps {
+  accessToken: string | null;
+}
+
+export function ResetPasswordForm({ accessToken }: ResetPasswordFormProps) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -30,15 +34,22 @@ export function ResetPasswordForm() {
       return;
     }
 
+    if (!accessToken) {
+      setError("Auth session missing! Please use the reset link from your email again.");
+      return;
+    }
+
     try {
       setIsLoading(true);
       setError(null);
       
-      console.log("Updating password...");
+      console.log("Updating password with token...");
       
-      // Update user's password
-      const { error } = await supabase.auth.updateUser({
-        password: password
+      // Update user's password using the access token
+      const { error } = await supabase.auth.updateUser({ 
+        password: password 
+      }, {
+        accessToken: accessToken // Use the access token from the URL
       });
 
       if (error) {
@@ -57,10 +68,7 @@ export function ResetPasswordForm() {
       
       // Redirect to login page after a short delay
       setTimeout(() => {
-        // Sign out to ensure they're fully logged out
-        supabase.auth.signOut().then(() => {
-          navigate("/login");
-        });
+        navigate("/login");
       }, 2000);
       
     } catch (error: any) {
@@ -80,13 +88,19 @@ export function ResetPasswordForm() {
     <form className="mt-8 space-y-6" onSubmit={handleResetPassword}>
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-800 rounded-md p-3 text-sm">
-          {error}
+          <div className="flex items-start">
+            <AlertTriangle className="h-5 w-5 mr-2 mt-0.5 text-red-600 flex-shrink-0" />
+            <p>{error}</p>
+          </div>
         </div>
       )}
       
       {isSuccess && (
         <div className="bg-green-50 border border-green-200 text-green-800 rounded-md p-3 text-sm">
-          Password successfully reset! Redirecting to login...
+          <div className="flex items-start">
+            <Check className="h-5 w-5 mr-2 mt-0.5 text-green-600 flex-shrink-0" />
+            <p>Password successfully reset! Redirecting to login...</p>
+          </div>
         </div>
       )}
       
@@ -104,6 +118,7 @@ export function ResetPasswordForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className={error && error.includes("Password") ? "border-red-300" : ""}
+            disabled={isLoading || isSuccess}
           />
           <p className="mt-1 text-xs text-gray-500">
             Must be at least 6 characters
@@ -123,6 +138,7 @@ export function ResetPasswordForm() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             className={error && error.includes("match") ? "border-red-300" : ""}
+            disabled={isLoading || isSuccess}
           />
         </div>
       </div>
