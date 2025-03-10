@@ -17,6 +17,7 @@ import EditProject from "@/pages/EditProject"
 import ViewProject from "@/pages/ViewProject"
 import Index from "@/pages/Index"
 import Login from "@/pages/Login"
+import ResetPassword from "@/pages/ResetPassword"
 import Profile from "@/pages/Profile"
 import SignUp from "@/pages/SignUp"
 import About from "@/pages/About"
@@ -74,6 +75,7 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Index /> },
           { path: "login", element: <Login /> },
+          { path: "reset-password", element: <ResetPassword /> },
           { path: "signup", element: <SignUp /> },
           { path: "blog", element: <Blog /> },
           { path: "blog/track-home-improvement-receipts", element: <TrackHomeImprovements /> },

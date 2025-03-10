@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -10,7 +10,6 @@ export function usePasswordReset() {
   const [isResetSuccess, setIsResetSuccess] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleResetPasswordCallback = async (hash: string) => {
     try {
@@ -28,30 +27,10 @@ export function usePasswordReset() {
         return;
       }
 
-      // Process the token
-      const { data, error } = await supabase.auth.refreshSession();
+      // Instead of automatically logging in the user, we'll redirect to the reset-password page
+      // This allows the user to create a new password
+      navigate("/reset-password" + hash);
       
-      if (error) {
-        console.error("Error processing reset token:", error);
-        setAuthError("Invalid or expired reset link. Please request a new one.");
-        toast({
-          variant: "destructive",
-          title: "Password reset failed",
-          description: "Invalid or expired reset link. Please request a new one.",
-        });
-      } else if (data?.user) {
-        // User is now signed in after using reset link - prompt to set a new password
-        toast({
-          title: "Set a new password",
-          description: "Please enter your new password to complete the reset process.",
-        });
-        
-        // Clear the hash from the URL to prevent confusion if page is refreshed
-        window.history.replaceState(null, '', location.pathname);
-        
-        // Redirect to profile page to set new password
-        navigate("/profile");
-      }
     } catch (error) {
       console.error("Reset token processing error:", error);
       setAuthError("Failed to process password reset. Please try again.");
@@ -71,7 +50,7 @@ export function usePasswordReset() {
     try {
       // Make sure to create a fully qualified URL for the redirect
       const origin = window.location.origin;
-      const redirectTo = `${origin}/login`; // Redirect back to login page after reset
+      const redirectTo = `${origin}/reset-password`; // Redirect to our new reset-password page
       
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo,
