@@ -45,7 +45,7 @@ export const Hero = () => {
                   <div className="bg-[#D3E4FD] w-12 h-12 rounded-full flex items-center justify-center mb-4">
                     <Calculator className="h-6 w-6 text-[#0090FF]" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Tax-Smart Home Project Tracking</h3>
+                  <h3 className="text-xl font-semibold mb-2">Home Improvement Projects Tracker</h3>
                   <p className="text-gray-600">Track your home projects, save invoices and receipts, before &amp; after photos and we'll automatically calculate your cost basis.</p>
                 </div>
 
