@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthHeader } from "@/components/auth/AuthHeader";
 import { LoginForm } from "@/components/auth/LoginForm";
-import { ResetPasswordForm } from "@/components/auth/ResetPasswordForm";
+import { RequestPasswordResetForm } from "@/components/auth/RequestPasswordResetForm";
 import { usePasswordReset } from "@/hooks/auth/usePasswordReset";
 
 export default function Login() {
@@ -41,7 +41,7 @@ export default function Login() {
         />
 
         {isResetMode ? (
-          <ResetPasswordForm onSwitchToLogin={() => setIsResetMode(false)} />
+          <RequestPasswordResetForm onSwitchToLogin={() => setIsResetMode(false)} />
         ) : (
           <LoginForm 
             onSwitchToReset={() => setIsResetMode(true)} 
