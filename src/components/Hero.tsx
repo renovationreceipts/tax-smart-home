@@ -1,11 +1,12 @@
-
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calculator, DollarSign, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useIsMobile } from "@/hooks/use-mobile";
 export const Hero = () => {
-  const { trackEvent } = useAnalytics();
+  const {
+    trackEvent
+  } = useAnalytics();
   const isMobile = useIsMobile();
   const handleSignUpClick = () => {
     trackEvent({
@@ -36,7 +37,7 @@ export const Hero = () => {
                     Get Started for Free <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
-                <p className="text-sm text-gray-500 mt-1">No credit card required.</p>
+                <p className="text-sm text-gray-500 mt-1">No credit card required</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
