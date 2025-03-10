@@ -12,7 +12,7 @@ export function PublicLayout({ children }: { children: ReactNode }) {
   const { status } = useAuth();
   const from = location.state?.from || "/account";
   
-  // Don't redirect if on reset-password page, even if authenticated
+  // CRITICAL: Don't redirect if on reset-password page, even if authenticated
   const isResetPasswordPage = location.pathname === '/reset-password';
 
   if (status === AuthStatus.INITIALIZING) {

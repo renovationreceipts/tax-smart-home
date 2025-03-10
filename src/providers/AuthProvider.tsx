@@ -48,16 +48,29 @@ export function AuthProvider({ children }: AuthProviderProps) {
           
           if (!mounted) return;
 
-          // Update the auth state
+          // Check if we're in a password reset flow
+          const isPasswordRecovery = event === 'PASSWORD_RECOVERY';
+          const isResetPasswordPage = location.pathname === '/reset-password';
+          
+          // IMPORTANT: For password recovery flow, don't update the auth state to prevent
+          // automatic login during the reset process
+          if (isPasswordRecovery) {
+            console.log("Password recovery event detected, not updating auth state");
+            
+            // If we're not already on the reset-password page, go there
+            if (!isResetPasswordPage) {
+              navigate("/reset-password");
+            }
+            return;
+          }
+
+          // Update the auth state for non-recovery flows
           setState(prev => ({
             ...prev,
             status: newSession ? AuthStatus.AUTHENTICATED : AuthStatus.UNAUTHENTICATED,
             session: newSession,
             user: newSession?.user ?? null,
           }));
-
-          // Check if we're on the reset-password page - if so, don't redirect
-          const isResetPasswordPage = location.pathname === '/reset-password';
           
           // Handle specific auth events
           if (event === 'SIGNED_IN') {
@@ -78,15 +91,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
               title: "Signed out successfully",
               description: "You have been logged out.",
             });
-          } else if (event === 'PASSWORD_RECOVERY') {
-            // This event indicates we're in a password reset flow
-            // Make sure not to redirect away from reset-password page
-            console.log("Password recovery event detected, staying on reset-password page");
-            
-            // If we're not already on the reset-password page, go there
-            if (!isResetPasswordPage) {
-              navigate("/reset-password");
-            }
           }
         });
 

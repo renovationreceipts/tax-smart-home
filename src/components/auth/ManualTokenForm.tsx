@@ -29,8 +29,10 @@ export function ManualTokenForm({ onSuccess }: ManualTokenFormProps) {
       setIsLoading(true);
       setError(null);
 
+      console.log("Verifying OTP for email:", email, "with token length:", token.length);
+
       // Use the verifyOtp method to manually verify the token
-      const { data, error } = await supabase.auth.verifyOtp({
+      const { error } = await supabase.auth.verifyOtp({
         email,
         token,
         type: 'recovery',
@@ -38,7 +40,7 @@ export function ManualTokenForm({ onSuccess }: ManualTokenFormProps) {
 
       if (error) {
         console.error("Manual token verification error:", error);
-        setError(error.message || "Failed to verify the reset code. Please try again.");
+        setError(error.message || "Failed to verify the reset code. Please check and try again.");
         toast({
           variant: "destructive",
           title: "Verification Error",
@@ -47,7 +49,7 @@ export function ManualTokenForm({ onSuccess }: ManualTokenFormProps) {
         return;
       }
 
-      console.log("Manual token verification successful:", data);
+      console.log("Manual token verification successful!");
       toast({
         title: "Code Verified",
         description: "Your reset code has been verified. You can now set a new password.",

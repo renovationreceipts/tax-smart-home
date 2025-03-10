@@ -38,6 +38,8 @@ export function ResetPasswordForm({ userEmail, onSwitchToLogin }: ResetPasswordF
       setIsLoading(true);
       setError(null);
       
+      console.log("Updating password...");
+      
       // Update user's password
       const { error } = await supabase.auth.updateUser({
         password: password
@@ -59,13 +61,16 @@ export function ResetPasswordForm({ userEmail, onSwitchToLogin }: ResetPasswordF
       
       // Redirect to login page after a short delay
       setTimeout(() => {
-        // Use onSwitchToLogin if provided (for the Login page form toggle)
-        // otherwise navigate to the login page (for the dedicated reset page)
-        if (onSwitchToLogin) {
-          onSwitchToLogin();
-        } else {
-          navigate("/login");
-        }
+        // Sign out to ensure they're fully logged out
+        supabase.auth.signOut().then(() => {
+          // Use onSwitchToLogin if provided (for the Login page form toggle)
+          // otherwise navigate to the login page (for the dedicated reset page)
+          if (onSwitchToLogin) {
+            onSwitchToLogin();
+          } else {
+            navigate("/login");
+          }
+        });
       }, 2000);
       
     } catch (error: any) {

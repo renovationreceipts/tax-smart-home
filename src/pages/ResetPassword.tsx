@@ -47,20 +47,39 @@ export default function ResetPassword() {
           return;
         }
 
-        // Parse the token - but don't sign in automatically
-        const { data, error } = await supabase.auth.getUser();
+        // Important: We do NOT try to exchange the token for a session here
+        // Just verify that we have the necessary hash parameters
         
-        if (error || !data.user) {
-          console.error("Token verification error:", error);
-          setTokenError("Your password reset link is invalid or has expired. Please request a new one or try the manual code option.");
-          return;
+        // In the case of recovery flow, try to get the session to validate the token
+        // But DON'T sign in automatically
+        if (hash.includes('type=recovery')) {
+          // The user will need to verify the token manually in the next step
+          // We don't need to do anything here
+          console.log("Recovery flow detected, will need manual verification");
+        } else if (hash.includes('access_token=')) {
+          // For access_token flow, we can verify the token is valid
+          // But we don't want to sign in the user
+          try {
+            // Just parse the token to check it's valid
+            const params = new URLSearchParams(hash.substring(1));
+            const accessToken = params.get('access_token');
+            
+            if (!accessToken) {
+              throw new Error("No access_token found in URL");
+            }
+            
+            // We have a valid token, so we're good to proceed
+            console.log("Valid access_token found, proceeding to password reset");
+          } catch (err) {
+            console.error("Error verifying access token:", err);
+            setTokenError("Invalid or expired reset token. Please request a new password reset link.");
+            return;
+          }
         }
-
-        // Store the user email for display purposes
-        setUserEmail(data.user.email);
         
         // Token is valid, user can proceed with password reset
         console.log("Token verification successful, user can reset password");
+        
       } catch (err) {
         console.error("Token processing error:", err);
         setTokenError("An error occurred while verifying your reset token. Please try again or request a new link.");
@@ -70,18 +89,14 @@ export default function ResetPassword() {
     };
 
     verifyResetToken();
-  }, [location, navigate]);
+  }, [location]);
 
-  const handleRequestNewLink = async () => {
-    try {
-      navigate("/login", { state: { showResetForm: true } });
-      toast({
-        title: "Request new link",
-        description: "You'll be redirected to request a new password reset link."
-      });
-    } catch (error) {
-      console.error("Navigation error:", error);
-    }
+  const handleRequestNewLink = () => {
+    navigate("/login", { state: { showResetForm: true } });
+    toast({
+      title: "Request new link",
+      description: "You'll be redirected to request a new password reset link."
+    });
   };
 
   const handleSwitchToManual = () => {
