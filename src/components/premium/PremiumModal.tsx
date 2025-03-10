@@ -4,12 +4,14 @@ import { Check, Star, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+
 interface PremiumModalProps {
   open: boolean;
   onClose: () => void;
   propertyCount?: number;
   projectCount?: number;
 }
+
 export function PremiumModal({
   open,
   onClose,
@@ -21,6 +23,7 @@ export function PremiumModal({
   const {
     toast
   } = useToast();
+
   const handleUpgradeClick = async () => {
     setIsLoading(true);
     setError(null);
@@ -92,6 +95,7 @@ export function PremiumModal({
       setIsLoading(false);
     }
   };
+
   return <Dialog open={open} onOpenChange={() => onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader className="text-center sm:text-left">
@@ -123,14 +127,6 @@ export function PremiumModal({
               <li className="flex gap-3">
                 <Check className="h-5 w-5 text-green-500 shrink-0" />
                 <span>Unlimited projects</span>
-              </li>
-              <li className="flex gap-3">
-                <Check className="h-5 w-5 text-green-500 shrink-0" />
-                <span>Advanced tax analysis</span>
-              </li>
-              <li className="flex gap-3">
-                <Check className="h-5 w-5 text-green-500 shrink-0" />
-                <span>CSV export for tax professionals</span>
               </li>
               <li className="flex gap-3">
                 <Check className="h-5 w-5 text-green-500 shrink-0" />
