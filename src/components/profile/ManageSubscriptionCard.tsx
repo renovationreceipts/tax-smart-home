@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -28,28 +27,23 @@ export function ManageSubscriptionCard({
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [errorDetails, setErrorDetails] = useState<string | null>(null);
   
   const isPremiumActive = isPremium && subscription?.status === "active";
   const isCancelled = subscription?.cancel_at_period_end;
   
-  // Handle the date parsing more carefully
   const nextBillingDate = (() => {
     if (!subscription?.current_period_end) return null;
     
-    // Check if it's already a Date object
     if (subscription.current_period_end instanceof Date) {
       return isValid(subscription.current_period_end) ? subscription.current_period_end : null;
     }
     
-    // Handle Unix timestamp (number or numeric string)
     if (typeof subscription.current_period_end === 'number' || 
         (typeof subscription.current_period_end === 'string' && /^\d+$/.test(subscription.current_period_end))) {
       const date = new Date(Number(subscription.current_period_end) * 1000);
       return isValid(date) ? date : null;
     }
     
-    // Handle ISO string
     if (typeof subscription.current_period_end === 'string') {
       const date = new Date(subscription.current_period_end);
       return isValid(date) ? date : null;
@@ -125,55 +119,8 @@ export function ManageSubscriptionCard({
     }
   };
   
-  const handleUpdatePayment = async () => {
-    try {
-      setIsLoading(true);
-      setErrorDetails(null);
-      
-      console.log("Invoking create-portal-session function...");
-      const { data, error } = await supabase.functions.invoke('create-portal-session');
-      
-      if (error) {
-        console.error("Function invoke error:", error);
-        throw new Error(`Function error: ${error.message}`);
-      }
-      
-      if (!data) {
-        console.error("No data returned from function");
-        throw new Error("No data returned from billing portal");
-      }
-      
-      console.log("Portal session response:", data);
-      
-      if (data.error) {
-        console.error("Portal session error:", data.error, data.details);
-        throw new Error(data.details || data.error);
-      }
-      
-      if (!data.url) {
-        console.error("No portal URL returned");
-        throw new Error("No portal URL returned");
-      }
-      
-      console.log("Redirecting to portal URL:", data.url);
-      window.location.href = data.url;
-    } catch (error) {
-      console.error("Error opening billing portal:", error);
-      
-      let errorMessage = "Failed to open billing portal. Please try again.";
-      if (error instanceof Error) {
-        setErrorDetails(error.message);
-        errorMessage = "Failed to open billing portal. See details for more information.";
-      }
-      
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: errorMessage
-      });
-    } finally {
-      setIsLoading(false);
-    }
+  const handleUpdatePayment = () => {
+    window.location.href = 'https://billing.stripe.com/p/login/3cs6rx2Ah8AF7SM000';
   };
 
   const handleUpgradeToPremium = async () => {
@@ -211,7 +158,6 @@ export function ManageSubscriptionCard({
         </div>
       </CardHeader>
       <CardContent className="pt-6 space-y-6">
-        {/* Plan Details */}
         <div className="space-y-4">
           <div className="flex flex-col space-y-1">
             <h3 className="font-medium text-base">Plan Details</h3>
@@ -219,7 +165,6 @@ export function ManageSubscriptionCard({
               {isPremiumActive ? "Premium Plan • $20/year" : "Free Plan"}
             </p>
           
-            {/* Next Billing Date for Premium */}
             {isPremiumActive && nextBillingDate && (
               <div className="flex items-center text-sm mt-1 gap-1.5">
                 <Calendar className="h-4 w-4 text-gray-500" />
@@ -234,7 +179,6 @@ export function ManageSubscriptionCard({
             )}
           </div>
         
-          {/* Usage Limits */}
           <div className="p-3 bg-gray-50 rounded-md">
             <h4 className="text-sm font-medium mb-2">Usage Limits</h4>
             <ul className="space-y-2 text-sm">
@@ -254,11 +198,9 @@ export function ManageSubscriptionCard({
           </div>
         </div>
         
-        {/* Subscription Actions */}
         <div className="space-y-3 pt-2">
           {isPremiumActive ? (
             <>
-              {/* Premium User Actions */}
               {isCancelled ? (
                 <Button 
                   variant="outline" 
@@ -340,19 +282,8 @@ export function ManageSubscriptionCard({
                 )}
                 Update Payment Method
               </Button>
-              
-              {errorDetails && (
-                <div className="mt-2 p-3 bg-red-50 text-red-800 text-sm rounded-md flex items-start gap-2">
-                  <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold">Error details:</p>
-                    <p className="text-xs">{errorDetails}</p>
-                  </div>
-                </div>
-              )}
             </>
           ) : (
-            /* Free User Actions */
             <Button 
               className="w-full flex items-center justify-center gap-2" 
               onClick={handleUpgradeToPremium}
