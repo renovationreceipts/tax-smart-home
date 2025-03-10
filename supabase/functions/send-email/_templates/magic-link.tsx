@@ -41,7 +41,7 @@ export const MagicLinkEmail = ({
     : 'Log In to Renovation Receipts';
     
   const instructionText = isPasswordReset
-    ? 'Click the button below to reset your password and create a new one.'
+    ? 'Click the button below to reset your password and create a new one. If the button doesn\'t work, try using the direct link or reset code below.'
     : 'Click the button below to log in to your account and start tracking your renovation expenses.';
 
   // Create the full reset URL for manual copying
@@ -69,21 +69,25 @@ export const MagicLinkEmail = ({
             {buttonText}
           </Link>
           <Text style={{ ...text, marginBottom: '8px' }}>
-            Or, if the button doesn't work, copy and paste this URL into your browser:
+            <strong>IMPORTANT:</strong> If the button doesn't work, copy and paste this URL into your browser:
           </Text>
           <Text style={linkBox}>
             {fullResetUrl}
           </Text>
           
           <Text style={{ ...text, marginBottom: '14px', marginTop: '20px' }}>
-            Alternatively, use this temporary {isPasswordReset ? 'reset' : 'login'} code:
+            Alternatively, use this temporary reset code for manual verification:
           </Text>
           <code style={code}>{token}</code>
           
           {isPasswordReset && (
             <Text style={{...text, marginTop: '20px', backgroundColor: '#f9f9f9', padding: '12px', borderRadius: '5px', fontSize: '14px'}}>
-              <strong>Note for Outlook users:</strong> If you're using Outlook or another email service with link protection, 
-              try copying the link above and pasting it directly into your browser instead of clicking it.
+              <strong>For Outlook & SafeLinks Users:</strong> Email security features in Outlook and other services may modify links in this email. 
+              If clicking the button gives you an error, please:
+              <ul style={{marginTop: '8px', paddingLeft: '20px'}}>
+                <li style={{marginBottom: '5px'}}>Copy the full URL above and paste it directly into your browser, OR</li>
+                <li style={{marginBottom: '5px'}}>Use the temporary reset code with the manual verification option on the reset password page</li>
+              </ul>
             </Text>
           )}
           

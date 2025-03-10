@@ -7,11 +7,13 @@ import { useToast } from "@/hooks/use-toast";
 import { ResetPasswordForm } from "@/components/auth/ResetPasswordForm";
 import { TokenErrorState } from "@/components/auth/TokenErrorState";
 import { VerifyingToken } from "@/components/auth/VerifyingToken";
+import { ManualTokenForm } from "@/components/auth/ManualTokenForm";
 
 export default function ResetPassword() {
   const [isVerifyingToken, setIsVerifyingToken] = useState(true);
   const [tokenError, setTokenError] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [showManualEntry, setShowManualEntry] = useState(false);
   
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,7 +32,18 @@ export default function ResetPassword() {
         // Check if we have a hash with a token or if we're in a recovery flow
         if (!hash || !(hash.includes('access_token=') || hash.includes('type=recovery'))) {
           console.error("No valid token found in URL hash");
-          setTokenError("Invalid or missing reset token. Please request a new password reset link.");
+          
+          // Error messages coming from Supabase
+          if (hash.includes('error=')) {
+            const errorParam = new URLSearchParams(hash.substring(1)).get('error_description') || 
+                              new URLSearchParams(hash.substring(1)).get('error');
+            const errorMessage = decodeURIComponent(errorParam || 'Unknown error');
+            
+            console.error("Error in reset URL:", errorMessage);
+            setTokenError(`Your password reset link encountered an error: ${errorMessage}. Please request a new one or try the manual code option.`);
+          } else {
+            setTokenError("Invalid or missing reset token. Please request a new password reset link or use the manual code option if you received one in your email.");
+          }
           return;
         }
 
@@ -39,7 +52,7 @@ export default function ResetPassword() {
         
         if (error || !data.user) {
           console.error("Token verification error:", error);
-          setTokenError("Your password reset link is invalid or has expired. Please request a new one.");
+          setTokenError("Your password reset link is invalid or has expired. Please request a new one or try the manual code option.");
           return;
         }
 
@@ -71,6 +84,11 @@ export default function ResetPassword() {
     }
   };
 
+  const handleSwitchToManual = () => {
+    setShowManualEntry(true);
+    setTokenError(null);
+  };
+
   if (isVerifyingToken) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
@@ -79,13 +97,28 @@ export default function ResetPassword() {
     );
   }
 
-  if (tokenError) {
+  if (tokenError && !showManualEntry) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
         <TokenErrorState 
           tokenError={tokenError} 
           onRequestNewLink={handleRequestNewLink} 
+          onUseManualCode={handleSwitchToManual}
         />
+      </div>
+    );
+  }
+
+  if (showManualEntry) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          <AuthHeader 
+            title="Enter Reset Code" 
+            subtitle="Please enter the code you received in your password reset email" 
+          />
+          <ManualTokenForm onSuccess={(email) => setUserEmail(email)} />
+        </div>
       </div>
     );
   }

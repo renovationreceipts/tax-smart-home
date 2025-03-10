@@ -6,9 +6,10 @@ import { useNavigate } from "react-router-dom";
 interface TokenErrorStateProps {
   tokenError: string;
   onRequestNewLink: () => void;
+  onUseManualCode: () => void;
 }
 
-export function TokenErrorState({ tokenError, onRequestNewLink }: TokenErrorStateProps) {
+export function TokenErrorState({ tokenError, onRequestNewLink, onUseManualCode }: TokenErrorStateProps) {
   const navigate = useNavigate();
   
   return (
@@ -25,10 +26,13 @@ export function TokenErrorState({ tokenError, onRequestNewLink }: TokenErrorStat
         </p>
       </div>
       <div className="space-y-4">
-        <Button onClick={onRequestNewLink} className="w-full">
+        <Button onClick={onUseManualCode} className="w-full">
+          Enter Reset Code Manually
+        </Button>
+        <Button onClick={onRequestNewLink} className="w-full" variant="outline">
           Request New Reset Link
         </Button>
-        <Button onClick={() => navigate("/login")} variant="outline" className="w-full">
+        <Button onClick={() => navigate("/login")} variant="ghost" className="w-full">
           Back to Login
         </Button>
       </div>
