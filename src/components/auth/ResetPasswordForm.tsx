@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,7 +31,7 @@ export function ResetPasswordForm({ onSwitchToLogin }: ResetPasswordFormProps) {
       
       {isResetSuccess && (
         <div className="bg-green-50 border border-green-200 text-green-800 rounded-md p-3 text-sm">
-          Password reset instructions have been sent to your email. Please check your inbox.
+          Password reset instructions have been sent to your email. Please check your inbox and Junk folder.
         </div>
       )}
       
