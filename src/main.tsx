@@ -1,4 +1,3 @@
-
 import './polyfills'
 import React from "react"
 import { createRoot } from "react-dom/client"
@@ -84,7 +83,6 @@ const router = createBrowserRouter([
           { path: "blog/capital-gains-101", element: <CapitalGains101 /> },
           { path: "blog/eliminate-pmi-sooner", element: <EliminatePMISooner /> },
           { path: "about", element: <About /> },
-          { path: "contact", element: <Contact /> },
           { path: "disclaimers", element: <Disclaimers /> },
           { path: "terms", element: <Terms /> },
           { path: "privacy-policy", element: <Privacy /> },
@@ -101,6 +99,7 @@ const router = createBrowserRouter([
           { path: "project/edit/:propertyId/:id?", element: <EditProject /> },
           { path: "project/view/:propertyId/:id", element: <ViewProject /> },
           { path: "generate-og-image", element: <GenerateOGImage /> },
+          { path: "contact", element: <Contact /> },
         ],
       },
     ],

@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { LogOut, Menu, User, X } from "lucide-react";
+import { LogOut, Menu, User, X, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -37,6 +37,15 @@ export function AccountHeader({
         >
           <User className="h-4 w-4 mr-2" />
           Profile
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-full justify-start text-gray-600"
+          onClick={() => handleNavigate("/contact")}
+        >
+          <Mail className="h-4 w-4 mr-2" />
+          Contact
         </Button>
         <Button
           variant="ghost"
@@ -92,6 +101,15 @@ export function AccountHeader({
                 variant="ghost"
                 size="sm"
                 className="text-gray-600"
+                onClick={() => handleNavigate("/contact")}
+              >
+                <Mail className="h-4 w-4 mr-2" />
+                Contact
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-600"
                 onClick={handleSignOut}
               >
                 <LogOut className="h-4 w-4 mr-2" />
@@ -104,4 +122,3 @@ export function AccountHeader({
     </nav>
   );
 }
-
