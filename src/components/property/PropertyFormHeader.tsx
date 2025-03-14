@@ -1,3 +1,4 @@
+
 interface PropertyFormHeaderProps {
   isEditing: boolean
 }
@@ -9,7 +10,7 @@ export function PropertyFormHeader({ isEditing }: PropertyFormHeaderProps) {
         {isEditing ? "Edit Property" : "Add New Property"}
       </h2>
       <p className="text-muted-foreground">
-        {isEditing ? "Update your property details below." : "Enter your property details below."}
+        {/* Text removed as requested */}
       </p>
     </div>
   )
