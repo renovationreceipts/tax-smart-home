@@ -9,7 +9,7 @@ const blogPosts: BlogPost[] = [{
   slug: "eliminate-pmi-sooner",
   title: "How Home Improvements Can Help You Eliminate PMI Sooner",
   description: "Save money by increasing your home's value and lowering your loan-to-value ratio (LTV). Learn how smart home improvements can help remove PMI years earlier.",
-  thumbnail: "/lovable-uploads/769139b0-d5c2-4b13-9946-033d705281ce.png",
+  thumbnail: "/lovable-uploads/902eef2d-5840-4c0b-8638-e5093ed3aae0.png",
   date: "March 1, 2025"
 }, {
   slug: "track-home-improvement-receipts",

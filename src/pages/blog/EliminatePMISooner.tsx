@@ -46,7 +46,7 @@ const EliminatePMISooner = () => {
           
           <div className="aspect-[16/9] mb-8 overflow-hidden rounded-lg">
             <img 
-              src="/lovable-uploads/769139b0-d5c2-4b13-9946-033d705281ce.png" 
+              src="/lovable-uploads/902eef2d-5840-4c0b-8638-e5093ed3aae0.png" 
               alt="House with calculator showing reduced mortgage insurance" 
               className="w-full h-full object-cover"
             />
