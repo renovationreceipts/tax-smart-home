@@ -4,6 +4,7 @@ import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Contact = () => {
   const navigate = useNavigate();
@@ -20,21 +21,27 @@ const Contact = () => {
           Back to Dashboard
         </Button>
         
-        <h1 className="text-3xl font-semibold mb-6">Get in Touch</h1>
-        <div className="prose max-w-none">
-          <p className="text-lg mb-6">
-            Questions, feedback, find a bug? Want to see a new feature or enhancement? Let us know!
-          </p>
-          <div className="bg-slate-50 p-6 rounded-lg border border-slate-200 mb-8">
-            <p className="text-lg font-medium">Email:</p>
-            <a 
-              href="mailto:myrenovationreceipts@gmail.com" 
-              className="text-primary hover:underline break-words"
-            >
-              myrenovationreceipts@gmail.com
-            </a>
-          </div>
-        </div>
+        <Card className="border-border shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-3xl font-semibold">Get in Touch</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="prose max-w-none">
+              <p className="text-lg mb-6">
+                Questions, feedback, find a bug? Want to see a new feature or enhancement? Let us know!
+              </p>
+              <div className="bg-slate-50 p-6 rounded-lg border border-slate-200">
+                <p className="text-lg font-medium">Email:</p>
+                <a 
+                  href="mailto:myrenovationreceipts@gmail.com" 
+                  className="text-primary hover:underline break-words"
+                >
+                  myrenovationreceipts@gmail.com
+                </a>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </Container>
   );
