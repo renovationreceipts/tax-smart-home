@@ -1,20 +1,12 @@
-
-import { Container } from "@/components/ui/container"
-import { Check } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { ArrowLeft } from "lucide-react"
-import { useNavigate } from "react-router-dom"
-
+import { Container } from "@/components/ui/container";
+import { Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 export default function About() {
-  const navigate = useNavigate()
-
-  return (
-    <Container className="py-12">
-      <Button
-        variant="ghost"
-        onClick={() => navigate(-1)}
-        className="mb-6"
-      >
+  const navigate = useNavigate();
+  return <Container className="py-12">
+      <Button variant="ghost" onClick={() => navigate(-1)} className="mb-6">
         <ArrowLeft className="mr-2 h-4 w-4" />
         Back
       </Button>
@@ -26,9 +18,7 @@ export default function About() {
             It all started with an old house, a long list of projects, and way too many trips to Home Depot.
           </p>
           <div className="space-y-4">
-            <p className="text-base">
-              Like many homeowners, we found ourselves tackling renovations—some big, some small, some DIY, and some with contractors. Every project came with receipts, invoices, and expenses that piled up in a filing cabinet (or got lost in a drawer somewhere). When tax season rolled around, I knew some of these expenses would also qualify for credits, but tracking everything was a nightmare. I know knew the I should save these receipts as they would add to my cost basis in the event we ever sold the house in the future.
-            </p>
+            <p className="text-base">Like many homeowners, I found myself tackling renovations—some big, some small, some DIY, and some with contractors. Every project came with receipts, invoices, and expenses that piled up in a filing cabinet (or got lost in a drawer somewhere). When tax season rolled around, I knew some of these expenses would also qualify for credits, but tracking everything was a nightmare. I also knew the I should save these receipts as they would add to my cost basis in the event we ever sold the house in the future.</p>
             <p className="text-base">
               I searched for a tool that could organize renovation receipts, track expenses, and generate tax-friendly reports, but nothing fit my needs. So, I decided to build it myself.
             </p>
@@ -84,6 +74,5 @@ export default function About() {
           </div>
         </section>
       </div>
-    </Container>
-  )
+    </Container>;
 }
