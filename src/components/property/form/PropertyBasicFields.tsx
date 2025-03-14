@@ -11,7 +11,7 @@ interface PropertyBasicFieldsProps {
 
 export function PropertyBasicFields({ form }: PropertyBasicFieldsProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pt-6">
       <FormField
         control={form.control}
         name="propertyType"
