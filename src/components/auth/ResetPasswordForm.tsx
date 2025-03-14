@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -46,7 +47,7 @@ export function ResetPasswordForm({ accessToken }: ResetPasswordFormProps) {
       
       // First set the session with the access token
       const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
-        access_token: accessToken,
+        access_token: accessToken, // Fixed: changed 'accessToken' to 'access_token'
         refresh_token: '',
       });
       
