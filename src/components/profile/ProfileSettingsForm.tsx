@@ -29,21 +29,23 @@ export function ProfileSettingsForm() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false); 
+  const [isFormLoading, setIsFormLoading] = useState(true);
   
+  // Initialize form with empty values - we'll populate them after loading
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       email: "",
-      taxRate: 15,
-      taxFilingStatus: "Single",
-      houseValueGrowthRate: 4.92
+      taxRate: 0,
+      taxFilingStatus: "",
+      houseValueGrowthRate: 0
     }
   });
   
   useEffect(() => {
     const loadUserProfile = async () => {
       try {
-        setIsLoading(true);
+        setIsFormLoading(true);
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
         
@@ -55,7 +57,7 @@ export function ProfileSettingsForm() {
           
         if (error) throw error;
 
-        // Update form with user data
+        // Update form with user data, using defaults only if values are missing
         form.reset({
           email: profile.email || "",
           taxRate: profile.tax_rate || 15,
@@ -70,7 +72,7 @@ export function ProfileSettingsForm() {
           description: "Failed to load profile. Please try refreshing the page."
         });
       } finally {
-        setIsLoading(false);
+        setIsFormLoading(false);
       }
     };
     
@@ -126,6 +128,15 @@ export function ProfileSettingsForm() {
     } finally {
       setIsLoading(false);
     }
+  }
+  
+  // Show loading state while form data is being loaded
+  if (isFormLoading) {
+    return (
+      <div className="flex items-center justify-center py-8">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
   }
   
   return (
