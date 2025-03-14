@@ -62,9 +62,7 @@ export default function About() {
         <section>
           <h2 className="text-2xl font-bold mb-4">We Need Your Feedback</h2>
           <div className="space-y-4">
-            <p className="text-base">
-              This tool is for homeowners like you—so your input is critical. We've integrated Slack for feedback and feature requests, so if you sign up now, you can help define what this product becomes. Whether it's better cost basis tracking, smarter receipt management, or more tax-saving insights, we're listening.
-            </p>
+            <p className="text-base">This tool is for homeowners like you—so your input is critical. Please don't hesitate to reach out with feature requests, suggestions or any bugs you find.</p>
             <p className="text-base">
               Thanks for being part of the journey! 🚀
             </p>
