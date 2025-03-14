@@ -4,6 +4,7 @@ import { ProjectsSection } from "@/components/account/ProjectsSection";
 import { WhySaveRecords } from "@/components/account/WhySaveRecords";
 import { useProjects } from "@/hooks/useProjects";
 import type { Project } from "@/hooks/useProjects";
+import { FREE_TIER_LIMITS } from "@/hooks/usePremiumStatus";
 
 interface ProjectAndTaxSectionProps {
   selectedPropertyId: string | null;

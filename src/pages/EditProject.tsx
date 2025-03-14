@@ -44,9 +44,11 @@ export default function EditProject() {
       projectsCount
     });
     
-    // Only make decision when all data is loaded and premium status is confirmed
-    // Don't show premium modal for premium users or if user is editing an existing project
-    if (!isLoading && !isPremiumLoading && !isEditing && !isPremium && hasReachedLimit) {
+    // Modified condition: Only show premium modal when:
+    // 1. Not premium user
+    // 2. Not editing an existing project
+    // 3. EXCEEDING the project limit (not just reaching it)
+    if (!isLoading && !isPremiumLoading && !isEditing && !isPremium && projectsCount >= FREE_TIER_LIMITS.PROJECT_LIMIT) {
       console.log("Showing premium modal")
       setIsPremiumModalOpen(true)
     } else {

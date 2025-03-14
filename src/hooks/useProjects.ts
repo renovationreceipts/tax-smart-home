@@ -1,3 +1,4 @@
+
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { supabase } from "@/integrations/supabase/client"
 import { useAuth } from "./useAuth"
@@ -129,14 +130,17 @@ export function useProjectLimitCheck(isPremium: boolean) {
   
   const projectLimit = FREE_TIER_LIMITS.PROJECT_LIMIT;
   
+  // Fixed logic: hasReachedLimit should only be true when trying to add beyond the limit
+  // This way users can add up to PROJECT_LIMIT projects before seeing premium modal
+  const hasReachedLimit = !isPremium && allProjects.length >= projectLimit;
+  
   console.log("Project limit check:", { 
     projectsCount: allProjects.length, 
     isPremium, 
     limit: projectLimit,
-    hasReachedLimit: !isPremium && allProjects.length >= projectLimit
+    hasReachedLimit
   });
   
-  const hasReachedLimit = !isPremium && allProjects.length >= projectLimit;
   const projectsCount = allProjects.length;
   
   return {

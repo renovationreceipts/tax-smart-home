@@ -11,6 +11,7 @@ import { ProjectsTable } from "./project-section/ProjectsTable";
 import { ProjectsHeader } from "./project-section/ProjectsHeader";
 import { formatCurrency } from "@/lib/formatters";
 import { PremiumModal } from "@/components/premium/PremiumModal";
+import { FREE_TIER_LIMITS } from "@/hooks/usePremiumStatus";
 
 interface ProjectsSectionProps {
   propertyId: string | null;
@@ -29,7 +30,7 @@ export function ProjectsSection({
 }: ProjectsSectionProps) {
   const navigate = useNavigate();
   const { data: properties = [] } = useProperties();
-  const { hasReachedLimit, projectsCount } = useProjectLimitCheck(isPremium);
+  const { projectsCount } = useProjectLimitCheck(isPremium);
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
   
   const selectedProperty = properties.find(p => p.id === propertyId);
@@ -48,7 +49,8 @@ export function ProjectsSection({
   };
   
   const handleAddProject = () => {
-    if (!isPremium && hasReachedLimit) {
+    // Use the same logic as in EditProject - show premium modal only when exceeding the limit
+    if (!isPremium && projectsCount >= FREE_TIER_LIMITS.PROJECT_LIMIT) {
       setIsPremiumModalOpen(true);
     } else {
       onAddProject();
