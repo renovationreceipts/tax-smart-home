@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { EmailField } from "./EmailField";
 import { PercentageField } from "./PercentageField";
 import { TaxFilingStatusField } from "./TaxFilingStatusField";
+import { GrowthRateField } from "./GrowthRateField";
 import { supabase } from "@/integrations/supabase/client";
 import { Check, Loader2 } from "lucide-react";
 
@@ -18,7 +19,8 @@ const profileFormSchema = z.object({
     message: "Please enter a valid email address."
   }),
   taxRate: z.number().min(0).max(100),
-  taxFilingStatus: z.string()
+  taxFilingStatus: z.string(),
+  houseValueGrowthRate: z.number().min(0).max(30)
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -33,7 +35,8 @@ export function ProfileSettingsForm() {
     defaultValues: {
       email: "",
       taxRate: 15,
-      taxFilingStatus: "Single"
+      taxFilingStatus: "Single",
+      houseValueGrowthRate: 4.92
     }
   });
   
@@ -56,7 +59,8 @@ export function ProfileSettingsForm() {
         form.reset({
           email: profile.email || "",
           taxRate: profile.tax_rate || 15,
-          taxFilingStatus: profile.tax_filing_status || "Single"
+          taxFilingStatus: profile.tax_filing_status || "Single",
+          houseValueGrowthRate: profile.house_value_growth_rate || 4.92
         });
       } catch (error) {
         console.error("Error loading user profile:", error);
@@ -87,7 +91,8 @@ export function ProfileSettingsForm() {
         .from("profiles")
         .update({
           tax_rate: data.taxRate,
-          tax_filing_status: data.taxFilingStatus
+          tax_filing_status: data.taxFilingStatus,
+          house_value_growth_rate: data.houseValueGrowthRate
         })
         .eq("id", user.id);
         
@@ -145,6 +150,14 @@ export function ProfileSettingsForm() {
             name="taxRate"
             render={({ field }) => (
               <PercentageField value={field.value} onChange={field.onChange} />
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="houseValueGrowthRate"
+            render={({ field }) => (
+              <GrowthRateField value={field.value} onChange={field.onChange} />
             )}
           />
         </div>
