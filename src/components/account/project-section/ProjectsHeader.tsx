@@ -11,6 +11,7 @@ interface ProjectsHeaderProps {
   onAddProject: () => void;
   onPropertySelect: (propertyId: string) => void;
   onAddProperty: () => void;
+  onUploadReceipt?: () => void;
 }
 
 export function ProjectsHeader({
@@ -19,7 +20,8 @@ export function ProjectsHeader({
   hasProjects,
   onAddProject,
   onPropertySelect,
-  onAddProperty
+  onAddProperty,
+  onUploadReceipt
 }: ProjectsHeaderProps) {
   return (
     <>
@@ -48,15 +50,41 @@ export function ProjectsHeader({
           </DropdownMenu>
         </div>
         {hasProjects && (
-          <Button 
-            onClick={onAddProject} 
-            size="sm" 
-            variant="ghost" 
-            className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
-          >
-            <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
-            Add Project
-          </Button>
+          onUploadReceipt ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  size="sm" 
+                  variant="ghost" 
+                  className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
+                >
+                  <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
+                  Add Project
+                  <ChevronDown className="ml-2 h-4 w-4 text-[#0090FF]" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[180px]">
+                <DropdownMenuItem onClick={onAddProject}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Manually
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={onUploadReceipt}>
+                  <FileText className="mr-2 h-4 w-4" />
+                  Upload Receipt
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button 
+              onClick={onAddProject} 
+              size="sm" 
+              variant="ghost" 
+              className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
+            >
+              <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
+              Add Project
+            </Button>
+          )
         )}
       </div>
 
@@ -67,15 +95,41 @@ export function ProjectsHeader({
             <h3 className="font-semibold text-2xl">Projects</h3>
           </div>
           {hasProjects && (
-            <Button 
-              onClick={onAddProject} 
-              size="sm" 
-              variant="ghost" 
-              className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
-            >
-              <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
-              Add
-            </Button>
+            onUploadReceipt ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    size="sm" 
+                    variant="ghost" 
+                    className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
+                  >
+                    <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
+                    Add
+                    <ChevronDown className="ml-1 h-4 w-4 text-[#0090FF]" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-[180px]">
+                  <DropdownMenuItem onClick={onAddProject}>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Manually
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={onUploadReceipt}>
+                    <FileText className="mr-2 h-4 w-4" />
+                    Upload Receipt
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button 
+                onClick={onAddProject} 
+                size="sm" 
+                variant="ghost" 
+                className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
+              >
+                <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
+                Add
+              </Button>
+            )
           )}
         </div>
         

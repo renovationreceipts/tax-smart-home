@@ -1,154 +1,127 @@
-import { useNavigate, useParams } from "react-router-dom"
-import { ProjectForm } from "@/components/project/ProjectForm"
-import { useProjects, useProjectLimitCheck } from "@/hooks/useProjects"
-import { useProperties } from "@/hooks/useProperties"
-import { useState, useEffect } from "react"
-import { ProjectSuccessModal } from "@/components/project/ProjectSuccessModal"
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner"
-import { usePremiumStatus, FREE_TIER_LIMITS } from "@/hooks/usePremiumStatus"
-import { PremiumModal } from "@/components/premium/PremiumModal"
-import { Button } from "@/components/ui/button"
-import { ArrowLeft } from "lucide-react"
-import { useScrollToTop } from "@/hooks/useScrollToTop"
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { ProjectForm } from "@/components/project/ProjectForm";
+import { useState, useEffect } from "react";
+import type { Project } from "@/hooks/useProjects";
 
 export default function EditProject() {
-  const navigate = useNavigate()
-  const { propertyId, id } = useParams()
-  const { data: projects = [], isLoading, isError } = useProjects(propertyId || null)
-  const { data: properties = [] } = useProperties()
-  const project = id ? projects.find(p => p.id === id) : null
-  const [successProject, setSuccessProject] = useState<{
-    id: string
-    name: string
-    cost: number
-    qualifies_for_basis: boolean
-    tax_credits_eligible: boolean
-    insurance_reduction_eligible: boolean
-  } | null>(null)
-  const { isPremium, isLoading: isPremiumLoading } = usePremiumStatus()
-  const { hasReachedLimit, projectsCount } = useProjectLimitCheck(isPremium)
-  const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false)
-  const isEditing = !!project
-  const scrollToTop = useScrollToTop()
-  
-  const [formKey, setFormKey] = useState(Date.now())
+  const { propertyId, id } = useParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { toast } = useToast();
+  const [project, setProject] = useState<Project | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Get any prefilled values from the URL (from receipt upload)
+  const prefilledName = searchParams.get('name');
+  const prefilledDescription = searchParams.get('description');
+  const prefilledCost = searchParams.get('cost');
+  const prefilledDate = searchParams.get('date');
+  const prefilledBuilder = searchParams.get('builder');
 
   useEffect(() => {
-    console.log("Premium status check in EditProject:", { 
-      isPremium, 
-      isPremiumLoading,
-      isEditing,
-      hasReachedLimit,
-      projectsCount
-    });
-    
-    if (!isLoading && !isPremiumLoading && !isEditing && !isPremium && projectsCount >= FREE_TIER_LIMITS.PROJECT_LIMIT) {
-      console.log("Showing premium modal")
-      setIsPremiumModalOpen(true)
-    } else {
-      console.log("Not showing premium modal")
-      setIsPremiumModalOpen(false)
+    if (!propertyId) {
+      navigate("/account");
+      return;
     }
-  }, [isLoading, isPremiumLoading, isEditing, isPremium, hasReachedLimit, projectsCount])
 
-  if (!propertyId) {
-    navigate("/account")
-    return null
-  }
+    if (id) {
+      setIsLoading(true);
 
-  if (isLoading || isPremiumLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <LoadingSpinner size="lg" />
-      </div>
-    )
-  }
+      const fetchProject = async () => {
+        try {
+          const { data, error } = await supabase
+            .from("projects")
+            .select("*")
+            .eq("id", id)
+            .single();
 
-  if (isError) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-red-500">Error loading project data. Please try again.</div>
-      </div>
-    )
-  }
+          if (error) throw error;
 
-  if (id && !project) {
+          if (!data) {
+            toast({
+              variant: "destructive",
+              title: "Project not found",
+              description: "The project you're trying to edit does not exist.",
+            });
+            navigate(`/account?propertyId=${propertyId}`);
+            return;
+          }
+
+          setProject(data);
+        } catch (error) {
+          console.error("Error fetching project:", error);
+          toast({
+            variant: "destructive",
+            title: "Error fetching project",
+            description: "There was a problem loading the project data.",
+          });
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchProject();
+    } else if (prefilledName || prefilledCost || prefilledDate) {
+      // If we have prefilled data from receipt, create a prefilled project object
+      // We don't save it to the database yet, just use it to prefill the form
+      setProject({
+        id: "",
+        property_id: propertyId,
+        user_id: "",
+        name: prefilledName || "New Project",
+        description: prefilledDescription || "",
+        cost: prefilledCost ? parseFloat(prefilledCost.replace(/[^0-9.-]/g, "")) : 0,
+        completion_date: prefilledDate ? new Date(prefilledDate).toISOString() : new Date().toISOString(),
+        created_at: "",
+        updated_at: "",
+        builder_name: prefilledBuilder || "",
+        builder_url: "",
+        qualifies_for_basis: false,
+        tax_credits_eligible: false,
+        insurance_reduction_eligible: false,
+      });
+    }
+  }, [id, propertyId, navigate, toast, prefilledName, prefilledDescription, prefilledCost, prefilledDate, prefilledBuilder]);
+
+  const handleSuccess = (project: {
+    id: string;
+    name: string;
+    cost: number;
+    qualifies_for_basis: boolean;
+    tax_credits_eligible: boolean;
+    insurance_reduction_eligible: boolean;
+  }) => {
+    navigate(`/account?propertyId=${propertyId}`);
+  };
+
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Project not found.</div>
-      </div>
-    )
-  }
-  
-  if (isPremiumModalOpen && !isEditing) {
-    return (
-      <div className="min-h-screen bg-white py-8">
-        <div className="max-w-2xl mx-auto px-4">
-          <Button
-            variant="ghost"
-            className="mb-6"
-            onClick={() => navigate(`/account?propertyId=${propertyId}`, { replace: true })}
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Dashboard
-          </Button>
-          
-          <div className="text-center mt-12">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Premium Subscription Required</h2>
-            <p className="text-gray-600 mb-8">
-              You've reached the limit of {projectsCount} projects on the free plan.
-              Upgrade to premium to add unlimited projects.
-            </p>
-            <Button 
-              onClick={() => setIsPremiumModalOpen(true)}
-              className="bg-amber-500 hover:bg-amber-600"
-            >
-              View Premium Options
-            </Button>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="inline-block mx-auto">
+            <svg className="animate-spin h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
           </div>
-          
-          <PremiumModal
-            open={isPremiumModalOpen}
-            onClose={() => navigate(`/account?propertyId=${propertyId}`, { replace: true })}
-            propertyCount={properties.length}
-            projectCount={projectsCount}
-          />
+          <p className="mt-2 text-sm text-gray-500">Loading project data...</p>
         </div>
       </div>
-    )
+    );
   }
 
-  const handleNavigateBack = () => {
-    scrollToTop()
-    navigate(`/account?propertyId=${propertyId}`)
-  }
-
-  const handleSuccess = (project: { 
-    id: string
-    name: string
-    cost: number
-    qualifies_for_basis: boolean 
-    tax_credits_eligible: boolean
-    insurance_reduction_eligible: boolean
-  }) => {
-    setSuccessProject(project)
+  if (!propertyId) {
+    return null;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <ProjectForm
-        key={formKey}
-        propertyId={propertyId}
-        project={project}
-        onCancel={handleNavigateBack}
-        onSuccess={handleSuccess}
-      />
-      <ProjectSuccessModal
-        open={!!successProject}
-        project={successProject}
-        onClose={handleNavigateBack}
-        propertyId={propertyId}
-      />
-    </div>
-  )
+    <ProjectForm
+      propertyId={propertyId}
+      project={project}
+      onSuccess={handleSuccess}
+      onCancel={() => navigate(`/account?propertyId=${propertyId}`)}
+    />
+  );
 }
