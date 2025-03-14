@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const EliminatePMISooner = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -49,7 +50,16 @@ const EliminatePMISooner = () => {
               src="/lovable-uploads/902eef2d-5840-4c0b-8638-e5093ed3aae0.png" 
               alt="House with calculator showing reduced mortgage insurance" 
               className="w-full h-full object-cover"
+              onError={(e) => {
+                console.error("Failed to load image: /lovable-uploads/902eef2d-5840-4c0b-8638-e5093ed3aae0.png");
+                setImageError(true);
+              }}
             />
+            {imageError && (
+              <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                <p className="text-gray-500">Image not available</p>
+              </div>
+            )}
           </div>
 
           <div className="prose prose-lg max-w-none">
