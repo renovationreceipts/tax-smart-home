@@ -35,8 +35,22 @@ const MainNav = () => {
     setIsMenuOpen(false);
   };
 
+  const handleContactClick = () => {
+    trackEvent({
+      eventName: "contact_click",
+      eventType: "click",
+      eventData: {
+        location: "main_nav"
+      }
+    });
+    setIsMenuOpen(false);
+  };
+
   const MobileMenu = () => (
     <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border border-gray-200 z-50">
+      <Link to="/contact" className="block px-4 py-2 text-gray-600 hover:bg-gray-50" onClick={handleContactClick}>
+        Contact
+      </Link>
       <Link to="/login" className="block px-4 py-2 text-gray-600 hover:bg-gray-50" onClick={handleLoginClick}>
         Login
       </Link>
@@ -67,6 +81,9 @@ const MainNav = () => {
           </div>
         ) : (
           <div className="flex gap-4 items-center">
+            <Link to="/contact" className="text-gray-600 hover:text-gray-900" onClick={handleContactClick}>
+              Contact
+            </Link>
             <Link to="/login" className="text-gray-600 hover:text-gray-900" onClick={handleLoginClick}>
               Login
             </Link>

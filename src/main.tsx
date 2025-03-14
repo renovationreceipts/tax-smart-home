@@ -22,6 +22,7 @@ import Profile from "@/pages/Profile"
 import SignUp from "@/pages/SignUp"
 import About from "@/pages/About"
 import Blog from "@/pages/Blog"
+import Contact from "@/pages/Contact"
 import TaxAnalysis from "@/pages/TaxAnalysis"
 import TrackHomeImprovements from "@/pages/blog/TrackHomeImprovements"
 import HomeownersGuideTaxSavings from "@/pages/blog/HomeownersGuideTaxSavings"
@@ -83,6 +84,7 @@ const router = createBrowserRouter([
           { path: "blog/capital-gains-101", element: <CapitalGains101 /> },
           { path: "blog/eliminate-pmi-sooner", element: <EliminatePMISooner /> },
           { path: "about", element: <About /> },
+          { path: "contact", element: <Contact /> },
           { path: "disclaimers", element: <Disclaimers /> },
           { path: "terms", element: <Terms /> },
           { path: "privacy-policy", element: <Privacy /> },
