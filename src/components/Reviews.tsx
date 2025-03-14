@@ -6,7 +6,7 @@ const Reviews = () => {
   const reviews = [
     {
       rating: 5,
-      text: "This app has saved me countless hours during tax season. The automatic cost basis calculation is a game-changer!",
+      text: "Tracking home receipts was a nightmare before I found this app. Thank you Renovation Receipts!",
       author: "Sarah Johnson",
       role: "Homeowner"
     },
