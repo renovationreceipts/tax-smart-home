@@ -38,22 +38,15 @@ serve(async (req) => {
     base64Image = btoa(base64Image);
     console.log("Image converted to base64");
 
-    // Google Vision API credentials - stored as a Supabase secret
-    let credentials;
-    try {
-      const credentialsString = Deno.env.get('GOOGLE_VISION_CREDENTIALS');
-      if (!credentialsString) {
-        throw new Error('Google Vision credentials not found');
-      }
-      credentials = JSON.parse(credentialsString);
-      console.log("Successfully loaded Google credentials");
-    } catch (error) {
-      console.error("Error parsing Google credentials:", error);
-      throw new Error('Invalid Google Vision API credentials');
+    // Get Google Vision API key from environment variable
+    const apiKey = Deno.env.get('GOOGLE_VISION_API');
+    if (!apiKey) {
+      throw new Error('Google Vision API key not found');
     }
+    console.log("Successfully loaded Google Vision API key");
 
     // Configure the Vision API request
-    const visionEndpoint = 'https://vision.googleapis.com/v1/images:annotate';
+    const visionEndpoint = `https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`;
     const visionPayload = {
       requests: [
         {
@@ -68,64 +61,12 @@ serve(async (req) => {
       ]
     };
 
-    // Get the access token (self-signed JWT)
-    const iat = Math.floor(Date.now() / 1000);
-    const exp = iat + 3600; // 1 hour expiration
+    console.log("Calling Vision API");
 
-    const jwtHeader = { alg: 'RS256', typ: 'JWT' };
-    const jwtPayload = {
-      iss: credentials.client_email,
-      sub: credentials.client_email,
-      aud: 'https://vision.googleapis.com/',
-      iat,
-      exp,
-    };
-
-    // Create the JWT components
-    const base64UrlEncode = (str: string) => {
-      return btoa(str)
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=+$/, '');
-    };
-
-    const headerEncoded = base64UrlEncode(JSON.stringify(jwtHeader));
-    const payloadEncoded = base64UrlEncode(JSON.stringify(jwtPayload));
-    const toSign = `${headerEncoded}.${payloadEncoded}`;
-
-    // Convert private key to CryptoKey
-    const privateKey = credentials.private_key.replace(/\\n/g, '\n');
-    
-    // Import the private key for signing
-    const importedKey = await crypto.subtle.importKey(
-      'pkcs8',
-      new TextEncoder().encode(privateKey),
-      { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
-      false,
-      ['sign']
-    );
-
-    // Sign the JWT
-    const signature = await crypto.subtle.sign(
-      { name: 'RSASSA-PKCS1-v1_5' },
-      importedKey,
-      new TextEncoder().encode(toSign)
-    );
-
-    const signatureBase64 = base64UrlEncode(
-      String.fromCharCode(...new Uint8Array(signature))
-    );
-
-    // Combine to form the complete JWT
-    const jwt = `${toSign}.${signatureBase64}`;
-
-    console.log("JWT token generated successfully");
-
-    // Call the Vision API with the token
+    // Call the Vision API with the API key
     const visionResponse = await fetch(visionEndpoint, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${jwt}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(visionPayload)
