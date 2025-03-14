@@ -1,3 +1,4 @@
+
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -68,14 +69,13 @@ export default function EditProject() {
       // We don't save it to the database yet, just use it to prefill the form
       setProject({
         id: "",
-        property_id: propertyId,
-        user_id: "",
+        property_id: propertyId || "",
         name: prefilledName || "New Project",
         description: prefilledDescription || "",
         cost: prefilledCost ? parseFloat(prefilledCost.replace(/[^0-9.-]/g, "")) : 0,
         completion_date: prefilledDate ? new Date(prefilledDate).toISOString() : new Date().toISOString(),
         created_at: "",
-        updated_at: "",
+        updated_at: "", // This field is needed according to the Project type
         builder_name: prefilledBuilder || "",
         builder_url: "",
         qualifies_for_basis: false,
