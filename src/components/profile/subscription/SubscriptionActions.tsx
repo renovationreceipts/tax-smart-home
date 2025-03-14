@@ -59,7 +59,18 @@ export function SubscriptionActions({
   const handleUpgradeToPremium = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase.functions.invoke('create-checkout');
+      
+      // Add success and cancel URLs for the checkout session
+      const origin = window.location.origin;
+      const success_url = `${origin}/account?checkout_success=true`;
+      const cancel_url = `${origin}/account?checkout_cancelled=true`;
+      
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: {
+          success_url,
+          cancel_url
+        }
+      });
       
       if (error) throw error;
       
