@@ -67,21 +67,25 @@ export default function EditProject() {
     } else if (prefilledName || prefilledCost || prefilledDate) {
       // If we have prefilled data from receipt, create a prefilled project object
       // We don't save it to the database yet, just use it to prefill the form
-      setProject({
+      const projectData: Project = {
         id: "",
         property_id: propertyId || "",
         name: prefilledName || "New Project",
         description: prefilledDescription || "",
         cost: prefilledCost ? parseFloat(prefilledCost.replace(/[^0-9.-]/g, "")) : 0,
         completion_date: prefilledDate ? new Date(prefilledDate).toISOString() : new Date().toISOString(),
-        created_at: "",
-        updated_at: "", // This field is needed according to the Project type
+        created_at: null,
         builder_name: prefilledBuilder || "",
         builder_url: "",
         qualifies_for_basis: false,
         tax_credits_eligible: false,
         insurance_reduction_eligible: false,
-      });
+        ai_analysis_result: null,
+        tax_credits_analysis: null,
+        insurance_reduction_analysis: null
+      };
+      
+      setProject(projectData);
     }
   }, [id, propertyId, navigate, toast, prefilledName, prefilledDescription, prefilledCost, prefilledDate, prefilledBuilder]);
 
