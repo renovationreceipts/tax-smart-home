@@ -66,9 +66,7 @@ export default function About() {
             <p className="text-base">
               Thanks for being part of the journey! 🚀
             </p>
-            <p className="text-base font-medium">
-              Join the beta, track your projects, and help us build something great.
-            </p>
+            <p className="text-base font-medium"></p>
           </div>
         </section>
       </div>
