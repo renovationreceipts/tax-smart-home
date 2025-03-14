@@ -13,6 +13,7 @@ import type { Project } from "@/hooks/useProjects"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { useState, useEffect } from "react"
+import { useFormPersistence } from "@/hooks/useFormPersistence"
 
 interface ProjectFormProps {
   propertyId: string
@@ -34,6 +35,11 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
   
   console.log("ProjectForm - Project data:", project)
   console.log("ProjectForm - Project ID:", project?.id)
+
+  // Generate a unique storage key for this form
+  const formStorageKey = project?.id 
+    ? `project_form_${propertyId}_${project.id}` 
+    : `project_form_new_${propertyId}`
 
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
@@ -64,6 +70,14 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
       receipts: null,
     },
   })
+
+  // Use form persistence hook - exclude file fields
+  const { clearPersistedData } = useFormPersistence(
+    form,
+    formStorageKey,
+    true, // always persist
+    ['beforePhotos', 'afterPhotos', 'receipts'] // exclude file fields
+  )
 
   // Reset form when component mounts with no project
   useEffect(() => {
@@ -116,6 +130,8 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
         tax_credits_eligible: data.tax_credits_eligible || false,
         insurance_reduction_eligible: data.insurance_reduction_eligible || false
       }
+      // Clear persisted data on successful submission
+      clearPersistedData()
       onSuccess(successData)
     },
     onPhaseChange: setSubmissionPhase
@@ -131,13 +147,19 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
     }
   }
 
+  const handleCancel = () => {
+    // Clear persisted data when user explicitly cancels
+    clearPersistedData()
+    onCancel()
+  }
+
   return (
     <>
       <div className="max-w-4xl mx-auto px-4">
         <Button
           variant="ghost"
           className="mb-6"
-          onClick={onCancel}
+          onClick={handleCancel}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Account
@@ -152,7 +174,7 @@ export function ProjectForm({ propertyId, project, onSuccess, onCancel }: Projec
             <ProjectFileFields form={form} projectId={project?.id} />
             <ProjectFormActions 
               isEditing={!!project} 
-              onCancel={onCancel}
+              onCancel={handleCancel}
               isSubmitting={isSubmitting}
               projectId={project?.id}
               submissionPhase={submissionPhase}
