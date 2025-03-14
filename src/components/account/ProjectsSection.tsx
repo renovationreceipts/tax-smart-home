@@ -49,8 +49,8 @@ export function ProjectsSection({
   };
   
   const handleAddProject = () => {
-    // Fix the condition: show premium modal only when EXCEEDING the limit (not just reaching it)
-    if (!isPremium && projectsCount > FREE_TIER_LIMITS.PROJECT_LIMIT) {
+    // Changed to >= to show premium modal when reaching the limit of 3 projects
+    if (!isPremium && projectsCount >= FREE_TIER_LIMITS.PROJECT_LIMIT) {
       setIsPremiumModalOpen(true);
     } else {
       onAddProject();

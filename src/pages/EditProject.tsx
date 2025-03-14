@@ -42,7 +42,7 @@ export default function EditProject() {
       projectsCount
     });
     
-    if (!isLoading && !isPremiumLoading && !isEditing && !isPremium && projectsCount > FREE_TIER_LIMITS.PROJECT_LIMIT) {
+    if (!isLoading && !isPremiumLoading && !isEditing && !isPremium && projectsCount >= FREE_TIER_LIMITS.PROJECT_LIMIT) {
       console.log("Showing premium modal")
       setIsPremiumModalOpen(true)
     } else {

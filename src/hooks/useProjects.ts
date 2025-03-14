@@ -130,9 +130,9 @@ export function useProjectLimitCheck(isPremium: boolean) {
   
   const projectLimit = FREE_TIER_LIMITS.PROJECT_LIMIT;
   
-  // Update logic: hasReachedLimit should only be true when exceeding the limit
-  // This allows users to add exactly PROJECT_LIMIT projects before seeing premium modal
-  const hasReachedLimit = !isPremium && allProjects.length > projectLimit;
+  // Changed to >=: show premium modal when reaching or exceeding the limit
+  // This prevents users from adding more than 3 projects without premium
+  const hasReachedLimit = !isPremium && allProjects.length >= projectLimit;
   
   console.log("Project limit check:", { 
     projectsCount: allProjects.length, 
