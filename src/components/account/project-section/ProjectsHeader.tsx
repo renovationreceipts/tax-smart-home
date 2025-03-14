@@ -52,7 +52,7 @@ export function ProjectsHeader({
             onClick={onAddProject} 
             size="sm" 
             variant="ghost" 
-            className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
+            className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-blue-50 hover:text-[#0090FF] hover:border-[#0090FF]"
           >
             <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
             Add Project
@@ -71,7 +71,7 @@ export function ProjectsHeader({
               onClick={onAddProject} 
               size="sm" 
               variant="ghost" 
-              className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
+              className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-blue-50 hover:text-[#0090FF] hover:border-[#0090FF]"
             >
               <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
               Add
