@@ -34,7 +34,7 @@ export const projectFormSchema = z.object({
     required_error: "Completion date is required",
   }),
   builder_name: z.string().optional(),
-  builder_url: z.string().url().optional().or(z.literal("")),
+  builder_url: z.string().optional().or(z.literal("")),
   beforePhotos: z.instanceof(FileList).nullable().optional(),
   afterPhotos: z.instanceof(FileList).nullable().optional(),
   receipts: z.instanceof(FileList).nullable().optional(),
