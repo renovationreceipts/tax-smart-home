@@ -34,9 +34,12 @@ export function useFormPersistence<T extends FieldValues>(
             return acc
           }
           
-          // Handle date objects
+          // Handle date objects - Make sure to properly type check and convert
           if (key === 'completion_date' && value) {
-            acc[key] = new Date(value)
+            // Explicitly check and convert to Date
+            if (typeof value === 'string' || typeof value === 'number') {
+              acc[key] = new Date(value)
+            }
           } else {
             acc[key] = value
           }
