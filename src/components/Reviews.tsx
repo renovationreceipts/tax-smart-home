@@ -12,7 +12,7 @@ const Reviews = () => {
     },
     {
       rating: 5,
-      text: "Managing multiple rental properties was a nightmare before. Now I can track everything in one place.",
+      text: "I was saving my DIY project receipts in a folder until I found this much better tool to do it.",
       author: "Michael Chen",
       role: "Property Investor"
     },
