@@ -1,5 +1,5 @@
 
-import { FileText, Upload } from "lucide-react";
+import { FileText } from "lucide-react";
 import type { Project } from "@/hooks/useProjects";
 import { useProperties } from "@/hooks/useProperties";
 import { useProjectLimitCheck } from "@/hooks/useProjects";
@@ -12,8 +12,6 @@ import { ProjectsHeader } from "./project-section/ProjectsHeader";
 import { formatCurrency } from "@/lib/formatters";
 import { PremiumModal } from "@/components/premium/PremiumModal";
 import { FREE_TIER_LIMITS } from "@/hooks/usePremiumStatus";
-import { ReceiptUploadModal, type ExtractedReceiptData } from "@/components/project/ReceiptUploadModal";
-import { ReceiptOCRModal } from "@/components/project/ReceiptOCRModal";
 
 interface ProjectsSectionProps {
   propertyId: string | null;
@@ -34,8 +32,6 @@ export function ProjectsSection({
   const { data: properties = [] } = useProperties();
   const { projectsCount } = useProjectLimitCheck(isPremium);
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
-  const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
-  const [isOCRModalOpen, setIsOCRModalOpen] = useState(false);
   
   const selectedProperty = properties.find(p => p.id === propertyId);
   const totalProjectCosts = projects.reduce((sum, project) => sum + (project.cost || 0), 0);
@@ -61,34 +57,6 @@ export function ProjectsSection({
     }
   };
 
-  const handleUploadReceipt = () => {
-    if (!isPremium && projectsCount >= FREE_TIER_LIMITS.PROJECT_LIMIT) {
-      setIsPremiumModalOpen(true);
-    } else {
-      setIsReceiptModalOpen(true);
-    }
-  };
-
-  const handleOCRReceipt = () => {
-    if (!isPremium && projectsCount >= FREE_TIER_LIMITS.PROJECT_LIMIT) {
-      setIsPremiumModalOpen(true);
-    } else {
-      setIsOCRModalOpen(true);
-    }
-  };
-
-  const handleReceiptSuccess = (data: ExtractedReceiptData) => {
-    // Pass the extracted data to the edit project page
-    const searchParams = new URLSearchParams();
-    if (data.name) searchParams.append('name', data.name);
-    if (data.description) searchParams.append('description', data.description);
-    if (data.cost) searchParams.append('cost', data.cost);
-    if (data.completion_date) searchParams.append('date', data.completion_date.toISOString());
-    if (data.builder_name) searchParams.append('builder', data.builder_name);
-    
-    navigate(`/project/edit/${propertyId}?${searchParams.toString()}`);
-  };
-
   return (
     <div className="bg-white rounded-lg shadow-sm border p-6">
       <div className="pb-4 sm:pb-0 border-b sm:border-b-0">
@@ -99,8 +67,6 @@ export function ProjectsSection({
           onAddProject={handleAddProject}
           onPropertySelect={onPropertySelect}
           onAddProperty={handleAddProperty}
-          onUploadReceipt={handleUploadReceipt}
-          onOCRReceipt={handleOCRReceipt}
         />
       </div>
 
@@ -139,24 +105,6 @@ export function ProjectsSection({
         propertyCount={properties.length}
         projectCount={projectsCount}
       />
-
-      {propertyId && (
-        <ReceiptUploadModal
-          open={isReceiptModalOpen}
-          onClose={() => setIsReceiptModalOpen(false)}
-          propertyId={propertyId}
-          onSuccess={handleReceiptSuccess}
-        />
-      )}
-
-      {propertyId && (
-        <ReceiptOCRModal
-          open={isOCRModalOpen}
-          onClose={() => setIsOCRModalOpen(false)}
-          propertyId={propertyId}
-          onSuccess={handleReceiptSuccess}
-        />
-      )}
     </div>
   );
 }

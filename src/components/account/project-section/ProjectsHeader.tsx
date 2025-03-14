@@ -1,5 +1,5 @@
 
-import { FileText, Plus, ChevronDown, Upload } from "lucide-react";
+import { FileText, Plus, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import type { Property } from "@/hooks/useProperties";
@@ -11,8 +11,6 @@ interface ProjectsHeaderProps {
   onAddProject: () => void;
   onPropertySelect: (propertyId: string) => void;
   onAddProperty: () => void;
-  onUploadReceipt?: () => void;
-  onOCRReceipt?: () => void;
 }
 
 export function ProjectsHeader({
@@ -21,9 +19,7 @@ export function ProjectsHeader({
   hasProjects,
   onAddProject,
   onPropertySelect,
-  onAddProperty,
-  onUploadReceipt,
-  onOCRReceipt
+  onAddProperty
 }: ProjectsHeaderProps) {
   return (
     <>
@@ -52,29 +48,15 @@ export function ProjectsHeader({
           </DropdownMenu>
         </div>
         {hasProjects && (
-          <div className="flex gap-2">
-            {onOCRReceipt && (
-              <Button 
-                onClick={onOCRReceipt} 
-                size="sm" 
-                variant="ghost" 
-                className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
-              >
-                <Upload className="h-4 w-4 mr-2 text-[#0090FF]" />
-                Scan Receipt
-              </Button>
-            )}
-            
-            <Button 
-              onClick={onAddProject} 
-              size="sm" 
-              variant="ghost" 
-              className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
-            >
-              <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
-              Add Project
-            </Button>
-          </div>
+          <Button 
+            onClick={onAddProject} 
+            size="sm" 
+            variant="ghost" 
+            className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
+          >
+            <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
+            Add Project
+          </Button>
         )}
       </div>
 
@@ -85,28 +67,15 @@ export function ProjectsHeader({
             <h3 className="font-semibold text-2xl">Projects</h3>
           </div>
           {hasProjects && (
-            <div className="flex gap-2">
-              {onOCRReceipt && (
-                <Button 
-                  onClick={onOCRReceipt} 
-                  size="sm" 
-                  variant="ghost" 
-                  className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
-                >
-                  <Upload className="h-4 w-4 text-[#0090FF]" />
-                </Button>
-              )}
-              
-              <Button 
-                onClick={onAddProject} 
-                size="sm" 
-                variant="ghost" 
-                className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
-              >
-                <Plus className="h-4 w-4 text-[#0090FF]" />
-                Add
-              </Button>
-            </div>
+            <Button 
+              onClick={onAddProject} 
+              size="sm" 
+              variant="ghost" 
+              className="border bg-white text-[#0090FF] border-[#0090FF] hover:bg-white/90 hover:text-[#0090FF] hover:border-[#0090FF]"
+            >
+              <Plus className="h-4 w-4 mr-2 text-[#0090FF]" />
+              Add
+            </Button>
           )}
         </div>
         
