@@ -7,11 +7,12 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
 
+// Updated to match the interface in ReceiptUploadModal
 export interface ExtractedReceiptData {
   name: string;
-  description: string;
+  description?: string;
   cost: string;
-  completion_date?: Date;
+  completion_date: Date;
   builder_name?: string;
 }
 
@@ -72,7 +73,7 @@ export function ReceiptOCRModal({ open, onClose, propertyId, onSuccess }: Receip
       }
 
       // Convert the date string to a Date object if available
-      const dateObj = data.date ? new Date(data.date) : undefined;
+      const dateObj = data.date ? new Date(data.date) : new Date();
 
       // Return the extracted data to the parent component
       onSuccess({
