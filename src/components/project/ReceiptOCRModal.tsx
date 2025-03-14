@@ -45,9 +45,13 @@ export function ReceiptOCRModal({ open, onClose, propertyId, onSuccess }: Receip
       const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
       const filePath = `${propertyId}/${fileName}`;
 
+      // Upload to the ocr-receipts bucket that already exists
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('ocr-receipts')
-        .upload(filePath, receiptFile);
+        .upload(filePath, receiptFile, {
+          contentType: receiptFile.type,
+          upsert: false
+        });
 
       if (uploadError) {
         throw new Error(`Error uploading receipt: ${uploadError.message}`);
@@ -58,6 +62,8 @@ export function ReceiptOCRModal({ open, onClose, propertyId, onSuccess }: Receip
         .from('ocr-receipts')
         .getPublicUrl(filePath);
 
+      console.log("File uploaded successfully, processing with Vision API at URL:", publicUrl);
+
       // Process the receipt with the edge function
       const { data, error: processError } = await supabase.functions
         .invoke('process-receipt', {
@@ -65,12 +71,15 @@ export function ReceiptOCRModal({ open, onClose, propertyId, onSuccess }: Receip
         });
 
       if (processError) {
+        console.error("Edge function error:", processError);
         throw new Error(`Error processing receipt: ${processError.message}`);
       }
 
       if (!data) {
         throw new Error("No data returned from receipt processing");
       }
+
+      console.log("Received data from OCR processing:", data);
 
       // Convert the date string to a Date object if available
       const dateObj = data.date ? new Date(data.date) : new Date();
@@ -89,6 +98,11 @@ export function ReceiptOCRModal({ open, onClose, propertyId, onSuccess }: Receip
         description: "The information has been extracted and added to your project.",
       });
       
+      // Clean up the temporary file after processing
+      await supabase.storage
+        .from('ocr-receipts')
+        .remove([filePath]);
+        
       onClose();
     } catch (err: any) {
       console.error("Receipt processing error:", err);

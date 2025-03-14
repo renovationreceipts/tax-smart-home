@@ -28,9 +28,15 @@ serve(async (req) => {
     }
 
     const imageArrayBuffer = await imageResponse.arrayBuffer();
-    const base64Image = btoa(
-      String.fromCharCode(...new Uint8Array(imageArrayBuffer))
-    );
+    const uint8Array = new Uint8Array(imageArrayBuffer);
+    
+    // Convert to base64
+    let base64Image = '';
+    for (let i = 0; i < uint8Array.length; i++) {
+      base64Image += String.fromCharCode(uint8Array[i]);
+    }
+    base64Image = btoa(base64Image);
+    console.log("Image converted to base64");
 
     // Google Vision API credentials - stored as a Supabase secret
     let credentials;
@@ -89,6 +95,8 @@ serve(async (req) => {
 
     // Convert private key to CryptoKey
     const privateKey = credentials.private_key.replace(/\\n/g, '\n');
+    
+    // Import the private key for signing
     const importedKey = await crypto.subtle.importKey(
       'pkcs8',
       new TextEncoder().encode(privateKey),
