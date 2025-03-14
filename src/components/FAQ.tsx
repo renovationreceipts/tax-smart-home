@@ -22,7 +22,7 @@ const FAQ = () => {
     },
     {
       question: "How much does this cost?",
-      answer: "Renovation Receipts is free up to 4 home improvement projects and up to 1 property. After that, if you have more projects or properties to manage it's just $20 per year."
+      answer: "Renovation Receipts is free up to 3 home improvement projects and up to 1 property. After that, if you have more projects or properties to manage it's just $20 per year."
     }
   ];
 
