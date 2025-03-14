@@ -1,4 +1,3 @@
-
 import { useNavigate, useParams } from "react-router-dom"
 import { ProjectForm } from "@/components/project/ProjectForm"
 import { useProjects, useProjectLimitCheck } from "@/hooks/useProjects"
@@ -32,7 +31,6 @@ export default function EditProject() {
   const isEditing = !!project
   const scrollToTop = useScrollToTop()
   
-  // Add formKey state to force form remount
   const [formKey, setFormKey] = useState(Date.now())
 
   useEffect(() => {
@@ -44,11 +42,7 @@ export default function EditProject() {
       projectsCount
     });
     
-    // Modified condition: Only show premium modal when:
-    // 1. Not premium user
-    // 2. Not editing an existing project
-    // 3. EXCEEDING the project limit (not just reaching it)
-    if (!isLoading && !isPremiumLoading && !isEditing && !isPremium && projectsCount >= FREE_TIER_LIMITS.PROJECT_LIMIT) {
+    if (!isLoading && !isPremiumLoading && !isEditing && !isPremium && projectsCount > FREE_TIER_LIMITS.PROJECT_LIMIT) {
       console.log("Showing premium modal")
       setIsPremiumModalOpen(true)
     } else {
@@ -86,7 +80,6 @@ export default function EditProject() {
     )
   }
   
-  // If premium modal should be shown and not editing, render just that with back button
   if (isPremiumModalOpen && !isEditing) {
     return (
       <div className="min-h-screen bg-white py-8">

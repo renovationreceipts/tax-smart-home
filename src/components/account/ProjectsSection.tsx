@@ -49,8 +49,8 @@ export function ProjectsSection({
   };
   
   const handleAddProject = () => {
-    // Use the same logic as in EditProject - show premium modal only when exceeding the limit
-    if (!isPremium && projectsCount >= FREE_TIER_LIMITS.PROJECT_LIMIT) {
+    // Fix the condition: show premium modal only when EXCEEDING the limit (not just reaching it)
+    if (!isPremium && projectsCount > FREE_TIER_LIMITS.PROJECT_LIMIT) {
       setIsPremiumModalOpen(true);
     } else {
       onAddProject();
