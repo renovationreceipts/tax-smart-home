@@ -27,8 +27,16 @@ export const FeaturedIn = () => {
             />
           </div>
           
+          <div className="h-12 flex items-center justify-center">
+            <img 
+              src="/lovable-uploads/4a7871fe-83dc-471d-a6e4-ee42f0750964.png" 
+              alt="CNBC" 
+              className="max-h-full w-auto object-contain"
+            />
+          </div>
+          
           {/* Remaining placeholder boxes for logos */}
-          {[3, 4, 5].map((item) => (
+          {[4, 5].map((item) => (
             <div 
               key={item}
               className="h-12 w-32 bg-gray-200 rounded flex items-center justify-center text-gray-400"
