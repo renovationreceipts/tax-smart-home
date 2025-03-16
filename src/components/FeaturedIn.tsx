@@ -35,16 +35,21 @@ export const FeaturedIn = () => {
             />
           </div>
           
-          {/* Remaining placeholder boxes for logos */}
-          {[4, 5].map((item) => (
-            <div 
-              key={item}
-              className="h-12 w-32 bg-gray-200 rounded flex items-center justify-center text-gray-400"
-              aria-label="Logo placeholder"
-            >
-              Logo {item}
-            </div>
-          ))}
+          <div className="h-12 flex items-center justify-center">
+            <img 
+              src="/lovable-uploads/9df26525-c31e-4307-af49-751e5bbe0729.png" 
+              alt="HGTV" 
+              className="max-h-full w-auto object-contain"
+            />
+          </div>
+          
+          <div className="h-12 flex items-center justify-center">
+            <img 
+              src="/lovable-uploads/eeb4b39f-b3af-4631-a42f-8162cb0248d2.png" 
+              alt="REALTOR" 
+              className="max-h-full w-auto object-contain"
+            />
+          </div>
         </div>
       </div>
     </div>
