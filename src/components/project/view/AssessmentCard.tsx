@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
-import { CheckCircle2, XCircle } from "lucide-react"
+import { CheckCircle2, XCircle, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
 
@@ -74,10 +74,11 @@ export function AssessmentCard({ title, qualifies, analysis, tooltipContent, pro
         {title === "Insurance Premium Assessment" && qualifies && projectId && (
           <div className="flex justify-end">
             <Button 
-              variant="default" 
-              className="mt-2" 
+              variant="outline" 
+              className="mt-2 text-[#1EAEDB] border-[#1EAEDB] hover:bg-blue-50 hover:text-[#1EAEDB]" 
               onClick={handleRequestDiscount}
             >
+              <Plus className="h-4 w-4 mr-2 text-[#1EAEDB]" />
               Request My Discount
             </Button>
           </div>
@@ -87,16 +88,18 @@ export function AssessmentCard({ title, qualifies, analysis, tooltipContent, pro
           <div className="flex justify-end gap-2">
             <Button 
               variant="outline" 
-              className="mt-2" 
+              className="mt-2 text-[#1EAEDB] border-[#1EAEDB] hover:bg-blue-50 hover:text-[#1EAEDB]" 
               onClick={handleFindTaxForm}
             >
+              <Plus className="h-4 w-4 mr-2 text-[#1EAEDB]" />
               Find My Tax Form
             </Button>
             <Button 
-              variant="default" 
-              className="mt-2" 
+              variant="outline" 
+              className="mt-2 text-[#1EAEDB] border-[#1EAEDB] hover:bg-blue-50 hover:text-[#1EAEDB]" 
               onClick={handleTurboTaxInstructions}
             >
+              <Plus className="h-4 w-4 mr-2 text-[#1EAEDB]" />
               TurboTax Instructions
             </Button>
           </div>
