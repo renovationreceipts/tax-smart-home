@@ -26,11 +26,11 @@ serve(async (req) => {
     let systemContent;
 
     if (templateType === 'call') {
-      systemContent = "You are a professional assistant that generates polite, effective call scripts for homeowners to speak with their insurance providers about recent home improvements and potential policy updates or discounts.";
-      prompt = `I recently completed a home improvement project: ${projectDescription}. I want to call my insurance provider to inform them and ask if I qualify for a discount or policy update. Can you generate a call script I can follow?`;
+      systemContent = "You are an AI that creates call scripts. Do not include any explanatory text, introductions, or notes. Generate only the exact script that the homeowner should say when calling their insurance provider.";
+      prompt = `Create a direct call script for me to use when calling my insurance provider about my home improvement project: ${projectDescription}. I want to inform them and ask if I qualify for a discount. Do not include any introduction or explanation text, just the script itself.`;
     } else if (templateType === 'email') {
-      systemContent = "You are a professional assistant that drafts clear, polite, and persuasive emails to insurance providers about home improvements for potential discounts.";
-      prompt = `I recently completed a home improvement project: ${projectDescription}. I want to draft an email to my insurance provider to inquire about a discount on my homeowners insurance.`;
+      systemContent = "You are an AI that creates email templates. Do not include any explanatory text, introductions, or notes. Generate only the exact email content that should be sent.";
+      prompt = `Create a direct email template to send to my insurance provider about my home improvement project: ${projectDescription}. I want to inform them and ask if I qualify for a discount. Do not include any introduction or explanation text, just the email content itself.`;
     } else {
       throw new Error('Invalid template type');
     }
