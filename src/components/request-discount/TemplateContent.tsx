@@ -1,7 +1,8 @@
 
 import { Button } from "@/components/ui/button";
-import { Copy } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useState } from "react";
 
 interface TemplateContentProps {
   isLoading: boolean;
@@ -11,6 +12,14 @@ interface TemplateContentProps {
 }
 
 export function TemplateContent({ isLoading, content, type, onCopy }: TemplateContentProps) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = (text: string) => {
+    onCopy(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   if (isLoading) {
     return (
       <div>
@@ -55,10 +64,19 @@ export function TemplateContent({ isLoading, content, type, onCopy }: TemplateCo
         variant="outline" 
         size="sm"
         className="absolute top-0 right-0" 
-        onClick={() => onCopy(content)}
+        onClick={() => handleCopy(content)}
       >
-        <Copy className="h-4 w-4 mr-2" />
-        Copy {type === "script" ? "Script" : "Email"}
+        {copied ? (
+          <>
+            <Check className="h-4 w-4 mr-2 text-green-500" />
+            Copied!
+          </>
+        ) : (
+          <>
+            <Copy className="h-4 w-4 mr-2" />
+            Copy {type === "script" ? "Script" : "Email"}
+          </>
+        )}
       </Button>
     </div>
   );
