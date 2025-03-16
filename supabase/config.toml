@@ -21,3 +21,6 @@ verify_jwt = false
 
 [functions.create-portal-session]
 verify_jwt = false
+
+[functions.generate-insurance-templates]
+verify_jwt = false

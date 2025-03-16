@@ -48,6 +48,7 @@ export default function ViewProject() {
               qualifies={project.qualifies_for_basis}
               analysis={project.ai_analysis_result}
               tooltipContent="This analysis determines if the project can be added to your home's cost basis for tax purposes."
+              projectId={project.id}
             />
 
             <AssessmentCard
@@ -55,6 +56,7 @@ export default function ViewProject() {
               qualifies={project.tax_credits_eligible}
               analysis={project.tax_credits_analysis}
               tooltipContent="This analysis identifies potential tax credits available for your improvement project."
+              projectId={project.id}
             />
 
             <AssessmentCard
@@ -62,6 +64,7 @@ export default function ViewProject() {
               qualifies={project.insurance_reduction_eligible}
               analysis={project.insurance_reduction_analysis}
               tooltipContent="This analysis evaluates if your improvement could qualify for insurance premium reductions."
+              projectId={project.id}
             />
           </div>
 

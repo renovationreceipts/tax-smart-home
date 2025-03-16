@@ -2,15 +2,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { CheckCircle2, XCircle } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useNavigate } from "react-router-dom"
 
 interface AssessmentCardProps {
   title: string
   qualifies: boolean | null
   analysis: string | null
   tooltipContent: string
+  projectId?: string
 }
 
-export function AssessmentCard({ title, qualifies, analysis, tooltipContent }: AssessmentCardProps) {
+export function AssessmentCard({ title, qualifies, analysis, tooltipContent, projectId }: AssessmentCardProps) {
+  const navigate = useNavigate()
+  
   const renderQualificationStatus = () => {
     if (qualifies === null) return null;
     
@@ -26,6 +31,12 @@ export function AssessmentCard({ title, qualifies, analysis, tooltipContent }: A
         </span>
       </div>
     );
+  };
+
+  const handleRequestDiscount = () => {
+    if (projectId) {
+      navigate(`/request-discount/${projectId}`);
+    }
   };
 
   return (
@@ -44,9 +55,19 @@ export function AssessmentCard({ title, qualifies, analysis, tooltipContent }: A
         </TooltipProvider>
       </CardHeader>
       <CardContent>
-        <p className="text-gray-600">
+        <p className="text-gray-600 mb-4">
           {analysis || "No assessment available."}
         </p>
+        
+        {title === "Insurance Premium Assessment" && qualifies && projectId && (
+          <Button 
+            variant="secondary" 
+            className="mt-2" 
+            onClick={handleRequestDiscount}
+          >
+            Request My Discount
+          </Button>
+        )}
       </CardContent>
     </Card>
   )

@@ -1,3 +1,4 @@
+
 import './polyfills'
 import React from "react"
 import { createRoot } from "react-dom/client"
@@ -14,6 +15,7 @@ import Account from "@/pages/Account"
 import EditProperty from "@/pages/EditProperty"
 import EditProject from "@/pages/EditProject"
 import ViewProject from "@/pages/ViewProject"
+import RequestDiscount from "@/pages/RequestDiscount"
 import Index from "@/pages/Index"
 import Login from "@/pages/Login"
 import ResetPassword from "@/pages/ResetPassword"
@@ -98,6 +100,7 @@ const router = createBrowserRouter([
           { path: "property/edit/:id?", element: <EditProperty /> },
           { path: "project/edit/:propertyId/:id?", element: <EditProject /> },
           { path: "project/view/:propertyId/:id", element: <ViewProject /> },
+          { path: "request-discount/:projectId", element: <RequestDiscount /> },
           { path: "generate-og-image", element: <GenerateOGImage /> },
           { path: "contact", element: <Contact /> },
         ],
