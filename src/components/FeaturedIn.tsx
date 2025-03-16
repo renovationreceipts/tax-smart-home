@@ -53,7 +53,7 @@ export const FeaturedIn = () => {
           
           <div className="h-12 flex items-center justify-center">
             <img 
-              src="/lovable-uploads/f64cec28-b481-4ab7-9bac-265f6c1819aa.png" 
+              src="/lovable-uploads/71e6d7ab-27b6-416c-bc84-5df5a159b637.png" 
               alt="Better Homes and Gardens" 
               className="max-h-full w-auto object-contain"
             />
