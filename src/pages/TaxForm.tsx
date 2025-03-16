@@ -18,17 +18,17 @@ export default function TaxForm() {
   const { toast } = useToast();
   const { data: allProjects = [], isLoading: projectsLoading } = useAllUserProjects();
   const project = allProjects.find(p => p.id === projectId);
-  const { credits, updateCreditsUsed } = useIRSCredits();
+  const { updateCreditsUsed } = useIRSCredits();
 
   const [formInfo, setFormInfo] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    if (project?.description && !formInfo && !isLoading && credits?.used < credits?.limit) {
+    if (project?.description && !formInfo && !isLoading) {
       generateTaxFormInfo();
     }
-  }, [project, formInfo, isLoading, credits]);
+  }, [project, formInfo, isLoading]);
 
   const generateTaxFormInfo = async () => {
     if (!project?.description) return;
@@ -45,6 +45,7 @@ export default function TaxForm() {
 
       if (error) throw error;
       setFormInfo(data.text);
+      // Still call updateCreditsUsed for tracking, but doesn't affect functionality
       updateCreditsUsed();
     } catch (err) {
       console.error("Error generating tax form info:", err);
@@ -137,15 +138,6 @@ export default function TaxForm() {
                   )}
                 </Button>
               </>
-            ) : credits?.used >= credits?.limit ? (
-              <div className="py-8 text-center">
-                <p className="text-gray-600 mb-4">
-                  You've reached your limit of {credits.limit} AI tax assistance requests.
-                </p>
-                <Button variant="default" onClick={() => navigate("/profile")}>
-                  Upgrade to Premium
-                </Button>
-              </div>
             ) : (
               <p className="text-gray-500 text-center py-4">
                 Failed to generate tax form information. Please try refreshing the page.

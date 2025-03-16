@@ -18,17 +18,17 @@ export default function TurboTax() {
   const { toast } = useToast();
   const { data: allProjects = [], isLoading: projectsLoading } = useAllUserProjects();
   const project = allProjects.find(p => p.id === projectId);
-  const { credits, updateCreditsUsed } = useIRSCredits();
+  const { updateCreditsUsed } = useIRSCredits();
 
   const [instructions, setInstructions] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    if (project?.description && !instructions && !isLoading && credits?.used < credits?.limit) {
+    if (project?.description && !instructions && !isLoading) {
       generateTurboTaxInstructions();
     }
-  }, [project, instructions, isLoading, credits]);
+  }, [project, instructions, isLoading]);
 
   const generateTurboTaxInstructions = async () => {
     if (!project?.description) return;
@@ -45,6 +45,7 @@ export default function TurboTax() {
 
       if (error) throw error;
       setInstructions(data.text);
+      // Still call updateCreditsUsed for tracking, but doesn't affect functionality
       updateCreditsUsed();
     } catch (err) {
       console.error("Error generating TurboTax instructions:", err);
@@ -137,15 +138,6 @@ export default function TurboTax() {
                   )}
                 </Button>
               </>
-            ) : credits?.used >= credits?.limit ? (
-              <div className="py-8 text-center">
-                <p className="text-gray-600 mb-4">
-                  You've reached your limit of {credits.limit} AI tax assistance requests.
-                </p>
-                <Button variant="default" onClick={() => navigate("/profile")}>
-                  Upgrade to Premium
-                </Button>
-              </div>
             ) : (
               <p className="text-gray-500 text-center py-4">
                 Failed to generate TurboTax instructions. Please try refreshing the page.

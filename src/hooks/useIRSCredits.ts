@@ -54,6 +54,7 @@ export function useIRSCredits() {
     }
   }
 
+  // This still updates the database for tracking purposes, but doesn't affect the UI functionality
   const updateCreditsUsed = async () => {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
@@ -71,5 +72,6 @@ export function useIRSCredits() {
     }
   }
 
+  // We're still returning the credits to be able to display them, but won't use them to limit
   return { credits, updateCreditsUsed }
 }

@@ -28,6 +28,12 @@ export function UsageLimits({
             {isPremiumActive ? "Unlimited" : `${projectCount}/${FREE_TIER_LIMITS.PROJECT_LIMIT}`}
           </span>
         </li>
+        <li className="flex justify-between">
+          <span>AI Tax Assistance:</span>
+          <span className="font-medium">
+            Unlimited
+          </span>
+        </li>
       </ul>
     </div>
   );
