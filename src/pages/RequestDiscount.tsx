@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useProjects } from "@/hooks/useProjects";
+import { useAllUserProjects } from "@/hooks/useProjects";
 import { useInsuranceTemplates } from "@/hooks/useInsuranceTemplates";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,7 +13,7 @@ export default function RequestDiscount() {
   const { projectId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { data: allProjects = [] } = useProjects(null);
+  const { data: allProjects = [] } = useAllUserProjects();
   const project = allProjects.find(p => p.id === projectId);
   const [activeTab, setActiveTab] = useState("call");
   
