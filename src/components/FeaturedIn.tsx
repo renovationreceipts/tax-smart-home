@@ -9,7 +9,7 @@ export const FeaturedIn = () => {
           <h3 className="text-gray-500 font-medium text-lg">As featured in:</h3>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 justify-items-center items-center">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 justify-items-center items-center">
           {/* Real logos */}
           <div className="h-12 flex items-center justify-center">
             <img 
@@ -47,6 +47,14 @@ export const FeaturedIn = () => {
             <img 
               src="/lovable-uploads/eeb4b39f-b3af-4631-a42f-8162cb0248d2.png" 
               alt="REALTOR" 
+              className="max-h-full w-auto object-contain"
+            />
+          </div>
+          
+          <div className="h-12 flex items-center justify-center">
+            <img 
+              src="/lovable-uploads/f64cec28-b481-4ab7-9bac-265f6c1819aa.png" 
+              alt="Better Homes and Gardens" 
               className="max-h-full w-auto object-contain"
             />
           </div>
