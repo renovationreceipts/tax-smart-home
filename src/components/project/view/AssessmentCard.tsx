@@ -60,13 +60,15 @@ export function AssessmentCard({ title, qualifies, analysis, tooltipContent, pro
         </p>
         
         {title === "Insurance Premium Assessment" && qualifies && projectId && (
-          <Button 
-            variant="secondary" 
-            className="mt-2" 
-            onClick={handleRequestDiscount}
-          >
-            Request My Discount
-          </Button>
+          <div className="flex justify-end">
+            <Button 
+              variant="default" 
+              className="mt-2" 
+              onClick={handleRequestDiscount}
+            >
+              Request My Discount
+            </Button>
+          </div>
         )}
       </CardContent>
     </Card>
