@@ -123,8 +123,27 @@ export default function RequestDiscount() {
             <TabsContent value="call" className="mt-0">
               <div className="bg-gray-50 p-4 rounded-md min-h-[200px]">
                 {isLoading.call ? (
-                  <div className="flex justify-center items-center h-[200px]">
-                    <LoadingSpinner size="md" />
+                  <div>
+                    <div className="relative mb-6">
+                      <Skeleton className="h-4 w-3/4 mb-2" />
+                      <Skeleton className="h-4 w-5/6 mb-2" />
+                      <Skeleton className="h-4 w-2/3 mb-4" />
+                    </div>
+                    <div className="relative mb-6">
+                      <Skeleton className="h-4 w-full mb-2" />
+                      <Skeleton className="h-4 w-5/6 mb-2" />
+                      <Skeleton className="h-4 w-4/5 mb-2" />
+                      <Skeleton className="h-4 w-3/4 mb-4" />
+                    </div>
+                    <div className="relative">
+                      <Skeleton className="h-4 w-5/6 mb-2" />
+                      <Skeleton className="h-4 w-4/5 mb-2" />
+                      <Skeleton className="h-4 w-2/3 mb-2" />
+                      <Skeleton className="h-4 w-3/4" />
+                    </div>
+                    <div className="absolute top-0 right-0">
+                      <Skeleton className="h-8 w-28 rounded-md" />
+                    </div>
                   </div>
                 ) : callScript ? (
                   <div className="relative">
@@ -152,8 +171,28 @@ export default function RequestDiscount() {
             <TabsContent value="email" className="mt-0">
               <div className="bg-gray-50 p-4 rounded-md min-h-[200px]">
                 {isLoading.email ? (
-                  <div className="flex justify-center items-center h-[200px]">
-                    <LoadingSpinner size="md" />
+                  <div>
+                    <div className="relative mb-4">
+                      <Skeleton className="h-4 w-1/2 mb-4" />
+                    </div>
+                    <div className="relative mb-6">
+                      <Skeleton className="h-4 w-3/4 mb-2" />
+                      <Skeleton className="h-4 w-full mb-2" />
+                      <Skeleton className="h-4 w-5/6 mb-4" />
+                    </div>
+                    <div className="relative mb-4">
+                      <Skeleton className="h-4 w-full mb-2" />
+                      <Skeleton className="h-4 w-5/6 mb-2" />
+                      <Skeleton className="h-4 w-full mb-2" />
+                      <Skeleton className="h-4 w-4/5 mb-4" />
+                    </div>
+                    <div className="relative">
+                      <Skeleton className="h-4 w-1/3 mb-2" />
+                      <Skeleton className="h-4 w-2/5" />
+                    </div>
+                    <div className="absolute top-0 right-0">
+                      <Skeleton className="h-8 w-28 rounded-md" />
+                    </div>
                   </div>
                 ) : emailTemplate ? (
                   <div className="relative">
