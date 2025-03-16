@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Copy, Check } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { ProjectLoadingSkeleton } from "@/components/request-discount/ProjectLoadingSkeleton";
 
 export default function TurboTax() {
   const { projectId } = useParams();
@@ -73,12 +74,9 @@ export default function TurboTax() {
     navigate(-1);
   };
 
-  if (projectsLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-8 flex items-center justify-center">
-        <LoadingSpinner size="lg" />
-      </div>
-    );
+  // Show skeleton during initial data loading or when generating content
+  if (projectsLoading || (isLoading && !instructions)) {
+    return <ProjectLoadingSkeleton />;
   }
 
   if (!project) {
