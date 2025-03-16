@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAllUserProjects } from "@/hooks/useProjects";
@@ -15,7 +16,7 @@ export default function RequestDiscount() {
   const { toast } = useToast();
   const { data: allProjects = [], isLoading: projectsLoading } = useAllUserProjects();
   const project = allProjects.find(p => p.id === projectId);
-  const [activeTab, setActiveTab] = useState("call");
+  const [activeTab, setActiveTab] = useState("email");
   
   const {
     callScript,

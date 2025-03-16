@@ -23,28 +23,17 @@ export function TemplatesTabs({
   onCopy
 }: TemplatesTabsProps) {
   return (
-    <Tabs defaultValue="call" value={activeTab} onValueChange={onTabChange} className="w-full">
+    <Tabs defaultValue="email" value={activeTab} onValueChange={onTabChange} className="w-full">
       <TabsList className="grid w-full grid-cols-2 mb-6">
-        <TabsTrigger value="call" className="flex items-center">
-          <Phone className="h-4 w-4 mr-2" />
-          Call Script
-        </TabsTrigger>
         <TabsTrigger value="email" className="flex items-center">
           <Mail className="h-4 w-4 mr-2" />
           Email Template
         </TabsTrigger>
+        <TabsTrigger value="call" className="flex items-center">
+          <Phone className="h-4 w-4 mr-2" />
+          Call Script
+        </TabsTrigger>
       </TabsList>
-
-      <TabsContent value="call" className="mt-0">
-        <div className="bg-gray-50 p-4 rounded-md min-h-[200px]">
-          <TemplateContent 
-            isLoading={isCallLoading}
-            content={callScript}
-            type="script"
-            onCopy={onCopy}
-          />
-        </div>
-      </TabsContent>
 
       <TabsContent value="email" className="mt-0">
         <div className="bg-gray-50 p-4 rounded-md min-h-[200px]">
@@ -52,6 +41,17 @@ export function TemplatesTabs({
             isLoading={isEmailLoading}
             content={emailTemplate}
             type="email"
+            onCopy={onCopy}
+          />
+        </div>
+      </TabsContent>
+
+      <TabsContent value="call" className="mt-0">
+        <div className="bg-gray-50 p-4 rounded-md min-h-[200px]">
+          <TemplateContent 
+            isLoading={isCallLoading}
+            content={callScript}
+            type="script"
             onCopy={onCopy}
           />
         </div>
