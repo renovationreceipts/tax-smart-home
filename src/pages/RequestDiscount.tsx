@@ -26,15 +26,23 @@ export default function RequestDiscount() {
     generateEmailTemplate
   } = useInsuranceTemplates();
 
+  // Track if initial content generation has started
+  const [generationStarted, setGenerationStarted] = useState({
+    call: false,
+    email: false
+  });
+
   useEffect(() => {
     if (project?.description) {
-      if (activeTab === "call" && !callScript && !isLoading.call) {
+      if (activeTab === "call" && !callScript && !isLoading.call && !generationStarted.call) {
+        setGenerationStarted(prev => ({ ...prev, call: true }));
         generateCallScript(project.description);
-      } else if (activeTab === "email" && !emailTemplate && !isLoading.email) {
+      } else if (activeTab === "email" && !emailTemplate && !isLoading.email && !generationStarted.email) {
+        setGenerationStarted(prev => ({ ...prev, email: true }));
         generateEmailTemplate(project.description);
       }
     }
-  }, [project, activeTab]);
+  }, [project, activeTab, callScript, emailTemplate, isLoading.call, isLoading.email, generationStarted]);
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -43,6 +51,10 @@ export default function RequestDiscount() {
       description: "The template has been copied to your clipboard."
     });
   };
+
+  // Handle loading states
+  const isCallLoading = projectsLoading || (activeTab === "call" && (!callScript && (isLoading.call || !generationStarted.call)));
+  const isEmailLoading = projectsLoading || (activeTab === "email" && (!emailTemplate && (isLoading.email || !generationStarted.email)));
 
   if (projectsLoading) {
     return (
@@ -122,7 +134,7 @@ export default function RequestDiscount() {
 
             <TabsContent value="call" className="mt-0">
               <div className="bg-gray-50 p-4 rounded-md min-h-[200px]">
-                {isLoading.call ? (
+                {isCallLoading ? (
                   <div>
                     <div className="relative mb-6">
                       <Skeleton className="h-4 w-3/4 mb-2" />
@@ -170,7 +182,7 @@ export default function RequestDiscount() {
 
             <TabsContent value="email" className="mt-0">
               <div className="bg-gray-50 p-4 rounded-md min-h-[200px]">
-                {isLoading.email ? (
+                {isEmailLoading ? (
                   <div>
                     <div className="relative mb-4">
                       <Skeleton className="h-4 w-1/2 mb-4" />
