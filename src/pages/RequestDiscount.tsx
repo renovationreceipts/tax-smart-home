@@ -8,12 +8,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Copy, Phone, Mail } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function RequestDiscount() {
   const { projectId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { data: allProjects = [] } = useAllUserProjects();
+  const { data: allProjects = [], isLoading: projectsLoading } = useAllUserProjects();
   const project = allProjects.find(p => p.id === projectId);
   const [activeTab, setActiveTab] = useState("call");
   
@@ -42,6 +43,36 @@ export default function RequestDiscount() {
       description: "The template has been copied to your clipboard."
     });
   };
+
+  if (projectsLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="flex items-center mb-6">
+            <Button 
+              variant="ghost" 
+              className="mr-2" 
+              onClick={() => navigate(-1)}
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+            <h1 className="text-2xl font-bold">Request Insurance Discount</h1>
+          </div>
+          
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <Skeleton className="h-8 w-1/3 mb-4" />
+            <Skeleton className="h-4 w-full mb-2" />
+            <Skeleton className="h-4 w-3/4 mb-6" />
+            
+            <div className="flex justify-center py-8">
+              <LoadingSpinner size="lg" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!project) {
     return (
@@ -90,9 +121,9 @@ export default function RequestDiscount() {
             </TabsList>
 
             <TabsContent value="call" className="mt-0">
-              <div className="bg-gray-50 p-4 rounded-md">
+              <div className="bg-gray-50 p-4 rounded-md min-h-[200px]">
                 {isLoading.call ? (
-                  <div className="flex justify-center py-8">
+                  <div className="flex justify-center items-center h-[200px]">
                     <LoadingSpinner size="md" />
                   </div>
                 ) : callScript ? (
@@ -119,9 +150,9 @@ export default function RequestDiscount() {
             </TabsContent>
 
             <TabsContent value="email" className="mt-0">
-              <div className="bg-gray-50 p-4 rounded-md">
+              <div className="bg-gray-50 p-4 rounded-md min-h-[200px]">
                 {isLoading.email ? (
-                  <div className="flex justify-center py-8">
+                  <div className="flex justify-center items-center h-[200px]">
                     <LoadingSpinner size="md" />
                   </div>
                 ) : emailTemplate ? (
