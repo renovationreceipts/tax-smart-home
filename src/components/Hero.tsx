@@ -33,7 +33,7 @@ export const Hero = () => {
               <div className="flex flex-col items-center justify-center gap-2">
                 <Link to="/signup" onClick={handleSignUpClick}>
                   <Button size="lg" className="text-base sm:text-lg">
-                    Turn Your Filing Cabinet into Tax Savings – Try Free! <ArrowRight className="ml-2 h-5 w-5" />
+                    Turn Receipts into Savings – Free! <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 <p className="text-sm text-gray-500 mt-1">No credit card required</p>
