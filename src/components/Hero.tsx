@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calculator, DollarSign, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -29,9 +28,7 @@ export const Hero = () => {
                 color: '#0090FF'
               }}>Save Thousands!</span>
               </h1>
-              <p className="text-lg sm:text-xl text-gray-600">
-                Join 50,000 property owners who've saved an average of $33,200 on taxes.
-              </p>
+              <p className="text-lg sm:text-xl text-gray-600">Digitize your receipts, track improvements, and uncover hidden tax savings. Homeowners save an average of $33,200—get started free in seconds!</p>
               <div className="flex flex-col items-center justify-center gap-2">
                 <Link to="/signup" onClick={handleSignUpClick}>
                   <Button size="lg" className="text-base sm:text-lg">
