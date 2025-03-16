@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calculator, DollarSign, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -23,10 +24,10 @@ export const Hero = () => {
           <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
             <div className="space-y-8">
               <h1 className="sm:text-4xl md:text-5xl font-bold tracking-tight px-0 text-3xl text-slate-950 lg:text-4xl">
-                Track Home Improvements, Renovations and DIY Projects &amp;{' '}
+                Still Keeping Home Improvement Receipts in a Filing Cabinet? Convert &amp;{' '}
                 <span style={{
                 color: '#0090FF'
-              }}>Unlock Hidden Savings</span>
+              }}>Save Thousands!</span>
               </h1>
               <p className="text-lg sm:text-xl text-gray-600">
                 Join 50,000 property owners who've saved an average of $33,200 on taxes.
