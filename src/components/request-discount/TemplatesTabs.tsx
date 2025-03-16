@@ -1,6 +1,6 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Phone, Mail } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 import { TemplateContent } from "./TemplateContent";
 
 interface TemplatesTabsProps {
