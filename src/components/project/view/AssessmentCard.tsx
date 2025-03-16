@@ -39,6 +39,18 @@ export function AssessmentCard({ title, qualifies, analysis, tooltipContent, pro
     }
   };
 
+  const handleFindTaxForm = () => {
+    if (projectId) {
+      navigate(`/tax-form/${projectId}`);
+    }
+  };
+
+  const handleTurboTaxInstructions = () => {
+    if (projectId) {
+      navigate(`/turbotax/${projectId}`);
+    }
+  };
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -67,6 +79,25 @@ export function AssessmentCard({ title, qualifies, analysis, tooltipContent, pro
               onClick={handleRequestDiscount}
             >
               Request My Discount
+            </Button>
+          </div>
+        )}
+
+        {title === "Tax Credits Assessment" && qualifies && projectId && (
+          <div className="flex justify-end gap-2">
+            <Button 
+              variant="outline" 
+              className="mt-2" 
+              onClick={handleFindTaxForm}
+            >
+              Find My Tax Form
+            </Button>
+            <Button 
+              variant="default" 
+              className="mt-2" 
+              onClick={handleTurboTaxInstructions}
+            >
+              TurboTax Instructions
             </Button>
           </div>
         )}

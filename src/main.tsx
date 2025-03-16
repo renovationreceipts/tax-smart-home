@@ -16,6 +16,8 @@ import EditProperty from "@/pages/EditProperty"
 import EditProject from "@/pages/EditProject"
 import ViewProject from "@/pages/ViewProject"
 import RequestDiscount from "@/pages/RequestDiscount"
+import TaxForm from "@/pages/TaxForm"
+import TurboTax from "@/pages/TurboTax"
 import Index from "@/pages/Index"
 import Login from "@/pages/Login"
 import ResetPassword from "@/pages/ResetPassword"
@@ -101,6 +103,8 @@ const router = createBrowserRouter([
           { path: "project/edit/:propertyId/:id?", element: <EditProject /> },
           { path: "project/view/:propertyId/:id", element: <ViewProject /> },
           { path: "request-discount/:projectId", element: <RequestDiscount /> },
+          { path: "tax-form/:projectId", element: <TaxForm /> },
+          { path: "turbotax/:projectId", element: <TurboTax /> },
           { path: "generate-og-image", element: <GenerateOGImage /> },
           { path: "contact", element: <Contact /> },
         ],

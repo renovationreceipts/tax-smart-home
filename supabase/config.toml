@@ -24,3 +24,9 @@ verify_jwt = false
 
 [functions.generate-insurance-templates]
 verify_jwt = false
+
+[functions.generate-tax-form-info]
+verify_jwt = false
+
+[functions.generate-turbotax-instructions]
+verify_jwt = false
