@@ -1,8 +1,6 @@
-
 import { Hero } from "@/components/Hero";
 import { FeaturedIn } from "@/components/FeaturedIn";
 import { Features } from "@/components/Features";
-import { HowItWorks } from "@/components/HowItWorks";
 import Reviews from "@/components/Reviews";
 import FAQ from "@/components/FAQ";
 import { useNavigate } from "react-router-dom";
@@ -75,7 +73,6 @@ const Index = () => {
       <Hero />
       <FeaturedIn />
       <WhyTrackCosts />
-      <HowItWorks />
       <Features />
       <Reviews />
       <FAQ />
