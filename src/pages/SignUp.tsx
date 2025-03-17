@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -93,6 +94,24 @@ export default function SignUp() {
         />
 
         <form className="mt-8 space-y-6" onSubmit={handleSignUp}>
+          <div className="flex flex-col space-y-4">
+            <GoogleButton 
+              onClick={handleGoogleAuth}
+              text="Sign up with Google"
+            />
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-white px-2 text-muted-foreground">
+                  Or sign up with email
+                </span>
+              </div>
+            </div>
+          </div>
+
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="email" className="sr-only">
@@ -124,31 +143,13 @@ export default function SignUp() {
             />
           </div>
 
-          <div className="flex flex-col space-y-4">
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading}
-            >
-              {isLoading ? "Creating account..." : "Sign up"}
-            </Button>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-
-            <GoogleButton 
-              onClick={handleGoogleAuth}
-              text="Sign up with Google"
-            />
-          </div>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isLoading}
+          >
+            {isLoading ? "Creating account..." : "Sign up"}
+          </Button>
         </form>
       </div>
     </div>
