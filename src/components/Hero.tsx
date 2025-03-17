@@ -43,15 +43,15 @@ export const Hero = () => {
                   <div className="bg-[#D3E4FD] w-12 h-12 rounded-full flex items-center justify-center mb-4">
                     <Calculator className="h-6 w-6 text-[#0090FF]" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Home Improvement Projects Tracker</h3>
-                  <p className="text-gray-600">Track your home projects, save invoices and receipts, before &amp; after photos and we'll automatically calculate your cost basis.</p>
+                  <h3 className="text-xl font-semibold mb-2">Digital storage for project receipts</h3>
+                  <p className="text-gray-600">Track your home projects, store invoices and receipts, before & after photos and we'll automatically calculate your cost basis.</p>
                 </div>
 
                 <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-sm">
                   <div className="bg-[#DCFCE7] w-12 h-12 rounded-full flex items-center justify-center mb-4">
                     <DollarSign className="h-6 w-6 text-[#22C55E]" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Hidden Tax Credits Finder</h3>
+                  <h3 className="text-xl font-semibold mb-2">Find hidden tax credits</h3>
                   <p className="text-gray-600">
                     Discover tax credits and rebates you didn't know about. Our database is updated with the latest federal and state incentives.
                   </p>
@@ -61,7 +61,7 @@ export const Hero = () => {
                   <div className="bg-[#F3E8FF] w-12 h-12 rounded-full flex items-center justify-center mb-4">
                     <Shield className="h-6 w-6 text-[#A855F7]" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Insurance Optimizer</h3>
+                  <h3 className="text-xl font-semibold mb-2">Find insurance savings</h3>
                   <p className="text-gray-600">
                     Get better insurance rates by documenting improvements. Save up to 15% on premiums with detailed property records.
                   </p>
