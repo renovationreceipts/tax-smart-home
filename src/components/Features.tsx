@@ -1,21 +1,24 @@
+
 import { BarChart2, Calculator, FileText, BrainCog } from "lucide-react";
+
 const features = [{
   icon: <BarChart2 className="h-6 w-6" />,
-  title: "Renovation Expense Tracking",
-  description: "Record every home improvement—from contractor projects to DIY Home Depot trips."
+  title: "Track Every Dollar Spent on Home Improvements",
+  description: "Keep all your renovation expenses—big or small—organized in one place with receipts, descriptions, and costs at your fingertips."
 }, {
   icon: <Calculator className="h-6 w-6" />,
-  title: "Cost Basis Calculator",
-  description: "Automatically update your cost basis, tailored for primary, second, and rental properties."
+  title: "Automatically Update Your Property's Value",
+  description: "Instantly calculate your home's true cost basis by factoring in improvement costs—ensuring you get the most out of your investment when it's time to sell."
 }, {
   icon: <BrainCog className="h-6 w-6" />,
-  title: "Savings Finder AI",
-  description: "Discover if your project qualifies for cost basis adjustment, find tax credits, and more."
+  title: "Find Hidden Tax Credits and Insurance Savings",
+  description: "Our AI scans your projects to unlock tax credits, and lower insurance premiums—so you never leave money on the table."
 }, {
   icon: <FileText className="h-6 w-6" />,
-  title: "Proof When You Need it Most",
-  description: "Download a PDF of your project details for easy reporting."
+  title: "Generate Instant Reports When You Need Them",
+  description: "Need proof of home improvements for taxes, insurance, or resale? Download a clean, professional PDF in seconds—no more digging through old receipts."
 }];
+
 export const Features = () => {
   return <div className="section-padding bg-white">
       <div className="container-width">
